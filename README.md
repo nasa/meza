@@ -1,1 +1,1 @@
-# meza
+# Meza (MediaWiki E-Z Admin)

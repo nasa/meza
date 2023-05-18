@@ -3,15 +3,19 @@
 // make sure that session storage matches to the one used in simplesaml most likely default PHPSESSID
 $wgSessionName = "PHPSESSID";
 
-// Should login occur automatically when a user visits the wiki?
-$wgPluggableAuth_EnableAutoLogin = true;
+// SAML_OPTIONAL // SAML_LOGIN_ONLY // SAML_REQUIRED
+$wgSamlRequirement = SAML_REQUIRED;
+
+// Should users be created if they don't exist in the database yet?
+$wgSamlCreateUser = true;
 
 // SAML attributes. These are edited by /opt/meza/src/scripts/saml.sh
 // when setting up SAML auth.
-$wgSimpleSAMLphp_UsernameAttribute = '{{ saml_public.idp_username_attr }}';
-$wgSimpleSAMLphp_RealNameAttribute = '{{ saml_public.idp_realname_attr }}';
-$wgSimpleSAMLphp_EmailAttribute = '{{ saml_public.idp_email_attr }}';
+$wgSamlUsernameAttr = '{{ saml_public.idp_username_attr }}';
+$wgSamlRealnameAttr = '{{ saml_public.idp_realname_attr }}';
+$wgSamlMailAttr = '{{ saml_public.idp_email_attr }}';
 
 // SimpleSamlPhp settings
-$wgSimpleSAMLphp_InstallDir = '{{ m_install }}/simplesamlphp';
-$wgSimpleSAMLphp_AuthSourceId = 'default-sp';
+$wgSamlSspRoot = '{{ m_install }}/simplesamlphp';
+$wgSamlAuthSource = 'default-sp';
+$wgSamlPostLogoutRedirect = NULL;

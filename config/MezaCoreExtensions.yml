@@ -62,6 +62,13 @@ list:
       // Disabled due to some issue on FOD wikis. Confirm, reenable if possible
       // $srfgFormats[] = 'exhibit';
 
+  # Bootstrap - used for chameleon skin
+  - name: Bootstrap
+    composer: mediawiki/bootstrap
+    version: "~4.0"
+    config: |
+      wfLoadExtension( 'Bootstrap' );
+
   - name: SemanticCompoundQueries
     composer: "mediawiki/semantic-compound-queries"
     version: "2.2.0"

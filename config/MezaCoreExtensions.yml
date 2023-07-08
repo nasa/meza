@@ -472,3 +472,10 @@ list:
   - name: NumerAlpha
     repo: https://github.com/wikimedia/mediawiki-extensions-NumerAlpha.git
     version: "{{ mediawiki_default_branch }}"
+
+  # Extension:Bootstrap - provides the Bootstrap 4 web front-end framework to MediaWiki. (Note - required for Skin:Chameleon)
+  - name: Bootstrap
+    composer: mediawiki/bootstrap
+    version: "~4.0"
+    config: |
+      wfLoadExtension( 'Bootstrap' );

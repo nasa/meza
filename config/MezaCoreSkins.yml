@@ -1,13 +1,24 @@
 ---
 list:
 
+# Skin:Vector - The is the default skin for MediaWiki
 - name: Vector
   repo: https://github.com/wikimedia/mediawiki-skins-Vector.git
   type: skins
   version: "{{ mediawiki_default_branch }}"
 
+# Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
+- name: chameleon
+  composer: mediawiki/chameleon-skin
+  type: skins
+  version: "~4.0"
+  config: |
+    wfLoadSkin( 'chameleon' );
+    # add $wgDefaultSkin = 'Chameleon'; to config-meza/public/postLocalSettings/base.php to make chameleon the default skin
+    $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/clean.xml';
+
 #
-# If you'd like to use any of these skins it is recommended that these lines
+# If you'd like to use any of these other skins it is recommended that these lines
 # be placed in /opt/conf-meza/public/MezaLocalSkins.yml
 #
 #- name: Modern

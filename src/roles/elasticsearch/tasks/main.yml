@@ -1,7 +1,8 @@
 ---
-
+# =================================================================================
 # INSTALL JAVA 1.8
-#
+# =================================================================================
+
 - name: Ensure Java 1.7.0 OpenJDK is absent
   yum:
     lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
@@ -15,7 +16,6 @@
     name: "{{ package_java }}"
     state: present
 
-
 # Environment setup.
 - name: Set JAVA_HOME if configured.
   template:
@@ -23,37 +23,22 @@
     dest: /etc/profile.d/java_home.sh
     mode: 0644
 
+# ================================================================================
 # INSTALL ELASTICSEARCH
+# ================================================================================
+
 - name: Add Elasticsearch GPG key.
   rpm_key:
     key: https://packages.elastic.co/GPG-KEY-elasticsearch
     state: present
   when: ansible_distribution_file_variety == 'RedHat'
+
 - name: Add Elasticsearch repository.
   template:
     src: elasticsearch.repo.j2
     dest: /etc/yum.repos.d/elasticsearch.repo
     mode: 0644
   when: ansible_distribution_file_variety == 'RedHat'
-
-
-- name: HTTPS APT transport for Elasticsearch repository.
-  apt:
-    name: apt-transport-https
-    state: present
-  when: ansible_distribution_file_variety == 'Debian'
-- name: Add Elasticsearch apt key.
-  apt_key:
-    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    state: present
-  when: ansible_distribution_file_variety == 'Debian'
-- name: Add Elasticsearch repository.
-  apt_repository:
-    repo: 'deb https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}/apt stable main'
-    state: present
-    update_cache: true
-  when: ansible_distribution_file_variety == 'Debian'
-
 
 - name: Ensure elasticsearch installed
   package:
@@ -64,6 +49,7 @@
 # is special in Docker.
 # ref: https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/#updating-the-etchosts-file
 # ref: http://stackoverflow.com/questions/28327458/how-to-add-my-containers-hostname-to-etc-hosts
+
 - name: Check whether /etc/hosts contains "127.0.0.1"
   command: awk /127.0.0.1/ /etc/hosts
   register: checkhostsfile
@@ -94,10 +80,7 @@
     - "{{ m_meza_data }}/elasticsearch/log"
 
 # Copy java cacerts to /etc/elasticsearch to resolve issue with openjdk RPM
-# update. See:
-#
-# https://discuss.elastic.co/t/elasticsearch-is-incompatible-with-new-versions-of-openjdk-from-redhat/318928/7
-#
+# update. See: https://discuss.elastic.co/t/elasticsearch-is-incompatible-with-new-versions-of-openjdk-from-redhat/318928/7
 - name: Copy extracted java cacerts to /etc/elasticsearch
   copy:
     src: /etc/pki/ca-trust/extracted/java/cacerts
@@ -106,10 +89,9 @@
     group: elasticsearch
     mode: '0444'
 
-
 # CONFIGURE AND START ELASTICSEARCH
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration.html
-- name: Configure Elasticsearch.
+- name: Configure and Restart Elasticsearch
   template:
     src: elasticsearch.yml.j2
     dest: /etc/elasticsearch/elasticsearch.yml

@@ -45,3 +45,39 @@ xpack.ssl.truststore.path: /etc/elasticsearch/cacerts-java-extracted
 xpack.ssl.truststore.password: changeit
 reindex.ssl.truststore.path: /etc/elasticsearch/cacerts-java-extracted
 reindex.ssl.truststore.password: changeit
+
+# ---------------------------------- Security ----------------------------------
+#
+#                                 *** WARNING ***
+#
+# Elasticsearch security features are not enabled by default.
+# These features are free, but require configuration changes to enable them.
+# This means that users don’t have to provide credentials and can get full access
+# to the cluster. Network connections are also not encrypted.
+#
+# To protect your data, we strongly encourage you to enable the Elasticsearch security features.
+# Refer to the following documentation for instructions.
+#
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings
+#
+# Some typical security setting are:
+#   xpack.security.enabled: true
+#   xpack.security.http.ssl.enabled: true
+#   xpack.security.http.ssl.key: /etc/elasticsearch/ssl/http-key.key
+#   xpack.security.http.ssl.certificate: /etc/elasticsearch/ssl/http-cert.crt
+#
+# however, recall that meza (when deployed as a monolith) runs all services (like elasticsearch)
+# behind an SSL terminating load balancer/proxy. This means that the elasticsearch service is
+# not accessible to the network as such.
+#
+# However, we do need elastic search to work in FIPS mode so we need the folowing security settings per
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html#password-hashing-settings
+# but note that the settings below only tell Elasticsearch to avoid non-FIPS approved algorithms.
+# It does not configure the underlying JVM to run in FIPS mode. That must be addressed in the JVM config separately.
+# Ref1: https://discuss.elastic.co/t/issues-trying-to-enable-fips-140-2-on-centos-8/300505
+# Ref2: https://www.elastic.co/support/matrix#matrix_jvm
+#
+# Require only FIPS aproved algothithms
+#xpack.security.fips_mode.enabled: true
+#xpack.security.authc.password_hashing.algorithm: pbkdf2_stretch
+

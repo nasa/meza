@@ -518,7 +518,11 @@ $wgDiff3 = "/usr/bin/diff3";
 
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, ie 'vector', 'monobook': see MezaCoreSkins.yml for choices.
-$wgDefaultSkin = "vector";
+## Meza users should not modify this setting as it wil not be preserved by meza deploys
+## To override this setting Meza users should add this setting to the php file in either
+## A) For all wikis, in conf-meza/public/postLocalSettings/base.php
+## B) For a specific wiki, in conf-meza/public/wikis/<wikiId>/postLocalSettings/base.php
+$wgDefaultSkin = "chameleon";
 
 # Enabled skins.
 # The following skins were automatically enabled:

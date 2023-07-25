@@ -14,8 +14,8 @@ list:
   version: "~4.0"
   config: |
     wfLoadSkin( 'chameleon' );
-    # add $wgDefaultSkin = 'Chameleon'; to config-meza/public/postLocalSettings/base.php to make chameleon the default skin
-    $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/clean.xml';
+    $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';
+    $wgDefaultSkin = 'Chameleon';
 
 #
 # If you'd like to use any of these other skins it is recommended that these lines

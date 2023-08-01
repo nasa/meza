@@ -1,15 +1,14 @@
 ---
 
-
 # Import pages required for SemanticMeetingMinutes and rebuild recent changes
 # - name: import pages for SemanticMeetingMinutes
 #   shell: >
 #     WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/maintenance/importDump.php" --report --debug < {{ m_mediawiki }}/extensions/SemanticMeetingMinutes/ImportFiles/import.xml
 #   run_once: true
-- name: Import all pages registered with PageImporter (e.g. SemanticMeetingMinutes)
-  shell: >
-    WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/extensions/PageImporter/importPages.php"
-  run_once: True
+#- name: Import all pages registered with PageImporter (e.g. SemanticMeetingMinutes)
+#  shell: >
+#    WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/extensions/PageImporter/importPages.php"
+#  run_once: True
 
 - name: rebuildrecentchanges.php
   shell: >

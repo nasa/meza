@@ -104,9 +104,9 @@ backend www-backend
 		server nd1 127.0.0.1:19999
 	{% endif %}
 
-backend nowiki-backend
+backend nonwiki-backend
 	redirect scheme https if !{ ssl_fc }
-	server nowiki 127.0.0.1:8082 check
+	server nonwiki 127.0.0.1:8082 check
 
 {% endif %}
 

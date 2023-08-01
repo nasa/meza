@@ -336,7 +336,8 @@
   environment:
     TMPDIR: "{{ m_tmp }}"
   git:
-    repo: https://github.com/jamesmontalvo3/WikiBlender.git
+    # ToDo: migrate WikiBlender from ndc-rkevans to nasa
+    repo: https://github.com/ndc-rkevans/WikiBlender.git
     dest: "{{ m_htdocs }}/WikiBlender"
     version: "master"
     umask: "0002"

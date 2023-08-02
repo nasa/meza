@@ -67,10 +67,15 @@ frontend www-http
 frontend www-https
 	bind *:443 ssl crt /etc/haproxy/certs/meza.pem
 	reqadd X-Forwarded-Proto:\ https
+
 	# Keep letsencrypt stuff here for now. Probably add it back later.
 	# acl letsencrypt-acl path_beg /.well-known/acme-challenge/
 	# use_backend letsencrypt-backend if letsencrypt-acl
+
 	default_backend www-backend
+
+	acl nonwiki path_beg -i /nonwiki/
+	use_backend nonwiki-backend if nonwiki
 
 backend www-backend
 	redirect scheme https if !{ ssl_fc }
@@ -99,10 +104,11 @@ backend www-backend
 		server nd1 127.0.0.1:19999
 	{% endif %}
 
+backend nonwiki-backend
+	redirect scheme https if !{ ssl_fc }
+	server nonwiki 127.0.0.1:8082 check
+
 {% endif %}
-
-
-
 
 {% if m_setup_php_profiling %}
 listen php-profiling

@@ -462,6 +462,20 @@ Listen 8080
 
 </VirtualHost>
 
+Listen 8082
+<VirtualHost *:8082>
+        DocumentRoot /opt/nonwiki
+        ServerName NonWikiMainEntrypoint
+        <Directory /opt/nonwiki>
+                AllowOverride All
+                Options Indexes
+                Require all granted
+                Allow from all
+        </Directory>
+        CustomLog /var/log/httpd/nonwiki-access.log combined
+        ErrorLog  /var/log/httpd/nonwiki-error.log
+</VirtualHost>
+
 {% if m_setup_php_profiling -%}
 # Enable profiling for PHP
 Listen 8089

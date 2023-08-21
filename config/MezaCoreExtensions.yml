@@ -316,11 +316,6 @@ list:
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
 
-  # BatchUserRights - Allows adding one or more users to several groups in one action
-  - name: BatchUserRights
-    repo: https://github.com/wikimedia/mediawiki-extensions-BatchUserRights.git
-    version: "{{ mediawiki_default_branch }}"
-
   # HeaderTabs - Transforms top-level MediaWiki headers (i.e., headers surrounded by a single "=") into JavaScript-based tab
   - name: HeaderTabs
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git

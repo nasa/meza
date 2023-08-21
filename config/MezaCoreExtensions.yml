@@ -285,12 +285,6 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-ImageMap
     version: "{{ mediawiki_default_branch }}"
 
-  # StringFunctionsEscaped - Defines a superset of string parser functions that allow character escaping in the 'search for' and 'replace with' arguments
-  - name: StringFunctionsEscaped
-    repo: https://github.com/wikimedia/mediawiki-extensions-StringFunctionsEscaped.git
-    version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
-
   # WhoIsWatching - Allows to find out who is watching a particular page, and add others to watchlist for that page
   - name: WhoIsWatching
     repo: https://github.com/wikimedia/mediawiki-extensions-WhoIsWatching.git

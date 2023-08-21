@@ -10,7 +10,7 @@ list:
   # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
   - name: Semantic MediaWiki
     composer: "mediawiki/semantic-media-wiki"
-    version: "3.2.2"
+    version: "4.0.1"
     config: |
       enableSemantics( $wgServer );
       $smwgQMaxSize = 5000;
@@ -21,7 +21,7 @@ list:
   # SRF - Extends SMW to display quesry results in many different formats
   - name: Semantic Result Formats
     composer: "mediawiki/semantic-result-formats"
-    version: "3.2.0"
+    version: "4.0.1"
     config: |
       wfLoadExtension( 'SemanticResultFormats' );
       $srfgFormats[] = 'excel';
@@ -31,14 +31,14 @@ list:
   # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
   - name: SemanticCompoundQueries
     composer: "mediawiki/semantic-compound-queries"
-    version: "2.1.0"
+    version: "2.2.0"
     config: |
       wfLoadExtension( 'SemanticCompoundQueries' );
 
   # Semantic Scribunto - Extends Scribunto base capability to support SMW
   - name: "Semantic Scribunto"
     composer: "mediawiki/semantic-scribunto"
-    version: "2.1.0"
+    version: "2.2.0"
     config: |
       wfLoadExtension( 'SemanticScribunto' );
 
@@ -50,21 +50,21 @@ list:
   # Maps - Extension to visualize and work with geographical information
   - name: Maps
     composer: "mediawiki/maps"
-    version: "8.x"
+    version: "9.0.7"
     config: |
       wfLoadExtension( 'Maps' );
 
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "tags/5.3.1"
+    version: "tags/5.4"
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
     composer: "mediawiki/semantic-extra-special-properties"
-    version: "2.1.0"
+    version: "3.0.1"
     config: |
       $sespgEnabledPropertyList = [
         '_EUSER',
@@ -536,11 +536,6 @@ list:
     repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
     version: e94afaffcdde8d926b166fdd166162f9519beaa1
     legacy_load: True
-
-  # MezaExt - Holds add-ons pertinent to meza
-  - name: MezaExt
-    repo: https://github.com/enterprisemediawiki/MezaExt.git
-    version: tags/0.1.0
 
   # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
   - name: TalkRight

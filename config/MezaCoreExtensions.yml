@@ -105,11 +105,6 @@ list:
     config: |
       wfLoadExtension( 'Bootstrap' );
 
-  # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
-  - name: FlexDiagrams
-    repo: https://github.com/wikimedia/mediawiki-extensions-FlexDiagrams.git
-    version: master
-
   # Network - Allows for adding interactive network visualizations to your wiki pages
   - name: Network
     composer: professional-wiki/network
@@ -129,6 +124,11 @@ list:
   # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
+
+  # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
+  - name: FlexDiagrams
+    repo: https://github.com/wikimedia/mediawiki-extensions-FlexDiagrams.git
+    version: "{{ mediawiki_default_branch }}"
 
   # Scribunto - Allows for embedding scripting languages in MediaWiki
   - name: Scribunto

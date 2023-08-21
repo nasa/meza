@@ -403,14 +403,6 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-AdvancedSearch.git
     version: "{{ mediawiki_default_branch }}"
 
-  # UserMerge - Allows sysops to merge user A to user B and delete User A
-  - name: UserMerge
-    repo: https://github.com/wikimedia/mediawiki-extensions-UserMerge.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgGroupPermissions['bureaucrat']['usermerge'] = true;
-      $wgUserMergeProtectedGroups = array( 'awesomeusers' );
-
   # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
   - name: CreateUserPage
     repo: https://github.com/wikimedia/mediawiki-extensions-CreateUserPage.git
@@ -477,12 +469,6 @@ list:
     legacy_load: True
     composer_merge: True
 
-  # SocialProfile - Adds Social Profile data features for all users
-  - name: SocialProfile
-    repo: https://github.com/wikimedia/mediawiki-extensions-SocialProfile.git
-    version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
-
   # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of various media files in both local and remote repositories
   - name: MediaFunctions
     repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
@@ -536,22 +522,12 @@ list:
     repo: https://github.com/enterprisemediawiki/Wiretap.git
     version: tags/0.2.0
 
-  # ImagesLoaded - Loads an "ImagesLoaded" js library to be used by extensions or in MediaWiki:Common.js
-  - name: ImagesLoaded
-    repo: https://github.com/enterprisemediawiki/ImagesLoaded.git
-    version: tags/0.1.0
-
   # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics
     repo: https://github.com/enterprisemediawiki/WatchAnalytics.git
     version: "master"
     config: |
       $egPendingReviewsEmphasizeDays = 10;
-
-  # ParserFunctionHelper - Helper class for creating MediaWiki parser functions (NASA)
-  - name: ParserFunctionHelper
-    repo: https://github.com/enterprisemediawiki/ParserFunctionHelper.git
-    version: tags/1.0.0
 
   # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
   - name: HeaderFooter
@@ -561,7 +537,7 @@ list:
   # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this extension will update (null-edit) all pages that have been selected through that property.
   - name: SemanticDependencyUpdater
     repo: https://github.com/gesinn-it/SemanticDependencyUpdater.git
-    version: master
+    version: tags/3.0.0
     config: |
       $wgSDUProperty = 'Semantic Dependency';
       $wgSDUUseJobQueue = false;

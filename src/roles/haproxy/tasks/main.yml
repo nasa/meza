@@ -271,11 +271,12 @@
     fully_open_ports:
       - 80
       - 443
+      - 20000
 
-- name: Add port 20000 to world-accessible list if installing netdata
-  set_fact:
-    fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
-  when: m_install_netdata
+#- name: Add port 20000 to world-accessible list if installing netdata
+#  set_fact:
+#    fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
+#  when: m_install_netdata
 
 - name: Ensure port {{ fully_open_ports | join(', ') }} open to the world for haproxy
   include_role:

@@ -10,7 +10,7 @@ meza_repository: https://github.com/nasa/meza.git
 m_use_production_settings: True
 
 m_httpd_server_admin: "admin@example.com"
-m_timezone: "America/Chicago"
+m_timezone: "America/New_York"
 
 # Poorly documented and not really used method to specify networking zone
 m_private_networking_zone: public
@@ -75,7 +75,7 @@ do_cleanup_sql_backup: False
 # sshd_config defaults
 sshd_config_UsePAM: "yes"
 sshd_config_PasswordAuthentication: "yes"
-use_default_ssh_config: True
+use_default_ssh_config: False
 
 m_modify_etc_sudoers: true
 m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"

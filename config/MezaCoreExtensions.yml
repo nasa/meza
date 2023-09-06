@@ -12,7 +12,8 @@ list:
     composer: "mediawiki/semantic-media-wiki"
     version: "4.0.1"
     config: |
-      enableSemantics( $wgServer );
+      wfLoadExtension( 'SemanticMediaWiki' );
+      enableSemantics( $wgServer . '/' . $wikiId . '/' );
       $smwgQMaxSize = 5000;
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
@@ -292,16 +293,16 @@ list:
     config: |
       $wgPageShowWatchingUsers = true;
 
-  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event, both of which are used to define "internal objects" for SMW
-  - name: SemanticInternalObjects
-    repo: https://github.com/wikimedia/mediawiki-extensions-SemanticInternalObjects.git
-    version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
+#  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event, both of which are used to define "internal objects" for SMW
+#  - name: SemanticInternalObjects
+#    repo: https://github.com/wikimedia/mediawiki-extensions-SemanticInternalObjects.git
+#    version: "{{ mediawiki_default_branch }}"
+#    legacy_load: true
 
   # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
   - name: SemanticDrilldown
     repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
-    version: "{{ mediawiki_default_branch }}"
+    version: master
     legacy_load: true
 
   # Arrays - Creates an additional set of parser functions that operate on arrays.

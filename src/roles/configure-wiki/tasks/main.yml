@@ -57,6 +57,7 @@
   with_items:
     - preLocalSettings.d
     - postLocalSettings.d
+    - samlAuthorizations.d
 
 - name: Ensure base templates are present (but do not overwrite)
   template:
@@ -71,5 +72,6 @@
     - preLocalSettings.d/base.php
     - preLocalSettings.d/README.md
     - postLocalSettings.d/README.md
+    - samlAuthorizations.d/base.php
   delegate_to: localhost
   run_once: true

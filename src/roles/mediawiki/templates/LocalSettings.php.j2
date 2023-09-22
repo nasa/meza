@@ -55,37 +55,52 @@ else {
  *  Perform authentication up front, immediately after $wikiId is setup.
  *
  **/
-## This is commented out because we are no longer using Extension:SimpleSamlAuth
-## Instead we will be using Extension:PluggableAuth with Extension:SimpleSamlphp
-## which is configued as by the user in MezaLocalExtensions.yml
-#require "{{ m_deploy }}/samlLocalSettings.php";
 
-
-if ( in_array( $wikiId, array( 'mywiki1','mywiki2', ) ) )
-{
- # Skip  "PluggableAuth" AND "SimpleSAMLphp" so that localhost bots can access the wikis
-} else {
-
-wfLoadExtension( "PluggableAuth" );
-$wgPluggableAuth_EnableAutoLogin = true;
-
+// Get the data needed to know if the server request is an external (remote) or internal (localhost) request
 if     (!empty($_SERVER['HTTP_CLIENT_IP']))       { $ip_address = $_SERVER['HTTP_CLIENT_IP']; }
 elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR']; }
 elseif (isset($_SERVER['REMOTE_ADDR'] ) )         { $ip_address = $_SERVER['REMOTE_ADDR']; }
 
-if (isset($ip_address) && $ip_address == '127.0.0.1') { $wgPluggableAuth_EnableLocalLogin = true;  }
-else                                                  { $wgPluggableAuth_EnableLocalLogin = false; }
+// Allow exceptions of the PluggableAuth/SAML integration for specific wikis
+// so that localhost maintenance script can create new bot accounts on the wikis
+if ( in_array( $wikiId, array( 'mywiki1','mywiki2', ) ) )
+{ # SKIP "PluggableAuth" AND "SimpleSAMLphp" 
+} else { 
+  #  USE "PluggableAuth" AND "SimpleSAMLphp"as follows:
 
+// Load and Configure PluggableAuth for SAML IDP/SSO
+wfLoadExtension( "PluggableAuth" );
+$wgPluggableAuth_EnableAutoLogin = true;
 $wgPluggableAuth_EnableLocalProperties = false;
-$wgPluggableAuth_ButtonLabel = 'Click Here for Auto-Logon';
-
-wfLoadExtension( "SimpleSAMLphp" );
-$wgSimpleSAMLphp_InstallDir        = '/opt/simplesamlphp';
-$wgSimpleSAMLphp_AuthSourceId      = 'default-sp';
-$wgSimpleSAMLphp_UsernameAttribute = 'AUID';
-$wgSimpleSAMLphp_RealNameAttribute = 'displayName';
-$wgSimpleSAMLphp_EmailAttribute    = 'Email';
+$wgPluggableAuth_EnableLocalLogin = false;
+if (isset($ip_address) && $ip_address == '127.0.0.1') 
+{ $wgPluggableAuth_EnableLocalLogin = true;  }
 $wgGroupPermissions['*']['autocreateaccount'] = true;
+
+// Load and Configure SimpleSAMLphp for SAML IDP/SSO
+wfLoadExtension( "SimpleSAMLphp" );
+$wgSimpleSAMLphp_InstallDir = '/opt/simplesamlphp';
+
+// SAML Authentication (Who the user IS)
+$wgPluggableAuth_Config['Log in using SAML'] = [
+    'plugin' =>   'SimpleSAMLphp',
+    'data'   => [ 'authSourceId'      => 'default-sp',
+                  'usernameAttribute' => 'AUID',
+                  'realNameAttribute' => 'displayName',
+                  'emailAttribute'    => 'Email'
+                ]
+];
+
+// Load all PHP files in samlAuthorizations.d for all wikis
+foreach ( glob("$m_deploy/public/samlAuthorizations.d/*.php") as $filename) {
+  require_once $filename;
+}
+
+// Load all PHP files in samlAuthorizations.d for this wiki
+foreach ( glob("$m_deploy/public/wikis/$wikiId/samlAuthorizations.d/*.php") as $filename) {
+  require_once $filename; 
+}
+
 }
 {% endif %}
 

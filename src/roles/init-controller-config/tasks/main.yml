@@ -72,7 +72,7 @@
     group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
 
-- name: Ensure pre/post settings directories exists in config
+- name: Ensure pre/post/saml settings directories exists in config
   file:
     path: "{{ m_local_public }}/{{ item }}"
     state: directory
@@ -82,6 +82,7 @@
   with_items:
     - preLocalSettings.d
     - postLocalSettings.d
+    - samlAuthorizations.d
 
 
 - name: "Ensure base files present, do NOT overwrite"

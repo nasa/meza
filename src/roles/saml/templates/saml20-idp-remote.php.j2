@@ -38,37 +38,15 @@ $metadata['{{ saml_public.idp_entity_id }}'] = array(
 	{% endif %}
 
 
-	{% if saml_secret.cert_fingerprint is defined %}
+       {% if saml_secret.cert_data is defined %}
+       'certData' => '{{ saml_secret.cert_data }}',
 
-	'certFingerprint' => array(
-		{% for fp in saml_secret.cert_fingerprint -%}
-		'{{ fp }}',
-		{%- endfor %}
-	),
+       {% elif saml_public.cert_data is defined %}
+       'certData' => '{{ saml_public.cert_data }}',
 
-	{% elif saml_public.cert_fingerprint is defined %}
+       {% else %}
+       // neither saml_secret.cert_data nor saml_public.cert_data is defined
 
-	'certFingerprint' => array(
-		{% for fp in saml_public.cert_fingerprint -%}
-		'{{ fp }}',
-		{%- endfor %}
-	),
-
-	{% else %}
-	// neither {{ saml_secret.cert_fingerprint }} nor {{ saml_public.cert_fingerprint }} is defined
-	{% endif %}
-
-
-	{% if saml_secret.cert_data is defined %}
-
-	'certData' => '{{ saml_secret.cert_data }}',
-
-	{% elif saml_public.cert_data is defined %}
-
-	'certData' => '{{ saml_public.cert_data }}',
-
-	{% else %}
-	// neither saml_secret.cert_data nor saml_public.cert_data is defined
-	{% endif %}
+       {% endif %}
 
 );

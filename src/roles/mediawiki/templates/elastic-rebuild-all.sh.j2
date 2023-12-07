@@ -8,7 +8,7 @@ else
 	do_wikis="$1"
 fi
 
-wiki_dir="{{ m_htdocs }}/wikis"
+wiki_dir="/opt/htdocs/wikis"
 
 cd "$wiki_dir"
 
@@ -33,8 +33,8 @@ for d in $do_wikis; do
 
 	# Disable search indexing in wiki-specific settings, and tell the
 	# wiki to not use CirrusSearch for now by nullifying $wgSearchType.
-	echo -e "<?php\n\$wgDisableSearchUpdate = true;" > "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
-	echo -e "<?php\n\$wgSearchType = null;"          > "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
+	echo -e "<?php\n\$wgDisableSearchUpdate = true;" > "/opt/.deploy-meza/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
+	echo -e "<?php\n\$wgSearchType = null;"          > "/opt/.deploy-meza/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
 
 done
 
@@ -58,7 +58,7 @@ curl -X GET 'http://localhost:9200/_cat/indices?v'
 
 # Create metastore index (used by all wikis)
 echo "Create wiki metastore"
-WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php" --upgrade
+WIKI="$wiki_id" php "/opt/htdocs/mediawiki/extensions/CirrusSearch/maintenance/Metastore.php" --upgrade
 
 #
 # SECOND wiki loop: nuke jobs, create indexes, reenable
@@ -84,17 +84,20 @@ for d in $do_wikis; do
 	mysql "wiki_$wiki_id" -e "DELETE FROM job WHERE job_cmd = 'cirrusSearchElasticaWrite'"
 
 	# Run script to generate elasticsearch index
-	cd "{{ m_mediawiki }}"
-	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php" --startOver
+	cd "/opt/htdocs/mediawiki"
+	WIKI="$wiki_id" php "/opt/htdocs/mediawiki/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php" --startOver
 
 	# Remove search-update disable in wiki-specific settings
-	rm -f "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
+	rm -f "/opt/.deploy-meza/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
 done
 
 # Restart PHP/Apache to ensure ^ change is picked up
 sudo systemctl restart httpd
 sudo systemctl restart php-fpm
+
+# need to go back here since the prior loop cd'd into other directories
+cd "$wiki_dir"
 
 #
 # THIRD wiki loop: Setup the search indexing
@@ -123,10 +126,10 @@ for d in $do_wikis; do
 	# Note that this can take some time
 	# For large wikis read "Bootstrapping large wikis" in:
 	# https://git.wikimedia.org/blob/mediawiki%2Fextensions%2FCirrusSearch.git/REL1_25/README
-	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipLinks --indexOnSkip
-	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipParse
+	WIKI="$wiki_id" php "/opt/htdocs/mediawiki/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipLinks --indexOnSkip
+	WIKI="$wiki_id" php "/opt/htdocs/mediawiki/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipParse
 
-	rm -f "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
+	rm -f "/opt/.deploy-meza/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
 
 	# Restart PHP/Apache to ensure ^ change is picked up
 	sudo systemctl restart httpd
@@ -154,7 +157,7 @@ for d in $do_wikis; do
 	# Run all the jobs for this wiki
 	maxjobs=1000
 	while [ $(WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/showJobs.php) -gt 0 ]; do
-		WIKI="$wiki_id" php {{ m_mediawiki }}/maintenance/runJobs.php --maxjobs="$maxjobs"
+		WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/runJobs.php --maxjobs="$maxjobs"
 		echo
 		echo "Up to 1000 jobs complete. Pausing for 5 seconds."
 		echo

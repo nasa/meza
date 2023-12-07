@@ -474,7 +474,6 @@
     group: wheel
     mode: 0755
   with_items:
-    - elastic-build-index.sh
     - elastic-rebuild-all.sh
     - smw-rebuild-all.sh
     - refresh-links.sh

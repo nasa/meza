@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Starting rebuilding search indexes as $(whoami)"
+
 if [ -z "$1" ]; then
 	do_wikis="*/"
 else
@@ -10,6 +12,9 @@ wiki_dir="{{ m_htdocs }}/wikis"
 
 cd "$wiki_dir"
 
+#
+# FIRST wiki loop: disable indexing and use basic search
+#
 # Before processing any wikis, stop search indexing on all. We're gonna nuke the whole index, across
 # all wikis before starting indexing, and we don't want any wikis to try to index anything until
 # their proper index is recreated.
@@ -28,28 +33,36 @@ for d in $do_wikis; do
 
 	# Disable search indexing in wiki-specific settings, and tell the
 	# wiki to not use CirrusSearch for now by nullifying $wgSearchType.
-	echo -e "<?php"                           >  "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
-	echo -e "\$wgDisableSearchUpdate = true;" >> "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
-	echo -e "\$wgSearchType = null;"          >> "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
-
-	# Restart PHP/Apache to ensure ^ change is picked up
-	systemctl restart httpd
-	systemctl restart php-fpm
+	echo -e "<?php\n\$wgDisableSearchUpdate = true;" > "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
+	echo -e "<?php\n\$wgSearchType = null;"          > "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
 
 done
 
+echo "Restarting apache and PHP to pick up disable-search-update.php changes"
+
+# Restart PHP/Apache to ensure ^ change is picked up
+sudo systemctl restart httpd
+sudo systemctl restart php-fpm
+
 # Print elasticsearch indexes
+echo "List all pre-existing elasticsearch indexes"
 curl -X GET 'http://localhost:9200/_cat/indices?v'
 
 # Nuke all the indexes
+echo "Deleting all Elasticsearch indexes"
 curl -X DELETE 'http://localhost:9200/_all'
 
 # Print again (should be empty)
+echo "Printing indexes again. Should be empty."
 curl -X GET 'http://localhost:9200/_cat/indices?v'
 
 # Create metastore index (used by all wikis)
-sudo WIKI="$wiki_id" php Metastore.php --upgrade
+echo "Create wiki metastore"
+WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php" --upgrade
 
+#
+# SECOND wiki loop: nuke jobs, create indexes, reenable
+#
 for d in $do_wikis; do
 
 	if [ -z "$1" ]; then
@@ -63,37 +76,85 @@ for d in $do_wikis; do
 		continue
 	fi
 
-	timestamp=$(date +"%F_%T")
+	echo
+	echo "Running UpdateSearchIndexConfig.php for ${wiki_id}"
+	echo
 
-	out_log="{{ m_logs }}/search-index/$wiki_id.$timestamp.log"
+	# Remove any broken cirrus update jobs
+	mysql "wiki_$wiki_id" -e "DELETE FROM job WHERE job_cmd = 'cirrusSearchElasticaWrite'"
 
-	echo "Rebuilding index for $wiki_id"
-	echo "  Output log:"
-	echo "    $out_log"
+	# Run script to generate elasticsearch index
+	cd "{{ m_mediawiki }}"
+	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php" --startOver
 
+	# Remove search-update disable in wiki-specific settings
+	rm -f "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
-	wiki_id="$wiki_id" bash "{{ m_deploy }}/elastic-build-index.sh" > "$out_log"  2>&1
+done
 
-	endtimestamp=$(date +"%F_%T")
+# Restart PHP/Apache to ensure ^ change is picked up
+sudo systemctl restart httpd
+sudo systemctl restart php-fpm
 
-	# If the above command had a failing exit code
-	if [[ $? -ne 0 ]]; then
+#
+# THIRD wiki loop: Setup the search indexing
+#
+# I don't think this actually does the indexing per-se. I think that's actually handled by the job
+# queue after this sets up all the jobs.
+for d in $do_wikis; do
 
-		# FIXME #577 #681: add notification/warning system here
-		echo "elastic-build-index FAILED for \"$wiki_id\" at $endtimestamp"
-
-		# Need to fix exit code. The following may not be sufficient. Ref issue #1263.
-		exit 1
-
-	#if the above command had a passing exit code (e.g. zero)
+	if [ -z "$1" ]; then
+		wiki_id=${d%/}
 	else
-		echo "elastic-build-index completed for \"$wiki_id\" at $endtimestamp"
+		wiki_id="$d"
+	fi
+
+	if [ ! -d "$wiki_dir/$wiki_id" ]; then
+		echo "\"$wiki_id\" not a valid wiki ID"
+		continue
+	fi
+
+	echo
+	echo "Running ForceSearchIndex.php for ${wiki_id}"
+	echo
+
+	# Bootstrap the search index
+	#
+	# Note that this can take some time
+	# For large wikis read "Bootstrapping large wikis" in:
+	# https://git.wikimedia.org/blob/mediawiki%2Fextensions%2FCirrusSearch.git/REL1_25/README
+	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipLinks --indexOnSkip
+	WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipParse
+
+	rm -f "{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/use-basic-search.php"
+
+	# Restart PHP/Apache to ensure ^ change is picked up
+	sudo systemctl restart httpd
+	sudo systemctl restart php-fpm
+	# Do ^ for each wiki, since the indexing will take a while
+
+done
+
+#
+# FOURTH wiki loop: run all jobs for all wikis
+#
+for d in $do_wikis; do
+
+	if [ -z "$1" ]; then
+		wiki_id=${d%/}
+	else
+		wiki_id="$d"
+	fi
+
+	if [ ! -d "$wiki_dir/$wiki_id" ]; then
+		echo "\"$wiki_id\" not a valid wiki ID"
+		continue
 	fi
 
 	# Run all the jobs for this wiki
 	maxjobs=1000
 	while [ $(WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/showJobs.php) -gt 0 ]; do
-		WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/runJobs.php --maxjobs="$maxjobs"
+		WIKI="$wiki_id" php {{ m_mediawiki }}/maintenance/runJobs.php --maxjobs="$maxjobs"
 		echo
 		echo "Up to 1000 jobs complete. Pausing for 5 seconds."
 		echo
@@ -101,5 +162,4 @@ for d in $do_wikis; do
 	done;
 
 done
-
 

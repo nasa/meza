@@ -224,12 +224,12 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-YouTube.git
     version: "{{ mediawiki_default_branch }}"
 
-  # ULS - Allows users to select a language and configure its support in an easy way.
-  - name: UniversalLanguageSelector
-    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgULSIMEEnabled = false;
+#  # ULS - Allows users to select a language and configure its support in an easy way.
+#  - name: UniversalLanguageSelector
+#    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+#    version: "{{ mediawiki_default_branch }}"
+#    config: |
+#      $wgULSIMEEnabled = false;
 
   # VE - Allows for editing pages as rich content
   - name: VisualEditor
@@ -507,11 +507,11 @@ list:
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
 
-  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
-  - name: SimpleMathJax
-    repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
-    version: e94afaffcdde8d926b166fdd166162f9519beaa1
-    legacy_load: True
+#  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
+#  - name: SimpleMathJax
+#    repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
+#    version: e94afaffcdde8d926b166fdd166162f9519beaa1
+#    legacy_load: True
 
   # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
   - name: TalkRight

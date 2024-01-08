@@ -299,11 +299,11 @@ list:
 #    version: "{{ mediawiki_default_branch }}"
 #    legacy_load: true
 
-  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
-  - name: SemanticDrilldown
-    repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
-    version: master
-    legacy_load: true
+#  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
+#  - name: SemanticDrilldown
+#    repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
+#    version: master
+#    legacy_load: true
 
   # Arrays - Creates an additional set of parser functions that operate on arrays.
   - name: Arrays

@@ -476,6 +476,7 @@
   with_items:
     - elastic-rebuild-all.sh
     - smw-rebuild-all.sh
+    - run-all-jobs-now.sh
     - refresh-links.sh
 
 - name: Ensure data rebuilding logs directories exist

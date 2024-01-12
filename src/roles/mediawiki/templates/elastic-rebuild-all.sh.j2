@@ -137,32 +137,3 @@ for d in $do_wikis; do
 	# Do ^ for each wiki, since the indexing will take a while
 
 done
-
-#
-# FOURTH wiki loop: run all jobs for all wikis
-#
-for d in $do_wikis; do
-
-	if [ -z "$1" ]; then
-		wiki_id=${d%/}
-	else
-		wiki_id="$d"
-	fi
-
-	if [ ! -d "$wiki_dir/$wiki_id" ]; then
-		echo "\"$wiki_id\" not a valid wiki ID"
-		continue
-	fi
-
-	# Run all the jobs for this wiki
-	maxjobs=1000
-	while [ $(WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/showJobs.php) -gt 0 ]; do
-		WIKI="$wiki_id" php /opt/htdocs/mediawiki/maintenance/runJobs.php --maxjobs="$maxjobs"
-		echo
-		echo "Up to 1000 jobs complete. Pausing for 5 seconds."
-		echo
-		sleep 5
-	done;
-
-done
-

@@ -530,8 +530,8 @@ list:
 
   # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
   - name: HeaderFooter
-    repo: https://github.com/enterprisemediawiki/HeaderFooter.git
-    version: tags/3.0.1
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
+    version: "{{ mediawiki_default_branch }}"
 
   # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this extension will update (null-edit) all pages that have been selected through that property.
   - name: SemanticDependencyUpdater

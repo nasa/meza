@@ -542,7 +542,7 @@ list:
       $wgSDUUseJobQueue = false;
 
   # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
-  - name: Html5mediator
-    repo: https://github.com/lightbinder/Html5mediator.git
-    version: master
-    legacy_load: true
+  # - name: Html5mediator
+  #   repo: https://github.com/lightbinder/Html5mediator.git
+  #   version: master
+  #   legacy_load: true

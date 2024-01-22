@@ -595,7 +595,9 @@ $wgRestrictDisplayTitle = false;
  */
 $wgCacheDirectory = "{{ m_cache_directory }}/$wikiId";
 
-
+// Set the location for the SMW config file .smw.json
+// https://www.semantic-mediawiki.org/wiki/Help:$smwgConfigFileDir
+$smwgConfigFileDir = "/opt/data-meza/mw-temp/{$wgDBname}";
 
 
 

@@ -511,15 +511,15 @@ list:
     repo: https://github.com/jmnote/SimpleMathJax
     version: "main"
 
-  # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
-  - name: TalkRight
-    repo: https://github.com/enterprisemediawiki/TalkRight.git
-    version: tags/2.0.0
+  # # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
+  # - name: TalkRight
+  #   repo: https://github.com/enterprisemediawiki/TalkRight.git
+  #   version: tags/2.0.0
 
-  # Wiretap - Provides special pages for tracking user page viewing stats
-  - name: Wiretap
-    repo: https://github.com/enterprisemediawiki/Wiretap.git
-    version: tags/0.2.0
+  # # Wiretap - Provides special pages for tracking user page viewing stats
+  # - name: Wiretap
+  #   repo: https://github.com/enterprisemediawiki/Wiretap.git
+  #   version: tags/0.2.0
 
   # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics

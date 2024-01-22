@@ -523,7 +523,7 @@ list:
 
   # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics
-    repo: https://github.com/enterprisemediawiki/WatchAnalytics.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics.git
     version: "master"
     config: |
       $egPendingReviewsEmphasizeDays = 10;

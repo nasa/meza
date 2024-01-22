@@ -329,12 +329,20 @@ list:
   - name: ContributionScores
     repo: https://github.com/wikimedia/mediawiki-extensions-ContributionScores.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
     config: |
-      $wgContribScoreIgnoreBots = true;
+      // Exclude Bots from the reporting - Can be omitted.
+      $wgContribScoreIgnoreBots = true; 
+      // Exclude Blocked Users from the reporting - Can be omitted.
       $wgContribScoreIgnoreBlockedUsers = true;
+      // Exclude specific usernames from the reporting - Can be omitted.
+      $wgContribScoreIgnoreUsernames = [];
+      // Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
       $wgContribScoresUseRealName = true;
+      // Set to true to disable cache for parser function and inclusion of table.
       $wgContribScoreDisableCache = false;
+      // Use the total edit count to compute the Contribution score.
+      $wgContribScoreUseRoughEditCount = false;  
+      // Each array defines a report - 7,50 is "past 7 days" and "LIMIT 50" - Can be omitted.
       $wgContribScoreReports = array( array(7,50), array(30,50), array(0,50) );
 
   # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being interpreted as an argument delimiter

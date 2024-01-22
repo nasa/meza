@@ -474,7 +474,6 @@ list:
   - name: MediaFunctions
     repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
 
   # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which you can't get with MediaWikis existing magic Words
   - name: SubpageFun

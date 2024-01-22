@@ -348,7 +348,6 @@ list:
   - name: PipeEscape
     repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
 
   # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
   - name: CirrusSearch

@@ -468,7 +468,6 @@ list:
   - name: Widgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Widgets.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: True
     composer_merge: True
 
   # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of various media files in both local and remote repositories

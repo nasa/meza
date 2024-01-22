@@ -25,11 +25,13 @@
 
 # ================================================================================
 # INSTALL ELASTICSEARCH
-# ================================================================================
+# ================================================================================ 
 
+# equivalent to command-line
+# rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 - name: Add Elasticsearch GPG key.
   rpm_key:
-    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
   when: ansible_distribution_file_variety == 'RedHat'
 
@@ -40,9 +42,11 @@
     mode: 0644
   when: ansible_distribution_file_variety == 'RedHat'
 
+# sudo dnf install --enablerepo=elasticsearch elasticsearch
 - name: Ensure elasticsearch installed
   package:
     name: elasticsearch
+    enablerepo: elasticsearch
     state: present
 
 # Need to perform this check so `lineinfile` doesn't run in Docker. /etc/hosts

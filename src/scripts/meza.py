@@ -1174,7 +1174,7 @@ def prompt(varname,default=False):
 	else:
 		# If no default, keep asking until user supplies a value
 		while (not value):
-			value = raw_input( input_msg )
+			value = input( input_msg )
 
 	return value
 

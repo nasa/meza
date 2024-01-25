@@ -449,6 +449,32 @@
   set_fact:
     wikis_to_rebuild_data: []
 
+
+# Prior to running verify-wiki, which will create an {{m_htdocs}}/wikis/{{wiki_id}}/config
+# symlink to {{m_deploy}}/something, nuke the entirety of {{m_htdocs}}/wikis. All it holds is
+# symlinks anyway, so no data will be lost. Running verify-wiki for each wiki will regenerate
+# these symlinks for all valid wikis. These two tasks are tagged "verify-wiki" such that if
+# `--skip-tags verify-wiki` is run, it doesn't nuke this directory then NOT recreate due to
+# verify-wiki not being run.
+#
+# Without these tasks, old wikis that have been deleted from config will show up in
+# the wiki landing page. Nuking this directory and recreating it clears them out.
+- name: Delete content & directory to remove any wikis deleted from config
+  file:
+    path: "{{ m_htdocs }}/wikis"
+    state: absent
+  tags:
+    - verify-wiki
+- name: Recreate {{ m_htdocs }}/wikis directory
+  file:
+    path: "{{ m_htdocs }}/wikis"
+    state: directory
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: 0755
+  tags:
+    - verify-wiki
+
 # Check that all wikis in config are present on app and DB servers
 - name: Ensure defined wikis exist
   include_role:

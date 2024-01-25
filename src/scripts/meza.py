@@ -1125,8 +1125,8 @@ def write_vault_decryption_tmp_file ( env, value ):
 	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir,env)
 
 	with open( temp_decrypt_file, 'w' ) as filetowrite:
-	    filetowrite.write( value )
-	    filetowrite.close()
+		filetowrite.write( value )
+		filetowrite.close()
 
 	return temp_decrypt_file
 

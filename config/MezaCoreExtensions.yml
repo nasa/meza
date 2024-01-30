@@ -314,7 +314,7 @@ list:
 
   - name: AdminLinks
     repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git
-    version: "master"
+    version: tags/0.5
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
 

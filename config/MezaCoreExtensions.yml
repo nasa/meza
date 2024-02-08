@@ -224,12 +224,12 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-YouTube.git
     version: "{{ mediawiki_default_branch }}"
 
-  # ULS - Allows users to select a language and configure its support in an easy way.
-  - name: UniversalLanguageSelector
-    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgULSIMEEnabled = false;
+#  # ULS - Allows users to select a language and configure its support in an easy way.
+#  - name: UniversalLanguageSelector
+#    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+#    version: "{{ mediawiki_default_branch }}"
+#    config: |
+#      $wgULSIMEEnabled = false;
 
   # VE - Allows for editing pages as rich content
   - name: VisualEditor
@@ -247,11 +247,6 @@ list:
           "Help" => true,
           "_merge_strategy" => "array_plus"
       ];
-      $wgVirtualRestConfig['modules']['parsoid'] = array(
-          'url' => "http://127.0.0.1:8080/$wikiId/rest.php",
-      );
-      // Because we're manually setting the Virtual Rest Config above, need to load Parsoid manually
-      wfLoadExtension( 'Parsoid', '{{ m_mediawiki }}/vendor/wikimedia/parsoid/extension.json' );
 
   # TemplateData - Adds a templatedata tag and an API which together allow editors to specify how templates should be invoked
   - name: TemplateData
@@ -299,11 +294,11 @@ list:
 #    version: "{{ mediawiki_default_branch }}"
 #    legacy_load: true
 
-  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
-  - name: SemanticDrilldown
-    repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
-    version: master
-    legacy_load: true
+#  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
+#  - name: SemanticDrilldown
+#    repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
+#    version: master
+#    legacy_load: true
 
   # Arrays - Creates an additional set of parser functions that operate on arrays.
   - name: Arrays
@@ -507,11 +502,11 @@ list:
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
 
-  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
-  - name: SimpleMathJax
-    repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
-    version: e94afaffcdde8d926b166fdd166162f9519beaa1
-    legacy_load: True
+#  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
+#  - name: SimpleMathJax
+#    repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
+#    version: e94afaffcdde8d926b166fdd166162f9519beaa1
+#    legacy_load: True
 
   # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
   - name: TalkRight

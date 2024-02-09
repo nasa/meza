@@ -134,7 +134,7 @@ list:
 
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "tags/5.4"
+    version: "tags/4.7"
     config: |
       // If enabled all "red links" will bring up a form chooser
       $wgPageFormsLinkAllRedLinksToForms = false;
@@ -324,7 +324,7 @@ list:
 
   - name: HeaderTabs
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
-    version: tags/2.2.1
+    version: tags/1.3
     config: |
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;

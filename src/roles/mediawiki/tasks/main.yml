@@ -305,22 +305,10 @@
     - local-skins
     - latest
 
-- name: Check if the compiled_templates directory exists per the widgets extension
-  stat:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-  register: mw_ext_widgets_compiled_templates_folder
-
-- name: "Ensure compiled templates folder for widget extension is ownwed by apache"
-  file:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-    owner: apache
-    group: apache
-    mode: "0755"
-  when: mw_ext_widgets_compiled_templates_folder.stat.exists
-
 #
 # LocalSettings.php
 #
+
 - name: Ensure LocalSettings.php in place
   template:
     src: LocalSettings.php.j2
@@ -341,9 +329,25 @@
     - mediawiki-core
     - file-perms
 
+- name: Check if the compiled_templates directory exists per the widgets extension
+  stat:
+    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+  register: mw_ext_widgets_compiled_templates_folder
+
+- name: "Ensure compiled templates folder for widget extension is ownwed by apache"
+  file:
+    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+    owner: apache
+    group: apache
+    mode: "0755"
+    state: directory
+    recurse: yes
+  when: mw_ext_widgets_compiled_templates_folder.stat.exists
+
 #
 # LANDING PAGE
 #
+
 - name: Ensure WikiBlender installed
   # Ref #1149 for TMPDIR environment var
   environment:

@@ -412,10 +412,12 @@ list:
     config: |
       $wgCreateUserPage_OnLogin = true;
 
-  # WhosOnline - Provides a special page that shows who is (or has very recently been) logged-in
+  # WhosOnline - Provides a special page that shows who is 
+  # (or has very recently been) logged-in
+  # Use 'master' because bugfixes are not backported
   - name: WhosOnline
     repo: https://github.com/wikimedia/mediawiki-extensions-WhosOnline.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
     config: |
       $wgWhosOnlineShowRealName = true;
 

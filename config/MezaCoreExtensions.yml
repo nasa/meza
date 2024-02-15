@@ -65,7 +65,7 @@ list:
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
     composer: "mediawiki/semantic-extra-special-properties"
-    version: "3.0.1"
+    version: "3.0.5"
     config: |
       $sespgEnabledPropertyList = [
         '_EUSER',

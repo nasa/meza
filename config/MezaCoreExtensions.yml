@@ -58,7 +58,7 @@ list:
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "tags/5.4"
+    version: "tags/5.6.3"
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
 

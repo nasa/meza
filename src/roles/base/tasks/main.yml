@@ -18,8 +18,14 @@
     mode: 0700
     state: directory
 
+- name: Check if meza-ansible authorized_keys exists
+  stat:
+    path: "{{ m_home }}/meza-ansible/.ssh/authorized_keys"
+  register: authorized_keys_result
+
 - name: Copy meza-ansible authorized_keys to alt-meza-ansible
   shell: cp {{ m_home }}/meza-ansible/.ssh/authorized_keys {{ m_home }}/alt-meza-ansible/.ssh/authorized_keys
+  when: authorized_keys_result.stat.exists
 
 - name: Ensure user meza-ansible and alt-meza-ansible authorized_keys configured
   file:
@@ -30,6 +36,7 @@
   with_items:
   - meza-ansible
   - alt-meza-ansible
+  when: authorized_keys_result.stat.exists
 
 - name: Set authorized key for alt-meza-ansible
   authorized_key:

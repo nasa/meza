@@ -50,7 +50,7 @@
       delay: 10
 
     - name: Display Current Elasticsearch Version
-      debug: var=version_found.json.version.number
+      ansible.builtin.debug: var=version_found.json.version.number
 
       # this step is key!!!  Don't restart more nodes
       # until all shards have completed recovery

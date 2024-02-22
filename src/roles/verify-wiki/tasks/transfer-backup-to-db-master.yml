@@ -1,7 +1,7 @@
 ---
 # Transfer SQL to DB master
 
-- debug:
+- ansible.builtin.debug:
     msg: |
       wiki_id:                       {{ wiki_id | default('<undefined>') }}
       sql_dir_path:                  {{ sql_dir_path | default('<undefined>') }}
@@ -66,7 +66,7 @@
     )
 
 - name: Debug var wiki_sql_push_file
-  debug:
+  ansible.builtin.debug:
     var: wiki_sql_push_file
 
 - name: "{{ wiki_id }} - If no pushed SQL file, find any SQL file if it exists"
@@ -117,7 +117,7 @@
     - not sql_file_pushed_exists
     - sql_file_exists
 
-- debug:
+- ansible.builtin.debug:
     msg: |
       sql file: {{ wiki_sql_file_path | default('<undefined>') }}
 

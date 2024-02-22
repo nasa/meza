@@ -142,12 +142,12 @@
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Display current Elasticsearch full version number
-  debug:
+  ansible.builtin.debug:
     var: version_found.json.version.number
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Display desired Elasticsearch version
-  debug:
+  ansible.builtin.debug:
     var: elasticsearch_major_version
 
 - name: Set the Elasticsearch major version found

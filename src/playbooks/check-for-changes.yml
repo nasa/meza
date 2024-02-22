@@ -8,7 +8,7 @@
   tasks:
 
     - name: "Exit if at least one of the following not setup: secret, public, or Meza versions"
-      debug:
+      ansible.builtin.debug:
         msg: "local_config_repo, secret_config_repo, or enforce_meza_version must be configured"
       failed_when: True
       when: >
@@ -54,7 +54,7 @@
           register: secret_config_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: secret_config_git_operation
 
         - name: Reset vars if secret config changed
@@ -120,7 +120,7 @@
             link_names: 1
 
         - name: "End autodeployer: Secret config Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Secret config Git failure"
 
         - meta: end_play
@@ -158,7 +158,7 @@
           register: public_config_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: public_config_git_operation
 
         - name: Reset vars if public config changed
@@ -246,7 +246,7 @@
             link_names: 1
 
         - name: "End autodeployer: Public config Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Public config Git failure"
 
         - meta: end_play
@@ -284,7 +284,7 @@
           register: meza_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: meza_git_operation
 
         - name: Reset vars if Meza changed
@@ -360,7 +360,7 @@
             link_names: 1
 
         - name: "End autodeployer: Meza Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Meza Git failure"
 
         - meta: end_play
@@ -375,7 +375,7 @@
     #
     - block:
         - name: "End autodeployer if no changes made"
-          debug:
+          ansible.builtin.debug:
             msg: "Nothing new to deploy"
 
         - meta: end_play

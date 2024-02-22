@@ -9,7 +9,7 @@
 #   pushing_to_user:
 
 - name: "Rsync-push inputs"
-  debug:
+  ansible.builtin.debug:
     msg: |
       pushing_from_server: {{ pushing_from_server }}
       pushing_from_path: {{ pushing_from_path }}

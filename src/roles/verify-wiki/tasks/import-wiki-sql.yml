@@ -12,7 +12,7 @@
   delegate_to: "{{ groups['db_master'][0] }}"
   run_once: true
 
-- debug:
+- ansible.builtin.debug:
     var: imported_wiki_sql_on_db_master
 
 #
@@ -68,7 +68,7 @@
   when: not wiki_exists or do_overwrite_db_from_backup
 
 - name: Did DB import?
-  debug: { var: did_db_import }
+  ansible.builtin.debug: { var: did_db_import }
 
 
 #

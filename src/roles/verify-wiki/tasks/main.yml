@@ -182,7 +182,7 @@
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
 
-- debug:
+- ansible.builtin.debug:
     msg: |
       do_sql_dump:                   {{ do_sql_dump | default('<undefined>') }}
       wiki_exists:                   {{ wiki_exists | default('<undefined>') }}
@@ -326,7 +326,7 @@
   tags:
     - verify-wiki-uploads
 
-- debug: { var: remote_dir_exists }
+- ansible.builtin.debug: { var: remote_dir_exists }
   tags:
     - verify-wiki-uploads
 

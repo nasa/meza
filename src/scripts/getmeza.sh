@@ -82,8 +82,8 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			;;
 
 		rocky)
-			dnf install -y epel-release
 			dnf config-manager --set-enabled powertools
+			dnf install -y epel-release
 			dnf module -y reset php
 			dnf module -y enable php:7.4
 			sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo

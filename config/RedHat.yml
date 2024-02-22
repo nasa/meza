@@ -38,7 +38,7 @@ package_base_extras8:
   - gcc
   - cifs-utils
 package_nmap: nmap-ncat
-package_lua: [ 'lua', 'lua-devel' ]
+package_lua: ['lua', 'lua-devel']
 package_imagemagick:
   - ghostscript
   - ImageMagick

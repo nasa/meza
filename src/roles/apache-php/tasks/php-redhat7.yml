@@ -24,7 +24,7 @@
     list: "{{ php_ius_version }}-cli"
   register: correct_php
 
-- debug:
+- ansible.builtin.debug:
     var: correct_php
 
 - name: Set fact desired_PHP_version_installed

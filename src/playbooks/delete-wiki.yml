@@ -10,7 +10,7 @@
         Enter the desired wiki identifier to delete.
 
         Type the wiki ID and press [ENTER]:
-      private: no
+      private: false
 
   roles:
     - set-vars

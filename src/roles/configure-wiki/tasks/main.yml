@@ -35,7 +35,7 @@
     src: "files/{{ item }}"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: this will not overwrite
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
@@ -64,7 +64,7 @@
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: Non-default for templates. Destination files will not be overwritten
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755

@@ -6,7 +6,7 @@
   vars_prompt:
    - name: "seriously_delete_elasticsearch"
      prompt: Type "yes" to delete elasticsearch
-     private: no
+     private: false
      default: "No"
 
 

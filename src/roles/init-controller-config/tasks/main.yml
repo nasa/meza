@@ -92,7 +92,7 @@
     owner: "{{ m_config_public_owner }}"
     group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
-    force: no
+    force: false
   with_items:
     - MezaLocalExtensions.yml
     - MezaLocalSkins.yml

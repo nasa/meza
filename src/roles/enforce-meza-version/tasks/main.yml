@@ -10,7 +10,7 @@
     repo: "{{ meza_repository }}"
     dest: "{{ m_meza }}"
     version: "{{ enforce_meza_version }}"
-    track_submodules: no
-    recursive: no
+    track_submodules: false
+    recursive: false
     umask: "0002"
   when: enforce_meza_version is defined

@@ -48,8 +48,8 @@
             repo: "{{ secret_config_repo.repo }}"
             dest: "{{ m_local_secret }}"
             version: "{{ secret_config_repo.version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: secret_config_git_operation
 
@@ -152,8 +152,8 @@
             repo: "{{ local_config_repo.repo }}"
             dest: "{{ m_local_public }}"
             version: "{{ local_config_repo.version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: public_config_git_operation
 
@@ -278,8 +278,8 @@
             repo: "{{ meza_repository }}"
             dest: "{{ m_meza }}"
             version: "{{ enforce_meza_version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: meza_git_operation
 

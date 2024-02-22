@@ -18,5 +18,5 @@
   shell: bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh) --dont-wait
   args:
     executable: /bin/bash
-  become: no
+  become: false
   when: netdata_present.stat.exists == False

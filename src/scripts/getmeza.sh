@@ -20,20 +20,20 @@ for ARG in "$@"; do
 done
 
 checkInternetConnection() {
-    declare -i pingRetries=100
-    declare -i sleepDuration=3
-    declare -i minutes=$(($pingRetries * $sleepDuration / 60))
+	declare -i pingRetries=100
+	declare -i sleepDuration=3
+	declare -i minutes=$(($pingRetries * $sleepDuration / 60))
 
-    while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 mirrorlist.centos.org >/dev/null 2>&1; do
-        echo "Could not connect to mirrorlist.centos.org. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
-        ((pingRetries -= 1))
-        sleep $sleepDuration
-    done
+	while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 mirrorlist.centos.org >/dev/null 2>&1; do
+		echo "Could not connect to mirrorlist.centos.org. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
+		((pingRetries -= 1))
+		sleep $sleepDuration
+	done
 
-    if [[ ! $pingRetries -gt 0 ]]; then
-        echo "Meza has been trying to install but hasn't found an internet connection for $minutes minutes. Verify internet connectivity and try again."
-        exit 1
-    fi
+	if [[ ! $pingRetries -gt 0 ]]; then
+		echo "Meza has been trying to install but hasn't found an internet connection for $minutes minutes. Verify internet connectivity and try again."
+		exit 1
+	fi
 }
 
 if [ ! -z "${SKIP_CONNECTION_CHECK}" ]; then
@@ -131,46 +131,46 @@ fi
 
 case ${distro} in
 
-        centos)
-                yum install -y git ansible libselinux-python
-                ;;
+	centos)
+		yum install -y git ansible libselinux-python
+		;;
 
-        rocky)
+	rocky)
 		dnf install -y centos-release-ansible-29
 		dnf install -y python36
 		dnf install -y git ansible-2.9.27-1.el8.noarch
 		dnf install -y python3-libselinux
 		alternatives --set python /usr/bin/python3
-                ;;
+		;;
 
-        redhat)
-                case ${version} in
+	redhat)
+		case ${version} in
 
-                        7.*)
-                                yum install -y git ansible libselinux-python
-                                ;;
+			7.*)
+				yum install -y git ansible libselinux-python
+				;;
 
-                        8.*)
+			8.*)
 				dnf install -y python36 git ansible python3-libselinux
 				alternatives --set python /usr/bin/python3
-                                ;;
+				;;
 
-                        *)
-                                echo "RedHat version ${version} is not supported yet." && exit 188
-                                ;;
-                esac
-                ;;
+			*)
+				echo "RedHat version ${version} is not supported yet." && exit 188
+				;;
+		esac
+		;;
 
-        *)
-                echo "Cannot determine operating system distro or version" && exit 189
-                ;;
+	*)
+		echo "Cannot determine operating system distro or version" && exit 189
+		;;
 esac
 
 
 # if /opt/meza doesn't exist, clone into and use master branch (which is the
 # default, but should we make this configurable?)
 if [ ! -d "${INSTALL_DIR}/meza" ]; then
-        git clone https://github.com/enterprisemediawiki/meza.git ${INSTALL_DIR}/meza --branch master
+	git clone https://github.com/enterprisemediawiki/meza.git ${INSTALL_DIR}/meza --branch master
 fi
 
 # Make sure /opt/meza permissions are good in case git-cloned earlier

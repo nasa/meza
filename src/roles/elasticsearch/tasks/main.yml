@@ -77,7 +77,7 @@
     state: directory
     mode: 0755
     owner: elasticsearch
-    recurse: yes
+    recurse: true
   with_items:
     - "{{ m_meza_data }}/elasticsearch/data"
     - "{{ m_meza_data }}/elasticsearch/scripts"
@@ -112,7 +112,7 @@
   service:
     name: elasticsearch
     state: started
-    enabled: yes
+    enabled: true
   register: response
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 

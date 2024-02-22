@@ -1,7 +1,7 @@
 ---
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
     - umask-set
@@ -39,7 +39,7 @@
     - name: Do secret config
       block:
         - name: Ensure proper secret config
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
@@ -143,7 +143,7 @@
       block:
 
         - name: Ensure proper public config
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
@@ -269,7 +269,7 @@
 
 
         - name: Ensure proper Meza version
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:

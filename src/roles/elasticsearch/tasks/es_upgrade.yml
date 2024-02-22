@@ -89,9 +89,9 @@
 - name: Start elasticsearch
   service:
     name: elasticsearch
-    enabled: yes
+    enabled: true
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Wait for elasticsearch node to come back up
   wait_for:

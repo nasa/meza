@@ -18,7 +18,7 @@
   # hosts: tag_Services_elasticsearch:&tag_Environment_production
   hosts: search
   serial: 1
-  become: yes
+  become: true
 
   vars:
     es_disable_allocation:  '{"transient":{"cluster.routing.allocation.enable":"none"}}'

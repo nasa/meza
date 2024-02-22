@@ -1,7 +1,7 @@
 ---
 
 - hosts: app_servers
-  become: yes
+  become: true
 
   # prompt for wiki_id and wiki_name
   vars_prompt:

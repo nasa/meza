@@ -55,7 +55,7 @@
     file_type: directory
   register: wikis_dirs
   delegate_to: localhost
-  run_once: yes
+  run_once: true
 
 - set_fact:
     list_of_wikis: "{{ wikis_dirs.files | map(attribute='path') | map('basename') | list }}"

@@ -181,7 +181,7 @@
   file:
     path: /etc/haproxy/certs
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: 0600
@@ -389,5 +389,5 @@
   service:
     name: haproxy
     state: started
-    enabled: yes
+    enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks

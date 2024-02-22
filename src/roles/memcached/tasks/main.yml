@@ -23,5 +23,5 @@
   service:
     name: memcached
     state: started
-    enabled: yes
+    enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks

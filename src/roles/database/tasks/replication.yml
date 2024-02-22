@@ -113,7 +113,7 @@
   fetch:
     src: "{{ m_tmp }}/mysqldump-onmaster.sql.gz"
     dest: "{{ m_tmp }}/mysqldump-oncontrol.sql.gz"
-    flat: yes
+    flat: true
   delegate_to: "{{ mysql_replication_master }}"
   when:
     - slave_needs_configuration

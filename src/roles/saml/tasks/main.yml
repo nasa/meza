@@ -20,7 +20,7 @@
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    recurse: yes
+    recurse: true
   when: simplesamlphp_exists.stat.exists and simplesamlphp_exists.stat.isdir
 
 - name: Ensure good permissions on Extension:SimpleSAMLphp directory and subs (if dir exists)
@@ -29,11 +29,11 @@
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
-    recurse: yes
+    recurse: true
   when: simplesamlphp_exists.stat.exists and simplesamlphp_exists.stat.isdir
 
 - name: Get simplesamlphp tarball
-  become: yes
+  become: true
   become_user: "meza-ansible"
   get_url:
     url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
@@ -64,20 +64,20 @@
   when: not simplesamlphp_exists.stat.exists
 
 - name: Unarchive simplesamlphp tarball if new
-  become: yes
+  become: true
   unarchive:
     src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
     dest: "{{ m_simplesamlphp_path }}"
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    remote_src: yes
+    remote_src: true
     extra_opts:
       - "--strip-components=1"
   when: not simplesamlphp_exists.stat.exists or new_simplesamlphp_archive.changed
 
 - name: Ensure Extension:PluggableAuth installed
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -91,7 +91,7 @@
     - latest
 
 - name: Ensure Extension:SimpleSAMLphp (MediaWiki extension) installed
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -142,7 +142,7 @@
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    recurse: yes
+    recurse: true
 
 - name: Ensure _still_ good permissions on Extension:SimpleSamlAuth directory and subs
   file:
@@ -150,7 +150,7 @@
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
-    recurse: yes
+    recurse: true
 
 - name: Ensure NonMediaWikiSimpleSamlAuth.php in place
   template:

@@ -61,11 +61,11 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
     state: directory
-    recurse: yes
+    recurse: true
   tags:
     - mediawiki-core
 - name: Ensure proper MediaWiki git version installed
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -121,7 +121,7 @@
     - always
 
 - name: Ensure core meza extensions installed (non-Composer)
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -164,7 +164,7 @@
     - core-skins
 
 - name: Ensure local meza extensions installed (non-Composer)
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -220,12 +220,12 @@
     group: "{{ m_htdocs_group }}"
 
 - name: Run composer install on MediaWiki for dependencies
-  become: yes
+  become: true
   become_user: "meza-ansible"
   composer:
     command: install
     working_dir: "{{ m_mediawiki }}"
-    no_dev: yes
+    no_dev: true
   tags:
     - composer-extensions
     - latest
@@ -241,12 +241,12 @@
 
 # install doesn't appear to do extensions
 - name: Run composer update on MediaWiki for extensions
-  become: yes
+  become: true
   become_user: "meza-ansible"
   composer:
     command: update
     working_dir: "{{ m_mediawiki }}"
-    no_dev: yes
+    no_dev: true
   tags:
     - extensions
     - composer-extensions
@@ -254,7 +254,7 @@
     - skins
 
 - name: Ensure Git submodule requirements met for core meza extensions
-  become: yes
+  become: true
   become_user: "meza-ansible"
   shell: |
     cd "{{ m_mediawiki }}/extensions/{{ item.name }}"
@@ -267,7 +267,7 @@
     - latest
 
 - name: Ensure Git submodule requirements met for local meza extensions
-  become: yes
+  become: true
   become_user: "meza-ansible"
   shell: |
     cd "{{ m_mediawiki }}/extensions/{{ item.name }}"
@@ -336,7 +336,7 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
     state: directory
-    recurse: yes
+    recurse: true
   tags:
     - mediawiki-core
     - file-perms
@@ -370,7 +370,7 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
     state: directory
-    recurse: yes
+    recurse: true
 
 #
 # Authentication roles
@@ -443,7 +443,7 @@
     file_type: directory
   register: wikis_dirs
   delegate_to: localhost
-  run_once: yes
+  run_once: true
 
 - name: Set fact - list of wikis
   set_fact:

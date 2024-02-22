@@ -5,7 +5,7 @@
 # backups-src server(s), but in the hosts declaration below it only specifies
 # backups-src. For the test case these servers will be the same.
 - hosts: "{{ alt_source_ip_addr }}"
-  become: yes
+  become: true
   vars:
     alt_source_backups_dir: /opt/alt/backups
     m_home: /opt/conf-meza/users
@@ -36,7 +36,7 @@
       service:
         name: mariadb
         state: started
-        enabled: yes
+        enabled: true
 
     - name: Set MariaDB root password
       shell: mysqladmin -u root password 1234

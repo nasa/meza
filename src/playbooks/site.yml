@@ -5,7 +5,7 @@
 
 # FIXME #729: Move this into a role
 - hosts: localhost
-  become: yes
+  become: true
   tasks:
   # Can't run set-vars yet, so bootstrap m_home and m_config_vault for now.
   # Meza install path retrieved in same way in set-vars role
@@ -22,7 +22,7 @@
     - name: Ensure controller has user alt-meza-ansible
       user:
         name: alt-meza-ansible
-        move_home: yes
+        move_home: true
         home: "{{ m_home }}/alt-meza-ansible"
         group: wheel
     - name: Ensure user alt-meza-ansible .ssh dir configured
@@ -77,11 +77,11 @@
 # it may impact them, and role "umask-set" has no config requirements
 
 - hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
-  become: yes
+  become: true
   roles:
     - umask-set
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
     - init-controller-config
@@ -92,7 +92,7 @@
     - autodeployer
     - controller
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
     - role: autodeployer
@@ -103,14 +103,14 @@
 # allow servers which serve as sources for database and user-uploaded files,
 # but are not managed by this meza install.
 - hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
-  become: yes
+  become: true
   roles:
     - set-vars
     - base
     - base-config-scripts
   tags: base
 - hosts: load_balancers,load_balancers_meza_internal,load_balancers_meza_external
-  become: yes
+  become: true
   tags:
     - load-balancer
     - load_balancers
@@ -126,7 +126,7 @@
       # NOTE: firewalld ports 80 and 443 opened to ALL within haproxy role
     - haproxy
 - hosts: app_servers
-  become: yes
+  become: true
   tags: apache-php
   roles:
     - set-vars
@@ -152,7 +152,7 @@
 # configure app_servers as gluster clients and have separate gluster servers
 # (which can also be app_servers, of course, like everything else in meza)
 - hosts: app_servers
-  become: yes
+  become: true
   tags: gluster
   vars:
     gluster_replicas: "{{ groups['app_servers'] | length }}"
@@ -245,7 +245,7 @@
     - role: gluster
       when: groups['app_servers']|length|int > 1
 - hosts: memcached_servers
-  become: yes
+  become: true
   tags: memcached
   roles:
     - set-vars
@@ -257,7 +257,7 @@
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - memcached
 - hosts: db_master
-  become: yes
+  become: true
   tags: database
   roles:
     - set-vars
@@ -279,7 +279,7 @@
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: master
 - hosts: db_slaves
-  become: yes
+  become: true
   tags: database
   roles:
     - set-vars
@@ -295,13 +295,13 @@
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: slave
 - hosts: backup_servers
-  become: yes
+  become: true
   tags: backup_servers
   roles:
     - set-vars
     - backup-config
 - hosts: elastic_servers
-  become: yes
+  become: true
   tags: elasticsearch
   roles:
     - set-vars
@@ -333,7 +333,7 @@
 
 # Note: this is app_servers again, but must be after everything else is setup
 - hosts: app_servers
-  become: yes
+  become: true
   tags: mediawiki
   roles:
     - set-vars
@@ -342,14 +342,14 @@
       when: m_install_lua
     - mediawiki
 - hosts: logging_servers
-  become: yes
+  become: true
   tags: logging
   roles:
     - set-vars
     - role: meza-log
       when: docker_skip_tasks is not defined or not docker_skip_tasks
 - hosts: backup_servers
-  become: yes
+  become: true
   tags:
     - backup-cleanup
   roles:
@@ -357,7 +357,7 @@
     - role: backups-cleanup
       when: backups_cleanup is defined and backups_cleanup.crontime is defined
 - hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
-  become: yes
+  become: true
   tags:
     - cron
     - always

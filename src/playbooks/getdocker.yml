@@ -4,7 +4,7 @@
 # ref: https://docs.docker.com/engine/installation/linux/centos/
 
 - hosts: localhost
-  become: yes
+  become: true
 
   handlers:
     - name: Restart Docker
@@ -39,7 +39,7 @@
     #     description: Docker repository
     #     baseurl: https://download.docker.com/linux/centos/docker-ce.repo
     #     gpgkey: https://download.docker.com/linux/centos/gpg
-    #     gpgcheck: yes
+    #     gpgcheck: true
 
 
     - name: yum makecache fast
@@ -59,7 +59,7 @@
       service:
         name: docker
         state: started
-        enabled: yes
+        enabled: true
 
 
     # http://docs.ansible.com/ansible/docker_module.html

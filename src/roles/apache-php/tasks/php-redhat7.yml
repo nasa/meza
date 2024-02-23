@@ -6,14 +6,14 @@
 
 - name: Install IUS repo.
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name:
       - "https://repo.ius.io/ius-release-el7.rpm"
       - "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
 
 - name: Remove PHP 5.x packages
   package:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: "php5*"
     state: absent
 

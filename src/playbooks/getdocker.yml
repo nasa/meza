@@ -21,12 +21,12 @@
           - container-selinux
           - docker-selinux
           - docker-engine
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         state: absent
 
     - name: Ensure yum-utils present
       yum:
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         name: yum-utils
         state: present
 
@@ -48,7 +48,7 @@
     # or specify docker-ce-{{ docker_version }}
     - name: Ensure docker-ce package installed
       yum:
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         name: "docker-ce"
         state: latest
       notify: Restart Docker

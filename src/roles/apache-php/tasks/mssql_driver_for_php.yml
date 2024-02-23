@@ -6,7 +6,7 @@
       - re2c
       - gcc-c++
     state: present
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
 
 # Install ODBC driver
 - name: install mssql-server repo (CentOS, RedHat)
@@ -24,12 +24,12 @@
     name:
       - unixODBC-utf16
       - unixODBC-utf16-devel
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     state: absent
 
 - name: install MS ODBC driver package
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: msodbcsql17
     state: latest
   environment:
@@ -40,7 +40,7 @@
 
 - name: install ODBC driver devel package
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: unixODBC-devel
     state: latest
 

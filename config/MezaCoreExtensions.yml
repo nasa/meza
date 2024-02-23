@@ -88,7 +88,7 @@ list:
   # SimpleBatchUpload - Allows for customized in-page uploads with templates
   - name: SimpleBatchUpload
     composer: "mediawiki/simple-batch-upload"
-    version: "1.9.0"
+    version: "^2.0"
     config: |
       wfLoadExtension( 'SimpleBatchUpload' );
 

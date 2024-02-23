@@ -170,7 +170,7 @@
     )
 
 - name: ensure python3-selinux installed for Rocky/RHEL8
-  dnf:
+  ansible.builtin.dnf:
     lock_timeout: 180
     name: python3-libselinux
     state: installed
@@ -214,7 +214,7 @@
     )
 
 - name: Install Rocky/RHEL8 base packages
-  dnf:
+  ansible.builtin.dnf:
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name:
       - chrony

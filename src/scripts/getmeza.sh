@@ -166,11 +166,24 @@ case ${distro} in
 		;;
 esac
 
+# Meza repository URL and branch can be set in your system shell as environment variables so as to work locally with 
+# your preferred setup and/or test changes to this file in development without needing to alter this file explicitly. 
+#
+# Use 
+# export MEZA_REPOSITORY_URL='https://github.com/freephile/meza.git'
+# in your shell to override the default repo URL set here
+MEZA_REPOSITORY_URL="${MEZA_REPOSITORY_URL:-https://github.com/nasa/meza.git}"
 
-# if /opt/meza doesn't exist, clone into and use master branch (which is the
-# default, but should we make this configurable?)
+# Declare which branch in the repo to use
+# 
+# Use 
+# export MEZA_BRANCH_NAME='REL1_39'
+# in your shell to override the default branch name set here
+MEZA_BRANCH_NAME="${MEZA_BRANCH_NAME:-main}"
+
+# if /opt/meza doesn't exist, clone our sources, always keeping the 'meza' name
 if [ ! -d "${INSTALL_DIR}/meza" ]; then
-	git clone https://github.com/enterprisemediawiki/meza.git ${INSTALL_DIR}/meza --branch master
+	git clone ${MEZA_REPOSITORY_URL} ${INSTALL_DIR}/meza --branch ${MEZA_BRANCH_NAME} "${INSTALL_DIR}/meza"
 fi
 
 # Make sure /opt/meza permissions are good in case git-cloned earlier

@@ -37,7 +37,7 @@
     owner: meza-ansible
     group: wheel
     mode: "{{ item.mode }}"
-  failed_when: False
+  failed_when: false
   with_items:
     - name: known_hosts
       mode: "0600"
@@ -51,7 +51,7 @@
     block: |
       [diff]
           ignoreSubmodules = all
-  failed_when: False
+  failed_when: false
   tags:
     - mediawiki-core
 - name: Ensure MediaWiki core owned by meza-ansible
@@ -84,7 +84,7 @@
   # this sucks to have to do this but I'm repeatedly getting submodule errors
   # so it's this or stop using git (which would also mean changing how
   # extensions/skins/vendor is stored so it didn't wipe them out each time)
-  failed_when: False
+  failed_when: false
 
   tags:
     - latest
@@ -463,7 +463,10 @@
     list_of_wikis: "['{{ primary_wiki_id }}'] + {{ list_of_wikis | difference([primary_wiki_id]) }}"
   when: primary_wiki_id is defined
 
-- ansible.builtin.debug: { var: list_of_wikis }
+- name: Check list of wikis
+  ansible.builtin.debug:
+    var: list_of_wikis
+  debugger: on_failed
 
 - name: Set fact - initiate empty list of wikis to rebuild smw and search data
   set_fact:
@@ -484,7 +487,8 @@
     - verify-wiki
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
-- ansible.builtin.debug: { var: wikis_to_rebuild_data }
+- ansible.builtin.debug:
+    var: wikis_to_rebuild_data
 
 - name: Ensure data rebuilding scripts in place on app servers
   template:
@@ -552,7 +556,10 @@
     - search-index
 
 - name: "(Re-)build SemanticMediaWiki data for: {{ wikis_to_rebuild_data | join(', ') }}"
-  shell: 'bash {{ m_deploy }}/smw-rebuild-all.sh "{{ wikis_to_rebuild_data | join('' '') }}"  > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
+  shell: >
+    'bash {{ m_deploy }}/smw-rebuild-all.sh "{{ wikis_to_rebuild_data | join('' '') }}"
+    >
+    {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
   when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (wikis_to_rebuild_data|length > 0)
   run_once: true
   tags:
@@ -616,26 +623,3 @@
   tags:
     - latest
   when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
-
-# Not needed as alternatives takes care of this from getmeza.sh
-#
-#- name: "Ensure python3 symlink in place"
-#  file:
-#    # dest = symlink, src = dir linked to
-#    src: "/usr/bin/python3.6"
-#    dest: "/usr/bin/python3"
-#    state: link
-#    owner: root
-#    group: root
-#    mode: 0755
-#  when: ansible_distribution_file_variety == 'RedHat'
-# - name: "Ensure pip3 symlink in place"
-#   file:
-#     # dest = symlink, src = dir linked to
-#     src: "/usr/bin/pip3.5"
-#     dest: "/usr/bin/pip3"
-#     state: link
-#     owner: root
-#     group: root
-#     mode: 0755
-#   when: ansible_distribution_file_variety == 'RedHat'

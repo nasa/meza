@@ -386,8 +386,11 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: True
     config: |
+      $wgFlowContentFormat = 'html';
       $wgNamespaceContentModels[NS_TALK] = 'flow-board';
+      $wgNamespacesWithSubpages[NS_TALK] = true;
       $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
+      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
       $wgGroupPermissions['user']['flow-create-board'] = true;
 
   # CommentStreams - Adds a commenting system for wikis.

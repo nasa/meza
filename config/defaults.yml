@@ -2,7 +2,10 @@
 # Meza default config file
 
 # used by autodeployer to track a named branch, tag, or SHA1
-enforce_meza_version: main
+# @FIXME when this is defined, you can not deploy with modifications in
+# /opt/meza so you can not change anything
+# add another 'enfoce_mode' variable, or a host!=localhost condition
+# enforce_meza_version: REL1_39
 
 # The source code repo for Meza
 # e.g. Use our local repo fork temporarily

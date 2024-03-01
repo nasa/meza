@@ -108,7 +108,14 @@
     - set-vars
     - base
     - base-config-scripts
+    # right now remi repo is buried in the apache-php role, but we could do a
+    # general best-practice role re-use in our playbook like this
+    # - role: geerlingguy.repo-remi
+    #   when:
+    #     - ansible_facts['distribution'] == "Rocky"
+    #     - ansible_facts['distribution_major_version'] == "8"
   tags: base
+
 - hosts: load_balancers,load_balancers_meza_internal,load_balancers_meza_external
   become: true
   tags:

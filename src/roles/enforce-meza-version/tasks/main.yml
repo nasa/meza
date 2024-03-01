@@ -7,7 +7,7 @@
   environment:
     TMPDIR: "{{ m_tmp }}"
   git:
-    repo: "{{ meza_repository }}"
+    repo: "{{ meza_repository_url }}"
     dest: "{{ m_meza }}"
     version: "{{ enforce_meza_version }}"
     track_submodules: false

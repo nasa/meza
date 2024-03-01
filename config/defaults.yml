@@ -1,8 +1,21 @@
 ---
 # Meza default config file
 
-# enforce_meza_version: main
-meza_repository: https://github.com/nasa/meza.git
+# used by autodeployer to track a named branch, tag, or SHA1
+enforce_meza_version: main
+
+# The source code repo for Meza
+# e.g. Use our local repo fork temporarily
+# meza_repository_url: https://github.com/freephile/meza.git
+# You can override this using Ansible 'extra-vars'
+# yamllint disable-line rule:line-length
+# sudo time meza deploy monolith -vvv --tags base,httpd-reload -e meza_repository_url=https://github.com/freephile/meza.git
+# Note: a similar variable is used in getmeza.sh
+# That script (or git on the CLI) controls your meza sources currently.
+# The variable here is NOT used to check out new versions of meza on deploys
+# but rather used in playbooks/check-for-changes and roles/enforce-meza-version
+# as part of the Autodeployer https://www.mediawiki.org/wiki/Meza/Autodeployer
+meza_repository_url: https://github.com/nasa/meza.git
 
 # Use development or production settings for this server
 # production being as performant and secure as possible

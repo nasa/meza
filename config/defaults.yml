@@ -101,7 +101,10 @@ m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
 # Version of MediaWiki core
 mediawiki_version: "REL1_39"  # FIXME set a specific version
 
-# Branch to use on many extensions extensions and skins
+# Depth of MediaWiki clone - to avoid having ALL the project history
+mediawiki_git_depth: "100"
+
+# Branch to use for extensions and skins without a more specific version
 mediawiki_default_branch: "REL1_39"
 
 # PHP version

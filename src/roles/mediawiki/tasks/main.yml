@@ -74,6 +74,7 @@
     repo: https://github.com/wikimedia/mediawiki.git
     dest: "{{ m_mediawiki }}"
     version: "{{ mediawiki_version }}"
+    depth: "{{ mediawiki_git_depth }}"
     refspec: "{{ item.refspec | default('') }}"
     track_submodules: false
     recursive: false

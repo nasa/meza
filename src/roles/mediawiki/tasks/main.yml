@@ -73,6 +73,7 @@
   git:
     repo: https://github.com/wikimedia/mediawiki.git
     dest: "{{ m_mediawiki }}"
+    force: "{{ overwrite_local_git_changes }}"
     version: "{{ mediawiki_version }}"
     depth: "{{ mediawiki_git_depth }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -130,6 +131,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    force: "{{ overwrite_local_git_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
     umask: "0002"
@@ -155,6 +157,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
+    force: "{{ overwrite_local_git_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
   with_items: "{{ meza_core_skins.list }}"
@@ -173,6 +176,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    force: "{{ overwrite_local_git_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
     umask: "0002"
@@ -192,6 +196,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
+    force: "{{ overwrite_local_git_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
   with_items: "{{ meza_local_skins.list }}"

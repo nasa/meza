@@ -107,6 +107,10 @@ mediawiki_git_depth: "100"
 # Branch to use for extensions and skins without a more specific version
 mediawiki_default_branch: "REL1_39"
 
+# CAUTION: if set to true, a deploy will overwrite manual changes made on disk
+# to MediaWiki core, Meza core extensions and skins + Local extensions and skins
+overwrite_local_git_changes: false
+
 # PHP version
 php_ius_version: "php74"
 php_debian_version: "7.4"

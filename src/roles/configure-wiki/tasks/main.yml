@@ -18,6 +18,7 @@
 #   preLocalSettings.php
 #   postLocalSettings.php
 
+# e.g. /opt/conf-meza/public/wikis/foo
 - name: Ensure wiki directory exists in config
   file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
@@ -25,6 +26,17 @@
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+- name: Ensure .smw.json directory exists in the data directory
+  file:
+    path: "{{ m_meza_data }}/mw-temp/{{ wiki_id }}"
+    # same as "{{ mw_temp.path }}/{{ wiki_id }}"
+    state: directory
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: "u=rwX,g=rwX,o="
   delegate_to: localhost
   run_once: true
 

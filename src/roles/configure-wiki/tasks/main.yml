@@ -29,14 +29,15 @@
   delegate_to: localhost
   run_once: true
 
+# ownership allows for apache, ansible, and local 'userx' to run scripts
+# like update.php or rebuildData.php
 - name: Ensure .smw.json directory exists in the data directory
   file:
-    path: "{{ m_meza_data }}/mw-temp/{{ wiki_id }}"
-    # same as "{{ mw_temp.path }}/{{ wiki_id }}"
+    path: "{{ mw_temp.path }}/{{ wiki_id }}"
     state: directory
-    owner: "{{ user_apache }}"
-    group: "{{ group_apache }}"
-    mode: "u=rwX,g=rwX,o="
+    owner: "meza-ansible"
+    group: "wheel"
+    mode: "u=rwX,g=rwX,o=rX"
   delegate_to: localhost
   run_once: true
 

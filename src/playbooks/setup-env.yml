@@ -1,7 +1,7 @@
 ---
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
     - setup-env

@@ -18,6 +18,7 @@
 #   preLocalSettings.php
 #   postLocalSettings.php
 
+# e.g. /opt/conf-meza/public/wikis/foo
 - name: Ensure wiki directory exists in config
   file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
@@ -28,6 +29,18 @@
   delegate_to: localhost
   run_once: true
 
+# ownership allows for apache, ansible, and local 'userx' to run scripts
+# like update.php or rebuildData.php
+- name: Ensure .smw.json directory exists in the data directory
+  file:
+    path: "{{ mw_temp.path }}/{{ wiki_id }}"
+    state: directory
+    owner: "meza-ansible"
+    group: "wheel"
+    mode: "u=rwX,g=rwX,o=rX"
+  delegate_to: localhost
+  run_once: true
+
 # This will make sure the wiki has some required files, but if they exist
 # already it will not overwrite them.
 - name: Ensure base files are in place (but do not overwrite)
@@ -35,7 +48,7 @@
     src: "files/{{ item }}"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: this will not overwrite
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
@@ -64,7 +77,7 @@
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: Non-default for templates. Destination files will not be overwritten
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755

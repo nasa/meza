@@ -5,8 +5,8 @@
   synchronize:
     src: "files/ServerPerformance/"
     dest: "{{ m_htdocs }}/ServerPerformance"
-    recursive: yes
-    delete: yes
+    recursive: true
+    delete: true
     rsync_opts:
       - "--no-motd"
       - "--exclude=.git"
@@ -15,8 +15,8 @@
   synchronize:
     src: "files/BackupDownload/"
     dest: "{{ m_htdocs }}/BackupDownload"
-    recursive: yes
-    delete: yes
+    recursive: true
+    delete: true
     rsync_opts:
       - "--no-motd"
       - "--exclude=.git"

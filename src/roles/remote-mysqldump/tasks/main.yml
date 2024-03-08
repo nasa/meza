@@ -10,7 +10,7 @@
 #   target_server
 #   target_server_path
 
-- debug: { msg: "Running role:remote-mysqldump for {{ wiki_id }}" }
+- ansible.builtin.debug: { msg: "Running role:remote-mysqldump for {{ wiki_id }}" }
 
 
 #
@@ -42,11 +42,11 @@
 #
 - name: Set mysql password option if defined
   set_fact:
-    password_option: "-p{{ remote_server_mysql_pass }}"
+    password_option: "-p'{{ remote_server_mysql_pass }}'"
   when: remote_server_mysql_pass is defined
 - name: Set mysql password option use wiki application user if not defined
   set_fact:
-    password_option: "-p{{ wiki_app_db_user.password }}"
+    password_option: "-p'{{ wiki_app_db_user.password }}'"
   when: remote_server_mysql_pass is not defined
 
 #
@@ -92,7 +92,7 @@
       | grep -v Wildcard
       | grep -o {{ dump_database }}
   when: remote_server == target_server
-- debug: { msg: "{{ mysqlshow_command }}" }
+- ansible.builtin.debug: { msg: "{{ mysqlshow_command }}" }
 
 - name: "{{ wiki_id }} - check if wiki database exists ON SOURCE SERVER"
   shell: "{{ mysqlshow_command }}"
@@ -101,7 +101,7 @@
   run_once: true
   delegate_to: "{{ target_server }}"
 
-- debug:
+- ansible.builtin.debug:
     var: source_wiki_exists_check
 
 
@@ -146,7 +146,7 @@
       > {{ target_server_path }}
   when: remote_server == target_server
 
-- debug: { msg: "{{ mysqldump_command }}" }
+- ansible.builtin.debug: { msg: "{{ mysqldump_command }}" }
 
 #
 # DO mysqldump

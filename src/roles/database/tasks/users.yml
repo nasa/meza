@@ -6,7 +6,7 @@
     password: "{{ wiki_app_db_user.password }}"
     priv: "{{ wiki_app_db_user.priv }}"
     state: present
-    append_privs: no
+    append_privs: false
   with_items: "{{ groups['app_servers'] }}"
   no_log: true
 
@@ -17,7 +17,7 @@
     password: "{{ wiki_app_db_user.password }}"
     priv: "{{ wiki_app_db_user.priv }}"
     state: present
-    append_privs: no
+    append_privs: false
   no_log: true
   when: inventory_hostname in groups['app_servers']
 

@@ -10,7 +10,7 @@ list:
   # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
   - name: Semantic MediaWiki
     composer: "mediawiki/semantic-media-wiki"
-    version: "4.0.1"
+    version: "4.1.3"
     config: |
       wfLoadExtension( 'SemanticMediaWiki' );
       enableSemantics( $wgServer . '/' . $wikiId . '/' );
@@ -51,21 +51,21 @@ list:
   # Maps - Extension to visualize and work with geographical information
   - name: Maps
     composer: "mediawiki/maps"
-    version: "9.0.7"
+    version: "10.1.1"
     config: |
       wfLoadExtension( 'Maps' );
 
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "tags/5.4"
+    version: "tags/5.6.3"
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
     composer: "mediawiki/semantic-extra-special-properties"
-    version: "3.0.1"
+    version: "3.0.5"
     config: |
       $sespgEnabledPropertyList = [
         '_EUSER',
@@ -88,7 +88,7 @@ list:
   # SimpleBatchUpload - Allows for customized in-page uploads with templates
   - name: SimpleBatchUpload
     composer: "mediawiki/simple-batch-upload"
-    version: "1.9.0"
+    version: "^2.0"
     config: |
       wfLoadExtension( 'SimpleBatchUpload' );
 
@@ -294,11 +294,10 @@ list:
 #    version: "{{ mediawiki_default_branch }}"
 #    legacy_load: true
 
-#  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
-#  - name: SemanticDrilldown
-#    repo: https://github.com/SemanticMediaWiki/SemanticDrilldown.git
-#    version: master
-#    legacy_load: true
+  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
+  - name: SemanticDrilldown
+    repo: https://github.com/freephile/SemanticDrilldown.git
+    version: master
 
   # Arrays - Creates an additional set of parser functions that operate on arrays.
   - name: Arrays
@@ -323,25 +322,32 @@ list:
   # Variables - Allows variables to be defined in a page and used later in that same page or included templates, change its value, possibly to a value given by an expression in terms of the old value, etc.
   - name: Variables
     repo: https://github.com/wikimedia/mediawiki-extensions-Variables.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # ContributionScores - Polls the wiki database to locate contributors with the highest contribution volume
   - name: ContributionScores
     repo: https://github.com/wikimedia/mediawiki-extensions-ContributionScores.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
     config: |
-      $wgContribScoreIgnoreBots = true;
+      // Exclude Bots from the reporting - Can be omitted.
+      $wgContribScoreIgnoreBots = true; 
+      // Exclude Blocked Users from the reporting - Can be omitted.
       $wgContribScoreIgnoreBlockedUsers = true;
+      // Exclude specific usernames from the reporting - Can be omitted.
+      $wgContribScoreIgnoreUsernames = [];
+      // Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
       $wgContribScoresUseRealName = true;
+      // Set to true to disable cache for parser function and inclusion of table.
       $wgContribScoreDisableCache = false;
+      // Use the total edit count to compute the Contribution score.
+      $wgContribScoreUseRoughEditCount = false;  
+      // Each array defines a report - 7,50 is "past 7 days" and "LIMIT 50" - Can be omitted.
       $wgContribScoreReports = array( array(7,50), array(30,50), array(0,50) );
 
   # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being interpreted as an argument delimiter
   - name: PipeEscape
     repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
 
   # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
   - name: CirrusSearch
@@ -380,8 +386,11 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: True
     config: |
+      $wgFlowContentFormat = 'html';
       $wgNamespaceContentModels[NS_TALK] = 'flow-board';
+      $wgNamespacesWithSubpages[NS_TALK] = true;
       $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
+      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
       $wgGroupPermissions['user']['flow-create-board'] = true;
 
   # CommentStreams - Adds a commenting system for wikis.
@@ -406,10 +415,12 @@ list:
     config: |
       $wgCreateUserPage_OnLogin = true;
 
-  # WhosOnline - Provides a special page that shows who is (or has very recently been) logged-in
+  # WhosOnline - Provides a special page that shows who is 
+  # (or has very recently been) logged-in
+  # Use 'master' because bugfixes are not backported
   - name: WhosOnline
     repo: https://github.com/wikimedia/mediawiki-extensions-WhosOnline.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
     config: |
       $wgWhosOnlineShowRealName = true;
 
@@ -462,14 +473,12 @@ list:
   - name: Widgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Widgets.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: True
     composer_merge: True
 
   # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of various media files in both local and remote repositories
   - name: MediaFunctions
     repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
     version: "{{ mediawiki_default_branch }}"
-    legacy_load: true
 
   # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which you can't get with MediaWikis existing magic Words
   - name: SubpageFun
@@ -502,33 +511,32 @@ list:
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
 
-#  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
-#  - name: SimpleMathJax
-#    repo: https://github.com/jamesmontalvo3/SimpleMathJax.git
-#    version: e94afaffcdde8d926b166fdd166162f9519beaa1
-#    legacy_load: True
+  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
+  - name: SimpleMathJax
+    repo: https://github.com/jmnote/SimpleMathJax
+    version: "main"
 
-  # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
-  - name: TalkRight
-    repo: https://github.com/enterprisemediawiki/TalkRight.git
-    version: tags/2.0.0
+  # # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
+  # - name: TalkRight
+  #   repo: https://github.com/enterprisemediawiki/TalkRight.git
+  #   version: tags/2.0.0
 
-  # Wiretap - Provides special pages for tracking user page viewing stats
-  - name: Wiretap
-    repo: https://github.com/enterprisemediawiki/Wiretap.git
-    version: tags/0.2.0
+  # # Wiretap - Provides special pages for tracking user page viewing stats
+  # - name: Wiretap
+  #   repo: https://github.com/enterprisemediawiki/Wiretap.git
+  #   version: tags/0.2.0
 
   # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics
-    repo: https://github.com/enterprisemediawiki/WatchAnalytics.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics.git
     version: "master"
     config: |
       $egPendingReviewsEmphasizeDays = 10;
 
   # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
   - name: HeaderFooter
-    repo: https://github.com/enterprisemediawiki/HeaderFooter.git
-    version: tags/3.0.1
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
+    version: "{{ mediawiki_default_branch }}"
 
   # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this extension will update (null-edit) all pages that have been selected through that property.
   - name: SemanticDependencyUpdater
@@ -539,7 +547,7 @@ list:
       $wgSDUUseJobQueue = false;
 
   # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
-  - name: Html5mediator
-    repo: https://github.com/lightbinder/Html5mediator.git
-    version: master
-    legacy_load: true
+  # - name: Html5mediator
+  #   repo: https://github.com/lightbinder/Html5mediator.git
+  #   version: master
+  #   legacy_load: true

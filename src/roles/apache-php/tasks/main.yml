@@ -25,10 +25,10 @@
     name: "{{ item }}"
     # add onto groups
     groups: "{{ group_apache }}"
-    append: yes
+    append: true
   with_items:
-  - meza-ansible
-  - alt-meza-ansible
+    - meza-ansible
+    - alt-meza-ansible
 
 - name: write the apache config file for Cent/RHEL7
   template:
@@ -115,20 +115,20 @@
   template:
     src: www.conf.j2
     dest: "{{ path_php_fpm_conf }}"
-    backup: yes
+    backup: true
   when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
 
 - name: Proper php.conf for Rocky/RHEL8 httpd
   template:
     src: php.conf
     dest: "{{ path_php_httpd_conf }}"
-    backup: yes
+    backup: true
   when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
 
 - name: Enable and start php-from for Rocky/RHEL8+
   service:
     name: "{{ service_php_fpm }}"
-    enabled: yes
+    enabled: true
     state: started
   when: docker_skip_tasks is not defined or not docker_skip_tasks and
         ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
@@ -138,7 +138,7 @@
   service:
     name: "{{ service_apache }}"
     state: restarted
-    enabled: yes
+    enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 

@@ -1,6 +1,6 @@
 ---
 
-- debug: { msg: "Running role:update.php for {{ wiki_id }}" }
+- ansible.builtin.debug: { msg: "Running role:update.php for {{ wiki_id }}" }
 
 - name: Set backup timestamp fact
   set_fact:
@@ -68,20 +68,20 @@
       shell: "cat {{ update_php_log }}"
       register: update_php_log_output
 
-    - debug:
+    - ansible.builtin.debug:
         var: update_php_log_output
 
     - name: Get php error log
       shell: "tail -n 50 {{ m_logs }}/php/php_errors.log"
       register: php_error_log_output
 
-    - debug:
+    - ansible.builtin.debug:
         var: php_error_log_output
 
     #
     # IF IT'S A MULTI-CONTENT REVISIONS ISSUE
     #
-    - debug:
+    - ansible.builtin.debug:
         msg: "Multi-Content Revisions error detected. Ref https://phabricator.wikimedia.org/T212428"
       when: '"Main slot of revision not found in database" in update_php_log_output'
 

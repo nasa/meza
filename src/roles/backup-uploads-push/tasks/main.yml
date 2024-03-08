@@ -33,7 +33,7 @@
     - push_backup.uploads.path is not defined
 
 - name: Output value of remote_server_base_path (<id> will be replaced by each wiki_id)
-  debug: { var: remote_server_base_path }
+  ansible.builtin.debug: { var: remote_server_base_path }
 
 - name: "Run role:rsync-push - Copy uploads directory to {{ push_backup.uploads.addr }}"
   include_role:

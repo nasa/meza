@@ -61,8 +61,8 @@ def main (argv):
 		import subprocess
 		version = subprocess.check_output( ["git", "--git-dir={}/meza/.git".format(install_dir), "describe", "--tags" ] )
 		commit = subprocess.check_output( ["git", "--git-dir={}/meza/.git".format(install_dir), "rev-parse", "HEAD" ] )
-		print( "Meza " + version.strip() )
-		print( "Commit " + commit.strip() )
+		print( "Meza " + version.strip().decode() )
+		print( "Commit " + commit.strip().decode() )
 		print( "Mediawiki EZ Admin" )
 		print( "" )
 		sys.exit(0)
@@ -1125,8 +1125,8 @@ def write_vault_decryption_tmp_file ( env, value ):
 	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir,env)
 
 	with open( temp_decrypt_file, 'w' ) as filetowrite:
-	    filetowrite.write( value )
-	    filetowrite.close()
+		filetowrite.write( value )
+		filetowrite.close()
 
 	return temp_decrypt_file
 
@@ -1174,7 +1174,7 @@ def prompt(varname,default=False):
 	else:
 		# If no default, keep asking until user supplies a value
 		while (not value):
-			value = raw_input( input_msg )
+			value = input( input_msg )
 
 	return value
 

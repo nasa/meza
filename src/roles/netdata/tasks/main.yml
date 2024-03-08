@@ -7,10 +7,10 @@
     path: "{{ m_install }}/netdata"
   register: netdata_present
 
-- debug: msg="netdata not installed"
+- ansible.builtin.debug: msg="netdata not installed"
   when: netdata_present.stat.exists == False
 
-- debug: msg="netdata installed"
+- ansible.builtin.debug: msg="netdata installed"
   when: netdata_present.stat.exists == True
 
 ## It will be running once installed
@@ -18,5 +18,5 @@
   shell: bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh) --dont-wait
   args:
     executable: /bin/bash
-  become: no
+  become: false
   when: netdata_present.stat.exists == False

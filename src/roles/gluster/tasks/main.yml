@@ -14,7 +14,7 @@
   service:
     name: "{{ glusterfs_daemon }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure Gluster brick and mount directories exist.
   file:
@@ -33,7 +33,7 @@
     replicas: "{{ gluster_replicas }}"
     cluster: "{{ groups['app_servers'] | join(',') }}"
     host: "{{ inventory_hostname }}"
-    force: yes
+    force: true
   run_once: true
 
 - name: Ensure Gluster volume is mounted.

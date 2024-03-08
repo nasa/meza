@@ -4,11 +4,11 @@
     name: "{{ item }}"
     # primary group
     group: wheel
-    move_home: yes
+    move_home: true
     home: "{{ m_home }}/{{ item }}"
   with_items:
-  - meza-ansible
-  - alt-meza-ansible
+    - meza-ansible
+    - alt-meza-ansible
 
 - name: Ensure user alt-meza-ansible .ssh dir configured
   file:
@@ -19,7 +19,10 @@
     state: directory
 
 - name: Copy meza-ansible authorized_keys to alt-meza-ansible
-  shell: cp {{ m_home }}/meza-ansible/.ssh/authorized_keys {{ m_home }}/alt-meza-ansible/.ssh/authorized_keys
+  shell: >
+    cp
+    {{ m_home }}/meza-ansible/.ssh/authorized_keys
+    {{ m_home }}/alt-meza-ansible/.ssh/authorized_keys
 
 - name: Ensure user meza-ansible and alt-meza-ansible authorized_keys configured
   file:
@@ -28,8 +31,8 @@
     group: wheel
     mode: 0644
   with_items:
-  - meza-ansible
-  - alt-meza-ansible
+    - meza-ansible
+    - alt-meza-ansible
 
 - name: Set authorized key for alt-meza-ansible
   authorized_key:
@@ -39,7 +42,7 @@
 
 - name: Ensure no password on alt-meza-ansible user
   shell: passwd --delete alt-meza-ansible
-  failed_when: False
+  failed_when: false
 
 - name: Ensure /etc/sudoers.d/meza-ansible in place
   template:
@@ -49,34 +52,41 @@
     group: root
     mode: "0644"
 
-# Without this get error "yum lockfile is held by another process" occasionally
-- name: Ensure PackageKit is removed so it doesn't try to upgrade packages on its own
+# Without this, we sometimes get error "yum lockfile is held by another process"
+# because PackageKit will upgrade packages on its own
+- name: Ensure PackageKit is removed
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: PackageKit
     state: absent
   when: ansible_distribution_file_variety == 'RedHat'
 
 - name: ensure deltarpm is installed and latest
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: deltarpm
     state: latest
   tags:
-  - latest
-  when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7") or
-        (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7")
+    - latest
+  when: >
+    ansible_facts['distribution_major_version'] == "7"
+    and
+    (
+      ansible_facts['distribution'] == "CentOS"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 - name: Ensure apt cache updated (Debian only)
   apt:
-    update_cache: yes
+    update_cache: true
   when: ansible_distribution_file_variety == "Debian"
 
-- name: Ensure aptitude installed in order to use Ansible 'package' (Debian only)
+- name: Ensure aptitude installed to use Ansible 'package' (Debian only)
   apt:
     name: aptitude
     state: present
-    force_apt_get: yes
+    force_apt_get: true
   when: ansible_distribution_file_variety == "Debian"
 
 - name: Upgrade all packages
@@ -87,18 +97,18 @@
     # license agreements.
     ACCEPT_EULA: 'y'
   tags:
-  - latest
-  - upgrade-packages
+    - latest
+    - upgrade-packages
 
 # FIXME #807: for RedHat may need to enable "Optional RPMs"
-- name: Ensure EPEL installed via epel-release package (CentOS only)
+- name: Ensure EPEL installed via epel-release package (CentOS and Rocky Linux)
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: epel-release
     state: present
   when: ansible_distribution == "CentOS" or ansible_distribution == "Rocky"
   tags:
-  - latest
+    - latest
 
 - name: Check if EPEL repo is already configured (RedHat only)
   stat:
@@ -106,54 +116,71 @@
   register: epel_repofile_result
   when: ansible_distribution == "RedHat"
   tags:
-  - latest
+    - latest
 
 - name: Ensure EPEL installed via URL (RedHat only)
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
+    # yamllint disable-line rule:line-length
     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
   register: result
   until: '"failed" not in result'
   retries: 5
   delay: 10
-  when: ansible_distribution == "RedHat" and not epel_repofile_result.stat.exists
+  when: >
+    ansible_distribution == "RedHat"
+    and not
+    epel_repofile_result.stat.exists
   tags:
-  - latest
+    - latest
 
 - name: Import EPEL GPG key (RedHat only)
   rpm_key:
+    # yamllint disable-line rule:line-length
     key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
     state: present
-  when: ansible_distribution == "RedHat" and not epel_repofile_result.stat.exists
+  when: >
+    ansible_distribution == "RedHat"
+    and not
+    epel_repofile_result.stat.exists
   ignore_errors: "{{ ansible_check_mode }}"
   tags:
-  - latest
+    - latest
 
 - name: Ensure optional repos enabled (RedHat Only)
   shell: subscription-manager repos --enable rhel-7-server-optional-rpms
   tags:
-  - latest
-  when: (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7")
+    - latest
+  when:
+    - ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution_major_version'] == "7"
 
 - name: ensure libselinux-python installed prior to SELinux (RedHat/CentOS only)
   yum: name=libselinux-python state=installed
   tags:
-  - latest
-  when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7") or
-        (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7")
+    - latest
+  when: >
+    ansible_facts['distribution_major_version'] == "7"
+    and
+    (
+      ansible_facts['distribution'] == "CentOS"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 - name: ensure python3-selinux installed for Rocky/RHEL8
-  dnf:
+  ansible.builtin.dnf:
     lock_timeout: 180
     name: python3-libselinux
     state: installed
   tags:
     - latest
   when:
-    (ansible_facts['distribution'] == "Rocky" and ansible_facts['distribution_major_version'] == "8")
+    - ansible_facts['distribution'] == "Rocky"
+    - ansible_facts['distribution_major_version'] == "8"
 
-- name: Ensure base packages installed
+- name: Ensure base packages installed CentOS7/RHEL7/Debian
   package:
     name:
       - ntp
@@ -172,20 +199,48 @@
       - rsync
     state: present
   tags:
-  - latest
-  when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7") or
-        (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7") or
-        (ansible_facts['distribution'] == "Debian")
+    - latest
+  when: >
+    ansible_facts['distribution'] == "Debian"
+    or
+    (
+      ansible_facts['distribution_major_version'] == "7"
+      and
+      (
+        ansible_facts['distribution'] == "CentOS"
+        or
+        ansible_facts['distribution'] == "RedHat"
+      )
+    )
 
 - name: Install Rocky/RHEL8 base packages
-  dnf:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
-    name: ['openssh-server', 'openssh-clients', 'vim', 'git', 'net-tools', 'firewalld', 'selinux-policy', 'rsyslog', 'jq', 'tree', 'chrony', 'rsync', 'python3-pip']
+  ansible.builtin.dnf:
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
+    name:
+      - chrony
+      - firewalld
+      - git
+      - jq
+      - net-tools
+      - openssh-clients
+      - openssh-server
+      - python3-pip
+      - rsync
+      - rsyslog
+      - selinux-policy
+      - tree
+      - vim
     state: installed
   tags:
-  - latest
-  when: (ansible_facts['distribution'] == "Rocky" and ansible_facts['distribution_major_version'] == "8") or
-        (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "8")
+    - latest
+  when: >
+    ansible_facts['distribution_major_version'] == "8"
+    and
+    (
+      ansible_facts['distribution'] == "Rocky"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 
 - name: Ensure selinux-policy installed (RedHat/CentOS only)
@@ -194,19 +249,19 @@
     state: latest
   when: ansible_distribution_file_variety == "RedHat"
   tags:
-  - latest
+    - latest
 
 - name: put SELinux in permissive mode (RedHat/CentOS only)
   selinux:
     policy: targeted
-    state: permissive # log actions that would be blocked if state=enforcing
+    state: permissive  # log actions that would be blocked if state=enforcing
   when: ansible_distribution_file_variety == "RedHat"
 
 - name: Ensure firewalld is running and enable it at boot (RedHat/CentOS only)
   service:
     name: firewalld
     state: started
-    enabled: yes
+    enabled: true
   when:
     - docker_skip_tasks is not defined or not docker_skip_tasks
     - ansible_distribution_file_variety == "RedHat"
@@ -237,7 +292,7 @@
   service:
     name: "{{ service_ssh }}"
     state: started
-    enabled: yes
+    enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Ensure SSH client and SSH Daemon configs in place
@@ -265,41 +320,64 @@
 # chkconfig ntpd on # Activate service
 # ntpdate pool.ntp.org # Synchronize the system clock with 0.pool.ntp.org server
 # service ntpd start # Start service
-# FIXME: this is duplicated from above, right? No reason it needs to be here twice?
-#- name: Install NTP
-#  package: name=ntp state=installed
-#  tags:
-#  - latest
-#  when: use_ntp
+# FIXME: this is duplicated from above, right?
+# No reason it needs to be here twice?
+# - name: Install NTP
+#   package: name=ntp state=installed
+#   tags:
+#       - latest
+#   when: use_ntp
 
 - name: Ensure NTP is running and enabled as configured.
   service:
     name: "{{ service_ntp }}"
     state: started
-    enabled: yes
-  when: use_ntp and 
-        ((ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7") or
-         (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7"))
+    enabled: true
+  when: >
+    use_ntp
+    and
+    ansible_facts['distribution_major_version'] == "7"
+    and
+    (
+      ansible_facts['distribution'] == "CentOS"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 - name: Enable chrony for Rocky/RHEL8
   service:
     name: chronyd
     state: started
-    enabled: yes
-  when: use_ntp and
-        ((ansible_facts['distribution'] == "Rocky" and ansible_facts['distribution_major_version'] == "8") or
-         (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "8"))
+    enabled: true
+  when: >
+    use_ntp
+    and
+    ansible_facts['distribution_major_version'] == "8"
+    and
+    (
+      ansible_facts['distribution'] == "Rocky"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 - name: Copy the ntp.conf template file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   notify:
     - restart ntp rhel7
-  when: use_ntp and
-        ((ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "7") or
-         (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "7"))
+  when: >
+    use_ntp
+    and
+    ansible_facts['distribution_major_version'] == "7"
+    and
+    (
+      ansible_facts['distribution'] == "CentOS"
+      or
+      ansible_facts['distribution'] == "RedHat"
+    )
 
 # FIXME #809: PIP required first; has dependencies; needed on all hosts?
 # Speed up encrypt/decrypt operations
+# yamllint disable-line rule:line-length
 # ref: http://docs.ansible.com/ansible/playbooks_vault.html#speeding-up-vault-operations
 # - name: Ensure PIP cryptography package installed
 #   pip:
@@ -364,11 +442,13 @@
 # indeterminate state
 - name: Ensure crontab empty for meza-ansible when overwriting wikis
   shell: crontab -u meza-ansible -r
-  when: force_overwrite_from_backup is defined and force_overwrite_from_backup == true
+  when:
+    - force_overwrite_from_backup is defined
+    - force_overwrite_from_backup == true
 
   # Ignore errors due issue #699: If a crontab doesn't exist yet this command
   # will fail
-  failed_when: False
+  failed_when: false
 
 - name: Ensure CA package installed
   package:

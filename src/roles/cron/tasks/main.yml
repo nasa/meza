@@ -10,7 +10,7 @@
   service:
     name: "{{ service_cron }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure crontab file up-to-date
   template:

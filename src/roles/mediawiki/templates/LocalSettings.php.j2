@@ -31,6 +31,21 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 require '{{ m_install }}/.deploy-meza/config.php';
 
+/*
+ * Fix ENV vars getting prepended with 'REDIRECT_' by Apache
+ * @todo REMOVE ME
+ * I'm not sure this is a valid bug in the current Apache
+ */
+function fixApacheEnv () {
+	foreach ($_ENV as $key => $value) {
+	    if (substr($key, 0, 9) === 'REDIRECT_') {
+	        $_ENV[str_replace('REDIRECT_', '', $key)] = $value;
+	        putenv(str_replace('REDIRECT_', '', $key) . '=' . $value);
+	    }
+	}
+}
+fixApacheEnv();
+
 if( $wgCommandLineMode ) {
 
 	$mezaWikiEnvVarName='WIKI';
@@ -134,10 +149,13 @@ if ( isset( $wikiIdRedirects[ $wikiId ] ) ) {
 $wikis = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
 
 
-if ( ! in_array( $wikiId, $wikis ) ) {
-
-	// handle invalid wiki
-	die( "No sir, I ain't heard'a no wiki that goes by the name \"$wikiId\"\n" );
+if ( ! in_array( $wikiId, $wikis ) && empty ( $wikiId ) ) {
+    // get $wikiId from environment variable
+	$wikiId = getenv( $mezaWikiEnvVarName );
+    if (!$wikiId) {
+		// handle invalid wiki
+		die( "No sir, I ain't heard'a no wiki that goes by the name \"$wikiId\"\n" );
+	}
 
 }
 
@@ -303,6 +321,11 @@ $wgServer = 'https://{{ wiki_app_fqdn }}';
 // https://www.mediawiki.org/wiki/Manual:$wgScriptPath
 $wgScriptPath = "/$wikiId";
 
+// https://www.mediawiki.org/wiki/Manual:Short_URL
+$wgArticlePath = "/$wikiId/$1";
+
+$wgUsePathInfo = true;
+
 // https://www.mediawiki.org/wiki/Manual:$wgUploadPath
 $wgUploadPath = "$wgScriptPath/img_auth.php";
 
@@ -331,8 +354,6 @@ $wgScriptExtension = ".php";
 $wgStylePath = "$wgScriptPath/skins";
 $wgResourceBasePath = $wgScriptPath;
 
-## This is the base URL that will be used to construct all internal links. Without this, the title will append to the end of the URL when switching wikis in a wiki farm
-$wgArticlePath = "/$wikiId/index.php/$1";
 
 
 
@@ -521,6 +542,7 @@ $wgSessionCacheType = CACHE_MEMCACHED;
 ## is writable, then set this to true:
 $wgEnableUploads = true;
 $wgMaxUploadSize = 1024*1024*100; // 100 MB
+$wgGenerateThumbnailOnParse = false;
 
 $wgUseImageMagick = true;
 {% if ansible_distribution_file_variety == "RedHat" %}
@@ -595,7 +617,11 @@ $wgRestrictDisplayTitle = false;
  */
 $wgCacheDirectory = "{{ m_cache_directory }}/$wikiId";
 
-
+// Set the location for the SMW config file .smw.json
+// This is a per-wiki, non-browsable, apache-writable directory
+// Directory is created in the configure-wiki role
+// https://www.semantic-mediawiki.org/wiki/Help:$smwgConfigFileDir
+$smwgConfigFileDir = "/opt/data-meza/mw-temp/{$wikiId}";
 
 
 

@@ -5,7 +5,7 @@
 
 - name: Ensure Java 1.7.0 OpenJDK is absent
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: java-1.7.0-openjdk
     state: absent
   # Java 1.7 was only used when Meza only supported RedHat
@@ -25,11 +25,13 @@
 
 # ================================================================================
 # INSTALL ELASTICSEARCH
-# ================================================================================
+# ================================================================================ 
 
+# equivalent to command-line
+# rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 - name: Add Elasticsearch GPG key.
   rpm_key:
-    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
   when: ansible_distribution_file_variety == 'RedHat'
 
@@ -40,9 +42,11 @@
     mode: 0644
   when: ansible_distribution_file_variety == 'RedHat'
 
+# sudo dnf install --enablerepo=elasticsearch elasticsearch
 - name: Ensure elasticsearch installed
   package:
     name: elasticsearch
+    enablerepo: elasticsearch
     state: present
 
 # Need to perform this check so `lineinfile` doesn't run in Docker. /etc/hosts
@@ -73,7 +77,7 @@
     state: directory
     mode: 0755
     owner: elasticsearch
-    recurse: yes
+    recurse: true
   with_items:
     - "{{ m_meza_data }}/elasticsearch/data"
     - "{{ m_meza_data }}/elasticsearch/scripts"
@@ -108,7 +112,7 @@
   service:
     name: elasticsearch
     state: started
-    enabled: yes
+    enabled: true
   register: response
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
@@ -138,12 +142,12 @@
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Display current Elasticsearch full version number
-  debug:
+  ansible.builtin.debug:
     var: version_found.json.version.number
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Display desired Elasticsearch version
-  debug:
+  ansible.builtin.debug:
     var: elasticsearch_major_version
 
 - name: Set the Elasticsearch major version found

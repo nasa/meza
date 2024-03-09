@@ -59,7 +59,9 @@
     remote_dir_exists: True
   when: (local_dir_check and local_dir_check.rc == 0) or (remote_dir_check and remote_dir_check.rc == 0)
 
-- ansible.builtin.debug: { var: remote_dir_exists }
+- name: Show value of remote_dir_exists
+  ansible.builtin.debug:
+    var: remote_dir_exists
 
 - name: "Revoke keys from {{ inventory_hostname }}"
   include_role:

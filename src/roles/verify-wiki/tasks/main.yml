@@ -217,7 +217,7 @@
 # SECTION: TRANSFER SQL to DB master
 #
 - name: "{{ wiki_id }} - Transfer SQL file from backup server to DB master"
-  include: transfer-backup-to-db-master.yml
+  include_tasks: transfer-backup-to-db-master.yml
   run_once: true
   when: (not do_sql_dump) and (not wiki_exists or intend_overwrite_from_backup)
 
@@ -226,7 +226,7 @@
 # SECTION: IMPORT wiki SQL
 #
 - name: "{{ wiki_id }} - Import wiki.sql"
-  include: import-wiki-sql.yml
+  include_tasks: import-wiki-sql.yml
   run_once: true
   when: (not wiki_exists) or intend_overwrite_from_backup
 
@@ -312,7 +312,7 @@
 #
 # SECTION: Does backup server have uploads?
 #
-- name:
+- name: Check if directory {{ uploads_backup_dir_path }} exists on remote server
   include_role:
     name: remote-dir-check
   vars:
@@ -322,7 +322,9 @@
   tags:
     - verify-wiki-uploads
 
-- ansible.builtin.debug: { var: remote_dir_exists }
+- name: Print debug message for remote_dir_exists
+  ansible.builtin.debug:
+    var: remote_dir_exists
   tags:
     - verify-wiki-uploads
 

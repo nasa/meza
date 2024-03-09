@@ -24,6 +24,8 @@
   include_role:
     name: sync-configs
 
+# This whole role needs inspection. It does way too much.
+# Was breaking 'create wiki' because the mediawiki-tables.SQL was stale
 - name: Use verify-wiki to make sure new wiki is setup
   include_role:
     name: verify-wiki
@@ -36,10 +38,10 @@
   shell: "bash {{ m_deploy }}/elastic-rebuild-all.sh {{ wiki_id }}"
   run_once: true
   tags:
-  - search-index
+    - search-index
 
 - name: Rebuild SemanticMediaWiki data for each wiki
   shell: "bash {{ m_deploy }}/smw-rebuild-all.sh {{ wiki_id }} > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log"
   run_once: true
   tags:
-  - smw-data
+    - smw-data

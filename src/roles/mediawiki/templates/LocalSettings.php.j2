@@ -555,10 +555,14 @@ $wgImageMagickConvertCommand = 'convert';
 # InstantCommons allows wiki to use images from http://commons.wikimedia.org
 $wgUseInstantCommons = false;
 
-## If you use ImageMagick (or any other shell command) on a
-## Linux server, this will need to be set to the name of an
-## available UTF-8 locale
-$wgShellLocale = "en_US.utf8";
+## If you use ImageMagick, Lua (or any other shell command)
+## this will need to be set to the name of an available UTF-8 locale.
+# https://www.mediawiki.org/wiki/Manual:$wgShellLocale
+# @obsolete
+# This feature was removed completely in version 1.38.0.
+# https://phabricator.wikimedia.org/T291234
+# Prior to removal, the default value was "C.UTF-8"
+# $wgShellLocale = "C.UTF-8";
 
 ## If you want to use image uploads under safe mode,
 ## create the directories images/archive, images/thumb and
@@ -621,7 +625,7 @@ $wgCacheDirectory = "{{ m_cache_directory }}/$wikiId";
 // This is a per-wiki, non-browsable, apache-writable directory
 // Directory is created in the configure-wiki role
 // https://www.semantic-mediawiki.org/wiki/Help:$smwgConfigFileDir
-$smwgConfigFileDir = "/opt/data-meza/mw-temp/{$wikiId}";
+$smwgConfigFileDir = "/opt/conf-meza/public/wikis/{$wikiId}";
 
 
 

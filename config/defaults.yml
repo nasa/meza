@@ -57,7 +57,7 @@ wikis_to_skip_overwrite: []
 #   robo: iss
 wiki_id_redirects: {}
 
-m_force_debug: true
+m_force_debug: false
 
 enable_wiki_emails: true
 

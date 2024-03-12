@@ -110,10 +110,23 @@
   tags:
     - latest
 
-
 #
 # EXTENSIONS AND SKINS
 #
+- name: Check if the compiled_templates directory exists per the widgets extension
+  stat:
+    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+  register: mw_ext_widgets_compiled_templates_folder
+
+- name: Check for Widgets extention folder and chown compiled templates to meza-ansible:wheel
+  file:
+    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+    owner: meza-ansible
+    group: wheel
+    state: directory
+    recurse: yes
+  when: mw_ext_widgets_compiled_templates_folder.stat.exists
+
 - name: Set variable holding list of core skins
   include_vars:
     file: "{{ m_config_core }}/MezaCoreSkins.yml"
@@ -347,11 +360,6 @@
   tags:
     - mediawiki-core
     - file-perms
-
-- name: Check if the compiled_templates directory exists per the widgets extension
-  stat:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-  register: mw_ext_widgets_compiled_templates_folder
 
 - name: "Ensure compiled templates folder for widget extension is ownwed by apache"
   file:

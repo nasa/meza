@@ -842,6 +842,15 @@ $wgCirrusSearchClusters['default'][] = '{{ host }}';
 {% endfor %}
 $wgCirrusSearchWikimediaExtraPlugin['id_hash_mod_filter'] = true;
 
+$wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
+    if ( $key === 'places' ) {
+        $footerlinks['test'] = Html::rawElement( 'a', [
+                        'href' => Title::newFromText(
+                                $skin->msg( 'Section 508 Compliance and Digital Accessibility' )->inContentLanguage()->text()
+                        )
+                ], $skin->msg( 'section508compliance' ) );
+    };
+};
 
 /**
  *  9) LOAD POST LOCAL SETTINGS

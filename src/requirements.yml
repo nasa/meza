@@ -1,0 +1,6 @@
+---
+
+roles:
+  #  https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/kibana/documentation/
+  - name: geerlingguy.kibana
+    version: 4.0.2

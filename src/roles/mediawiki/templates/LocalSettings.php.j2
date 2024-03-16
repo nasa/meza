@@ -538,11 +538,14 @@ $wgMemCachedServers = array(
 
 $wgSessionCacheType = CACHE_MEMCACHED;
 
-## To enable image uploads, make sure the 'images' directory
-## is writable, then set this to true:
+// Of course we allow uploads, we even allow large uploads.
 $wgEnableUploads = true;
 $wgMaxUploadSize = 1024*1024*100; // 100 MB
+// We do not generate thumbnails on parse, but rather on demand - which speeds
+// up page load times.
 $wgGenerateThumbnailOnParse = false;
+// With short-urls, we need to let MediaWiki know where to find thumb.php
+$wgThumbnailScriptPath = "$wgScriptPath/thumb.php";
 
 $wgUseImageMagick = true;
 {% if ansible_distribution_file_variety == "RedHat" %}
@@ -683,14 +686,13 @@ $wgMaxImageArea = 1.25e10; // Images on [[Snorkel]] fail without this
 ini_set( 'pcre.backtrack_limit', 1000000000 ); //1 billion
 
 
-// Allowed file types
-$wgFileExtensions = array(
+// Allowed file types for upload
+// https://www.mediawiki.org/wiki/Manual:$wgFileExtensions
+// We accept the default file types, plus a few more
+$wgFileExtensions = array_merge ( $wgFileExtensions, [
 	'aac',
 	'bmp',
 	'docx',
-	'gif',
-	'jpg',
-	'jpeg',
 	'mpp',
 	'mp3',
 	'msg',
@@ -699,15 +701,13 @@ $wgFileExtensions = array(
 	'ods',
 	'odt',
 	'pdf',
-	'png',
 	'pptx',
 	'ps',
 	'svg',
 	'tiff',
 	'txt',
 	'xlsx',
-	'zip'
-);
+	'zip'] );
 
 // Tell Universal Language Selector not to try to guess language based upon IP
 // address. This (a) isn't likely needed in enterprise use cases and (b) fails

@@ -88,7 +88,7 @@ def main(argv):
 	elif argv[0] in ('-v', '--version'):
 		import subprocess
 		version = subprocess.check_output(
-			["git", "--git-dir={}/meza/.git".format(install_dir), "describe", "--tags"])
+			["git", "--git-dir={}/meza/.git".format(install_dir), "describe", "--tags", "--always"])
 		commit = subprocess.check_output(
 			["git", "--git-dir={}/meza/.git".format(install_dir), "rev-parse", "HEAD"])
 		print("Meza " + version.strip().decode())
@@ -409,7 +409,7 @@ def write_deploy_log(datetime, env, unique, condition, args_string):
 		env,
 		unique,
 		condition,
-		get_git_descripe_tags("{}/meza".format(install_dir)),
+		get_git_describe_tags("{}/meza".format(install_dir)),
 		get_git_hash("{}/meza".format(install_dir)),
 		get_git_hash("{}/conf-meza/secret".format(install_dir)),
 		get_git_hash("{}/conf-meza/public".format(install_dir)),
@@ -614,7 +614,7 @@ def get_git_hash(dir):
 	else:
 		return "not-a-git-repo"
 
-def get_git_descripe_tags(dir):
+def get_git_describe_tags(dir):
 	"""
 	Get the description of the latest Git tag in the specified directory.
 
@@ -633,7 +633,7 @@ def get_git_descripe_tags(dir):
 
 	if os.path.isdir(git_dir):
 		try:
-			tags = subprocess.check_output(["git", "--git-dir={}".format(git_dir), "describe", "--tags"]).strip()
+			tags = subprocess.check_output(["git", "--git-dir={}".format(git_dir), "describe", "--tags", "--always"]).strip()
 		except:
 			tags = "git-error"
 		return tags
@@ -707,7 +707,7 @@ def meza_command_update(argv):
 		print("The following versions are available:")
 		print(tags_text.strip())
 		print("")
-		closest_tag = subprocess.check_output(["git", "describe", "--tags"])
+		closest_tag = subprocess.check_output(["git", "describe", "--tags", "--always"])
 		print("You are currently on version {}".format(closest_tag.strip()))
 		print("To change versions, do 'sudo meza update <version>'")
 	elif len(argv) > 1:

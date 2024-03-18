@@ -835,11 +835,18 @@ $wgSearchType = 'CirrusSearch';
 $wgCirrusSearchClusters['default'] = [];
 {% for host in groups['elastic_servers'] %}
 {% if host == inventory_hostname %}
-$wgCirrusSearchClusters['default'][] = 'localhost';
+$wgCirrusSearchClusters['default'] = [
+  'host' => 'localhost',
+  // 'username' => 'elastic',
+  // 'password' => 'eApmGGeHMeJcn3ZuaBk5',
+  // 'password' => 'elasticsearch_password',
+];
+
 {% else %}
 $wgCirrusSearchClusters['default'][] = '{{ host }}';
 {% endif %}
 {% endfor %}
+
 $wgCirrusSearchWikimediaExtraPlugin['id_hash_mod_filter'] = true;
 
 $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {

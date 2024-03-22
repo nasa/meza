@@ -9,6 +9,7 @@
     (mysql_replication_role == 'slave')
     and mysql_replication_user
     and (mysql_replication_master != '')
+
 - set_fact:
     role_is_valid_slave: False
   when: role_is_valid_slave is skipped
@@ -20,10 +21,6 @@
     (mysql_replication_role == 'master')
     and mysql_replication_user
     and (mysql_replication_master != '')
-- set_fact:
-    role_is_valid_master: False
-  when: role_is_valid_master is skipped
-
 
 - set_fact:
     role_is_valid_master: false

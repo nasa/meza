@@ -151,6 +151,8 @@
   copy:
     content: "{{ decrypted_cert.stdout }}"
     dest: "/etc/haproxy/certs/meza.crt"
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 
@@ -158,6 +160,8 @@
   copy:
     content: "{{ decrypted_key.stdout }}"
     dest: "/etc/haproxy/certs/meza.key"
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 
@@ -167,6 +171,8 @@
       {{ decrypted_cert.stdout }}
       {{ decrypted_key.stdout }}
     dest: /etc/haproxy/certs/meza.pem
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 

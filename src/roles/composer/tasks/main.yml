@@ -26,8 +26,7 @@
     mv /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
   when: not composer_bin.stat.exists
-
-# Enforce composer 1.x per #1272. Per #1273 we should make Meza support Composer 2.x.
+# @FIXME: we should not limit the version of composer
 - name: Set Composer to version 2.1.14
   shell: >
     {{ php_executable }} {{ composer_path }} self-update 2.1.14
@@ -55,5 +54,6 @@
     group: "{{ composer_home_group }}"
   when: composer_github_oauth_token != ''
 
-- ansible.builtin.include_tasks: global-require.yml
+- name: Include the global require tasks
+  ansible.builtin.include_tasks: global-require.yml
   when: composer_global_packages|length > 0

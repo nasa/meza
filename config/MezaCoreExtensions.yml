@@ -42,10 +42,14 @@ list:
     config: |
       wfLoadExtension( 'SemanticScribunto' );
 
-  # SubPageList - Allows the display and count subpages
+  # SubPageList - Allows the display and count of subpages
   - name: SubPageList
     composer: "mediawiki/sub-page-list"
     version: "3.0.0"
+    config: |
+      wfLoadExtension( 'SubPageList' );
+      // automatically refresh the tree after a subpage is created or deleted
+      $egSPLAutorefresh = true;
 
   # Maps - Extension to visualize and work with geographical information
   - name: Maps

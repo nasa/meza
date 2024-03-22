@@ -26,18 +26,16 @@
     mv /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
   when: not composer_bin.stat.exists
-# @FIXME: we should not limit the version of composer
-- name: Set Composer to version 2.1.14
+
+- name: Update composer itself
   shell: >
-    {{ php_executable }} {{ composer_path }} self-update 2.1.14
+    {{ php_executable }} {{ composer_path }} self-update
   register: composer_update
   changed_when: "'Updating to version' in composer_update.stdout"
   when: composer_keep_updated
 
 - name: Ensure composer cache is clear
   shell: "{{ composer_path }} clear-cache"
-  when: "'Updating to version' in composer_update.stdout"
-
 
 - name: Ensure composer directory exists.
   file:

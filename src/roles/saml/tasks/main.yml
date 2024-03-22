@@ -36,7 +36,7 @@
   become: true
   become_user: "meza-ansible"
   get_url:
-    url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
+    url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
     dest: "{{ m_home }}/meza-ansible/"
   register: new_simplesamlphp_archive
 
@@ -61,12 +61,12 @@
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-  when: not simplesamlphp_exists.stat.exists
+  when: not simplesamlphp_exists2.stat.exists
 
 - name: Unarchive simplesamlphp tarball if new
   become: true
   unarchive:
-    src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
+    src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
     dest: "{{ m_simplesamlphp_path }}"
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
@@ -85,7 +85,7 @@
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git
     dest: "{{ m_mediawiki }}/extensions/PluggableAuth"
-    version: "tags/6.3" # "{{ saml_mw_extension_version }}"
+    version: "{{ saml_mw_extension_version }}"
     umask: "0002"
   tags:
     - latest
@@ -99,11 +99,13 @@
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-SimpleSAMLphp.git
     dest: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
-    version: "tags/5.0.1" # "{{ saml_mw_extension_version }}"
+    version: "{{ saml_mw_extension_version }}"
     umask: "0002"
   tags:
     - latest
 
+# We could move the config directory (e.g. into /opt/conf-meza/secret)
+# setting SIMPLESAMLPHP_CONFIG_DIR but it seems best to leave it default
 - name: Ensure ./config directory in place
   file:
     path: "{{ m_simplesamlphp_path }}/config"
@@ -159,3 +161,14 @@
     owner: meza-ansible
     group: apache
     mode: 0755
+
+# We could use /var/log here, but still would need to ensure apache can write to it
+- name: Ensure ./log directory in place
+  become: true
+  file:
+    path: "{{ m_simplesamlphp_path }}/log"
+    state: directory
+    mode: "u+rwX,g+rwX,o+rX"
+    owner: "{{ user_apache | default('apache', true) }}"
+    group: "{{ group_apache | default('apache', true) }}"
+    recurse: true

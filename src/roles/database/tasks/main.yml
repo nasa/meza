@@ -24,5 +24,11 @@
 - include: users.yml
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
+# don't run replication in check mode
 - include: replication.yml
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
+  when: >
+    (docker_skip_tasks is not defined)
+    or
+    (not docker_skip_tasks)
+    or
+    not ansible_check_mode

@@ -42,10 +42,14 @@ list:
     config: |
       wfLoadExtension( 'SemanticScribunto' );
 
-  # SubPageList - Allows the display and count subpages
+  # SubPageList - Allows the display and count of subpages
   - name: SubPageList
     composer: "mediawiki/sub-page-list"
-    version: "1.6.1"
+    version: "3.0.0"
+    config: |
+      wfLoadExtension( 'SubPageList' );
+      // automatically refresh the tree after a subpage is created or deleted
+      $egSPLAutorefresh = true;
 
   # Maps - Extension to visualize and work with geographical information
   - name: Maps
@@ -139,7 +143,8 @@ list:
       $wgScribuntoUseGeSHi = true;
       $wgScribuntoUseCodeEditor = true;
 
-  # DisplayTitle - Allows a page's display title to be used as the default link text in links to the page - both links from other pages as well as self-links on the page.
+  # DisplayTitle - Allows a page's display title to be used as the default link text in links to the page - both links
+  # from other pages as well as self-links on the page.
   - name: DisplayTitle
     repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle.git
     version: "{{ mediawiki_default_branch }}"
@@ -156,7 +161,7 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-ExternalData.git
     version: "{{ mediawiki_default_branch }}"
 
-  # LabeledSectionTransclusion - Allows selective transclusion of marked-off sections of text, parsing wikitext as normal
+  # LabeledSectionTransclusion - Allows for a more granular transclusion of wiki pages by 'headings' or 'sections'
   - name: LabeledSectionTransclusion
     repo: https://github.com/wikimedia/mediawiki-extensions-LabeledSectionTransclusion.git
     version: "{{ mediawiki_default_branch }}"
@@ -192,10 +197,11 @@ list:
   - name: SyntaxHighlight_GeSHi
     repo: https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi.git
     version: "{{ mediawiki_default_branch }}"
-    composer_merge: True
+    composer_merge: true
 
-  # CodeEditor - Extends the WikiEditor advanced editing toolbar with an embedded Ace editor widget, providing some handy features
-  # for user/site JavaScript pages, CSS pages, JSON pages, and when extension Scribunto is also installed, for Lua pages
+  # CodeEditor - Extends the WikiEditor advanced editing toolbar with an embedded Ace editor widget, providing some
+  # handy features for user/site JavaScript pages, CSS pages, JSON pages, and when extension Scribunto is also
+  # installed, for Lua pages
   - name: CodeEditor
     repo: https://github.com/wikimedia/mediawiki-extensions-CodeEditor.git
     version: "{{ mediawiki_default_branch }}"
@@ -205,13 +211,14 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-InputBox.git
     version: "{{ mediawiki_default_branch }}"
 
-  # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side global string find-and-replace
-  # on both the text and titles of the wiki's content pages
+  # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
+  # global string find-and-replace on both the text and titles of the wiki's content pages
   - name: ReplaceText
     repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText.git
     version: "{{ mediawiki_default_branch }}"
 
-  # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any actions made with it.
+  # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
+  # actions made with it.
   - name: Interwiki
     repo: https://github.com/wikimedia/mediawiki-extensions-Interwiki.git
     version: "{{ mediawiki_default_branch }}"
@@ -234,7 +241,7 @@ list:
   - name: VisualEditor
     repo: https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git
     version: "{{ mediawiki_default_branch }}"
-    git_submodules: True
+    git_submodules: true
     config: |
       $wgVisualEditorEnableDiffPage = true;
       $wgDefaultUserOptions['visualeditor-enable'] = 1;
@@ -247,7 +254,7 @@ list:
           "_merge_strategy" => "array_plus"
       ];
 
-  # TemplateData - Adds a templatedata tag and an API which together allow editors to specify how templates should be invoked
+  # TemplateData - Adds templatedata tag and API which allow editors to define the VisualEditor's template interface
   - name: TemplateData
     repo: https://github.com/wikimedia/mediawiki-extensions-TemplateData.git
     version: "{{ mediawiki_default_branch }}"
@@ -256,7 +263,7 @@ list:
   - name: Elastica
     repo: https://github.com/wikimedia/mediawiki-extensions-Elastica.git
     version: "{{ mediawiki_default_branch }}"
-    composer_merge: True
+    composer_merge: true
 
   # Thanks - Adds a quick way to give positive feedback for productive contributions to MediaWiki sites.
   - name: Thanks
@@ -270,7 +277,7 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-RevisionSlider.git
     version: "{{ mediawiki_default_branch }}"
 
-  # CollapsibleVector - Used for bring back the collapsible navigation portals to the sidebar that were removed from Vector skin.
+  # CollapsibleVector - Restores the collapsible navigation portals to the sidebar that were removed from Vector skin.
   - name: CollapsibleVector
     repo: https://github.com/wikimedia/mediawiki-extensions-CollapsibleVector
     version: "{{ mediawiki_default_branch }}"
@@ -287,13 +294,14 @@ list:
     config: |
       $wgPageShowWatchingUsers = true;
 
-  #  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event, both of which are used to define "internal objects" for SMW
+  #  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event,
+  #  # both of which are used to define "internal objects" for SMW
   #  - name: SemanticInternalObjects
   #    repo: https://github.com/wikimedia/mediawiki-extensions-SemanticInternalObjects.git
   #    version: "{{ mediawiki_default_branch }}"
   #    legacy_load: true
 
-  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and filters on semantic properties
+  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
   - name: SemanticDrilldown
     repo: https://github.com/freephile/SemanticDrilldown.git
     version: master
@@ -303,14 +311,14 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-Arrays.git
     version: "{{ mediawiki_default_branch }}"
 
-  # AdminLinks - Defines a special page, Special:AdminLinks, that holds links meant to be helpful for wiki administrators
+  # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
   - name: AdminLinks
     repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
 
-  # HeaderTabs - Transforms top-level MediaWiki headers (i.e., headers surrounded by a single "=") into JavaScript-based tab
+  # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
   - name: HeaderTabs
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
     version: "{{ mediawiki_default_branch }}"
@@ -318,7 +326,8 @@ list:
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
 
-  # Variables - Allows variables to be defined in a page and used later in that same page or included templates, change its value, possibly to a value given by an expression in terms of the old value, etc.
+  # Variables - Allows variables to be defined in a page and used later in that same page or included templates,
+  # change its value, possibly to a value given by an expression in terms of the old value, etc.
   - name: Variables
     repo: https://github.com/wikimedia/mediawiki-extensions-Variables.git
     version: "master"
@@ -329,7 +338,7 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       // Exclude Bots from the reporting - Can be omitted.
-      $wgContribScoreIgnoreBots = true; 
+      $wgContribScoreIgnoreBots = true;
       // Exclude Blocked Users from the reporting - Can be omitted.
       $wgContribScoreIgnoreBlockedUsers = true;
       // Exclude specific usernames from the reporting - Can be omitted.
@@ -339,11 +348,12 @@ list:
       // Set to true to disable cache for parser function and inclusion of table.
       $wgContribScoreDisableCache = false;
       // Use the total edit count to compute the Contribution score.
-      $wgContribScoreUseRoughEditCount = false;  
+      $wgContribScoreUseRoughEditCount = false;
       // Each array defines a report - 7,50 is "past 7 days" and "LIMIT 50" - Can be omitted.
       $wgContribScoreReports = array( array(7,50), array(30,50), array(0,50) );
 
-  # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being interpreted as an argument delimiter
+  # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
+  # interpreted as an argument delimiter
   - name: PipeEscape
     repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape.git
     version: "{{ mediawiki_default_branch }}"
@@ -364,7 +374,8 @@ list:
     config: |
       $wgEchoEmailFooterAddress = $wgPasswordSender;
 
-  # DataTransfer - Allows users to both export and import data from and to the wiki, with export done in XML format and import possible in both XML, CSV and some spreadsheet formats.
+  # DataTransfer - Allows users to both export and import data from and to the wiki, with export done in XML format and
+  # import possible in both XML, CSV and some spreadsheet formats.
   - name: DataTransfer
     repo: https://github.com/wikimedia/mediawiki-extensions-DataTransfer.git
     version: "{{ mediawiki_default_branch }}"
@@ -383,7 +394,7 @@ list:
   - name: Flow
     repo: https://github.com/wikimedia/mediawiki-extensions-Flow.git
     version: "{{ mediawiki_default_branch }}"
-    composer_merge: True
+    composer_merge: true
     config: |
       $wgFlowContentFormat = 'html';
       $wgNamespaceContentModels[NS_TALK] = 'flow-board';
@@ -448,7 +459,8 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-MyVariables.git
     version: "{{ mediawiki_default_branch }}"
 
-  # MultimediaViewer - Gives the user of a wiki a different interface for viewing full-size, or nearly full-size, images in their browser.
+  # MultimediaViewer - Gives the user of a wiki a different interface for viewing full-size, or nearly full-size, images
+  # in their browser.
   - name: MultimediaViewer
     repo: https://github.com/wikimedia/mediawiki-extensions-MultimediaViewer.git
     version: "{{ mediawiki_default_branch }}"
@@ -463,7 +475,8 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-VEForAll.git
     version: "{{ mediawiki_default_branch }}"
 
-  # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format that renders a Vega-based graph.
+  # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format
+  # that renders a Vega-based graph.
   - name: Graph
     repo: https://github.com/wikimedia/mediawiki-extensions-Graph.git
     version: "{{ mediawiki_default_branch }}"
@@ -472,14 +485,16 @@ list:
   - name: Widgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Widgets.git
     version: "{{ mediawiki_default_branch }}"
-    composer_merge: True
+    composer_merge: true
 
-  # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of various media files in both local and remote repositories
+  # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of
+  # various media files in both local and remote repositories
   - name: MediaFunctions
     repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
     version: "{{ mediawiki_default_branch }}"
 
-  # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which you can't get with MediaWikis existing magic Words
+  # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which
+  # you can't get with MediaWikis existing magic Words
   - name: SubpageFun
     repo: https://github.com/wikimedia/mediawiki-extensions-SubpageFun.git
     version: "{{ mediawiki_default_branch }}"
@@ -510,7 +525,7 @@ list:
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
 
-  # SimpleMathJax - Enables MathJax, a JavaScript library, for typesetting TeX formula in MediaWiki inside math environments
+  # SimpleMathJax - Uses the JavaScript MathJax library for representing mathematical equations in MediaWiki
   - name: SimpleMathJax
     repo: https://github.com/jmnote/SimpleMathJax
     version: "main"
@@ -525,8 +540,8 @@ list:
   #   repo: https://github.com/enterprisemediawiki/Wiretap.git
   #   version: tags/0.2.0
 
-  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the wiki as a whole is,
-  # as well as to invite users to watch and review neglected pages
+  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
+  # wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics
     repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics.git
     version: "master"
@@ -537,17 +552,18 @@ list:
   - name: HeaderFooter
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
     version: "{{ mediawiki_default_branch }}"
+# Temporarily disabled 2024-03 because deploys were hanging on git clone
+# SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
+# extension will update (null-edit) all pages that have been selected through that property.
+# - name: SemanticDependencyUpdater
+#   repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
+#   version: tags/3.0.0
+#   config: |
+#     $wgSDUProperty = 'Semantic Dependency';
+#     $wgSDUUseJobQueue = false;
 
-  # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this extension will update (null-edit) all pages that have been selected through that property.
-  - name: SemanticDependencyUpdater
-    repo: https://github.com/gesinn-it/SemanticDependencyUpdater.git
-    version: tags/3.0.0
-    config: |
-      $wgSDUProperty = 'Semantic Dependency';
-      $wgSDUUseJobQueue = false;
-
-  # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
-  # - name: Html5mediator
-  #   repo: https://github.com/lightbinder/Html5mediator.git
-  #   version: master
-  #   legacy_load: true
+# Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
+# - name: Html5mediator
+#   repo: https://github.com/lightbinder/Html5mediator.git
+#   version: master
+#   legacy_load: true

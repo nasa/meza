@@ -217,7 +217,17 @@
 # SECTION: TRANSFER SQL to DB master
 #
 - name: "{{ wiki_id }} - Transfer SQL file from backup server to DB master"
-  include_tasks: transfer-backup-to-db-master.yml
+  import_tasks: transfer-backup-to-db-master.yml
+  vars:
+    wiki_id: "{{ wiki_id }}"
+    m_tmp: "{{ m_tmp }}"
+    intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
+    wiki_exists: "{{ wiki_exists }}"
+    sql_backup_server: "{{ sql_backup_server }}"
+    sql_dir_path: "{{ sql_dir_path }}"
+    sql_file_match: "{{ sql_file_match }}"
+    sql_file_push_match: "{{ sql_file_push_match }}"
+    db_backup_server_remote_user: "{{ db_backup_server_remote_user }}"
   run_once: true
   when: (not do_sql_dump) and (not wiki_exists or intend_overwrite_from_backup)
 
@@ -226,7 +236,12 @@
 # SECTION: IMPORT wiki SQL
 #
 - name: "{{ wiki_id }} - Import wiki.sql"
-  include_tasks: import-wiki-sql.yml
+  import_tasks: import-wiki-sql.yml
+  vars:
+    wiki_id: "{{ wiki_id }}"
+    m_tmp: "{{ m_tmp }}"
+    intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
+    wiki_exists: "{{ wiki_exists }}"
   run_once: true
   when: (not wiki_exists) or intend_overwrite_from_backup
 

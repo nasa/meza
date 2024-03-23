@@ -6,6 +6,11 @@
 - name: Get Meza install path
   shell: "dirname $(dirname $(dirname $(dirname $(realpath $(which meza)))))"
   register: register_install_path
+  # In --check mode, the shell command will not run, which means there will be no .stdout to pass to set_fact:
+  # Since we know THIS shell command has no side-effects, we need to force it to run ALWAYS, even in --check mode.
+  # To force a task to run (which could make changes to the system), even when the playbook is called with --check,
+  # set check_mode: false.
+  check_mode: false
 
 - set_fact:
     m_install: "{{ register_install_path.stdout }}"

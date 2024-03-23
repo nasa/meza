@@ -7,8 +7,25 @@ elasticsearch_network_host: 127.0.0.1
 elasticsearch_http_port: 9200
 elasticsearch_transport_port: 9300
 
+# An example of how to use the uri module to check if Elasticsearch is running
+# ansible localhost -m uri -a "url='http://localhost:9200' method=GET user=elastic password='eApmGGeHMeJcn3ZuaBk5'"
+elasticsearch_password: 'eApmGGeHMeJcn3ZuaBk5'
+elasticsearch_username: "elastic"
+
+elasticsearch_version: "7.10.2"
+
+# Setup the discovery.type (relates to security)
+# and also relates to bootstrap checks and whether or not Elasticsearch
+# considers itself to be "production" or "development".
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/important-settings.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/modules-discovery-settings.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/bootstrap-checks.html#single-node-discovery
+# {% if env == monolith %}
+elasticsearch_discovery_type: "single-node"
+# {% endif %}
+
 # FIXME: Pretty sure the elasticsearch docs have different values for these
-elasticsearch_disable_allocation:  '{"persistent":{"cluster.routing.allocation.enable":"none"}}'
+elasticsearch_disable_allocation: '{"persistent":{"cluster.routing.allocation.enable":"none"}}'
 elasticsearch_enable_allocation: '{"persistent":{"cluster.routing.allocation.enable": "all"}}'
 
 # For a rolling upgrade (e.g. not from one major version to another) use these:

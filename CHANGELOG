@@ -1,0 +1,613 @@
+commit 6ca76db3f3bc57af9248aaf684c355220e2df70c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Feature: Short URLs
+    
+    This fixes issue #28
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit c8e66653d3640c5068df6823e1acac4befc13a5b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Remove commented line
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit afb41e88b8ea6f16a65c141111c61c897adf0fc3
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Make 'enforce_meza_version' undefined; with comment
+    
+    This variable was initially undefined, and "turning it on" will
+    prevent deploys if your meza source is not a clean, matching checkout.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit a02a80ce99a8997f117cd0f59403bbb42f6cafde
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade PHP to 8.1
+    
+    This fixes issue #13
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit cd60cf11990ca27b071ead128099e9e167f251d4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Example of Remi repo usage from geerlingguy
+    
+    Issue #27
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit f2e7e1e88914f6810a3f8bb72249db0255897044
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Minor yaml lint fixes
+    
+    Part of Issue #17
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit f3ed0400931dde327679c8e43eb8f3e76cc9c18d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add 'force' option to be able to 'overwrite local git changes'
+    
+    This completes issue #25
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit f7a5cece8d7352325c662192260ceab374e02e7b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Make MediaWiki core branch depth a configuration value
+    
+    Solves issue #24
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 602587fedb4bba31aa36110781f3bfe1c1af171d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Make the Meza project repository a configuration value
+    
+    This resolves issue #22
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit d95b68242ee3e883bd721f1157fee06b61d56b04
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Update Extension Flow for PHP8.1 compatibility
+    
+    Add additional configuration settings while fixing deprecation warnings in issue#26
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 28f314e6b75e01b38e64fdd42f24d4d3af4fd3fd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    git repo URL and branch name as BASH variables
+    
+    Create Bash variables for getmeza.sh and source them from the ENVIRONMENT;
+    so that administrators can override them at run-time; or use a default.
+    
+    This addresses part of issues #22 and #23
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 4cbcd64477fd1e012d9002fca547d790bdd6918b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade SimpleBatchUpload to 2.x for PHP 8.1 compatibility
+    
+    Incompatibility revealed in upgrading PHP #13
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit b6daa75b49c4b847c0efc48a1c9cb6aa8c879c33
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use fully qualified built-in module name for dnf
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 0db71f8e65c04cb359823fe16a84e5879673236a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add .yamllint configuration
+    
+    Fix one error - missing space before comment across multiple files
+    Initial configuration allows for 140 char line with only a warning
+    Partial, initial fix for issue #17
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit d2fe7d922d829bc941ba49bde077d26f037e99d4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix 50 yamllint errors in Base role
+    
+    Fix indentation
+    Fix line-length
+    Fix comments
+    Fix spaces
+    Fix truthy values
+    Clarify logic of conditionals
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 972d5ca04592a24bc44aa0f65ff90b22059666b5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Reorder dnf set-enabled, install per docs
+    
+    Not sure it matters, but the order copied from the docs
+    https://docs.fedoraproject.org/en-US/epel/#_almalinux_8_rocky_linux_8
+    is
+    dnf config-manager --set-enabled powertools
+    then
+    dnf install epel-releaase
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit cdef0c41d5e80e7721ef4c1034d7f856d9c2ced9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add EditorConfig to this project
+    
+    Formally addresses the age-old problem of tabs vs spaces.
+    
+    Fixes Issue #14
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 48782c27622af21371f473d478089fe5494181cd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use 'false' for negative  truthy values
+    
+    Although Ansible accepts a broad range of values for boolean variables
+    Use true/false to be compatible with ansible-lint
+    https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 817f8f058f10811570cbd66af577d11a68947782
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use 'true'/'false' for truthy values
+    
+    Although Ansible accepts a broad range of values for boolean variables
+    Use true/false to be compatible with ansible-lint
+    https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 286147329f3d85a845182b9f186706d103d84afe
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix some yamllint and ansible-lint warnings
+    
+    Fix truthy values, spacing, indentation, line length
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit c5685249f0bf241d912e5f28ef81e5a24bfc92e7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix fatal indentation errors
+    
+    Errors were indicated by ansible-lint
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 62e2d784ce532ec98ac53251f36ed99187878401
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use fully qualified name  ansible.builtin.debug
+    
+    https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html
+    
+    We recommend you use the Fully Qualified Collection Name (FQCN)
+    ansible.builtin.debug for easy linking to the module documentation and
+    to avoid conflicting with other collections that may have the same
+    module name.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit cd83e120534ef460b0cafe554e8b3caac4febb64
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade Semantic MediaWiki to 4.1.3
+    
+    This is a patch release. Thus it contains only bug fixes. No new
+    features or breaking changes.
+    
+    This release contains security patches and improves support for modern
+    PHP and MediaWiki. Upgrading is recommended for all users.
+    
+    See docs/releasenotes/RELEASE-NOTES-4.1.3.md
+    
+        Fixed several XSS issues
+        Improved support for PHP 8.1 and above
+        Improved support for MediaWiki 1.39 and above
+        Various minor performance improvements, especially for multi-database setups
+        Fixed Special:PageProperty (thanks thomas-topway-it)
+        Improved compatibility with OpenSearch and recent versions of ElasticSearch
+        Improved PostgreSQL compatibility
+        Added ability to disable the upgrade key check via the smwgIgnoreUpgradeKeyCheck setting
+        Improved various interface messages
+        Translation updates
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit e61e9896111be58af4577f68692290130d2beef6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade Maps to 10.1.1
+    
+    Fixes deprecated SkinTemplateNavigation hook as well as
+    deprecated Content::fillParserOutput()
+    
+    The 10.x series of Maps supports MediaWiki 1.39.x
+    See Release Notes
+    https://github.com/ProfessionalWiki/Maps/blob/10.1.1/RELEASE-NOTES.md
+    and
+    Commit 257381b926477c486f3341497752485290530b87
+    https://github.com/ProfessionalWiki/Maps/commit/257381b926477c486f3341497752485290530b87
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit ccd118c8aae17063bf06910f23a00e593943514c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Switch PageForms to latest version (5.6.3)
+    
+    Fixes Deprecation of SkinTemplateNavigation hook
+    fixed by commit 46beadb
+    https://github.com/wikimedia/mediawiki-extensions-PageForms/commit/46beadb44b4dacc14923525f710abe1dfc9d2eb9
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit c2bc0a665b28809228e2146e220ad04fb30b2205
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use master branch for Variables extension
+    
+    paraphrasing https://www.mediawiki.org/wiki/Extension:Variables
+    
+    To avoid deprecation warning about the missing #var_final parser
+    function in MediaWiki 1.39+, please update to the latest version
+    (master branch for now).
+    
+    See task T276627 and task T250963 for further information.
+    
+    The Variables extension must be enabled so that a project can be
+    pursued to replace all the on-wiki usage of the extension.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 4f9ea657beb1feb56cd71753d61764f4f7366850
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Revert "Variables extension - disabled"
+    
+    This reverts commit c70ed42e32c327d0224c8d33a180e50b0d9aa5b2.
+
+commit dbc68b66d4e8f04865bfdb6c1f508425a14e3944
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Update WhosOnline for compatibility with REL1_39
+    
+    The REL1_39 branch of the extension still produces the error below -
+    which was fixed two years ago, but not backported.
+    
+    Use the 'master' branch for now.
+    
+    Deprecated
+    : Use of User::getOption was deprecated in MediaWiki 1.35.
+    [Called from WhosOnlineHooks::onBeforePageDisplay in
+    /opt/htdocs/mediawiki/extensions/WhosOnline/includes/WhosOnlineHooks.php
+    at line 27]
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 3ca303bd75c2019840d6ae481e9d3e8cf9e5943c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix database backup function
+    
+    Quote mysql password option to avoid special characters being interpreted by the Ansible shell module.
+    
+    In the source_wiki_exists_check task of /src/roles/remote-mysqldump/tasks/main.yml:104 you could
+    end up with a command like the following:
+    mysqlshow -u wiki_app_user -p6K2s9n!XTtebd$GUfy$8YtGVIcZYXA@d wiki_test3 | grep -v Wildcard | grep -o wiki_test3\n
+    
+    The password has ! and $ in it - both shell special characters. https://mywiki.wooledge.org/BashGuide/SpecialCharacters
+    
+    We avoid interpretation by quoting the password value with single quotes.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 2367a8265719ecff1dc7031e1a5d7cd4ab5ade7e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Enable Ansible debugger by default
+    
+    enable_task_debugger = true added to ansible.cfg for easy debugging in play logs
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 7cac79a9dde2e541ab1238c6362c4c3cd51065bf
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Update Semantic Extra Special Properties extesion
+    
+    Use v3.0.5 for bugfixes and compatibility with REL1_39
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B
+
+commit 20d152c57b9936c32bdc0aaabfb2ec794bbc1700
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix Issue #2 Remove GitHub Actions
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit da17c4590b201a7041b6fa47317af9b3583efed2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    change raw_input() to input() for Python 3.x
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 4c31903865f1f410b7e6488661c0dbb2a6b57eaf
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix inconsistent use of tabs and spaces
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit de507d4aa343fdff7e62353089dc4cad965a52a4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix issue #7 TypeError: must be str, not bytes
+    
+    By adding .decode() to the byte objects, we can concatenate with strings in Python 3.6.8
+    
+    Later versions of subprocess.check_output() can return text if you want, but not in this version.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit dffc4cd49106d4eb59d91360ca246fe3fb7bedc4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Change Elasticsearch repo to disabled by default
+    
+    We want to avoid accidentally updating elasticsearch
+    in a simple 'dnf update' so make sure the Elastic repo
+    is disabled by default. And, use the 'enablerepo' option in the task to install elasticsearch.
+    
+    Make sure the Elasticsearch repo key is installed; from the correct artifact location
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit cee39d48183c18739ba23863cd59c4788e3c3bbd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    lint site playbook
+    
+    lowercase truthy values to (true|false)
+    remove blank lines
+    remove "most" comments
+    remove double quotes where unnecessary
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 4598d894abe4d2c7b6b6011c4c3db152547ab91d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add sample script for checking an Upgrade
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 61092969e188dcd8a8577a19a598e2760211fbbb
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade Elasticsearch to 7.x from 6.x
+    
+    Comment out the xpack.ssltruststore settings in elasticsearch.yml
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 755bbcb0401b24cd8aeb1c44832ed2e74e4526de
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Semantic MediaWiki
+    
+    Upgrade from 4.0.1 to 4.1.2 and set .smw.json path
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit c70ed42e32c327d0224c8d33a180e50b0d9aa5b2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Variables extension - disabled
+    
+    Should be permanently removed; disabled to quiet the deprecation notices
+    in debugging. Can re-enable and work to replace functionality
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit c6710dc382276d233f67568073360fd27efa1b83
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Header Footer
+    
+    switch to WMF repo, REL1_39 branch
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit d3ef6c1fd2d4e012ba0adcc02927e4fd62318175
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Watch Analytics - switch to WMF master
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 936ba9eab291692f02efc160fbb1c1097b0e2929
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Talk Right & Wiretap removed
+    
+    These extensions are not maintained presently
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 19edfeb994058d9f73e74585a5a02120f653ff87
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    HTML5 Mediator
+    
+    disable (comment) because it is unmaintained and incompatible
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit faf0520145ad89b8e459bd648d5113d0f413dbf1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    SimpleMathJax
+    
+    remove legacy_load directive
+    CHANGE repository URL to the community (jmnote)
+    and 'main' branch
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit fd3701fe18ca4400031eae4b36d41e0c7078189c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Media Functions
+    
+    remove legacy_load directive
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 74f26f217db5a4de8738fcdace15bcb0656b859e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Widgets
+    
+    remove legacy_load directive
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit a171341aec06092b03efe755b849087dd1f5544c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Pipe Escape
+    
+    remove legacy_load directive
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 277d3901706a318e09d837a1e83e6417020b01a7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Semantic Drilldown
+    
+    use alternative forked repo (freephile) until pull request is merged upstreamhttps://github.com/SemanticMediaWiki/SemanticDrilldown/pull/75
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 420fd5e4233d2b1871acbec15cfcc9aa832bd6ba
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Contribution Scores
+    
+    remove legacy_load directive; improve configuration
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 876b8ac9d13f48fcc229aab01ec866bcaec98f68
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Major upgrade of Meza for MediaWiki 1.39
+    
+    Upgrade default version of MediaWiki to REL1_39
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract
+    NNC15BA02B.
+
+commit f8efb6fc23fd305850490501bdaf769b41e90de1
+Author: James Montalvo <edwin.j.montalvo@nasa.gov>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    fix: load balancer variable naming
+    
+    Commit 45c7cb04 changed how load balancer groups are accessed. This was
+    a good change, but some of the load balancer variables were changed
+    accidentally. e.g.
+    
+    load_balancers_nonmeza --> load_balancers_meza_nonmeza
+    
+    This "_meza_nonmeza" ending (a) was applied inconsistently and (b)
+    doesn't make sense as a naming convention.
+    
+    This commit fixes naming.

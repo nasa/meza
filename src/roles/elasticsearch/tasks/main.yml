@@ -45,7 +45,7 @@
 # sudo dnf install --enablerepo=elasticsearch elasticsearch
 - name: Ensure elasticsearch installed
   package:
-    name: elasticsearch
+    name: "elasticsearch <= {{ elasticsearch_version }}"
     enablerepo: elasticsearch
     state: present
 
@@ -57,7 +57,7 @@
 - name: Check whether /etc/hosts contains "127.0.0.1"
   command: awk /127.0.0.1/ /etc/hosts
   register: checkhostsfile
-  changed_when: False
+  changed_when: false
 
 # Add host name per https://github.com/elastic/elasticsearch/issues/6611
 - name: Add localhost to /etc/hosts if needed
@@ -136,6 +136,8 @@
   uri:
     url: "http://localhost:{{ elasticsearch_http_port }}"
     method: GET
+    # user: "{{ elasticsearch_username }}"
+    # password: "{{ elasticsearch_password }}"
   register: version_found
   retries: 10
   delay: 10

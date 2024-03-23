@@ -46,6 +46,7 @@
       - php-intl
       - php-opcache
       - php-soap
+      - php-sodium #  required for phpSimpleSAML
       - php-mbstring
       - php-ldap
       - php-fpm

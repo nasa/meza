@@ -263,7 +263,7 @@ memcached_memory: 512
 
 # TCP port on which to run php-fpm
 #
-m_php_fpm_port: 9090
+m_php_fpm_port: 9000
 
 #
 # Helpers to group load balancer types

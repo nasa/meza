@@ -1,5 +1,169 @@
 Release Notes
 =============
+## Meza 39.5.0
+
+Upgrades:
+- MediaWiki 1.39.6
+- Semantic MediaWiki 4.1.3
+- PHP 8.1 using the Remi repo
+- Elasticsearch 7.10.2
+- SAML Authentication
+  - SimpleSAMLphp library to 2.2.1
+  - Extension Pluggable Auth 7.0
+  - Extension SimpleSAMLphp 7.0
+- Composer (respect `composer_keep_updated`)
+- Extensions
+  - Simple Batch Upload
+  - Flow
+  - SubPageList 3.0.0
+  - Maps
+  - PageForms
+  - Variables
+  - Whos Online
+  - Semantic Extra Special Properties
+  - Header Footer
+  - Watch Analytics
+  - HTML5 Mediator
+  - Simple MathJax
+  - Media Functions
+  - Widgets
+  - Pipe Escape
+  - Semantic Drilldown
+  - Contribution Scores
+
+
+Removed Extensions:
+The following extensions were removed due to incompatibility
+- Talk Right
+- Wiretap
+  
+New Features: 
+- Pretty URLs (no index.php in the URL, just mysite.com/wiki/SomePage)
+- Add `overwrite_local_git_changes` option (default: off) for deploys
+- .webp images supported for upload
+
+Other Changes:
+- Reduce git clone size of MediaWiki / improve speed
+- Add .editorconfig
+- Version lock Ansible and Python
+- Disable (automatic) Elasticsearch upgrades
+- Set PHP-FPM default port to 9000
+- Syntax cleanup
+- Bug fixes in Python, PHP, YAML
+- Documentation of meza.py
+- Improve testing scripts
+- Create CHANGELOG
+- Remove obsolete $wgShellLocale
+- Allow easier forking
+- Enable Ansible debugger
+
+### Commits since 35.x
+
+* dce594e (HEAD -> REL1_39, origin/REL1_39) Versionlock Ansible and Python to prevent incompatibilities
+* 84e08b0 Fix deploy errors on initial deploy
+* 58933f2 Fix fatal recursion errors
+* 8623081 Finish dressing out the SAML Authentication role
+* df820d7 Remove the old 'remove Extension SimpleSamlAuth'
+* f73c216 Fix default port for PHP-FPM
+* 0011a5d Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
+* 5c89037 (nasa/grc-atf-dev, nasa/39.x) Merge pull request #48 from freephile/REL1_39
+* 315364c (tag: 39.4.0) Modify print_width in .editorconfig - but it doesn't seem to affect yamllint
+* e554ccf Fix 'create wiki' failure due to variable scoping
+* 18871ab Lift restriction on composer version
+* 29f99dd Enable check mode for testing
+* 7905761 Add LocalSettings directive for Extension:SubPageList
+* 0441317 Add FIXME comment about composer
+* e672dcc SubPageList needs a wfLoadExtension
+* 0923618 Upgrade SAML auth to use simpleSAMLphp 2.2.1
+* 5362af6 Extension SubPageList upgraded from 1.6.1 to 3.0.0
+* 6ab981b Reformat: Wrap all comments at 120 characters
+* d465e29 Delete errant swap file from repo
+* 74beb29 (tag: 39.3.0) Fix delete / restore functionality
+* 7d9915d Add VS Code settings to .gitignore
+* 013a11b (tag: 39.2.0) Use Elasticsearch 7.10
+* 873258d Add the --always option to git describe to avoid errors
+* fc45add Document all 53 functions in meza.py
+* 8ee9f63 Semantic Dependency Updater - new home / disabled
+* b76d951 Fix thumbnail generation + add webp support
+* 8edbf4a Fixe the compiled templates ownership issue
+* cd5ad23 Update some integration test scripts
+* 957a0ef Create a CHANGELOG as a de-minimus form of Release Notes
+* d253642 Add some directories to gitignore
+* 60d9bb0 (tag: 39.1.0) Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
+* 1697c20 Add a "Section 508 Info" link to the footer via LocalSettings.php template
+* 383f4c8 (origin/grc-atf-dev, grc-atf-dev) make sure widgets compipled templates folder is owned by meza-ansible to avoid local changes error when updating
+* 81ac965 restore force debug to false
+* e0fcbc4 Merge pull request #45 from freephile/REL1_39
+* a4fadf4 ansible-lint code health changes
+* a044cfe $wgShellLocale is obsolete as of REL1_38
+* 45270d4 Final fixes for .smw.json and create wiki bugs
+* 17f7fae yamllint code health syntax and formatting changes
+* f0dba02 Merge pull request #44 from freephile/REL1_39
+* 1e91f9e Fix permission problems + naming in .smw.json directory
+* 4b0d76a Ensure .smw.json has a home
+* 7049379 Feature: Short URLs
+* 6ca76db Feature: Short URLs
+* c8e6665 Remove commented line
+* afb41e8 Make 'enforce_meza_version' undefined; with comment
+* a02a80c Upgrade PHP to 8.1
+* cd60cf1 Example of Remi repo usage from geerlingguy
+* f2e7e1e Minor yaml lint fixes
+* f3ed040 Add 'force' option to be able to 'overwrite local git changes'
+* f7a5cec Make MediaWiki core branch depth a configuration value
+* 602587f Make the Meza project repository a configuration value
+* d95b682 Update Extension Flow for PHP8.1 compatibility
+* 28f314e git repo URL and branch name as BASH variables
+* 4cbcd64 Upgrade SimpleBatchUpload to 2.x for PHP 8.1 compatibility
+* b6daa75 Use fully qualified built-in module name for dnf
+* 0db71f8 Add .yamllint configuration
+* d2fe7d9 Fix 50 yamllint errors in Base role
+* 972d5ca Reorder dnf set-enabled, install per docs
+* cdef0c4 Add EditorConfig to this project
+* 48782c2 Use 'false' for negative  truthy values
+* 817f8f0 Use 'true'/'false' for truthy values
+* 2861473 Fix some yamllint and ansible-lint warnings
+* c568524 Fix fatal indentation errors
+* 62e2d78 Use fully qualified name  ansible.builtin.debug
+* cd83e12 Upgrade Semantic MediaWiki to 4.1.3
+* e61e989 Upgrade Maps to 10.1.1
+* ccd118c Switch PageForms to latest version (5.6.3)
+* c2bc0a6 Use master branch for Variables extension
+* 4f9ea65 Revert "Variables extension - disabled"
+* dbc68b6 Update WhosOnline for compatibility with REL1_39
+* 3ca303b Fix database backup function
+* 2367a82 Enable Ansible debugger by default
+* e3228e3 Fix Widgets folder permissions tasks
+* 7cac79a Update Semantic Extra Special Properties extesion
+* 20d152c Fix Issue #2 Remove GitHub Actions
+* da17c45 change raw_input() to input() for Python 3.x
+* 4c31903 Fix inconsistent use of tabs and spaces
+* de507d4 Fix issue #7 TypeError: must be str, not bytes
+* dffc4cd Change Elasticsearch repo to disabled by default
+* cee39d4 lint site playbook
+* 4598d89 Add sample script for checking an Upgrade
+* 6109296 Upgrade Elasticsearch to 7.x from 6.x
+* 755bbcb Semantic MediaWiki
+* c70ed42 Variables extension - disabled
+* c6710dc Header Footer
+* d3ef6c1 Watch Analytics - switch to WMF master
+* 936ba9e Talk Right & Wiretap removed
+* 19edfeb HTML5 Mediator
+* faf0520 SimpleMathJax
+* fd3701f Media Functions
+* 74f26f2 Widgets
+* a171341 Pipe Escape
+* 277d390 Semantic Drilldown
+* 420fd5e Contribution Scores
+* 876b8ac Major upgrade of Meza for MediaWiki 1.39
+
+### Contributors
+* 96 Greg Rundlett
+
+# How to upgrade
+There is no automatic upgrade path yet from 35.x to 39.x due to the major
+Elasticsearch and SMW upgrades. An UPGRADE doc may be forthcoming, but basically
+you can create a new instance, migrating your database and media files. Then
+create the search indexes with `meza maint-rebuild monolith`. 
 
 ## Meza 31.10.1
 

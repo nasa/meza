@@ -94,15 +94,16 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Load and Configure SimpleSAMLphp for SAML IDP/SSO
 wfLoadExtension( "SimpleSAMLphp" );
+// @FIXME This is repeated in the templated file SAMLConfig.php
 $wgSimpleSAMLphp_InstallDir = '/opt/simplesamlphp';
 
 // SAML Authentication (Who the user IS)
 $wgPluggableAuth_Config['Log in using SAML'] = [
     'plugin' =>   'SimpleSAMLphp',
     'data'   => [ 'authSourceId'      => 'default-sp',
-                  'usernameAttribute' => 'AUID',
-                  'realNameAttribute' => 'displayName',
-                  'emailAttribute'    => 'Email'
+                  'usernameAttribute' => "{{ idp_username_attr | default('AUID') }}",
+                  'realNameAttribute' => "{{ idp_realname_attr | default('displayName') }}",
+                  'emailAttribute'    => "{{ idp_email_attr | default('Email') }}",
                 ]
 ];
 

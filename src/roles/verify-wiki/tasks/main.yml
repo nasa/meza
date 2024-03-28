@@ -219,7 +219,6 @@
 - name: "{{ wiki_id }} - Transfer SQL file from backup server to DB master"
   import_tasks: transfer-backup-to-db-master.yml
   vars:
-    wiki_id: "{{ wiki_id }}"
     m_tmp: "{{ m_tmp }}"
     intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
     wiki_exists: "{{ wiki_exists }}"
@@ -238,7 +237,6 @@
 - name: "{{ wiki_id }} - Import wiki.sql"
   import_tasks: import-wiki-sql.yml
   vars:
-    wiki_id: "{{ wiki_id }}"
     m_tmp: "{{ m_tmp }}"
     intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
     wiki_exists: "{{ wiki_exists }}"

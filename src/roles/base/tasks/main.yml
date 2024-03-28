@@ -169,7 +169,7 @@
       ansible_facts['distribution'] == "RedHat"
     )
 
-- name: ensure python3-selinux installed for Rocky/RHEL8
+- name: Ensure python3-selinux installed for Rocky/RHEL8
   ansible.builtin.dnf:
     lock_timeout: 180
     name: python3-libselinux
@@ -179,6 +179,36 @@
   when:
     - ansible_facts['distribution'] == "Rocky"
     - ansible_facts['distribution_major_version'] == "8"
+
+# We could do this in 'getmeza.sh' but that makes it harder to manage this code.
+# Caution: getmeza.sh is what installs Ansible and Python in the first place.
+# getmeza.sh also sets up the CentOS package repo where we get the old packages.
+- name: Version lock packages for Ansible and Python
+  block:
+    - name: Ensure dnf versionlock is installed
+      ansible.builtin.dnf:
+        name: dnf-command(versionlock)
+        state: installed
+
+    - name: Pin packages for Ansible and Python 
+      ansible.builtin.shell:
+        cmd: dnf versionlock add {{ item }}
+      with_items:
+        - ansible
+        - python36
+      register: versionlock_result
+  rescue:
+    - name: Show versionlock_result
+      ansible.builtin.debug:
+        msg: versionlock_result
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+    - ansible_facts['distribution_major_version'] == "8"
+  become: true
+  become_user: root
+  # do not ignore errors because if we don't versionlock, then uncontrolled 
+  # upgrades to these central packages could occur
+  ignore_errors: false
 
 - name: Ensure base packages installed CentOS7/RHEL7/Debian
   package:

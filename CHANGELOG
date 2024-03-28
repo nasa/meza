@@ -1,3 +1,517 @@
+commit dce594e272571092ee1f00c444f96b0500ea3c45
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Versionlock Ansible and Python to prevent incompatibilities
+    
+    For the immediate future, we will stick with Python 3.6.8 and Ansible 2.29.27
+    There are other issues in the backlog to upgrade these.
+    
+    Fixes #82
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 84e08b0cbb7685df9d8d4a6ac48230123219d4c1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix deploy errors on initial deploy
+    
+    Fixes #80 First-time deploy failure
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 58933f20125658e50a6f3be6fa197eadbf2af6ed
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix fatal recursion errors
+    
+    Working on Issue #80
+    - Use loop to show the list of wikis
+    - Eliminate the vars: repetition of what is already established fact
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 86230816f917873938ee76b2a4feb7b712ee4be5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Finish dressing out the SAML Authentication role
+    
+    Fixes #74 Tested against Mocksaml.com
+    
+    - Use configuration variables from public.yml,
+    - and setup defaults that work for NASA for $wgPluggableAuth_Config
+    - templated into LocalSettings.php
+    - Add commentary about using privatekey and certificate in Authsources.php
+    - Add conditional on NameIDPolicy
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit df820d7150be741647ccce081e79f909a512a010
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Remove the old 'remove Extension SimpleSamlAuth'
+    
+    This is very old, and confusing to still be here.
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit f73c21608bb4d8607aa0c298c129728628c43cfa
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix default port for PHP-FPM
+    
+    The default port for PHP-FPM should be 9000
+    
+    9090 is used by many other services or applications
+    On my stock Rocky Linux, 9090 is being used by systemd
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 0011a5d702153971317de38fcf3252414b8bfe52
+Merge: 315364c 5c89037
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
+
+commit 5c89037205ae34de14cb11cf6c9741b2156fa0d4
+Merge: 1697c20 315364c
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    Merge pull request #48 from freephile/REL1_39
+    
+    Merge latest tag of REL1_39 (tag 39.4.0) since last pull request was merged
+
+commit 315364cc79e9c20d20bb48f800053d4a318a72d7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Modify print_width in .editorconfig - but it doesn't seem to affect yamllint
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit e554ccf64eadb128ade3dd546a24f8079c79933f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix 'create wiki' failure due to variable scoping
+    
+    include_tasks creates a whole new scope and so no variables are defined unless passed
+    
+    This is the real reason why fatal recursion was happening with create wiki without specifying wiki_id as an extra var.
+    
+    Fixes #48
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 18871ab1f385dd819db2b2e22e4492f8b07ee3e0
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Lift restriction on composer version
+    
+    This allows composer to upgrade to the latest release
+    Fixes #77
+    Fixes security issues related to composer
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 29f99dde648ab9ec7219507b84360a1ed28307a9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Enable check mode for testing
+    
+    Work on issue #76
+    
+    remove duplicate set_fact in replication.yml
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 79057619ac6ce25b94f764980bd1d94b73dbef23
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add LocalSettings directive for Extension:SubPageList
+    
+    This **maybe** should go in MezaCoreExtensions.yml, but generally
+    site-wide configuration should be in LocalSettings.php
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 04413171657e14c3b1dcec975ec1512d5791a46d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add FIXME comment about composer
+    
+    See issue #71
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit e672dccb5763539f6acd199a17c2a473c2104193
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    SubPageList needs a wfLoadExtension
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 0923618ff221da65301d9668f593a70df0dbfa65
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Upgrade SAML auth to use simpleSAMLphp 2.2.1
+    
+    This fixes #74
+    
+    Creates the administration web interface at https://localhost/simplesaml/admin
+    
+    Login credentials come from your secret.yml
+    Setup comes from your public.yml
+    See https://www.mediawiki.org/wiki/Meza/Setup_SAML_authentication
+    
+    config/defaults.yml
+    - upgrade simpleSAMLphp library from 1.19.7 to 2.2.1
+    - upgrade Extension:PluggableAuth to 7.0
+    - upgrade Extension:simpleSAMLphp to 7.0
+    
+    saml/templates/config.php.j2
+    - change array notation
+    - add comments
+    - use config variable with default for timezone
+    - remove obsolete settings
+    - update deprecated settings
+    
+    src/roles/apache-php/tasks/php-redhat8.yml
+    - add php-sodium #  required for phpSimpleSAML
+    
+    src/roles/apache-php/templates/httpd.conf.j2
+    - the simplesaml web entrypoint directory is changed to 'public' from 'www'
+    - describe the possible use of SIMPLESAMLPHP_CONFIG_DIR env variable
+    - remove 'Options All -Indexes' because it is meaningless in the context
+    
+    src/roles/saml/tasks/main.yml
+    - update the URL for library download
+    -  use the ansible variable saml_mw_extension_version for extension version
+    - add a task to create the apache writable log directory
+    
+    src/roles/apache-php/templates/php-fpm-httpd.conf.j2
+    - the simplesaml web entrypoint directory is changed to 'public' from 'www'
+    
+    src/roles/saml/templates/authsources.php.j2
+    - change array notation
+    - add comments
+    - add explicit 'idp' => null when not defined
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 5362af6af1af016b419c4ec13ea8d69784a90471
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Extension SubPageList upgraded from 1.6.1 to 3.0.0
+    
+    This fixes issue #70
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 6ab981b8b46598fcd98c4bc4c4f4858e2b979af2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Reformat: Wrap all comments at 120 characters
+    
+    Also remove trailing whitespace
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit d465e29d628bc565df4857f3d15712f44fa00e7a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Delete errant swap file from repo
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 74beb296510cd78f297ab46563b017dabec6818a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix delete / restore functionality
+    
+    The automatic recovery of a wiki from it's backups was failing due to the
+    'rebuild SMW' task in create-wiki-wrapper.
+    
+    Fixes #67
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 7d9915dc26ee6bff01ecb0813760c2e2bcdba51d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add VS Code settings to .gitignore
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 013a11b6841ecfac95afbeced031222df4932185
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Use Elasticsearch 7.10
+    
+    Fixes #65
+    
+    Start security work (singled-node is more secure, but this only works on monolith, with a single elasticsearch node)
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 873258d3a7269bc2ee8885b6aa92f491360e28d9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add the --always option to git describe to avoid errors
+    
+    With --always, even if git can not find any tags, the commit hash will be used.
+    
+    Fixes #57
+    meza --version will return something like
+        Meza 39.1.0-7-gfc45add
+        Commit fc45adddfa3efd308ab2dc4350c6315c5ef10858
+        Mediawiki EZ Admin
+    
+    Also, fix typo in function name get_git_descripe_tags()
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit fc45adddfa3efd308ab2dc4350c6315c5ef10858
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Document all 53 functions in meza.py
+    
+    get_deploy_info() now raises a FileNotFoundError if the lockfile
+    for the environment does not exist. Before it would just return
+    false in that case.
+    
+    The 'meza update' command now uses the nasa repo as the canonical source
+    instead of the enterprisemediawiki repo.
+    
+    Format 'import' statements one per line
+    
+    Fix mixed use of tabs and spaces
+    
+    Add some @FIXME comments about obsolete (CentOS) or unknown (Docker) functions.
+    
+    The context manager will automatically close your (open) file handle in
+    write_vault_decryption_tmp_file().
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 8ee9f63287f27f6a24ccc9f455d97da830f6fbb4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Semantic Dependency Updater - new home / disabled
+    
+    SDU is temporarily disabled. The repo URL has changed, but
+    for some odd reason deploys seem to hang on this specific
+    extension during git clone.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit b76d9517c1cee328df69dc4e597baebbb873084d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix thumbnail generation + add webp support
+    
+    Fixes issue #62 thumbnail generation by letting MediaWiki
+    know where to find thumb.php
+    $wgThumbnailScriptPath = "$wgScriptPath/thumb.php";
+    
+    Additionally, we changed the definition of $wgFileExtensions
+    so as to **merge** Meza customizations as additions to what is
+    supported by default - essentially adding webp support.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 8edbf4ab6686f43a56be79fd4e402047fbb20493
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fixe the compiled templates ownership issue
+    
+    Fixes Widgets issue #61
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit cd5ad2399918169722a4fe8459302d784e6ae88a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Update some integration test scripts
+    
+    Fix the image-check script domain handling for 'localhost'.
+    Pipe output to jq for pretty printing diagnosic output.
+    Remove obsolete Parsoid check.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 957a0efe969a5904b4858641d41a6ef06656bfb7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Create a CHANGELOG as a de-minimus form of Release Notes
+    
+    Fixes issue #54
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit d253642c5ada7f3d904f4e0c0ba99159489b066d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add some directories to gitignore
+    
+    Ignore the 'venv' directory for any local Python Virtual Env setup.
+    Ignore anything in 'roles' that starts with 'geerlingguy' because
+    those will come from Ansible Galaxy aka 3rd-party repos.
+    
+    Add comment to ansible.cfg about the 'roles_path' variable.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 60d9bb0e599ac6927ed641c4d10311c0aecaa412
+Merge: 383f4c8 1697c20
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
+
+commit 1697c20fcf34866bf92bc816091e98546d4d1fe0
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    Add a "Section 508 Info" link to the footer via LocalSettings.php template
+    
+    Section 508 Compliance and Digital Accessibility compliance information of required by many organizations.
+    
+    Meza admins can tailor the exact content via a "Mediawiki:Section508compliance" system message page in the wiki.
+
+commit 383f4c8a4144cda5c1300080fdac78c94f39c1c2
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    make sure widgets compipled templates folder is owned by meza-ansible to avoid local changes error when updating
+
+commit 81ac9659f7aab3ea53ce93d8319d32ed9b7d33a5
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    restore force debug to false
+
+commit e0fcbc4f05a18cbbd256375af864d41c2c81d89b
+Merge: f0dba02 a4fadf4
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    Merge pull request #45 from freephile/REL1_39
+    
+    Fixes 'Create Wiki' playbooks with updated MediaWiki DB schema plus .smw.json tweaks
+
+commit a4fadf47037c4f43c3cbea396ae01e8eebf83d17
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    ansible-lint code health changes
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit a044cfec6663fc895d6a7d0ef998944804400f6b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    $wgShellLocale is obsolete as of REL1_38
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 45270d4ebc690c37a619464acc0aacbb36d5c79c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Final fixes for .smw.json and create wiki bugs
+    
+    Fixes #44 by moving the .smw.json file to the 'conf-meza' hierarchy
+    
+    Fixes #48 by refreshing mediawiki-table.sql
+    @todo Use the source distributed version to automatically
+    be up-to-date. It is in mediawiki/maintenance/tables-generated.sql
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 17f7faefc25f2a9827df1d58a5143fcacfbfb857
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    yamllint code health syntax and formatting changes
+    
+    Increase conformance to accepted YAML parser rules.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit f0dba0223b31fcfab279c339578d0a8124da662c
+Merge: e3228e3 1e91f9e
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    Merge pull request #44 from freephile/REL1_39
+    
+    Upgrade Meza to MediaWiki REL1_39 and PHP 8.1
+
+commit 1e91f9ed730b7c4c60b8a9d77462dd8b25f0ade9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix permission problems + naming in .smw.json directory
+    
+    Fixes issue #44 "Ensure .smw.json has a home"
+    
+    The permission problems stem from the fact that a local userX can run ad-hoc shell scripts that will want to read/write; a deploy will read-write as user meza-ansible and of course the web server process will read-write as apache. So all these users and groups can be handled with meza-ansible:wheel
+    
+    The directory naming problem stems from the choice to use the wgDBname variable instead of the "wiki id". Wiki ID is a better choice for **wiki** related config data directory; and it's also easier to use over db name because the latter is a composed value, not a simple string.
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 4b0d76aa055f58a408cd384b501673b45cfce328
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Ensure .smw.json has a home
+    
+    This fixes issue #44
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 704937926ef9014f549353a322cfb0c11b647c5e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Feature: Short URLs
+    
+    Completes Issue #28
+    Remove redundant wgArticlePath that was overriding the correct setting.
+    Also add wgUsePathInfo
+    https://www.mediawiki.org/wiki/Manual:$wgUsePathInfo
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
 commit 6ca76db3f3bc57af9248aaf684c355220e2df70c
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Commit: Greg Rundlett <greg.rundlett@gmail.com>
@@ -371,6 +885,16 @@ Commit: Greg Rundlett <greg.rundlett@gmail.com>
     enable_task_debugger = true added to ansible.cfg for easy debugging in play logs
     
     This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit e3228e3c6bad04d34b6314a8d934fac25960ceec
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Commit: GitHub <noreply@github.com>
+
+    Fix Widgets folder permissions tasks
+    
+    moved the 2 tasks that test for the existence of the Widgets/complied templates folder and then, if it exists, changes the permissions to apache:apache - moved them to AFTER the global permissions fix for the entire mediawiki folder
+    
+    and - made the chown task recursive to apply to all the compiled templates
 
 commit 7cac79a9dde2e541ab1238c6362c4c3cd51065bf
 Author: Greg Rundlett <greg.rundlett@gmail.com>

@@ -157,7 +157,8 @@ Other Changes:
 * 876b8ac Major upgrade of Meza for MediaWiki 1.39
 
 ### Contributors
-* 96 Greg Rundlett
+* 89 Greg Rundlett
+* 8 Rich Evans
 
 # How to upgrade
 There is no automatic upgrade path yet from 35.x to 39.x due to the major

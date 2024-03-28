@@ -1,0 +1,33 @@
+#### Title; imperative, no period; ##############
+#### Limit to 50 characters #####################
+
+# Blank line between title and body
+
+# Leave the blank line above. It is critical.
+
+#######################################################################
+##### Wrap Body at 72 chars. ############# the length of this line ####
+#
+# Write your commit message in the imperative: "Fix bug" instead of 
+# "Fixed bug" or "Fixes bug."
+# 
+# Explain the problem that this commit is solving. Focus on why you
+# are making this change as opposed to how (the code explains that).
+# Are there side effects or other unintuitive consequences of this
+# change? Here's the place to explain them.
+# 
+# - Bullet points are okay, too
+# 
+# - Typically a hyphen or asterisk is used for the bullet, followed by a
+#   single space, with blank lines in between unless it's a list
+# 
+# If you use an issue tracker, put references to them at the bottom,
+# like this:
+
+# Resolves: #123
+# See also: #456, #789
+#
+# https://cbea.ms/git-commit/
+# All lines starting with the pound symbol will be discarded
+
+This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.

@@ -11,7 +11,7 @@ Upgrades:
   - SimpleSAMLphp library to 2.2.1
   - Extension Pluggable Auth 7.0
   - Extension SimpleSAMLphp 7.0
-- Composer (respect `composer_keep_updated`)
+- Composer
 - Extensions
   - Simple Batch Upload
   - Flow
@@ -37,20 +37,49 @@ The following extensions were removed due to incompatibility
 - Talk Right
 - Wiretap
   
-New Features: 
-- Pretty URLs (no index.php in the URL, just mysite.com/wiki/SomePage)
-- Add `overwrite_local_git_changes` option (default: off) for deploys
-- .webp images supported for upload
+New Features:
+- Only execute SMW Rebuild Data when requested explicitly. 
+  This feature improves the separation of concerns between "platform updates"
+  and "special maintenance". It is accomplished using the tags feature
+  of Ansible: `meza deploy monolith --tags smw-data` 
+  
+  Note that you can use the `meza maint rebuild` command to rebuild 
+  SMW data **and** Elasticsearch indexes. This command is equivalent to 
+  `meza deploy monolith --tags smw-data,search-index`
+
+- Pretty URLs 
+  There is no *index.php* in URLs, just `mysite.com/wiki/SomePage`
+  Easier to type, easier to read, easier to remember, shorter, and pretty!
+
+- Deploy over local changes
+  Added `overwrite_local_git_changes` option (default: off) for deploys. Say you
+  check out some new branch of code in a particular extension or MediaWiki itself.
+  Then you test that in the browser and get results (good or bad). Next you want to
+  re-deploy to a known state. This option allows you more control with less work.
+  The default value is 'false' (off) preserving current behavior which will fail
+  the deploy, refusing to overwrite local changes.
+
+- WebP (.webp) images are supported for upload
+  The WebP format now makes up 12% of the web. Designed to be more efficient than
+  JPEG and PNG images, the WebP format uses advanced compression for smaller size
+  without losing quality. WebP is supported by 96.3% of browsers.
+  https://en.wikipedia.org/wiki/WebP
+
+- Keep composer updated
+  The configuration option `composer_keep_updated` is observed when running a
+  deploy. Thus, if this role variable is set to 'true' (default), `composer` will
+  self-update on your targets providing you with the latest features, bugfixes
+  and security patches to composer itself.
 
 Other Changes:
-- Reduce git clone size of MediaWiki / improve speed
+- Reduce git clone size of MediaWiki by 2+GB / improve speed
 - Add .editorconfig
 - Version lock Ansible and Python
-- Disable (automatic) Elasticsearch upgrades
-- Set PHP-FPM default port to 9000
+- Disable (automatic) Elasticsearch upgrades for predictability
+- Set PHP-FPM default port to 9000 avoiding surprises or conflicts
 - Syntax cleanup
 - Bug fixes in Python, PHP, YAML
-- Documentation of meza.py
+- Documentation of all 50+ meza.py functions
 - Improve testing scripts
 - Create CHANGELOG
 - Remove obsolete $wgShellLocale
@@ -58,7 +87,11 @@ Other Changes:
 - Enable Ansible debugger
 
 ### Commits since 35.x
-
+* 86aea14 (HEAD -> REL1_39, tag: 39.6.0, freephile/REL1_39) Fix first-time deploy errors related to SMW rebuild data
+* 74e74a2 Change SAML logging handler to file
+* 0ac901c Update saml20-idp-remote.php
+* c8f3317 Add commit template; Add Rich to Release Notes
+* 5e2200b (tag: 39.5.0) Create Release Notes for v39.5.0
 * dce594e (HEAD -> REL1_39, origin/REL1_39) Versionlock Ansible and Python to prevent incompatibilities
 * 84e08b0 Fix deploy errors on initial deploy
 * 58933f2 Fix fatal recursion errors
@@ -157,8 +190,8 @@ Other Changes:
 * 876b8ac Major upgrade of Meza for MediaWiki 1.39
 
 ### Contributors
-* 89 Greg Rundlett
-* 8 Rich Evans
+* 94 Greg Rundlett
+* 7 Rich Evans
 
 # How to upgrade
 There is no automatic upgrade path yet from 35.x to 39.x due to the major

@@ -134,6 +134,16 @@
     - filename: "SAMLConfig.php"
       dest_path: "{{ m_deploy }}"
 
+# The simpleSAMLphp cache directory is hard-coded to the default in 
+# meza/src/roles/saml/templates/config.php.j2
+- name: "Ensure SimpleSAMLphp cache directory exists"
+  file:
+    path: /var/cache/simplesamlphp
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: "u=rwX,g=rwX,o=rX"
+    state: directory
+
 - name: Ensure _still_ good permissions on simplesamlphp directory and subs
   file:
     path: "{{ m_simplesamlphp_path }}"

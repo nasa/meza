@@ -1,3 +1,78 @@
+commit 86aea143c9546af22a3108cb6660658391915c93
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Fix first-time deploy errors related to SMW rebuild data
+    
+    Add the special 'never' tag to the task in the MediaWiki role.
+    With the 'never' tag, this task will ONLY be run if you specifically ask
+    for it with the --tags=smw-data option (or --tags=never option).
+    
+    This changes behavior of Meza so that it does not rebuild SMW data
+    on each and every deploy. To specifically request a SMW rebuild, simply
+    ask for it by name with `sudo meza deploy monolith --tags smw-data`
+    
+    Fixes Issue #80
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 74e74a201cdaeca7b6e3eff1091ca8482f112c64
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Change SAML logging handler to file
+    
+    simpleSAMLphp's logging handler is 'syslog' by default.
+    Change the handler to 'file' so that we can see the logs in the logging directory.
+    
+    See Issue #74
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 0ac901cf173175fbed162dafc51ac6b598d2f748
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Update saml20-idp-remote.php
+    
+    Fix syntax:
+    - update array syntax for PHP8
+    - avoid double open array by putting it after the conditionals
+    - vertical spacing
+    - indentation
+    - output an 'error message' in a PHP comment when cert data is not defined
+    
+    Move 'FIXME' into a jinja comment so it is not templated out
+    
+    See #74
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit c8f3317fa28d2a0d2f6559fe8872cd58d6f8d387
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Add commit template; Add Rich to Release Notes
+    
+    Use the commit template by issuing a git config command
+    git config commit.template ./.git-commit-template
+    
+    Add Rich Evans to Release Notes 'contributors' section
+    
+    See Issue #54
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 5e2200b7fbff0e3e5749502b32fd024a7ea1ccb4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Commit: Greg Rundlett <greg.rundlett@gmail.com>
+
+    Create Release Notes for v39.5.0
+    
+    Updated CHANGELOG and RELEASE-NOTES.md for the v39.5.0 release.
+    Fixes #55
+    See also #52 #53 #54
+
 commit dce594e272571092ee1f00c444f96b0500ea3c45
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Commit: Greg Rundlett <greg.rundlett@gmail.com>
@@ -1107,31 +1182,3 @@ Commit: Greg Rundlett <greg.rundlett@gmail.com>
     remove legacy_load directive; improve configuration
     
     This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
-
-commit 876b8ac9d13f48fcc229aab01ec866bcaec98f68
-Author: Greg Rundlett <greg.rundlett@gmail.com>
-Commit: Greg Rundlett <greg.rundlett@gmail.com>
-
-    Major upgrade of Meza for MediaWiki 1.39
-    
-    Upgrade default version of MediaWiki to REL1_39
-    
-    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract
-    NNC15BA02B.
-
-commit f8efb6fc23fd305850490501bdaf769b41e90de1
-Author: James Montalvo <edwin.j.montalvo@nasa.gov>
-Commit: Greg Rundlett <greg.rundlett@gmail.com>
-
-    fix: load balancer variable naming
-    
-    Commit 45c7cb04 changed how load balancer groups are accessed. This was
-    a good change, but some of the load balancer variables were changed
-    accidentally. e.g.
-    
-    load_balancers_nonmeza --> load_balancers_meza_nonmeza
-    
-    This "_meza_nonmeza" ending (a) was applied inconsistently and (b)
-    doesn't make sense as a naming convention.
-    
-    This commit fixes naming.

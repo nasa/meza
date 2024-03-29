@@ -75,7 +75,7 @@ $config = [
 
 	'logging.level' => SimpleSAML\Logger::NOTICE,
 	// change this handler to 'file' to get a log file in the loggingdir
-	'logging.handler' => 'syslog',
+	'logging.handler' => 'file',
 	'logging.facility' => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
 	'logging.processname' => 'simplesamlphp',
 	'logging.logfile' => 'simplesamlphp.log',

@@ -16,7 +16,8 @@ $config = [
 	{% else %}
 	'application' => [ 'baseURL' => 'https://{{ wiki_app_fqdn }}' ],
 	{% endif %}
-
+	// 'cachedir': Where SimpleSAMLphp can write its cache. 
+    'cachedir' => '/var/cache/simplesamlphp',
 	'loggingdir' => 'log/',
 	'datadir' => 'data/',
 	'tempdir' => '/tmp/simplesaml',

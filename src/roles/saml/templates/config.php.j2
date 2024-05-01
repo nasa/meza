@@ -7,256 +7,175 @@
 $httpUtils = new \SimpleSAML\Utils\HTTP();
 
 $config = [
-	'baseurlpath' => 'https://{{ wiki_app_fqdn }}/simplesaml/',
 
-	// on a localhost setup simpleSAMLphp needs to use the internal server
-	//  set baseURL to 'http://localhost:8080'
-	{% if wiki_app_fqdn == 'localhost' %}
-	'application' => [ 'baseURL' => 'http://localhost:8080' ],
-	{% else %}
-	'application' => [ 'baseURL' => 'https://{{ wiki_app_fqdn }}' ],
-	{% endif %}
-	// 'cachedir': Where SimpleSAMLphp can write its cache. 
+    'baseurlpath' => 'https://{{ wiki_app_fqdn }}/simplesaml/',
+    'application' => [],
+
     'cachedir' => '/var/cache/simplesamlphp',
-	'loggingdir' => 'log/',
-	'datadir' => 'data/',
-	'tempdir' => '/tmp/simplesaml',
-	'certdir' => 'cert/',
-	'technicalcontact_name' => '{{ saml_public.technicalcontact_name }}',
-	'technicalcontact_email' => '{{ saml_public.technicalcontact_email }}',
-    //'mail.transport.method' => 'smtp',
-/*
-    'mail.transport.options' => [
-        'host' => 'mail.example.org', // required
-        'port' => 25, // optional
-        'username' => 'user@example.org', // optional: if set, enables smtp authentication
-        'password' => 'password', // optional: if set, enables smtp authentication
-        'security' => 'tls', // optional: defaults to no smtp security
-        'smtpOptions' => [], // optional: passed to stream_context_create when connecting via SMTP
-    ],
-*/
+    'tempdir'  => '/tmp/simplesamlphp',
+    'certdir'  => 'cert/',
+
+        'technicalcontact_name'  => '{{ saml_public.technicalcontact_name }}',
+        'technicalcontact_email' => '{{ saml_public.technicalcontact_email }}',
+
     'timezone' => "{{ m_timezone | default('America/New_York') }}",
 
-    'secretsalt' => '{{ saml_secret.salt }}',
-
-    /*
-     * This password must be kept secret, and modified from the default value 123.
-     * This password will give access to the installation page of SimpleSAMLphp with
-     * metadata listing and diagnostics pages.
-     * You can also put a hash here; run "bin/pwgen.php" to generate one.
-     */
+    'secretsalt'         => '{{ saml_secret.salt }}',
     'auth.adminpassword' => '{{ saml_secret.adminpassword }}',
 
-
-    /*
-     * Set this option to true if you want to require administrator password to access the metadata.
-     */
     'admin.protectmetadata' => false,
-
-    /*
-     * Set this option to false if you don't want SimpleSAMLphp to check for new stable releases when
-     * visiting the configuration tab in the web interface.
-     */
     'admin.checkforupdates' => true,
 
-	'trusted.url.domains' => [],
+    'trusted.url.domains' => [],
+    'trusted.url.regex'   => false,
 
-	'trusted.url.regex' => false,
+    'enable.http_post' => false,
 
-	'enable.http_post' => false,
+    'assertion.allowed_clock_skew' => 180,
 
-	'debug' => [
-		'saml' => false,
-		'backtraces' => true,
-		'validatexml' => false,
-	],
-
-	'showerrors' => true,
-	'errorreporting' => true,
-
-	'logging.level' => SimpleSAML\Logger::NOTICE,
-	// change this handler to 'file' to get a log file in the loggingdir
-	'logging.handler' => 'file',
-	'logging.facility' => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
-	'logging.processname' => 'simplesamlphp',
-	'logging.logfile' => 'simplesamlphp.log',
-    'statistics.out' => [
-        // Log statistics to the normal log.
-        /*
-        [
-            'class' => 'core:Log',
-            'level' => 'notice',
-        ],
-        */
-        // Log statistics to files in a directory. One file per day.
-        /*
-        [
-            'class' => 'core:File',
-            'directory' => '/var/log/stats',
-        ],
-        */
+    'debug' => [
+        'saml'       => false,
+        'backtraces'  => true,
+        'validatexml' => false,
     ],
+    'showerrors'     => true,
+    'errorreporting' => true,
 
-	'proxy' => null,
-	'proxy.auth' => false,
+    'logging.level'       => SimpleSAML\Logger::DEBUG,
+    'logging.handler'     => 'syslog',
+    'logging.facility'    => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
+    'logging.processname' => 'simplesamlphp',
+    'logging.logfile'     => 'simplesamlphp.log',
 
+    'statistics.out' => [],
 
-    'module.enable' => [
-        'exampleauth' => false,
-        'core' => true,
-        'admin' => true,
-        'saml' => true
-    ],
+    'proxy' => null,
 
     /**************************
      | DATABASE CONFIGURATION |
      **************************/
 
-    /*
-     * This database configuration is optional. If you are not using
-     * core functionality or modules that require a database, you can
-     * skip this configuration.
-     */
-	'database.dsn' => 'mysql:host=localhost;dbname=saml',
-	'database.username' => 'simplesamlphp',
-	'database.password' => 'secret',
-	'database.options' => [],
-	'database.prefix' => '',
-	'database.persistent' => false,
-	'database.secondaries' => [],
+    'database.dsn'            => 'mysql:host=localhost;dbname=saml',
+    'database.username'       => 'simplesamlphp',
+    'database.password'       => 'secret',
+    'database.options'        => [],
+    'database.prefix'         => '',
+    'database.driver_options' => [],
+    'database.persistent'     => false,
+    'database.secondaries'    => [],
+    'enable.saml20-idp'       => true,
+    'enable.adfs-idp'         => false,
 
-	'enable.saml20-idp' => false,
-	'enable.adfs-idp' => false,
+    'module.enable' => [
+        'exampleauth' => true,
+        'core'        => true,
+        'admin'       => true,
+        'saml'        => true
+    ],
 
-	# This should be _less_ than memcache_store.expires. See below.
-	'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
+    'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
+    'session.datastore.timeout'     => (4 * 60 * 60), // 4 hours
+    'session.state.timeout'         => (60 * 60), // 1 hour
+    'session.cookie.name'           => 'SimpleSAMLSessionID',
+    'session.cookie.lifetime'       => 0,
+    'session.cookie.path'           => '/',
+    'session.cookie.domain'         => '',
+    'session.cookie.samesite'       => $httpUtils->canSetSameSiteNone() ? 'None' : null,
+    'session.phpsession.cookiename' => 'SimpleSAML',
+    'session.phpsession.savepath'   => null,
+    'session.phpsession.httponly'   => true,
+    'session.authtoken.cookiename'  => 'SimpleSAMLAuthToken',
+    'session.rememberme.enable'     => false,
+    'session.rememberme.checked'    => false,
+    'session.rememberme.lifetime'   => (14 * 86400),
 
-	'session.datastore.timeout' => (4 * 60 * 60), // 4 hours
-	'session.state.timeout' => (60 * 60), // 1 hour
-	'session.cookie.name' => 'SimpleSAMLSessionID',
-	'session.cookie.lifetime' => 0,
-	'session.cookie.path' => '/',
-	'session.cookie.domain' => '{{ wiki_app_fqdn }}',
-	    /*
-     * Set the secure flag in the cookie.
-     *
-     * Set this to TRUE if the user only accesses your service
-     * through https. If the user can access the service through
-     * both http and https, this must be set to FALSE.
-     */
-	'session.cookie.secure' => false,
-    /*
-     * Set the SameSite attribute in the cookie.
-     *
-     * You can set this to the strings 'None', 'Lax', or 'Strict' to support
-     * the RFC6265bis SameSite cookie attribute. If set to null, no SameSite
-     * attribute will be sent.
-     *
-     * A value of "None" is required to properly support cross-domain POST
-     * requests which are used by different SAML bindings. Because some older
-     * browsers do not support this value, the canSetSameSiteNone function
-     * can be called to only set it for compatible browsers.
-     *
-     * You must also set the 'session.cookie.secure' value above to true.
-     *
-     * Example:
-     *  'session.cookie.samesite' => 'None',
-     */
-    'session.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
-	'session.phpsession.cookiename' => 'SimpleSAML',
-	'session.phpsession.savepath' => null,
-	'session.phpsession.httponly' => true,
-	'session.authtoken.cookiename' => 'SimpleSAMLAuthToken',
-	'session.rememberme.enable' => false,
-	'session.rememberme.checked' => false,
-	'session.rememberme.lifetime' => (14 * 86400),
+        'memcache_store.servers' => [
+                [
+                        {% for server in groups['memcached_servers'] -%}
+                        {%- if server == inventory_hostname -%}
+                        ['hostname' => '127.0.0.1'],
+                        {%- else -%}
+                        ['hostname' => '{{ server }}'],
+                        {%- endif -%}
+                        {%- endfor %}
+                ],
+    ],
+    'memcache_store.prefix'  => '',
+    'memcache_store.expires' => {{ memcache_session_store_hours }} * (60 * 60), // {{ memcache_session_store_hours }} hours
 
+    'language.available' => [
+        'en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'ca', 'fr', 'it', 'nl', 'lb',
+        'cs', 'sk', 'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-br', 'tr', 'ja', 'zh', 'zh-tw',
+        'ru', 'et', 'he', 'id', 'sr', 'lv', 'ro', 'eu', 'el', 'af', 'zu', 'xh', 'st',
+    ],
+    'language.rtl'             => ['ar', 'dv', 'fa', 'ur', 'he'],
+    'language.default'         => 'en',
+    'language.parameter.name'  => 'language',
+    'language.parameter.setcookie' => true,
+    'language.cookie.name'     => 'language',
+    'language.cookie.domain'   => '',
+    'language.cookie.path'     => '/',
+    'language.cookie.secure'   => true,
+    'language.cookie.httponly' => false,
+    'language.cookie.lifetime' => (60 * 60 * 24 * 900),
+    'language.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
 
-	'memcache_store.servers' => [
-		[
-			{% for server in groups['memcached_servers'] -%}
-			{%- if server == inventory_hostname -%}
-			['hostname' => '127.0.0.1'],
-			{%- else -%}
-			['hostname' => '{{ server }}'],
-			{%- endif -%}
-			{%- endfor %}
-		],
-],
-	'memcache_store.prefix' => 'simpleSAMLphp',
+    'theme.use' => 'default',
 
-	# This value should always be larger than the 'session.duration'
-	# option. Not doing this may result in the session being deleted from
-	# the memcache servers while it is still in use.
-	'memcache_store.expires' => {{ memcache_session_store_hours }} * (60 * 60), // {{ memcache_session_store_hours }} hours
+    'template.auto_reload' => false,
 
-
-	'language.available' => [
-		'en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'ca', 'fr', 'it', 'nl', 'lb', 'cs',
-		'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-br', 'tr', 'ja', 'zh', 'zh-tw', 'ru', 'et',
-		'he', 'id', 'sr', 'lv', 'ro', 'eu', 'el', 'af'
-	],
-	'language.rtl' => ['ar', 'dv', 'fa', 'ur', 'he'],
-	'language.default' => 'en',
-	'language.parameter.name' => 'language',
-	'language.parameter.setcookie' => true,
-	'language.cookie.name' => 'language',
-	'language.cookie.domain' => '',
-	'language.cookie.path' => '/',
-	'language.cookie.secure' => false,
-	'language.cookie.httponly' => false,
-	'language.cookie.lifetime' => (60 * 60 * 24 * 900),
-	'language.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
-	'language.i18n.backend' => 'SimpleSAMLphp',
-
-
-	'attributes.extradictionary' => null,
-	'theme.use' => 'default',
-	'template.auto_reload' => false,
-	/*
-     * Set this option to true to indicate that your installation of SimpleSAMLphp
-     * is running in a production environment. This will affect the way resources
-     * are used, offering an optimized version when running in production, and an
-     * easy-to-debug one when not. Set it to false when you are testing or
-     * developing the software, in which case a banner will be displayed to remind
-     * users that they're dealing with a non-production instance.
-     *
-     * Defaults to true.
-     */
     'production' => true,
-	'idpdisco.enableremember' => true,
-	'idpdisco.rememberchecked' => true,
-	'idpdisco.validate' => true,
-	'idpdisco.extDiscoveryStorage' => null,
-	'idpdisco.layout' => 'dropdown',
 
-	'authproc.idp' => [
-		30 => 'core:LanguageAdaptor',
-		45 => [
-			'class'	 => 'core:StatisticsWithAttribute',
-			'attributename' => 'realm',
-			'type'	  => 'saml20-idp-SSO',
-		],
-		50 => 'core:AttributeLimit',
-		99 => 'core:LanguageAdaptor',
-	],
-	'authproc.sp' => [
-		90 => 'core:LanguageAdaptor',
-	],
+    'assets' => [
+        'caching' => [
+            'max_age' => 86400,
+            'etag'    => false,
+        ],
+    ],
 
+    'idpdisco.enableremember'      => true,
+    'idpdisco.rememberchecked'     => true,
+    'idpdisco.validate'            => true,
+    'idpdisco.extDiscoveryStorage' => null,
+    'idpdisco.layout'              => 'dropdown',
 
-	'metadata.sources' => [
-		array('type' => 'flatfile'),
-	],
-	'metadata.sign.enable' => false,
-	'metadata.sign.privatekey' => null,
-	'metadata.sign.privatekey_pass' => null,
-	'metadata.sign.certificate' => null,
+    'authproc.idp' => [
+        30 => 'core:LanguageAdaptor',
+        50 => 'core:AttributeLimit',
+        99 => 'core:LanguageAdaptor',
+    ],
 
+    'authproc.sp' => [
+        90 => 'core:LanguageAdaptor',
+    ],
 
-	'store.type'					=> 'memcache',
-	'store.sql.dsn'				 => 'sqlite:/path/to/sqlitedatabase.sq3',
-	'store.sql.username' => null,
-	'store.sql.password' => null,
-	'store.sql.prefix' => 'SimpleSAMLphp',
+    'metadatadir'                   => 'metadata',
+    'metadata.sources'              => [ [ 'type' => 'flatfile'], ],
+    'metadata.sign.enable'          => false,
+    'metadata.sign.privatekey'      => null,
+    'metadata.sign.privatekey_pass' => null,
+    'metadata.sign.certificate'     => null,
+    'metadata.sign.algorithm'       => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+
+    'store.type'           => 'memcache',
+    'store.sql.dsn'        => 'sqlite:/path/to/sqlitedatabase.sq3',
+    'store.sql.username'   => null,
+    'store.sql.password'   => null,
+    'store.sql.prefix'     => 'SimpleSAMLphp',
+    'store.sql.options'    => [],
+    'store.redis.host'     => 'localhost',
+    'store.redis.port'     => 6379,
+    'store.redis.username' => '',
+    'store.redis.password' => '',
+    'store.redis.tls'      => false,
+    'store.redis.insecure' => false,
+    'store.redis.ca_certificate' => null,
+    'store.redis.certificate'    => null,
+    'store.redis.privatekey'     => null,
+    'store.redis.prefix'         => 'SimpleSAMLphp',
+    'store.redis.mastergroup'    => 'mymaster',
+    'store.redis.sentinels'      => [],
+
+    'proxymode.passAuthnContextClassRef' => false,
 ];
+

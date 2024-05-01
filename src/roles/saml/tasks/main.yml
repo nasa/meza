@@ -165,13 +165,13 @@
 # https://www.mediawiki.org/w/index.php?oldid=4123921
 # Meanwhile, the simplesamlphp.org library has had a major version upgrade
 # Requirements and implementation here needs to be reviewed top to bottom.
-# - name: Ensure NonMediaWikiSimpleSamlAuth.php in place
-#   template:
-#     src: NonMediaWikiSimpleSamlAuth.php.j2
-#     dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
-#     owner: meza-ansible
-#     group: apache
-#     mode: 0755
+- name: Ensure NonMediaWikiSimpleSamlAuth.php in place
+  template:
+    src: NonMediaWikiSimpleSamlAuth.php.j2
+    dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
+    owner: meza-ansible
+    group: apache
+    mode: 0755
 
 # We could use /var/log here, but still would need to ensure apache can write to it
 - name: Ensure ./log directory in place

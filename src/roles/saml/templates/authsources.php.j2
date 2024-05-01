@@ -27,7 +27,7 @@ $config =[
         {% endif %}
 		
 		{% if saml_public.name_id_policy is defined %}
-        'NameIDPolicy' => '{{ saml_public.name_id_policy }}',
+        'NameIDPolicy' => {{ saml_public.name_id_policy }},
 		{% endif %}
 
         // The entity ID of the IdP this SP should contact.

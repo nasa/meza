@@ -17,9 +17,12 @@ global
 	# Default ciphers to use on SSL-enabled listening sockets.
 	# For more information, see ciphers(1SSL). This list is from:
 	#  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
-	ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
-	ssl-default-bind-options no-sslv3
 
+	# OBSOLETE - ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+        # OBSOLETE - ssl-default-bind-options no-sslv3
+
+	ssl-default-bind-ciphers EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:EDH+aRSA:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4:!DHE-RSA-CAMELLIA256-SHA:!DHE-RSA-AES256-SHA256:!DHE-RSA-AES256-SHA:!DHE-RSA-AES128-SHA256:!DHE-RSA-AES128-SHA:!DHE-RSA-SEED-SHA:!DHE-RSA-CAMELLIA128-SHA
+	ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12
 
 	# Apache httpd.conf settings regarding SSL which we should verify if they
 	# need to be included somehow here.
@@ -60,7 +63,7 @@ defaults
 {% if load_balancer_handle_external %}
 
 frontend www-http
-	bind *:80
+	# OBSOLETE bind *:80
 	reqadd X-Forwarded-Proto:\ http
 	default_backend www-backend
 
@@ -91,7 +94,7 @@ backend www-backend
 	# HSTS
 	# Ref: https://www.haproxy.com/blog/haproxy-and-http-strict-transport-security-hsts-header-in-http-redirects/
 	# Note: slight modification for HAProxy 1.6+
-	http-response set-header Strict-Transport-Security max-age=16000000;\ includeSubDomains;\ preload;
+	http-response set-header Strict-Transport-Security max-age=31536000;\ includeSubDomains;\ preload;
 
     # @FIXME loop w/ index and tie all
 	# app servers together with controller as registry

@@ -123,6 +123,11 @@ list:
     config: |
       wfLoadExtension( 'ModernTimeline' );
 
+  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
+  - name: SubpageNavigation
+    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation.git
+    version: master
+
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
   # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------

@@ -112,7 +112,7 @@ mediawiki_default_branch: "REL1_39"
 
 # CAUTION: if set to true, a deploy will overwrite manual changes made on disk
 # to MediaWiki core, Meza core extensions and skins + Local extensions and skins
-overwrite_local_git_changes: false
+overwrite_local_git_changes: true
 
 # PHP version
 php_ius_version: "php74"

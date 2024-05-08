@@ -30,6 +30,9 @@
 #
 ServerRoot "{{ path_apache_server_root }}"
 
+# Ensure that apache headers only contain the minimum required information
+ServerTokens ProductOnly
+
 #
 # Mutex: Allows you to set the mutex mechanism and mutex file directory
 # for individual mutexes, or change the global defaults

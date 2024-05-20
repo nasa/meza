@@ -40,4 +40,7 @@
     RewriteCond %{REQUEST_FILENAME} !-l
     RewriteRule ^/?([^/]+)/(.*)?$ %{DOCUMENT_ROOT}/mediawiki/ [env=WIKI:$1,L]
 
+    # Don't expose any files or folders with .git in the path
+    RedirectMatch 404 /\.git
+    
 </IfModule>

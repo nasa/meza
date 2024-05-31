@@ -417,6 +417,7 @@ list:
       $wgRestrictDisplayTitle = false;
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
+      $wgCommentStreamsAllowedNamespaces = -1
 
   # AdvancedSearch - Better Search capabilties
   - name: AdvancedSearch

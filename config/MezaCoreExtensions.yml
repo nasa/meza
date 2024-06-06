@@ -417,7 +417,7 @@ list:
       $wgRestrictDisplayTitle = false;
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
-      $wgCommentStreamsAllowedNamespaces = -1
+      $wgCommentStreamsAllowedNamespaces = -1;
 
   # AdvancedSearch - Better Search capabilties
   - name: AdvancedSearch
@@ -558,15 +558,15 @@ list:
   - name: HeaderFooter
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
     version: "{{ mediawiki_default_branch }}"
-# Temporarily disabled 2024-03 because deploys were hanging on git clone
-# SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
-# extension will update (null-edit) all pages that have been selected through that property.
-# - name: SemanticDependencyUpdater
-#   repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
-#   version: tags/3.0.0
-#   config: |
-#     $wgSDUProperty = 'Semantic Dependency';
-#     $wgSDUUseJobQueue = false;
+
+  # Semantic Dependancy Updated (SDU) - Monitors pages for changes in their semantic data. If the "Semantic Dependency" 
+  # property is found, this extension will update (null-edit) all pages that have been selected through that property.
+  - name: SemanticDependencyUpdater
+    repo: https://github.com/ndc-rkevans/SemanticDependencyUpdater.git
+    version: master
+    config: |
+      $wgSDUProperty = 'Semantic Dependency';
+      $wgSDUUseJobQueue = false;
 
 # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
 # - name: Html5mediator

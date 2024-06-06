@@ -1,6 +1,10 @@
 ---
 list:
 
+# Notes - Chameleon is the default skin
+# All the other skins either ship with MW Core (1.39) or they were listed at:
+# https://www.pro.wiki/articles/best-mediawiki-skins
+
 # Skin:Vector - The is the default skin for MediaWiki
 - name: Vector
   repo: https://github.com/wikimedia/mediawiki-skins-Vector.git
@@ -74,26 +78,28 @@ list:
   type: skins
   version: "{{ mediawiki_default_branch }}"
 
-# Skin: Poncho
+# Skin: Poncho - a skin for MediaWiki
 # Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
 - name: Poncho
   repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
   type: skins
   version: "{{ mediawiki_default_branch }}"
 
-# Skin: Tweeki
+# Skin: Tweeki - a skin based on Bootstrap (v4.6.2) framework
 # Documentation: https://www.mediawiki.org/wiki/Skin:Tweeki
+# Compatibility Policy: tbd
 - name: Tweeki
-  repo: https://github.com/wikimedia/mediawiki-skins-Tweeki.git
+  repo: https://github.com/thaider/Tweeki.git
   type: skins
   version: "{{ mediawiki_default_branch }}"
 
-# Skin: Medik
+# Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
 # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
+# Compatibility Policy: Master maintains backwards compatibility.
 - name: Medik
-  repo: https://github.com/wikimedia/mediawiki-skins-Medik.git
+  repo: https://bitbucket.org/wikiskripta/medik.git
   type: skins
-  version: "{{ mediawiki_default_branch }}"
+  version: "tags/v4.0.3"
 
 #
 # NOTE - If you'd like to use any other skins it is recommended

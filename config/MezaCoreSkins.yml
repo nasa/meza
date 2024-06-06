@@ -8,6 +8,7 @@ list:
   version: "{{ mediawiki_default_branch }}"
 
 # Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
+# Documentation:
 - name: chameleon
   composer: mediawiki/chameleon-skin
   type: skins
@@ -17,21 +18,84 @@ list:
     $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';
     $wgDefaultSkin = 'Chameleon';
 
+# Skin: Pivot - focuses on mobile first but will pivot to all viewports with elegance.
+# Documentation: https://www.mediawiki.org/wiki/Skin:Pivot
+- name: Pivot
+  repo: https://github.com/wikimedia/mediawiki-skins-Pivot.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Refreshed - a clean, modern skin.
+# Documentation: https://www.mediawiki.org/wiki/Skin:Refreshed
+- name: Refreshed
+  repo: https://github.com/wikimedia/mediawiki-skins-Refreshed.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Modern (MW Core)
+# Documentation: 
+- name: Modern
+  repo: https://github.com/wikimedia/mediawiki-skins-Modern.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: CologneBlue (MW Core)
+# Documentation: 
+- name: CologneBlue
+  repo: https://github.com/wikimedia/mediawiki-skins-CologneBlue.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: MonoBook (MW Core)
+# Documentation: 
+- name: MonoBook
+  repo: https://github.com/wikimedia/mediawiki-skins-MonoBook.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: MinervaNeue - the skin that serves mobile traffic for Wikimedia projects across the world
+# Documentation: https://www.mediawiki.org/wiki/Skin:Minerva_Neue
+- name: MinervaNeue
+  repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Timeless (MW Core) - strongly supports responsive web design
+# Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
+- name: MinervaNeue
+  repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Foreground
+# Documentation: https://www.mediawiki.org/wiki/Skin:Foreground
+- name: Foreground
+  repo: https://github.com/wikimedia/mediawiki-skins-Foreground.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Poncho
+# Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
+- name: Poncho
+  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Tweeki
+# Documentation: https://www.mediawiki.org/wiki/Skin:Tweeki
+- name: Tweeki
+  repo: https://github.com/wikimedia/mediawiki-skins-Tweeki.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
+# Skin: Medik
+# Documentation: https://www.mediawiki.org/wiki/Skin:Medik
+- name: Medik
+  repo: https://github.com/wikimedia/mediawiki-skins-Medik.git
+  type: skins
+  version: "{{ mediawiki_default_branch }}"
+
 #
-# If you'd like to use any of these other skins it is recommended that these lines
-# be placed in /opt/conf-meza/public/MezaLocalSkins.yml
+# NOTE - If you'd like to use any other skins it is recommended
+# that you add them in /opt/conf-meza/public/MezaLocalSkins.yml
 #
-#- name: Modern
-#  repo: https://github.com/wikimedia/mediawiki-skins-Modern.git
-#  type: skins
-#  version: "{{ mediawiki_default_branch }}"
-#
-#- name: CologneBlue
-#  repo: https://github.com/wikimedia/mediawiki-skins-CologneBlue.git
-#  type: skins
-#  version: "{{ mediawiki_default_branch }}"
-#
-#- name: MonoBook
-#  repo: https://github.com/wikimedia/mediawiki-skins-MonoBook.git
-#  type: skins
-#  version: "{{ mediawiki_default_branch }}"

@@ -10,6 +10,10 @@ list:
   repo: https://github.com/wikimedia/mediawiki-skins-Vector.git
   type: skins
   version: "{{ mediawiki_default_branch }}"
+  # There are no Vector specific configurations per-say, however, let's take advantage of the universality
+  # of the Vector Skin load and use it to load core Mediawiki Site configuratons here as well:
+  config: | 
+    $wgAllowSiteCSSOnRestrictedPages = true;
 
 # Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
 # Documentation:

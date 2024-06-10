@@ -80,10 +80,11 @@ list:
 
 # Skin: Poncho - a skin for MediaWiki
 # Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
-- name: Poncho
-  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+# Note - removed until we have time to debug it
+#- name: Poncho
+#  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
+#  type: skins
+#  version: "{{ mediawiki_default_branch }}"
 
 # Skin: Tweeki - a skin based on Bootstrap (v4.6.2) framework
 # Documentation: https://www.mediawiki.org/wiki/Skin:Tweeki

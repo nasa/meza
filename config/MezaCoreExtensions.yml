@@ -64,6 +64,7 @@ list:
     version: "tags/5.6.3"
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
+      $wgPageFormsAutoeditNamespaces[] = NS_USER;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties

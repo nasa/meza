@@ -60,8 +60,14 @@ list:
 
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
-    repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "tags/5.6.3"
+    #repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
+    #version: "tags/5.7.2"
+    #
+    # We choose to use the the version of Page Forms that is maintained by gesinn-it-pub
+    # As the wikimedia version is optimized for Cargo and does not test for compatibility with SMW anymore
+    # The gesinn-it-pub version is mainatiend by the Professional Wiki Co. with a significant investment in SMW
+    repo: https://github.com/Knowledge-Wiki/mediawiki-extensions-PageForms.git
+    version: master
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
       $wgPageFormsAutoeditNamespaces[] = NS_USER;
@@ -253,6 +259,7 @@ list:
       $wgDefaultUserOptions['visualeditor-enable'] = 1;
       $wgHiddenPrefs[] = 'visualeditor-enable';
       $wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
+      $wgGroupPermissions['user']['writeapi'] = true;
       $wgVisualEditorAvailableNamespaces = [
           "User" => true,
           "Project" => true,
@@ -480,7 +487,7 @@ list:
   # VE4All - Allows for visual editor to be used in form pages
   - name: VEForAll
     repo: https://github.com/wikimedia/mediawiki-extensions-VEForAll.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format
   # that renders a Vega-based graph.
@@ -526,6 +533,23 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-Lockdown.git
     version: "{{ mediawiki_default_branch }}"
 
+  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
+  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
+  - name: WikiLove
+    repo: https://github.com/wikimedia/mediawiki-extensions-WikiLove.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgDefaultUserOptions['wikilove-enabled'] = 1;
+      $wgWikiLoveTabIcon = true;
+      $wgWikiLoveLogging = true;
+
+  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
+  # Documentation: https://www.mediawiki.org/wiki/Extension:FlexForm
+  - name: FlexForm
+    repo: https://github.com/Open-CSP/FlexForm.git
+    version: "REL1_39"
+    compoaser_merge: true
+
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
   # ---- Non-Wikimedia extensions  ----------------------------------------------------------------------
@@ -568,6 +592,7 @@ list:
     config: |
       $wgSDUProperty = 'Semantic Dependency';
       $wgSDUUseJobQueue = false;
+      $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
 # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
 # - name: Html5mediator

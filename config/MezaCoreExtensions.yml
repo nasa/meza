@@ -591,7 +591,7 @@ list:
     version: master
     config: |
       $wgSDUProperty = 'Semantic Dependency';
-      $wgSDUUseJobQueue = false;
+      $wgSDUUseJobQueue = true;
       $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
 # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.

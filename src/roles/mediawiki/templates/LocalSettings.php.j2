@@ -541,7 +541,20 @@ $wgSessionCacheType = CACHE_MEMCACHED;
 
 // Of course we allow uploads, we even allow large uploads.
 $wgEnableUploads = true;
-$wgMaxUploadSize = 1024*1024*100; // 100 MB
+$wgMaxUploadSize = 1024*1024*1024*4; // 4 GB
+
+$wgAllowJavaUploads     = true;
+$wgCheckFileExtensions  = false;
+$wgStrictFileExtensions = false;
+$wgVerifyMimeType       = false;
+
+$wgDisableUploadScriptChecks = true;
+
+$wgFileExtensions[] = 'exe';
+$wgFileExtensions[] = 'ics';
+$wgFileExtensions[] = 'msg';
+$wgFileExtensions[] = 'mp4';
+
 // We do not generate thumbnails on parse, but rather on demand - which speeds
 // up page load times.
 $wgGenerateThumbnailOnParse = false;

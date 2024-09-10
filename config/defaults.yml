@@ -212,7 +212,7 @@ clean_upload_stash_crontime: "0 18 * * *"
 
 # PHP max file size. This gets applied to php.ini variables upload_max_filesize
 # and post_max_size for convenience.
-php_max_upload_filesize: "100M"
+php_max_upload_filesize: "5G"
 
 # The OPcache shared memory storage size
 php_opcache_memory_consumption: 256

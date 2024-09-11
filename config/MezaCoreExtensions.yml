@@ -141,6 +141,14 @@ list:
 #      $wgSubpageNavigationShowArticleHeader = false;
 #      $wgSubpageNavigationShowTree = false;
 
+  # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
+  - name: HeaderTabs
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
+    version: master
+    config: |
+      $wgHeaderTabsEditTabLink = false;
+      $wgHeaderTabsRenderSingleTab = true;
+
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
   # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------
@@ -347,14 +355,6 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
-
-  # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
-  - name: HeaderTabs
-    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgHeaderTabsEditTabLink = false;
-      $wgHeaderTabsRenderSingleTab = true;
 
   # Variables - Allows variables to be defined in a page and used later in that same page or included templates,
   # change its value, possibly to a value given by an expression in terms of the old value, etc.

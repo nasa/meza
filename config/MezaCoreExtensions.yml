@@ -133,13 +133,13 @@ list:
     config: |
       wfLoadExtension( 'ModernTimeline' );
 
-  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
-  - name: SubpageNavigation
-    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation.git
-    version: master
-    config: |
-      $wgSubpageNavigationShowArticleHeader = false;
-      $wgSubpageNavigationShowTree = false;
+#  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
+#  - name: SubpageNavigation
+#    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation.git
+#    version: master
+#    config: |
+#      $wgSubpageNavigationShowArticleHeader = false;
+#      $wgSubpageNavigationShowTree = false;
 
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
@@ -147,16 +147,16 @@ list:
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
 
-  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
-  # to the annotations within software such as Google Docs
-  - name: InlineComments
-    repo: https://github.com/wikimedia/mediawiki-extensions-InlineComments.git
-    version: "{{ mediawiki_default_branch }}"
+#  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
+#  # to the annotations within software such as Google Docs
+#  - name: InlineComments
+#    repo: https://github.com/wikimedia/mediawiki-extensions-InlineComments.git
+#    version: "{{ mediawiki_default_branch }}"
 
-  # Dark Mode - Adds a toggleable dark mode for the MediaWiki user interface.
-  - name: DarkMode
-    repo: https://github.com/wikimedia/mediawiki-extensions-DarkMode.git
-    version: "{{ mediawiki_default_branch }}"
+#  # Dark Mode - Adds a toggleable dark mode for the MediaWiki user interface.
+#  - name: DarkMode
+#    repo: https://github.com/wikimedia/mediawiki-extensions-DarkMode.git
+#    version: "{{ mediawiki_default_branch }}"
 
   # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
   - name: FlexDiagrams
@@ -550,22 +550,22 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-Lockdown.git
     version: "{{ mediawiki_default_branch }}"
 
-  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
-  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
-  - name: WikiLove
-    repo: https://github.com/wikimedia/mediawiki-extensions-WikiLove.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgDefaultUserOptions['wikilove-enabled'] = 1;
-      $wgWikiLoveTabIcon = true;
-      $wgWikiLoveLogging = true;
+#  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
+#  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
+#  - name: WikiLove
+#    repo: https://github.com/wikimedia/mediawiki-extensions-WikiLove.git
+#    version: "{{ mediawiki_default_branch }}"
+#    config: |
+#      $wgDefaultUserOptions['wikilove-enabled'] = 1;
+#      $wgWikiLoveTabIcon = true;
+#      $wgWikiLoveLogging = true;
 
-  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
-  # Documentation: https://www.mediawiki.org/wiki/Extension:FlexForm
-  - name: FlexForm
-    repo: https://github.com/Open-CSP/FlexForm.git
-    version: "REL1_39"
-    compoaser_merge: true
+#  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
+#  # Documentation: https://www.mediawiki.org/wiki/Extension:FlexForm
+#  - name: FlexForm
+#    repo: https://github.com/Open-CSP/FlexForm.git
+#    version: "REL1_39"
+#    compoaser_merge: true
 
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------

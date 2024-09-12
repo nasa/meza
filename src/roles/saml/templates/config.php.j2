@@ -1,162 +1,181 @@
 <?php
 
-$config = array(
-	'baseurlpath' => 'https://{{ wiki_app_fqdn }}/simplesaml/',
+/**
+ * The configuration of SimpleSAMLphp
+ */
 
-	'application' => [ 'baseURL' => 'https://{{ wiki_app_fqdn }}' ],
+$httpUtils = new \SimpleSAML\Utils\HTTP();
 
-	'certdir' => 'cert/',
-	'loggingdir' => 'log/',
-	'datadir' => 'data/',
-	'tempdir' => '/tmp/simplesaml',
+$config = [
 
-	'technicalcontact_name' => '{{ saml_public.technicalcontact_name }}',
-	'technicalcontact_email' => '{{ saml_public.technicalcontact_email }}',
+    'baseurlpath' => 'https://{{ wiki_app_fqdn }}/simplesaml/',
+    'application' => [],
 
-	'timezone' => null,
+    'cachedir' => '/var/cache/simplesamlphp',
+    'tempdir'  => '/tmp/simplesamlphp',
+    'certdir'  => 'cert/',
 
-	'secretsalt' => '{{ saml_secret.salt }}',
+        'technicalcontact_name'  => '{{ saml_public.technicalcontact_name }}',
+        'technicalcontact_email' => '{{ saml_public.technicalcontact_email }}',
 
-	'auth.adminpassword' => '{{ saml_secret.adminpassword }}',
+    'timezone' => "{{ m_timezone | default('America/New_York') }}",
 
-	'admin.protectindexpage' => false,
-	'admin.protectmetadata' => false,
+    'secretsalt'         => '{{ saml_secret.salt }}',
+    'auth.adminpassword' => '{{ saml_secret.adminpassword }}',
 
-	'admin.checkforupdates' => true,
+    'admin.protectmetadata' => false,
+    'admin.checkforupdates' => true,
 
-	'trusted.url.domains' => array(),
+    'trusted.url.domains' => [],
+    'trusted.url.regex'   => false,
 
-	'trusted.url.regex' => false,
+    'enable.http_post' => false,
 
-	'enable.http_post' => false,
+    'assertion.allowed_clock_skew' => 180,
 
-	'debug' => array(
-		'saml' => false,
-		'backtraces' => true,
-		'validatexml' => false,
-	),
+    'debug' => [
+        'saml'       => false,
+        'backtraces'  => true,
+        'validatexml' => false,
+    ],
+    'showerrors'     => true,
+    'errorreporting' => true,
 
-	'showerrors' => true,
-	'errorreporting' => true,
+    'logging.level'       => SimpleSAML\Logger::DEBUG,
+    'logging.handler'     => 'syslog',
+    'logging.facility'    => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
+    'logging.processname' => 'simplesamlphp',
+    'logging.logfile'     => 'simplesamlphp.log',
 
-	'logging.level' => SimpleSAML\Logger::NOTICE,
-	'logging.handler' => 'syslog',
-	'logging.facility' => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
-	'logging.processname' => 'simplesamlphp',
-	'logging.logfile' => 'simplesamlphp.log',
-	'statistics.out' => array(),
+    'statistics.out' => [],
 
-	'proxy' => null,
-	'proxy.auth' => false,
-	'database.dsn' => 'mysql:host=localhost;dbname=saml',
-	'database.username' => 'simplesamlphp',
-	'database.password' => 'secret',
-	'database.prefix' => '',
-	'database.persistent' => false,
-	'database.slaves' => array(),
+    'proxy' => null,
 
-	'enable.saml20-idp' => false,
-	'enable.shib13-idp' => false,
-	'enable.adfs-idp' => false,
-	'enable.wsfed-sp' => false,
-	'enable.authmemcookie' => false,
+    /**************************
+     | DATABASE CONFIGURATION |
+     **************************/
 
-	'default-wsfed-idp' => 'urn:federation:pingfederate:localhost',
-	'shib13.signresponse' => true,
+    'database.dsn'            => 'mysql:host=localhost;dbname=saml',
+    'database.username'       => 'simplesamlphp',
+    'database.password'       => 'secret',
+    'database.options'        => [],
+    'database.prefix'         => '',
+    'database.driver_options' => [],
+    'database.persistent'     => false,
+    'database.secondaries'    => [],
+    'enable.saml20-idp'       => true,
+    'enable.adfs-idp'         => false,
 
-	# This should be _less_ than memcache_store.expires. See below.
-	'session.duration' => {{ session_duration_hours }} * (60 * 60),
+    'module.enable' => [
+        'exampleauth' => true,
+        'core'        => true,
+        'admin'       => true,
+        'saml'        => true
+    ],
 
-	'session.datastore.timeout' => (4 * 60 * 60), // 4 hours
-	'session.state.timeout' => (60 * 60), // 1 hour
-	'session.cookie.name' => 'SimpleSAMLSessionID',
-	'session.cookie.lifetime' => 0,
-	'session.cookie.path' => '/',
-	'session.cookie.domain' => '{{ wiki_app_fqdn }}',
-	'session.cookie.secure' => false,
-	'session.phpsession.cookiename' => null,
-	'session.phpsession.savepath' => null,
-	'session.phpsession.httponly' => true,
-	'session.authtoken.cookiename' => 'SimpleSAMLAuthToken',
-	'session.rememberme.enable' => false,
-	'session.rememberme.checked' => false,
-	'session.rememberme.lifetime' => (14 * 86400),
+    'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
+    'session.datastore.timeout'     => (4 * 60 * 60), // 4 hours
+    'session.state.timeout'         => (60 * 60), // 1 hour
+    'session.cookie.name'           => 'SimpleSAMLSessionID',
+    'session.cookie.lifetime'       => 0,
+    'session.cookie.path'           => '/',
+    'session.cookie.domain'         => '',
+    'session.cookie.samesite'       => $httpUtils->canSetSameSiteNone() ? 'None' : null,
+    'session.phpsession.cookiename' => 'SimpleSAML',
+    'session.phpsession.savepath'   => null,
+    'session.phpsession.httponly'   => true,
+    'session.authtoken.cookiename'  => 'SimpleSAMLAuthToken',
+    'session.rememberme.enable'     => false,
+    'session.rememberme.checked'    => false,
+    'session.rememberme.lifetime'   => (14 * 86400),
 
+        'memcache_store.servers' => [
+                [
+                        {% for server in groups['memcached_servers'] -%}
+                        {%- if server == inventory_hostname -%}
+                        ['hostname' => '127.0.0.1'],
+                        {%- else -%}
+                        ['hostname' => '{{ server }}'],
+                        {%- endif -%}
+                        {%- endfor %}
+                ],
+    ],
+    'memcache_store.prefix'  => '',
+    'memcache_store.expires' => {{ memcache_session_store_hours }} * (60 * 60), // {{ memcache_session_store_hours }} hours
 
-	'memcache_store.servers' => array(
-		array(
-			{% for server in groups['memcached_servers'] -%}
-			{%- if server == inventory_hostname -%}
-			array('hostname' => '127.0.0.1'),
-			{%- else -%}
-			array('hostname' => '{{ server }}'),
-			{%- endif -%}
-			{%- endfor %}
-		),
-	),
-	'memcache_store.prefix' => 'simpleSAMLphp',
+    'language.available' => [
+        'en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'ca', 'fr', 'it', 'nl', 'lb',
+        'cs', 'sk', 'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-br', 'tr', 'ja', 'zh', 'zh-tw',
+        'ru', 'et', 'he', 'id', 'sr', 'lv', 'ro', 'eu', 'el', 'af', 'zu', 'xh', 'st',
+    ],
+    'language.rtl'             => ['ar', 'dv', 'fa', 'ur', 'he'],
+    'language.default'         => 'en',
+    'language.parameter.name'  => 'language',
+    'language.parameter.setcookie' => true,
+    'language.cookie.name'     => 'language',
+    'language.cookie.domain'   => '',
+    'language.cookie.path'     => '/',
+    'language.cookie.secure'   => true,
+    'language.cookie.httponly' => false,
+    'language.cookie.lifetime' => (60 * 60 * 24 * 900),
+    'language.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
 
-	# This value should always be larger than the 'session.duration'
-	# option. Not doing this may result in the session being deleted from
-	# the memcache servers while it is still in use.
-	'memcache_store.expires' => {{ memcache_session_store_hours }} * (60 * 60),
+    'theme.use' => 'default',
 
+    'template.auto_reload' => false,
 
-	'language.available' => array(
-		'en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'fr', 'it', 'nl', 'lb', 'cs',
-		'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-br', 'tr', 'ja', 'zh', 'zh-tw', 'ru', 'et',
-		'he', 'id', 'sr', 'lv', 'ro', 'eu', 'el', 'af'
-	),
-	'language.rtl' => array('ar', 'dv', 'fa', 'ur', 'he'),
-	'language.default' => 'en',
-	'language.parameter.name' => 'language',
-	'language.parameter.setcookie' => true,
-	'language.cookie.name' => 'language',
-	'language.cookie.domain' => null,
-	'language.cookie.path' => '/',
-	'language.cookie.secure' => false,
-	'language.cookie.httponly' => false,
-	'language.cookie.lifetime' => (60 * 60 * 24 * 900),
-	'language.i18n.backend' => 'SimpleSAMLphp',
+    'production' => true,
 
+    'assets' => [
+        'caching' => [
+            'max_age' => 86400,
+            'etag'    => false,
+        ],
+    ],
 
-	'attributes.extradictionary' => null,
-	'theme.use' => 'default',
-	'template.auto_reload' => true,
-	'idpdisco.enableremember' => true,
-	'idpdisco.rememberchecked' => true,
-	'idpdisco.validate' => true,
-	'idpdisco.extDiscoveryStorage' => null,
-	'idpdisco.layout' => 'dropdown',
+    'idpdisco.enableremember'      => true,
+    'idpdisco.rememberchecked'     => true,
+    'idpdisco.validate'            => true,
+    'idpdisco.extDiscoveryStorage' => null,
+    'idpdisco.layout'              => 'dropdown',
 
-	'authproc.idp' => array(
-		30 => 'core:LanguageAdaptor',
-		45 => array(
-			'class'		 => 'core:StatisticsWithAttribute',
-			'attributename' => 'realm',
-			'type'		  => 'saml20-idp-SSO',
-		),
-		50 => 'core:AttributeLimit',
-		99 => 'core:LanguageAdaptor',
-	),
-	'authproc.sp' => array(
-		90 => 'core:LanguageAdaptor',
-	),
+    'authproc.idp' => [
+        30 => 'core:LanguageAdaptor',
+        50 => 'core:AttributeLimit',
+        99 => 'core:LanguageAdaptor',
+    ],
 
+    'authproc.sp' => [
+        90 => 'core:LanguageAdaptor',
+    ],
 
-	'metadata.sources' => array(
-		array('type' => 'flatfile'),
-	),
-	'metadata.sign.enable' => false,
-	'metadata.sign.privatekey' => null,
-	'metadata.sign.privatekey_pass' => null,
-	'metadata.sign.certificate' => null,
+    'metadatadir'                   => 'metadata',
+    'metadata.sources'              => [ [ 'type' => 'flatfile'], ],
+    'metadata.sign.enable'          => false,
+    'metadata.sign.privatekey'      => null,
+    'metadata.sign.privatekey_pass' => null,
+    'metadata.sign.certificate'     => null,
+    'metadata.sign.algorithm'       => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
 
+    'store.type'           => 'memcache',
+    'store.sql.dsn'        => 'sqlite:/path/to/sqlitedatabase.sq3',
+    'store.sql.username'   => null,
+    'store.sql.password'   => null,
+    'store.sql.prefix'     => 'SimpleSAMLphp',
+    'store.sql.options'    => [],
+    'store.redis.host'     => 'localhost',
+    'store.redis.port'     => 6379,
+    'store.redis.username' => '',
+    'store.redis.password' => '',
+    'store.redis.tls'      => false,
+    'store.redis.insecure' => false,
+    'store.redis.ca_certificate' => null,
+    'store.redis.certificate'    => null,
+    'store.redis.privatekey'     => null,
+    'store.redis.prefix'         => 'SimpleSAMLphp',
+    'store.redis.mastergroup'    => 'mymaster',
+    'store.redis.sentinels'      => [],
 
-	'store.type'					=> 'memcache',
-	'store.sql.dsn'				 => 'sqlite:/path/to/sqlitedatabase.sq3',
-	'store.sql.username' => null,
-	'store.sql.password' => null,
-	'store.sql.prefix' => 'SimpleSAMLphp',
-);
+    'proxymode.passAuthnContextClassRef' => false,
+];
 

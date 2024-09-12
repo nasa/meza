@@ -18,13 +18,35 @@
 #   preLocalSettings.php
 #   postLocalSettings.php
 
+# e.g. /opt/conf-meza/public/wikis/foo
 - name: Ensure wiki directory exists in config
-  file:
+  ansible.builtin.file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+# @FIXME: do we really need this to be world-writable?
+# Pretty sure that we need to allow apache, meza-ansible, and local 'userx'
+# to run scripts that write to this directory.
+# like update.php or rebuildData.php.
+# We could document proper 'usage' so that any local user running scripts
+# must use sudo -u apache for MediaWiki "web" scripts or sudo -u meza-ansible
+# for Meza shell scripts (but could those create ownership problems?)
+# Need better documentation on the permissions in Meza
+# Note: X in symbolic mode means execute a directory, but not files.
+# Nobody but Apache can write to mw-temp, so it's not suitable for .smw.json
+
+- name: Ensure .smw.json file exists in the conf directory
+  ansible.builtin.file:
+    path: "{{ m_local_public }}/wikis/{{ wiki_id }}/.smw.json"
+    state: touch
+    owner: "{{ user_apache }}"
+    group: wheel
+    mode: "u=rw,g=rw,o=r"
   delegate_to: localhost
   run_once: true
 
@@ -35,7 +57,7 @@
     src: "files/{{ item }}"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: this will not overwrite
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
@@ -46,7 +68,7 @@
   run_once: true
 
 - name: Ensure wiki pre/post settings directories exists in config
-  file:
+  ansible.builtin.file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     state: directory
     owner: "{{ user_apache }}"
@@ -57,13 +79,14 @@
   with_items:
     - preLocalSettings.d
     - postLocalSettings.d
+    - samlAuthorizations.d
 
 - name: Ensure base templates are present (but do not overwrite)
   template:
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
     # force=no: Non-default for templates. Destination files will not be overwritten
-    force: no
+    force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: 0755
@@ -71,5 +94,6 @@
     - preLocalSettings.d/base.php
     - preLocalSettings.d/README.md
     - postLocalSettings.d/README.md
+    - samlAuthorizations.d/base.php
   delegate_to: localhost
   run_once: true

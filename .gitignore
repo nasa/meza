@@ -1,3 +1,4 @@
+# Mac OS-X
 .DS_Store
 
 .vagrant/*
@@ -5,3 +6,12 @@ vagrantconf.yml
 
 # file used by src/scripts/do-release.sh
 .release-notes.tmp
+
+# ignore Jeff Geerling roles downloaded from ansible-galaxy
+src/roles/geerlingguy*
+
+# ignore virtualenv
+venv/*
+
+# ignore vscode settings wherever they are
+**/.vscode

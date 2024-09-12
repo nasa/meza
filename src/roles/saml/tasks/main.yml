@@ -4,10 +4,6 @@
     path: "{{ m_simplesamlphp_path }}"
   register: simplesamlphp_exists
 
-- name: Remove Extension:SimpleSamlAuth, Meza now uses Extension:SimpleSAMLphp
-  file:
-    path: "{{ m_mediawiki }}/extensions/SimpleSamlAuth"
-    state: absent
 
 - name: "Check if SAML MW extension exists"
   stat:
@@ -20,7 +16,7 @@
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    recurse: yes
+    recurse: true
   when: simplesamlphp_exists.stat.exists and simplesamlphp_exists.stat.isdir
 
 - name: Ensure good permissions on Extension:SimpleSAMLphp directory and subs (if dir exists)
@@ -29,14 +25,14 @@
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
-    recurse: yes
+    recurse: true
   when: simplesamlphp_exists.stat.exists and simplesamlphp_exists.stat.isdir
 
 - name: Get simplesamlphp tarball
-  become: yes
+  become: true
   become_user: "meza-ansible"
   get_url:
-    url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
+    url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
     dest: "{{ m_home }}/meza-ansible/"
   register: new_simplesamlphp_archive
 
@@ -61,23 +57,23 @@
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-  when: not simplesamlphp_exists.stat.exists
+  when: not simplesamlphp_exists2.stat.exists
 
 - name: Unarchive simplesamlphp tarball if new
-  become: yes
+  become: true
   unarchive:
-    src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}.tar.gz"
+    src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
     dest: "{{ m_simplesamlphp_path }}"
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    remote_src: yes
+    remote_src: true
     extra_opts:
       - "--strip-components=1"
   when: not simplesamlphp_exists.stat.exists or new_simplesamlphp_archive.changed
 
 - name: Ensure Extension:PluggableAuth installed
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -85,13 +81,13 @@
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git
     dest: "{{ m_mediawiki }}/extensions/PluggableAuth"
-    version: "tags/6.3" # "{{ saml_mw_extension_version }}"
+    version: "{{ saml_mw_extension_version }}"
     umask: "0002"
   tags:
     - latest
 
 - name: Ensure Extension:SimpleSAMLphp (MediaWiki extension) installed
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -99,11 +95,13 @@
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-SimpleSAMLphp.git
     dest: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
-    version: "tags/5.0.1" # "{{ saml_mw_extension_version }}"
+    version: "{{ saml_mw_extension_version }}"
     umask: "0002"
   tags:
     - latest
 
+# We could move the config directory (e.g. into /opt/conf-meza/secret)
+# setting SIMPLESAMLPHP_CONFIG_DIR but it seems best to leave it default
 - name: Ensure ./config directory in place
   file:
     path: "{{ m_simplesamlphp_path }}/config"
@@ -136,13 +134,23 @@
     - filename: "SAMLConfig.php"
       dest_path: "{{ m_deploy }}"
 
+# The simpleSAMLphp cache directory is hard-coded to the default in 
+# meza/src/roles/saml/templates/config.php.j2
+- name: "Ensure SimpleSAMLphp cache directory exists"
+  file:
+    path: /var/cache/simplesamlphp
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: "u=rwX,g=rwX,o=rX"
+    state: directory
+
 - name: Ensure _still_ good permissions on simplesamlphp directory and subs
   file:
     path: "{{ m_simplesamlphp_path }}"
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"
     mode: "{{ m_simplesamlphp_mode }}"
-    recurse: yes
+    recurse: true
 
 - name: Ensure _still_ good permissions on Extension:SimpleSamlAuth directory and subs
   file:
@@ -150,8 +158,13 @@
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
-    recurse: yes
+    recurse: true
 
+# DEPRECATED since 2024 
+# Extension:SimpleSamlAuth that this copies is archived
+# https://www.mediawiki.org/w/index.php?oldid=4123921
+# Meanwhile, the simplesamlphp.org library has had a major version upgrade
+# Requirements and implementation here needs to be reviewed top to bottom.
 - name: Ensure NonMediaWikiSimpleSamlAuth.php in place
   template:
     src: NonMediaWikiSimpleSamlAuth.php.j2
@@ -159,3 +172,14 @@
     owner: meza-ansible
     group: apache
     mode: 0755
+
+# We could use /var/log here, but still would need to ensure apache can write to it
+- name: Ensure ./log directory in place
+  become: true
+  file:
+    path: "{{ m_simplesamlphp_path }}/log"
+    state: directory
+    mode: "u+rwX,g+rwX,o+rX"
+    owner: "{{ user_apache | default('apache', true) }}"
+    group: "{{ group_apache | default('apache', true) }}"
+    recurse: true

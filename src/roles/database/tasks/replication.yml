@@ -9,6 +9,7 @@
     (mysql_replication_role == 'slave')
     and mysql_replication_user
     and (mysql_replication_master != '')
+
 - set_fact:
     role_is_valid_slave: False
   when: role_is_valid_slave is skipped
@@ -20,10 +21,6 @@
     (mysql_replication_role == 'master')
     and mysql_replication_user
     and (mysql_replication_master != '')
-- set_fact:
-    role_is_valid_master: False
-  when: role_is_valid_master is skipped
-
 
 - set_fact:
     role_is_valid_master: false
@@ -49,7 +46,7 @@
   failed_when: False
   register: slave
   when: role_is_valid_slave
-- debug: { var: slave }
+- ansible.builtin.debug: { var: slave }
 
 #
 # Another commonly used conditional. Whether or not to configure a slave.
@@ -64,7 +61,7 @@
       or (slave.Slave_IO_Running is defined and slave.Slave_SQL_Running == 'No')
       or (mysql_force_slave_configuration is defined and mysql_force_slave_configuration)
     )
-- debug: { var: slave_needs_configuration }
+- ansible.builtin.debug: { var: slave_needs_configuration }
 
 
 #
@@ -77,7 +74,7 @@
   when:
     - slave_needs_configuration
     - role_is_valid_slave
-- debug: { var: master }
+- ansible.builtin.debug: { var: master }
 
 
 
@@ -113,7 +110,7 @@
   fetch:
     src: "{{ m_tmp }}/mysqldump-onmaster.sql.gz"
     dest: "{{ m_tmp }}/mysqldump-oncontrol.sql.gz"
-    flat: yes
+    flat: true
   delegate_to: "{{ mysql_replication_master }}"
   when:
     - slave_needs_configuration

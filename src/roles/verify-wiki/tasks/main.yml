@@ -73,9 +73,6 @@
     group: "{{ group_apache }}"
     mode: 0755
 
-
-
-
 ###############################################################################
 #                                                                             #
 # Database                                                                    #
@@ -93,17 +90,17 @@
   shell: 'mysqlshow "wiki_{{ wiki_id }}" | grep -v Wildcard | grep -o wiki_{{ wiki_id }}'
   register: wiki_exists_check
   delegate_to: "{{ groups['db_master'][0] }}"
-  failed_when: False
+  failed_when: false
   run_once: true
 
 - name: "{{ wiki_id }} - Set fact if database wiki_{{ wiki_id }} DOES exist"
   set_fact:
-    wiki_exists: True
+    wiki_exists: true
   when: wiki_exists_check is defined and wiki_exists_check.rc == 0
 
 - name: "{{ wiki_id }} - Set fact if database wiki_{{ wiki_id }} DOES NOT exist"
   set_fact:
-    wiki_exists: False
+    wiki_exists: false
   when: wiki_exists_check is defined and wiki_exists_check.rc != 0
 
 
@@ -116,12 +113,12 @@
 #
 - name: "{{ wiki_id }} - Set fact if INTEND overwrite data"
   set_fact:
-    intend_overwrite_from_backup: True
+    intend_overwrite_from_backup: true
   when: force_overwrite_from_backup is defined and force_overwrite_from_backup == true and wiki_id not in wikis_to_skip_overwrite
 
 - name: "{{ wiki_id }} - Set fact if NOT INTEND overwrite data"
   set_fact:
-    intend_overwrite_from_backup: False
+    intend_overwrite_from_backup: false
   when: (force_overwrite_from_backup is not defined or force_overwrite_from_backup == false) or wiki_id in wikis_to_skip_overwrite
 
 
@@ -130,38 +127,38 @@
 #
 - name: "{{ wiki_id }} - Mark sql_backup_server_set as NOT SET yet"
   set_fact:
-    sql_backup_server_set: False
+    sql_backup_server_set: false
 
 - name: "{{ wiki_id }} - Set SQL source-from-backup facts IF SOURCING FROM db-src"
   set_fact:
     sql_backup_server: "{{ backups_server_db_dump.addr }}"
-    do_sql_dump: True
+    do_sql_dump: true
     sql_file_match: "wiki_{{ wiki_id }}.sql"
     sql_file_push_match: "wiki_{{ wiki_id }}.sql"
     db_backup_server_remote_user: "{{ backups_server_db_dump.remote_user }}"
     db_backup_server_mysql_user: "{{ backups_server_db_dump.mysql_user }}"
-    sql_backup_server_set: True
+    sql_backup_server_set: true
   when: "backups_server_db_dump is defined"
 
 - name: "{{ wiki_id }} - Set SQL source-from-backup facts IF SOURCING FROM backup-src"
   set_fact:
     sql_backup_server: "{{ backups_server_alt_source.addr }}"
-    do_sql_dump: False
+    do_sql_dump: false
     sql_dir_path: "{{ backups_server_alt_source.sql_dir_path | regex_replace('<id>', wiki_id) }}"
     sql_file_match: "{{ backups_server_alt_source.sql_file_match | default('*.sql') | regex_replace('<id>', wiki_id) }}"
     sql_file_push_match: "{{ backups_server_alt_source.sql_file_match | default('*push.sql') | regex_replace('<id>', wiki_id) }}"
     db_backup_server_remote_user: "{{ backups_server_alt_source.remote_user }}"
-    sql_backup_server_set: True
+    sql_backup_server_set: true
   when: "not sql_backup_server_set and backups_server_alt_source is defined"
 
 - name: "{{ wiki_id }} - Set SQL source-from-backup facts IF SOURCING FROM backup_servers"
   set_fact:
     sql_backup_server: "{{ groups['backup_servers'][0] }}"
-    do_sql_dump: False
+    do_sql_dump: false
     sql_dir_path: "{{ m_backups }}/{{ env }}/{{ wiki_id }}"
     sql_file_match: "*.sql"
     sql_file_push_match: "*push.sql"
-    sql_backup_server_set: True
+    sql_backup_server_set: true
   when: "not sql_backup_server_set and 'backup_servers' in groups and groups['backup_servers']|length|int > 0"
 
 # Set remote user to access database backup
@@ -182,7 +179,7 @@
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
 
-- debug:
+- ansible.builtin.debug:
     msg: |
       do_sql_dump:                   {{ do_sql_dump | default('<undefined>') }}
       wiki_exists:                   {{ wiki_exists | default('<undefined>') }}
@@ -203,13 +200,15 @@
   include_role:
     name: remote-mysqldump
   vars:
-    remote_server:            "{{ sql_backup_server }}"
-    remote_server_ssh_user:   "{{ db_backup_server_remote_user }}"
-    remote_server_mysql_user: "{{ db_backup_server_mysql_user }}"
-    remote_server_mysql_pass: "{{ backups_server_db_dump.mysql_pass }}"
-    dump_database:            "wiki_{{ wiki_id }}"
-    target_server:            "{{ groups['db_master'][0] }}"
-    target_server_path:       "{{ m_tmp }}/wiki.sql"
+    # yamllint disable rule:colons
+    remote_server            : "{{ sql_backup_server }}"
+    remote_server_ssh_user   : "{{ db_backup_server_remote_user }}"
+    remote_server_mysql_user : "{{ db_backup_server_mysql_user }}"
+    remote_server_mysql_pass : "{{ backups_server_db_dump.mysql_pass }}"
+    dump_database            : "wiki_{{ wiki_id }}"
+    target_server            : "{{ groups['db_master'][0] }}"
+    target_server_path       : "{{ m_tmp }}/wiki.sql"
+    # yamllint enable rule:colons
   run_once: true
   when: do_sql_dump and (not wiki_exists or intend_overwrite_from_backup)
 
@@ -218,7 +217,16 @@
 # SECTION: TRANSFER SQL to DB master
 #
 - name: "{{ wiki_id }} - Transfer SQL file from backup server to DB master"
-  include: transfer-backup-to-db-master.yml
+  import_tasks: transfer-backup-to-db-master.yml
+  vars:
+    m_tmp: "{{ m_tmp }}"
+    intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
+    wiki_exists: "{{ wiki_exists }}"
+    sql_backup_server: "{{ sql_backup_server }}"
+    sql_dir_path: "{{ sql_dir_path }}"
+    sql_file_match: "{{ sql_file_match }}"
+    sql_file_push_match: "{{ sql_file_push_match }}"
+    db_backup_server_remote_user: "{{ db_backup_server_remote_user }}"
   run_once: true
   when: (not do_sql_dump) and (not wiki_exists or intend_overwrite_from_backup)
 
@@ -227,7 +235,11 @@
 # SECTION: IMPORT wiki SQL
 #
 - name: "{{ wiki_id }} - Import wiki.sql"
-  include: import-wiki-sql.yml
+  import_tasks: import-wiki-sql.yml
+  vars:
+    m_tmp: "{{ m_tmp }}"
+    intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
+    wiki_exists: "{{ wiki_exists }}"
   run_once: true
   when: (not wiki_exists) or intend_overwrite_from_backup
 
@@ -241,9 +253,6 @@
     state: absent
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
-
-
-
 
 ###############################################################################
 #                                                                             #
@@ -262,12 +271,12 @@
 
 - name: "{{ wiki_id }} - Set fact if wiki {{ wiki_id }} DOES HAVE uploads"
   set_fact:
-    wiki_has_uploads: True
+    wiki_has_uploads: true
   when: uploads_dir.stat.exists
 
 - name: "{{ wiki_id }} - Set fact if wiki {{ wiki_id }} DOES NOT HAVE uploads"
   set_fact:
-    wiki_has_uploads: False
+    wiki_has_uploads: false
   when: not uploads_dir.stat.exists
 
 
@@ -288,21 +297,21 @@
 #
 - name: "{{ wiki_id }} - Mark uploads_backup_server_set as NOT SET yet"
   set_fact:
-    uploads_backup_server_set: False
+    uploads_backup_server_set: false
 
 - name: "{{ wiki_id }} - Set uploads-source-from-backup facts IF SOURCING FROM backup-src"
   set_fact:
     uploads_backup_server: "{{ backups_server_alt_source.addr }}"
     uploads_backup_dir_path: "{{ backups_server_alt_source.uploads_dir_path | regex_replace('<id>', wiki_id) }}"
     uploads_backup_server_remote_user: "{{ backups_server_alt_source.remote_user }}"
-    uploads_backup_server_set: True
+    uploads_backup_server_set: true
   when: "backups_server_alt_source is defined"
 
 - name: "{{ wiki_id }} - Set uploads-source-from-backup facts IF SOURCING FROM backup_servers"
   set_fact:
     uploads_backup_server: "{{ groups['backup_servers'][0] }}"
     uploads_backup_dir_path: "{{ m_backups }}/{{ env }}/{{ wiki_id }}/uploads"
-    uploads_backup_server_set: True
+    uploads_backup_server_set: true
   when: "not uploads_backup_server_set and 'backup_servers' in groups and groups['backup_servers']|length|int > 0"
 
 # Set remote user to access uploads backup if not set above
@@ -316,7 +325,7 @@
 #
 # SECTION: Does backup server have uploads?
 #
-- name:
+- name: Check if directory {{ uploads_backup_dir_path }} exists on remote server
   include_role:
     name: remote-dir-check
   vars:
@@ -326,7 +335,9 @@
   tags:
     - verify-wiki-uploads
 
-- debug: { var: remote_dir_exists }
+- name: Print debug message for remote_dir_exists
+  ansible.builtin.debug:
+    var: remote_dir_exists
   tags:
     - verify-wiki-uploads
 
@@ -336,14 +347,14 @@
 #
 - name: "{{ wiki_id }} - Set fact if SHOULD overwrite uploads data (only possible if backup exists)"
   set_fact:
-    do_overwrite_uploads_from_backup: True
+    do_overwrite_uploads_from_backup: true
   when: intend_overwrite_from_backup and remote_dir_exists
   tags:
     - verify-wiki-uploads
 
 - name: "{{ wiki_id }} - Set fact if SHOULD NOT overwrite uploads data"
   set_fact:
-    do_overwrite_uploads_from_backup: False
+    do_overwrite_uploads_from_backup: false
   when: not intend_overwrite_from_backup or not remote_dir_exists
   tags:
     - verify-wiki-uploads
@@ -356,11 +367,13 @@
   include_role:
     name: rsync
   vars:
-    pulling_to_server:   "{{ inventory_hostname }}"
-    pulling_to_path:     "{{ m_uploads_dir }}/{{ wiki_id }}"
+    # yamllint disable rule:colons
+    pulling_to_server  : "{{ inventory_hostname }}"
+    pulling_to_path    : "{{ m_uploads_dir }}/{{ wiki_id }}"
     pulling_from_server: "{{ uploads_backup_server }}"
-    pulling_from_path:   "{{ uploads_backup_dir_path }}/"
-    pulling_from_user:   "{{ uploads_backup_server_remote_user }}"
+    pulling_from_path  : "{{ uploads_backup_dir_path }}/"
+    pulling_from_user  : "{{ uploads_backup_server_remote_user }}"
+    # yamllint enable rule:colons
   run_once: true
   when:
     remote_dir_exists
@@ -371,7 +384,7 @@
 
 - name: "{{ wiki_id }} - Force m_recursively_set_uploads_permissions = True"
   set_fact:
-    m_recursively_set_uploads_permissions: True
+    m_recursively_set_uploads_permissions: true
   when: intend_overwrite_from_backup
 
 #

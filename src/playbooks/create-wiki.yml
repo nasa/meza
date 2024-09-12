@@ -1,7 +1,7 @@
 ---
 
 - hosts: app_servers
-  become: yes
+  become: true
 
   # prompt for wiki_id and wiki_name
   vars_prompt:
@@ -13,7 +13,7 @@
         "mywiki" part is your wiki ID: https://example.com/mywiki
 
         Type the desired wiki ID and press [ENTER]:
-      private: no
+      private: false
 
     - name: "wiki_name"
       prompt: |
@@ -23,7 +23,7 @@
         Example: Engineering Wiki
 
         Type the desired wiki name and press [ENTER]:
-      private: no
+      private: false
 
   roles:
     - set-vars

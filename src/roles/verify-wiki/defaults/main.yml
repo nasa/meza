@@ -16,11 +16,10 @@ blender_footer_wikis: []
 
 # Below all the wikis, links to stuff
 blender_footer_links:
-  - "<a href='https://github.com/enterprisemediawiki/meza'>meza on github</a>"
-  - "<a href='https://enterprisemediawiki.org'>enterprisemediawiki.org</a>"
+  - "<a href='https://github.com/nasa/meza'>meza on github/nasa</a>"
+  - "<a href='https://mwstake.org'>mwstake.org</a>"
 
 blender_admins: []
-# - { email: jamesmontalvo3@gmail.com, name: "James Montalvo" }
 # - email: sally@example.com
 #   name: Sally Example
 

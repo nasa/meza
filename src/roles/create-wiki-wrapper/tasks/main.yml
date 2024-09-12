@@ -24,22 +24,16 @@
   include_role:
     name: sync-configs
 
+# This whole role needs inspection. It does way too much.
+# Was breaking 'create wiki' because the mediawiki-tables.SQL was stale
 - name: Use verify-wiki to make sure new wiki is setup
   include_role:
     name: verify-wiki
 
-# Wikis are totally built at this point, but SMW and search need rebuilding
-# Not totally sure SMW-rebuild is necessary, but maybe for imported pages?
-# FIXME #811: Ensure no issues with this on multi-server environments and when
-#             controller is NOT an app server
+# Wikis are totally built at this point, but search needs rebuilding?
+# Pretty sure this is taken care of in the MedidaWiki role.
 - name: (Re-)build search index for each wiki
   shell: "bash {{ m_deploy }}/elastic-rebuild-all.sh {{ wiki_id }}"
   run_once: true
   tags:
-  - search-index
-
-- name: Rebuild SemanticMediaWiki data for each wiki
-  shell: "bash {{ m_deploy }}/smw-rebuild-all.sh {{ wiki_id }} > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log"
-  run_once: true
-  tags:
-  - smw-data
+    - search-index

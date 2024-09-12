@@ -1,14 +1,14 @@
 ---
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
     - umask-set
   tasks:
 
     - name: "Exit if at least one of the following not setup: secret, public, or Meza versions"
-      debug:
+      ansible.builtin.debug:
         msg: "local_config_repo, secret_config_repo, or enforce_meza_version must be configured"
       failed_when: True
       when: >
@@ -39,7 +39,7 @@
     - name: Do secret config
       block:
         - name: Ensure proper secret config
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
@@ -48,13 +48,13 @@
             repo: "{{ secret_config_repo.repo }}"
             dest: "{{ m_local_secret }}"
             version: "{{ secret_config_repo.version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: secret_config_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: secret_config_git_operation
 
         - name: Reset vars if secret config changed
@@ -120,7 +120,7 @@
             link_names: 1
 
         - name: "End autodeployer: Secret config Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Secret config Git failure"
 
         - meta: end_play
@@ -143,7 +143,7 @@
       block:
 
         - name: Ensure proper public config
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
@@ -152,13 +152,13 @@
             repo: "{{ local_config_repo.repo }}"
             dest: "{{ m_local_public }}"
             version: "{{ local_config_repo.version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: public_config_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: public_config_git_operation
 
         - name: Reset vars if public config changed
@@ -246,7 +246,7 @@
             link_names: 1
 
         - name: "End autodeployer: Public config Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Public config Git failure"
 
         - meta: end_play
@@ -269,22 +269,22 @@
 
 
         - name: Ensure proper Meza version
-          become: yes
+          become: true
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
             TMPDIR: "{{ m_tmp }}"
           git:
-            repo: "{{ meza_repository }}"
+            repo: "{{ meza_repository_url }}"
             dest: "{{ m_meza }}"
             version: "{{ enforce_meza_version }}"
-            track_submodules: no
-            recursive: no
+            track_submodules: false
+            recursive: false
             umask: "0002"
           register: meza_git_operation
 
         # temporary
-        - debug:
+        - ansible.builtin.debug:
             var: meza_git_operation
 
         - name: Reset vars if Meza changed
@@ -360,7 +360,7 @@
             link_names: 1
 
         - name: "End autodeployer: Meza Git failure"
-          debug:
+          ansible.builtin.debug:
             msg: "Meza Git failure"
 
         - meta: end_play
@@ -375,7 +375,7 @@
     #
     - block:
         - name: "End autodeployer if no changes made"
-          debug:
+          ansible.builtin.debug:
             msg: "Nothing new to deploy"
 
         - meta: end_play

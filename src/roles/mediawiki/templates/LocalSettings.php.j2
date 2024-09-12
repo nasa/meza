@@ -31,6 +31,21 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 require '{{ m_install }}/.deploy-meza/config.php';
 
+/*
+ * Fix ENV vars getting prepended with 'REDIRECT_' by Apache
+ * @todo REMOVE ME
+ * I'm not sure this is a valid bug in the current Apache
+ */
+function fixApacheEnv () {
+	foreach ($_ENV as $key => $value) {
+	    if (substr($key, 0, 9) === 'REDIRECT_') {
+	        $_ENV[str_replace('REDIRECT_', '', $key)] = $value;
+	        putenv(str_replace('REDIRECT_', '', $key) . '=' . $value);
+	    }
+	}
+}
+fixApacheEnv();
+
 if( $wgCommandLineMode ) {
 
 	$mezaWikiEnvVarName='WIKI';
@@ -55,9 +70,55 @@ else {
  *  Perform authentication up front, immediately after $wikiId is setup.
  *
  **/
-require "{{ m_deploy }}/samlLocalSettings.php";
-{% endif %}
 
+// Get the data needed to know if the server request is an external (remote) or internal (localhost) request
+if     (!empty($_SERVER['HTTP_CLIENT_IP']))       { $ip_address = $_SERVER['HTTP_CLIENT_IP']; }
+elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR']; }
+elseif (isset($_SERVER['REMOTE_ADDR'] ) )         { $ip_address = $_SERVER['REMOTE_ADDR']; }
+
+// Allow exceptions of the PluggableAuth/SAML integration for specific wikis
+// so that localhost maintenance script can create new bot accounts on the wikis
+if ( in_array( $wikiId, array( 'mywiki1','mywiki2', ) ) )
+{ # SKIP "PluggableAuth" AND "SimpleSAMLphp" 
+} else { 
+  #  USE "PluggableAuth" AND "SimpleSAMLphp"as follows:
+
+// Load and Configure PluggableAuth for SAML IDP/SSO
+wfLoadExtension( "PluggableAuth" );
+$wgPluggableAuth_EnableAutoLogin = true;
+$wgPluggableAuth_EnableLocalProperties = false;
+$wgPluggableAuth_EnableLocalLogin = false;
+if (isset($ip_address) && $ip_address == '127.0.0.1') 
+{ $wgPluggableAuth_EnableLocalLogin = true;  }
+$wgGroupPermissions['*']['autocreateaccount'] = true;
+
+// Load and Configure SimpleSAMLphp for SAML IDP/SSO
+wfLoadExtension( "SimpleSAMLphp" );
+// @FIXME This is repeated in the templated file SAMLConfig.php
+$wgSimpleSAMLphp_InstallDir = '/opt/simplesamlphp';
+
+// SAML Authentication (Who the user IS)
+$wgPluggableAuth_Config['Log in using SAML'] = [
+    'plugin' =>   'SimpleSAMLphp',
+    'data'   => [ 'authSourceId'      => 'default-sp',
+                  'usernameAttribute' => "{{ idp_username_attr | default('AUID') }}",
+                  'realNameAttribute' => "{{ idp_realname_attr | default('displayName') }}",
+                  'emailAttribute'    => "{{ idp_email_attr | default('Email') }}",
+                ]
+];
+
+// Load all PHP files in samlAuthorizations.d for all wikis
+foreach ( glob("$m_deploy/public/samlAuthorizations.d/*.php") as $filename) {
+  require_once $filename;
+}
+
+// Load all PHP files in samlAuthorizations.d for this wiki
+foreach ( glob("$m_deploy/public/wikis/$wikiId/samlAuthorizations.d/*.php") as $filename) {
+  require_once $filename; 
+}
+
+}
+{% endif %}
 
 {% if wiki_id_redirects is defined and wiki_id_redirects|length > 0 %}
 
@@ -89,10 +150,13 @@ if ( isset( $wikiIdRedirects[ $wikiId ] ) ) {
 $wikis = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
 
 
-if ( ! in_array( $wikiId, $wikis ) ) {
-
-	// handle invalid wiki
-	die( "No sir, I ain't heard'a no wiki that goes by the name \"$wikiId\"\n" );
+if ( ! in_array( $wikiId, $wikis ) && empty ( $wikiId ) ) {
+    // get $wikiId from environment variable
+	$wikiId = getenv( $mezaWikiEnvVarName );
+    if (!$wikiId) {
+		// handle invalid wiki
+		die( "No sir, I ain't heard'a no wiki that goes by the name \"$wikiId\"\n" );
+	}
 
 }
 
@@ -258,6 +322,11 @@ $wgServer = 'https://{{ wiki_app_fqdn }}';
 // https://www.mediawiki.org/wiki/Manual:$wgScriptPath
 $wgScriptPath = "/$wikiId";
 
+// https://www.mediawiki.org/wiki/Manual:Short_URL
+$wgArticlePath = "/$wikiId/$1";
+
+$wgUsePathInfo = true;
+
 // https://www.mediawiki.org/wiki/Manual:$wgUploadPath
 $wgUploadPath = "$wgScriptPath/img_auth.php";
 
@@ -286,8 +355,6 @@ $wgScriptExtension = ".php";
 $wgStylePath = "$wgScriptPath/skins";
 $wgResourceBasePath = $wgScriptPath;
 
-## This is the base URL that will be used to construct all internal links. Without this, the title will append to the end of the URL when switching wikis in a wiki farm
-$wgArticlePath = "/$wikiId/index.php/$1";
 
 
 
@@ -472,10 +539,27 @@ $wgMemCachedServers = array(
 
 $wgSessionCacheType = CACHE_MEMCACHED;
 
-## To enable image uploads, make sure the 'images' directory
-## is writable, then set this to true:
+// Of course we allow uploads, we even allow large uploads.
 $wgEnableUploads = true;
-$wgMaxUploadSize = 1024*1024*100; // 100 MB
+$wgMaxUploadSize = 1024*1024*1024*4; // 4 GB
+
+$wgAllowJavaUploads     = true;
+$wgCheckFileExtensions  = false;
+$wgStrictFileExtensions = false;
+$wgVerifyMimeType       = false;
+
+$wgDisableUploadScriptChecks = true;
+
+$wgFileExtensions[] = 'exe';
+$wgFileExtensions[] = 'ics';
+$wgFileExtensions[] = 'msg';
+$wgFileExtensions[] = 'mp4';
+
+// We do not generate thumbnails on parse, but rather on demand - which speeds
+// up page load times.
+$wgGenerateThumbnailOnParse = false;
+// With short-urls, we need to let MediaWiki know where to find thumb.php
+$wgThumbnailScriptPath = "$wgScriptPath/thumb.php";
 
 $wgUseImageMagick = true;
 {% if ansible_distribution_file_variety == "RedHat" %}
@@ -488,10 +572,14 @@ $wgImageMagickConvertCommand = 'convert';
 # InstantCommons allows wiki to use images from http://commons.wikimedia.org
 $wgUseInstantCommons = false;
 
-## If you use ImageMagick (or any other shell command) on a
-## Linux server, this will need to be set to the name of an
-## available UTF-8 locale
-$wgShellLocale = "en_US.utf8";
+## If you use ImageMagick, Lua (or any other shell command)
+## this will need to be set to the name of an available UTF-8 locale.
+# https://www.mediawiki.org/wiki/Manual:$wgShellLocale
+# @obsolete
+# This feature was removed completely in version 1.38.0.
+# https://phabricator.wikimedia.org/T291234
+# Prior to removal, the default value was "C.UTF-8"
+# $wgShellLocale = "C.UTF-8";
 
 ## If you want to use image uploads under safe mode,
 ## create the directories images/archive, images/thumb and
@@ -518,7 +606,11 @@ $wgDiff3 = "/usr/bin/diff3";
 
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, ie 'vector', 'monobook': see MezaCoreSkins.yml for choices.
-$wgDefaultSkin = "vector";
+## Meza users should not modify this setting as it wil not be preserved by meza deploys
+## To override this setting Meza users should add this setting to the php file in either
+## A) For all wikis, in conf-meza/public/postLocalSettings/base.php
+## B) For a specific wiki, in conf-meza/public/wikis/<wikiId>/postLocalSettings/base.php
+$wgDefaultSkin = "chameleon";
 
 # Enabled skins.
 # The following skins were automatically enabled:
@@ -546,7 +638,11 @@ $wgRestrictDisplayTitle = false;
  */
 $wgCacheDirectory = "{{ m_cache_directory }}/$wikiId";
 
-
+// Set the location for the SMW config file .smw.json
+// This is a per-wiki, non-browsable, apache-writable directory
+// Directory is created in the configure-wiki role
+// https://www.semantic-mediawiki.org/wiki/Help:$smwgConfigFileDir
+$smwgConfigFileDir = "/opt/conf-meza/public/wikis/{$wikiId}";
 
 
 
@@ -604,14 +700,13 @@ $wgMaxImageArea = 1.25e10; // Images on [[Snorkel]] fail without this
 ini_set( 'pcre.backtrack_limit', 1000000000 ); //1 billion
 
 
-// Allowed file types
-$wgFileExtensions = array(
+// Allowed file types for upload
+// https://www.mediawiki.org/wiki/Manual:$wgFileExtensions
+// We accept the default file types, plus a few more
+$wgFileExtensions = array_merge ( $wgFileExtensions, [
 	'aac',
 	'bmp',
 	'docx',
-	'gif',
-	'jpg',
-	'jpeg',
 	'mpp',
 	'mp3',
 	'msg',
@@ -620,21 +715,20 @@ $wgFileExtensions = array(
 	'ods',
 	'odt',
 	'pdf',
-	'png',
 	'pptx',
 	'ps',
 	'svg',
 	'tiff',
 	'txt',
 	'xlsx',
-	'zip'
-);
+	'zip'] );
 
 // Tell Universal Language Selector not to try to guess language based upon IP
 // address. This (a) isn't likely needed in enterprise use cases and (b) fails
 // anyway due to outdated URLs or firewall rules.
 $wgULSGeoService = false;
 
+// Used by extension SubPageList to allow subpages in the main namespace
 $wgNamespacesWithSubpages[NS_MAIN] = true;
 
 $wgUseRCPatrol = false;
@@ -756,13 +850,29 @@ $wgSearchType = 'CirrusSearch';
 $wgCirrusSearchClusters['default'] = [];
 {% for host in groups['elastic_servers'] %}
 {% if host == inventory_hostname %}
-$wgCirrusSearchClusters['default'][] = 'localhost';
+$wgCirrusSearchClusters['default'] = [
+  'host' => 'localhost',
+  // 'username' => 'elastic',
+  // 'password' => 'eApmGGeHMeJcn3ZuaBk5',
+  // 'password' => 'elasticsearch_password',
+];
+
 {% else %}
 $wgCirrusSearchClusters['default'][] = '{{ host }}';
 {% endif %}
 {% endfor %}
+
 $wgCirrusSearchWikimediaExtraPlugin['id_hash_mod_filter'] = true;
 
+$wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
+    if ( $key === 'places' ) {
+        $footerlinks['test'] = Html::rawElement( 'a', [
+                        'href' => Title::newFromText(
+                                $skin->msg( 'Section 508 Compliance and Digital Accessibility' )->inContentLanguage()->text()
+                        )
+                ], $skin->msg( 'section508compliance' ) );
+    };
+};
 
 /**
  *  9) LOAD POST LOCAL SETTINGS

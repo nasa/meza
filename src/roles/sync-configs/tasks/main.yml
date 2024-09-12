@@ -7,7 +7,7 @@
     owner: root
     group: root
     mode: 0755
-    recurse: yes
+    recurse: true
 
 # At this point the controller must have a local config. Now force it upon the
 # app servers.
@@ -16,8 +16,8 @@
   synchronize:
     src: "{{ m_local_public }}/"
     dest: "{{ m_deploy }}/public"
-    recursive: yes
-    delete: yes
+    recursive: true
+    delete: true
     rsync_opts:
       - "--no-motd"
       - "--exclude=.git"
@@ -31,5 +31,5 @@
     owner: root
     group: root
     mode: 0755
-    recurse: yes
+    recurse: true
 

@@ -20,20 +20,20 @@ for ARG in "$@"; do
 done
 
 checkInternetConnection() {
-    declare -i pingRetries=100
-    declare -i sleepDuration=3
-    declare -i minutes=$(($pingRetries * $sleepDuration / 60))
+	declare -i pingRetries=100
+	declare -i sleepDuration=3
+	declare -i minutes=$(($pingRetries * $sleepDuration / 60))
 
-    while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 mirrorlist.centos.org >/dev/null 2>&1; do
-        echo "Could not connect to mirrorlist.centos.org. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
-        ((pingRetries -= 1))
-        sleep $sleepDuration
-    done
+	while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 mirrorlist.centos.org >/dev/null 2>&1; do
+		echo "Could not connect to mirrorlist.centos.org. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
+		((pingRetries -= 1))
+		sleep $sleepDuration
+	done
 
-    if [[ ! $pingRetries -gt 0 ]]; then
-        echo "Meza has been trying to install but hasn't found an internet connection for $minutes minutes. Verify internet connectivity and try again."
-        exit 1
-    fi
+	if [[ ! $pingRetries -gt 0 ]]; then
+		echo "Meza has been trying to install but hasn't found an internet connection for $minutes minutes. Verify internet connectivity and try again."
+		exit 1
+	fi
 }
 
 if [ ! -z "${SKIP_CONNECTION_CHECK}" ]; then
@@ -65,7 +65,7 @@ if [ -f /etc/redhat-release ]; then
 	done
 
 # if Debian support still desired, add else condition here
-fi 
+fi
 
 # make sure conf-meza exists and has good permissions
 mkdir -p ${INSTALL_DIR}/conf-meza/secret
@@ -82,10 +82,10 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			;;
 
 		rocky)
-			dnf install -y epel-release
 			dnf config-manager --set-enabled powertools
+			dnf install -y epel-release
+			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 			dnf module -y reset php
-			dnf module -y enable php:7.4
 			sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo
 			echo "exclude = ansible ansible-core python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
 			cp /etc/yum.repos.d/epel.repo ${INSTALL_DIR}/conf-meza/epel.repo-withexcludes
@@ -131,46 +131,59 @@ fi
 
 case ${distro} in
 
-        centos)
-                yum install -y git ansible libselinux-python
-                ;;
+	centos)
+		yum install -y git ansible libselinux-python
+		;;
 
-        rocky)
+	rocky)
 		dnf install -y centos-release-ansible-29
 		dnf install -y python36
 		dnf install -y git ansible-2.9.27-1.el8.noarch
 		dnf install -y python3-libselinux
 		alternatives --set python /usr/bin/python3
-                ;;
+		;;
 
-        redhat)
-                case ${version} in
+	redhat)
+		case ${version} in
 
-                        7.*)
-                                yum install -y git ansible libselinux-python
-                                ;;
+			7.*)
+				yum install -y git ansible libselinux-python
+				;;
 
-                        8.*)
+			8.*)
 				dnf install -y python36 git ansible python3-libselinux
 				alternatives --set python /usr/bin/python3
-                                ;;
+				;;
 
-                        *)
-                                echo "RedHat version ${version} is not supported yet." && exit 188
-                                ;;
-                esac
-                ;;
+			*)
+				echo "RedHat version ${version} is not supported yet." && exit 188
+				;;
+		esac
+		;;
 
-        *)
-                echo "Cannot determine operating system distro or version" && exit 189
-                ;;
+	*)
+		echo "Cannot determine operating system distro or version" && exit 189
+		;;
 esac
 
+# Meza repository URL and branch can be set in your system shell as environment variables so as to work locally with 
+# your preferred setup and/or test changes to this file in development without needing to alter this file explicitly. 
+#
+# Use 
+# export MEZA_REPOSITORY_URL='https://github.com/freephile/meza.git'
+# in your shell to override the default repo URL set here
+MEZA_REPOSITORY_URL="${MEZA_REPOSITORY_URL:-https://github.com/nasa/meza.git}"
 
-# if /opt/meza doesn't exist, clone into and use master branch (which is the
-# default, but should we make this configurable?)
+# Declare which branch in the repo to use
+# 
+# Use 
+# export MEZA_BRANCH_NAME='REL1_39'
+# in your shell to override the default branch name set here
+MEZA_BRANCH_NAME="${MEZA_BRANCH_NAME:-main}"
+
+# if /opt/meza doesn't exist, clone our sources, always keeping the 'meza' name
 if [ ! -d "${INSTALL_DIR}/meza" ]; then
-        git clone https://github.com/enterprisemediawiki/meza.git ${INSTALL_DIR}/meza --branch master
+	git clone ${MEZA_REPOSITORY_URL} ${INSTALL_DIR}/meza --branch ${MEZA_BRANCH_NAME} "${INSTALL_DIR}/meza"
 fi
 
 # Make sure /opt/meza permissions are good in case git-cloned earlier

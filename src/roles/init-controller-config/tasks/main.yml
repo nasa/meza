@@ -26,7 +26,7 @@
 
 # If a git repo is defined use that for config
 - name: Get local config repo if set
-  become: yes
+  become: true
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
@@ -72,7 +72,7 @@
     group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
 
-- name: Ensure pre/post settings directories exists in config
+- name: Ensure pre/post/saml settings directories exists in config
   file:
     path: "{{ m_local_public }}/{{ item }}"
     state: directory
@@ -82,6 +82,7 @@
   with_items:
     - preLocalSettings.d
     - postLocalSettings.d
+    - samlAuthorizations.d
 
 
 - name: "Ensure base files present, do NOT overwrite"
@@ -91,7 +92,7 @@
     owner: "{{ m_config_public_owner }}"
     group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
-    force: no
+    force: false
   with_items:
     - MezaLocalExtensions.yml
     - MezaLocalSkins.yml
@@ -103,7 +104,7 @@
     owner: "{{ m_meza_owner }}"
     group: "{{ m_meza_group }}"
     state: directory
-    recurse: Yes
+    recurse: true
   tags:
     - file-perms
 

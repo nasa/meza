@@ -10,7 +10,7 @@
 
 - name: Ensure CentOS gluster prerequisites in place
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: "{{ item }}"
     state: present
   with_items:
@@ -20,6 +20,6 @@
 
 - name: Install gluster Packages
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: ['glusterfs-server', 'glusterfs-client']
     state: present

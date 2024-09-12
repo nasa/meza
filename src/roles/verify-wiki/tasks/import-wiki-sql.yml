@@ -12,7 +12,7 @@
   delegate_to: "{{ groups['db_master'][0] }}"
   run_once: true
 
-- debug:
+- ansible.builtin.debug:
     var: imported_wiki_sql_on_db_master
 
 #
@@ -36,7 +36,7 @@
   copy:
     src: templates/mediawiki-tables.sql
     dest: "{{ m_tmp }}/wiki.sql"
-    force: yes
+    force: true
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
   when: not wiki_exists and not imported_wiki_sql_on_db_master.stat.exists
@@ -68,7 +68,7 @@
   when: not wiki_exists or do_overwrite_db_from_backup
 
 - name: Did DB import?
-  debug: { var: did_db_import }
+  ansible.builtin.debug: { var: did_db_import }
 
 
 #
@@ -111,10 +111,8 @@
 - name: "{{ wiki_id }} - Update database"
   import_role:
     name: update.php
-  vars:
-    wiki_id: "{{ wiki_id }}"
   tags:
-  - update.php
+    - update.php
   when: not wiki_exists or do_overwrite_db_from_backup
 
 
@@ -122,7 +120,7 @@
 # SECTION: init new wiki
 #
 - name: "{{ wiki_id }} - Include init-wiki.yml only when a new wiki created (but not imported)"
-  include: init-wiki.yml
+  include_tasks: init-wiki.yml
   when: created_new_wiki
 
 

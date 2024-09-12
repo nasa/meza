@@ -151,6 +151,8 @@
   copy:
     content: "{{ decrypted_cert.stdout }}"
     dest: "/etc/haproxy/certs/meza.crt"
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 
@@ -158,6 +160,8 @@
   copy:
     content: "{{ decrypted_key.stdout }}"
     dest: "/etc/haproxy/certs/meza.key"
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 
@@ -167,6 +171,8 @@
       {{ decrypted_cert.stdout }}
       {{ decrypted_key.stdout }}
     dest: /etc/haproxy/certs/meza.pem
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
   notify:
     - restart haproxy
 
@@ -181,7 +187,7 @@
   file:
     path: /etc/haproxy/certs
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: 0600
@@ -271,11 +277,12 @@
     fully_open_ports:
       - 80
       - 443
+      - 20000
 
-- name: Add port 20000 to world-accessible list if installing netdata
-  set_fact:
-    fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
-  when: m_install_netdata
+#- name: Add port 20000 to world-accessible list if installing netdata
+#  set_fact:
+#    fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
+#  when: m_install_netdata
 
 - name: Ensure port {{ fully_open_ports | join(', ') }} open to the world for haproxy
   include_role:
@@ -388,5 +395,5 @@
   service:
     name: haproxy
     state: started
-    enabled: yes
+    enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks

@@ -4,7 +4,7 @@
 # ref: https://docs.docker.com/engine/installation/linux/centos/
 
 - hosts: localhost
-  become: yes
+  become: true
 
   handlers:
     - name: Restart Docker
@@ -21,12 +21,12 @@
           - container-selinux
           - docker-selinux
           - docker-engine
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         state: absent
 
     - name: Ensure yum-utils present
       yum:
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         name: yum-utils
         state: present
 
@@ -39,7 +39,7 @@
     #     description: Docker repository
     #     baseurl: https://download.docker.com/linux/centos/docker-ce.repo
     #     gpgkey: https://download.docker.com/linux/centos/gpg
-    #     gpgcheck: yes
+    #     gpgcheck: true
 
 
     - name: yum makecache fast
@@ -48,7 +48,7 @@
     # or specify docker-ce-{{ docker_version }}
     - name: Ensure docker-ce package installed
       yum:
-        lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+        lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
         name: "docker-ce"
         state: latest
       notify: Restart Docker
@@ -59,7 +59,7 @@
       service:
         name: docker
         state: started
-        enabled: yes
+        enabled: true
 
 
     # http://docs.ansible.com/ansible/docker_module.html

@@ -7,7 +7,7 @@
         backup_timestamp: "{{lookup('pipe','date +%Y%m%d%H%M%S')}}"
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
   tags:
@@ -38,7 +38,7 @@
 
 # FIXME #803: If a slave is available, maybe pull from there
 - hosts: db_master
-  become: yes
+  become: true
   roles:
     - set-vars
     - dump-db-wikis
@@ -46,7 +46,7 @@
   tags: db
 
 - hosts: backup_servers
-  become: yes
+  become: true
   roles:
     - set-vars
     - backup-uploads-push
@@ -55,7 +55,7 @@
     - upload
 
 - hosts: localhost
-  become: yes
+  become: true
   roles:
     - set-vars
   tags:

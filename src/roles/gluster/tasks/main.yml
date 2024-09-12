@@ -4,17 +4,17 @@
   include_vars: "{{ ansible_distribution_file_variety }}.yml"
 
 # Setup/install tasks.
-- include: setup-RedHat.yml
+- include_tasks: setup-RedHat.yml
   when: ansible_distribution_file_variety == 'RedHat'
 
-- include: setup-Debian.yml
+- include_tasks: setup-Debian.yml
   when: ansible_distribution_file_variety == 'Debian'
 
 - name: Ensure GlusterFS is started and enabled at boot.
   service:
     name: "{{ glusterfs_daemon }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure Gluster brick and mount directories exist.
   file:
@@ -33,7 +33,7 @@
     replicas: "{{ gluster_replicas }}"
     cluster: "{{ groups['app_servers'] | join(',') }}"
     host: "{{ inventory_hostname }}"
-    force: yes
+    force: true
   run_once: true
 
 - name: Ensure Gluster volume is mounted.

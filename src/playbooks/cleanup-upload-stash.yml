@@ -1,7 +1,7 @@
 ---
 
 - hosts: app_servers
-  become: yes
+  become: true
   tasks:
 
   - name: Set vars
@@ -16,7 +16,7 @@
       file_type: directory
     register: wikis_dirs
     delegate_to: localhost
-    run_once: yes
+    run_once: true
 
   - name: Set fact - list of wikis
     set_fact:

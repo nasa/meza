@@ -1,16 +1,32 @@
 ---
 # Meza default config file
 
-enforce_meza_version: main
-meza_repository: https://github.com/nasa/meza.git
+# used by autodeployer to track a named branch, tag, or SHA1
+# @FIXME when this is defined, you can not deploy with modifications in
+# /opt/meza so you can not change anything
+# add another 'enfoce_mode' variable, or a host!=localhost condition
+# enforce_meza_version: REL1_39
+
+# The source code repo for Meza
+# e.g. Use our local repo fork temporarily
+# meza_repository_url: https://github.com/freephile/meza.git
+# You can override this using Ansible 'extra-vars'
+# yamllint disable-line rule:line-length
+# sudo time meza deploy monolith -vvv --tags base,httpd-reload -e meza_repository_url=https://github.com/freephile/meza.git
+# Note: a similar variable is used in getmeza.sh
+# That script (or git on the CLI) controls your meza sources currently.
+# The variable here is NOT used to check out new versions of meza on deploys
+# but rather used in playbooks/check-for-changes and roles/enforce-meza-version
+# as part of the Autodeployer https://www.mediawiki.org/wiki/Meza/Autodeployer
+meza_repository_url: https://github.com/nasa/meza.git
 
 # Use development or production settings for this server
 # production being as performant and secure as possible
 # development being less secure and providing optional features useful for dev
-m_use_production_settings: True
+m_use_production_settings: true
 
 m_httpd_server_admin: "admin@example.com"
-m_timezone: "America/Chicago"
+m_timezone: "America/New_York"
 
 # Poorly documented and not really used method to specify networking zone
 m_private_networking_zone: public
@@ -32,7 +48,8 @@ allow_backup_downloads: false
 #   - yourwiki
 wikis_to_skip_overwrite: []
 
-# Allow redirecting wiki IDs to other wikis. This is useful if if wikis are renamed or merged.
+# Allow redirecting wiki IDs to other wikis.
+# This is useful if if wikis are renamed or merged.
 # Example:
 # wiki_id_redirects:
 #   eva: iss
@@ -52,7 +69,7 @@ haproxy_stats_password: password
 m_setup_php_profiling: false
 
 # Enable slow query log
-mysql_slow_query_log_enabled: yes
+mysql_slow_query_log_enabled: true
 mysql_slow_query_time: "5"
 # mysql_slow_query_log_file: /var/log/mariadb/slow-queries.log
 
@@ -64,18 +81,18 @@ mysql_slow_query_time: "5"
 mysql_performance_schema: "on"
 
 # Netdata is a monitoring and alerting system
-m_install_netdata: False
+m_install_netdata: true
 # netdata runs on 19999 by default. We'll expose it at 20000
 netdata_internal_port: 19999
 netdata_external_port: 20000
 
 # If false, keep all SQL files on backup servers. If true, only keep the latest
-do_cleanup_sql_backup: False
+do_cleanup_sql_backup: false
 
 # sshd_config defaults
 sshd_config_UsePAM: "yes"
 sshd_config_PasswordAuthentication: "yes"
-use_default_ssh_config: True
+use_default_ssh_config: false
 
 m_modify_etc_sudoers: true
 m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
@@ -85,10 +102,17 @@ m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
 #
 
 # Version of MediaWiki core
-mediawiki_version: "REL1_35" # FIXME set a specific version
+mediawiki_version: "REL1_39"  # FIXME set a specific version
 
-# Branch to use on many extensions extensions and skins
-mediawiki_default_branch: "REL1_35"
+# Depth of MediaWiki clone - to avoid having ALL the project history
+mediawiki_git_depth: "100"
+
+# Branch to use for extensions and skins without a more specific version
+mediawiki_default_branch: "REL1_39"
+
+# CAUTION: if set to true, a deploy will overwrite manual changes made on disk
+# to MediaWiki core, Meza core extensions and skins + Local extensions and skins
+overwrite_local_git_changes: true
 
 # PHP version
 php_ius_version: "php74"
@@ -99,12 +123,13 @@ php_debian_version: "7.4"
 # Meza 31.x had 5.x
 # Meza 32.x through 34.x were never released, but had 5.x or 6.x
 # Meza 35.x uses 6.x
-elasticsearch_major_version: "6.x"
+# Meza 39.x uses 7.x
+elasticsearch_major_version: "7.x"
 
 # Whether or not to install Lua/luasandbox
 m_install_lua: false
 
-# This can't be in Debian.yml, because that is loaded prior to defaults.yml...hmmm...
+# This can't be in Debian.yml, because that is loaded prior to defaults.yml
 packages_php_debian:
   - php{{ php_debian_version }}-common
   - php{{ php_debian_version }}-cli
@@ -139,8 +164,16 @@ packages_php_debian:
   #   "{{ php_ius_version }}-pdo"
 
 # SAML
-simplesamlphp_version: "1.19.7"
-saml_mw_extension_version: "master"
+# The library version to install. 
+# For MW 1.39, we need the library at 2.1.1 and PHP >=8.0
+## @FIXME: changing library blows away the existing installation directory
+## DO NOT CHANGE THIS WITHOUT BACKING UP YOUR CONFIG AND LOGS
+simplesamlphp_version: "2.2.1"
+# Extension:PluggableAuth 7.0
+# Extension:SimpleSAMLphp 7.0
+# These two extensions may diverge in their release naming
+# (already has with 7.1.0 and 7.0.1) so we may need to make two config variables
+saml_mw_extension_version: "tags/7.0.0"
 
 
 #
@@ -157,8 +190,10 @@ server_performance_memory_usage_danger: "75"
 disk_space_usage_crontime: "0 1 * * *"
 
 # Icons display in Slack
-server_performance_notification_icon: https://github.com/enterprisemediawiki/meza/raw/master/src/roles/configure-wiki/files/logo.png
-disk_space_usage_notification_icon: https://github.com/enterprisemediawiki/meza/raw/master/src/roles/configure-wiki/files/logo.png
+server_performance_notification_icon: |
+  https://github.com/enterprisemediawiki/meza/raw/master/src/roles/configure-wiki/files/logo.png
+disk_space_usage_notification_icon: |
+  https://github.com/enterprisemediawiki/meza/raw/master/src/roles/configure-wiki/files/logo.png
 
 # secret.yml has additional configuration options commented out. See that file
 # for more details.
@@ -177,7 +212,7 @@ clean_upload_stash_crontime: "0 18 * * *"
 
 # PHP max file size. This gets applied to php.ini variables upload_max_filesize
 # and post_max_size for convenience.
-php_max_upload_filesize: "100M"
+php_max_upload_filesize: "5G"
 
 # The OPcache shared memory storage size
 php_opcache_memory_consumption: 256
@@ -228,7 +263,7 @@ memcached_memory: 512
 
 # TCP port on which to run php-fpm
 #
-m_php_fpm_port: 9090
+m_php_fpm_port: 9000
 
 #
 # Helpers to group load balancer types
@@ -240,9 +275,9 @@ load_balancers_all: >
   ( groups.get('load_balancers', [] ) ) +
   ( groups.get('load_balancers_meza_internal', [] ) ) +
   ( groups.get('load_balancers_meza_external', [] ) ) +
-  ( groups.get('load_balancers_meza_nonmeza', [] ) ) +
-  ( groups.get('load_balancers_meza_nonmeza_internal', [] ) ) +
-  ( groups.get('load_balancers_meza_nonmeza_external', [] ) )
+  ( groups.get('load_balancers_nonmeza', [] ) ) +
+  ( groups.get('load_balancers_nonmeza_internal', [] ) ) +
+  ( groups.get('load_balancers_nonmeza_external', [] ) )
   }}
 
 
@@ -250,14 +285,14 @@ load_balancers_all: >
 load_balancers_internal: >
   {{
   ( groups.get('load_balancers_meza_internal', [] ) ) +
-  ( groups.get('load_balancers_meza_nonmeza_internal', [] ) )
+  ( groups.get('load_balancers_nonmeza_internal', [] ) )
   }}
 
 # Just load balancers for handling external traffic
 load_balancers_external: >
   {{
   ( groups.get('load_balancers_meza_external', [] ) ) +
-  ( groups.get('load_balancers_meza_nonmeza_external', [] ) )
+  ( groups.get('load_balancers_nonmeza_external', [] ) )
   }}
 
 # Just load balancers that handle internal and external

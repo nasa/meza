@@ -82,16 +82,16 @@
 
 - name: Ensure Elasticsearch is latest version
   yum:
-    lock_timeout: 180 # wait up to 3 minutes for a lock ansible/ansible#57189
+    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: elasticsearch
     state: latest
 
 - name: Start elasticsearch
   service:
     name: elasticsearch
-    enabled: yes
+    enabled: true
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Wait for elasticsearch node to come back up
   wait_for:
@@ -133,6 +133,6 @@
   delay: 10
 
 - name: Re-display current Elasticsearch full version number after upgrade
-  debug:
+  ansible.builtin.debug:
     var: version_found.json.version.number
 

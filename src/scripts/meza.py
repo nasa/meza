@@ -25,6 +25,13 @@ defaults = {
 # Handle pressing of ctrl-c. Make sure to remove lock file when deploying.
 deploy_lock_environment = False
 def sigint_handler(sig, frame):
+	"""
+	Signal handler for SIGINT (Ctrl+C) interrupt.
+	
+	Args:
+		sig (int): The signal number.
+		frame (frame): The current stack frame.
+	"""
 	print('Cancelling...')
 	if deploy_lock_environment:
 		print('Deploy underway...removing lock file')
@@ -35,7 +42,19 @@ import signal
 signal.signal(signal.SIGINT, sigint_handler)
 
 
-def load_yaml ( filepath ):
+def load_yaml(filepath):
+	"""
+	Load YAML data from a file.
+
+	Args:
+		filepath (str): The path to the YAML file.
+
+	Returns:
+		dict: The parsed YAML data.
+
+	Raises:
+		yaml.YAMLError: If there is an error parsing the YAML file.
+	"""
 	with open(filepath, 'r') as stream:
 		try:
 			return yaml.load(stream, Loader=yaml.Loader)
@@ -47,7 +66,16 @@ def load_yaml ( filepath ):
 language = "en"
 i18n = load_yaml( os.path.join( defaults['m_i18n'], language+".yml" ) )
 
-def main (argv):
+def main(argv):
+	"""
+	The main function of the script.
+
+	Parameters:
+	- argv (list): The list of command-line arguments passed to the script.
+
+	Returns:
+	None
+	"""
 
 	# meza requires a command parameter. No first param, no command. Display
 	# help. Also display help if explicitly specifying help.
@@ -56,17 +84,18 @@ def main (argv):
 		sys.exit(1)
 	elif argv[0] in ('-h', '--help'):
 		display_docs('base')
-		sys.exit(0) # asking for help doesn't give error code
+		sys.exit(0)  # asking for help doesn't give error code
 	elif argv[0] in ('-v', '--version'):
 		import subprocess
-		version = subprocess.check_output( ["git", "--git-dir={}/meza/.git".format(install_dir), "describe", "--tags" ] )
-		commit = subprocess.check_output( ["git", "--git-dir={}/meza/.git".format(install_dir), "rev-parse", "HEAD" ] )
-		print( "Meza " + version.strip() )
-		print( "Commit " + commit.strip() )
-		print( "Mediawiki EZ Admin" )
-		print( "" )
+		version = subprocess.check_output(
+			["git", "--git-dir={}/meza/.git".format(install_dir), "describe", "--tags", "--always"])
+		commit = subprocess.check_output(
+			["git", "--git-dir={}/meza/.git".format(install_dir), "rev-parse", "HEAD"])
+		print("Meza " + version.strip().decode())
+		print("Commit " + commit.strip().decode())
+		print("Mediawiki EZ Admin")
+		print("")
 		sys.exit(0)
-
 
 	# Every command has a sub-command. No second param, no sub-command. Display
 	# help for that specific sub-command.
@@ -74,25 +103,32 @@ def main (argv):
 	if len(argv) == 1 and argv[0] != "update":
 		display_docs(argv[0])
 		sys.exit(1)
-	elif len(argv) == 2 and argv[1] in ('--help','-h'):
+	elif len(argv) == 2 and argv[1] in ('--help', '-h'):
 		display_docs(argv[0])
 		sys.exit(0)
 
-
 	command = argv[0]
-	command_fn = "meza_command_{}".format( argv[0] ).replace("-","_")
+	command_fn = "meza_command_{}".format(argv[0]).replace("-", "_")
 
 	# if command_fn is a valid Python function, pass it all remaining args
-	if command_fn in globals() and callable( globals()[command_fn] ):
-		globals()[command_fn]( argv[1:] )
+	if command_fn in globals() and callable(globals()[command_fn]):
+		globals()[command_fn](argv[1:])
 	else:
 		print()
 		print("{} is not a valid command".format(command))
 		sys.exit(1)
 
 
-def meza_command_deploy (argv):
+def meza_command_deploy(argv):
+	"""
+	Deploy the environment specified by the given argv.
 
+	Args:
+		argv (list): A list of command-line arguments.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
@@ -100,7 +136,7 @@ def meza_command_deploy (argv):
 	lock_success = request_lock_for_deploy(env)
 
 	if not lock_success:
-		print( "Deploy for environment {} in progress. Exiting".format(env) )
+		print("Deploy for environment {} in progress. Exiting".format(env))
 		sys.exit(1)
 
 	# return code != 0 means failure
@@ -116,16 +152,16 @@ def meza_command_deploy (argv):
 	argv = argv[1:]
 
 	# save state of args before stripping -o and --overwrite
-	args_string = ' '.join( argv )
+	args_string = ' '.join(argv)
 
 	# if argv[1:] includes -o or --overwrite
-	if len( set(argv).intersection({"-o", "--overwrite"}) ) > 0:
+	if len(set(argv).intersection({"-o", "--overwrite"})) > 0:
 		# remove -o and --overwrite from args;
 		argv = [value for value in argv[:] if value not in ["-o", "--overwrite"]]
 
 		more_extra_vars['force_overwrite_from_backup'] = True
 
-	if (len( set(argv).intersection({"--no-firewall"}) )) > 0:
+	if len(set(argv).intersection({"--no-firewall"})) > 0:
 		# remove --no-firewall from args:
 		argv = [value for value in argv[:] if value not in ["--no-firewall"]]
 
@@ -136,17 +172,17 @@ def meza_command_deploy (argv):
 
 	import hashlib
 	start = get_datetime_string()
-	unique = hashlib.sha1( (start + env).encode('utf-8') ).hexdigest()[:8]
+	unique = hashlib.sha1((start + env).encode('utf-8')).hexdigest()[:8]
 
-	write_deploy_log( start, env, unique, 'start', args_string )
+	write_deploy_log(start, env, unique, 'start', args_string)
 
-	shell_cmd = playbook_cmd( 'site', env, more_extra_vars )
+	shell_cmd = playbook_cmd('site', env, more_extra_vars)
 	if len(argv) > 0:
 		shell_cmd = shell_cmd + argv
 
 	deploy_log = get_deploy_log_path(env)
 
-	return_code = meza_shell_exec( shell_cmd, True, deploy_log )
+	return_code = meza_shell_exec(shell_cmd, True, deploy_log)
 
 	unlock_deploy(env)
 	if return_code == 0:
@@ -155,16 +191,24 @@ def meza_command_deploy (argv):
 		condition = 'failed'
 
 	end = get_datetime_string()
-	write_deploy_log( end, env, unique, condition, args_string )
+	write_deploy_log(end, env, unique, condition, args_string)
 
-	meza_shell_exec_exit( return_code )
+	meza_shell_exec_exit(return_code)
 
 #
 # Intended to be used by cron job to check for changes to config and meza. Can
 # also be called with `meza autodeploy <env>`
 #
-def meza_command_autodeploy (argv):
+def meza_command_autodeploy(argv):
+	"""
+	Perform an autodeploy for the specified environment.
 
+	Args:
+		argv (list): List of command line arguments.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
@@ -184,31 +228,39 @@ def meza_command_autodeploy (argv):
 	# strip environment off of it
 	argv = argv[1:]
 
-	if len( argv ) > 0:
+	if len(argv) > 0:
 		more_extra_vars = {
 			'deploy_type': argv[0]
 		}
-		argv = argv[1:] # strip deploy type off
+		argv = argv[1:]  # strip deploy type off
 
-	if len( argv ) > 0:
+	if len(argv) > 0:
 		more_extra_vars['deploy_args'] = argv[0]
-		argv = argv[1:] # strip deploy args off
+		argv = argv[1:]  # strip deploy args off
 
-	shell_cmd = playbook_cmd( 'check-for-changes', env, more_extra_vars )
+	shell_cmd = playbook_cmd('check-for-changes', env, more_extra_vars)
 	if len(argv) > 0:
 		shell_cmd = shell_cmd + argv
 
-	return_code = meza_shell_exec( shell_cmd )
+	return_code = meza_shell_exec(shell_cmd)
 
-	unlock_deploy(env) # double check
+	unlock_deploy(env)  # double check
 
-	meza_shell_exec_exit( return_code )
+	meza_shell_exec_exit(return_code)
 
 # Just a wrapper on deploy that does some notifications. This needs some
 # improvement. FIXME. Lots of duplication between this and meza_command_deploy
 # and meza_command_autodeploy
-def meza_command_deploy_notify (argv):
+def meza_command_deploy_notify(argv):
+	"""
+	Deploy the environment and notify the deployment status.
 
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
@@ -228,36 +280,54 @@ def meza_command_deploy_notify (argv):
 	# strip environment off of it
 	argv = argv[1:]
 
-	if len( argv ) > 0:
+	if len(argv) > 0:
 		more_extra_vars = {
 			'deploy_type': argv[0]
 		}
-		argv = argv[1:] # strip deploy type off
+		argv = argv[1:]  # strip deploy type off
 
-	if len( argv ) > 0:
+	if len(argv) > 0:
 		more_extra_vars['deploy_args'] = argv[0]
-		argv = argv[1:] # strip deploy args off
+		argv = argv[1:]  # strip deploy args off
 
-	shell_cmd = playbook_cmd( 'deploy-notify', env, more_extra_vars )
+	shell_cmd = playbook_cmd('deploy-notify', env, more_extra_vars)
 	if len(argv) > 0:
 		shell_cmd = shell_cmd + argv
 
-	return_code = meza_shell_exec( shell_cmd )
+	return_code = meza_shell_exec(shell_cmd)
 
-	unlock_deploy(env) # double check
+	unlock_deploy(env)  # double check
 
-	meza_shell_exec_exit( return_code )
+	meza_shell_exec_exit(return_code)
 
 
-def request_lock_for_deploy (env):
-	import os, datetime
+def request_lock_for_deploy(env):
+	"""
+	Requests a lock for deployment.
+
+	Args:
+		env (str): The environment for which the lock is requested.
+
+	Returns:
+		dict or bool: If the lock is successfully created, returns a dictionary
+		containing the process ID (pid) and timestamp of the lock creation.
+		Otherwise, returns False.
+
+	Raises:
+		None
+
+	"""
+	import os
+	import datetime
+
 	lock_file = get_lock_file_path(env)
-	if os.path.isfile( lock_file ):
+
+	if os.path.isfile(lock_file):
 		print("Deploy lock file already exists at {}".format(lock_file))
 		return False
 	else:
 		print("Create deploy lock file at {}".format(lock_file))
-		pid = str( os.getpid() )
+		pid = str(os.getpid())
 		timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
 		# Before creating lock file, this global must be set in order for ctrl-c
@@ -266,39 +336,71 @@ def request_lock_for_deploy (env):
 		global deploy_lock_environment
 		deploy_lock_environment = env
 
-		with open( lock_file, 'w' ) as f:
-			f.write( "{}\n{}".format(pid,timestamp) )
+		with open(lock_file, 'w') as f:
+			f.write("{}\n{}".format(pid, timestamp))
 			f.close()
 
 		import grp
 
 		try:
 			grp.getgrnam('apache')
-			meza_chown( lock_file, 'meza-ansible', 'apache' )
+			meza_chown(lock_file, 'meza-ansible', 'apache')
 		except KeyError:
 			print('Group apache does not exist. Set "wheel" as group for lock file.')
-			meza_chown( lock_file, 'meza-ansible', 'wheel' )
+			meza_chown(lock_file, 'meza-ansible', 'wheel')
 
-		os.chmod( lock_file, 0o664 )
+		os.chmod(lock_file, 0o664)
 
-		return { "pid": pid, "timestamp": timestamp }
+		return {"pid": pid, "timestamp": timestamp}
 
 def unlock_deploy(env):
+	"""
+	Removes the lock file for the specified environment.
+
+	Args:
+		env (str): The environment for which to unlock the deployment.
+
+	Returns:
+		bool: True if the lock file was successfully removed, False otherwise.
+	"""
 	import os
 	lock_file = get_lock_file_path(env)
-	if os.path.exists( lock_file ):
-		os.remove( lock_file )
+	if os.path.exists(lock_file):
+		os.remove(lock_file)
 		return True
 	else:
 		return False
 
 def get_lock_file_path(env):
+	"""
+	Get the path of the lock file for the given environment.
+
+	Args:
+		env (str): The environment name.
+
+	Returns:
+		str: The path of the lock file.
+	"""
 	import os
-	lock_file = os.path.join( defaults['m_meza_data'], "env-{}-deploy.lock".format(env) )
+	lock_file = os.path.join(defaults['m_meza_data'], "env-{}-deploy.lock".format(env))
 	return lock_file
 
-def write_deploy_log( datetime, env, unique, condition, args_string ):
-	import subprocess, os
+def write_deploy_log(datetime, env, unique, condition, args_string):
+	"""
+	Write deployment log to a file.
+
+	Args:
+		datetime (str): The timestamp of the deployment.
+		env (str): The environment in which the deployment is performed.
+		unique (str): A unique identifier for the deployment.
+		condition (str): The condition of the deployment.
+		args_string (str): A string representation of the deployment arguments.
+
+	Returns:
+		None
+	"""
+	import subprocess
+	import os
 
 	deploy_log = defaults['m_logs_deploy']
 
@@ -307,34 +409,56 @@ def write_deploy_log( datetime, env, unique, condition, args_string ):
 		env,
 		unique,
 		condition,
-		get_git_descripe_tags( "{}/meza".format(install_dir) ),
-		get_git_hash( "{}/meza".format(install_dir) ),
-		get_git_hash( "{}/conf-meza/secret".format(install_dir) ),
-		get_git_hash( "{}/conf-meza/public".format(install_dir) ),
+		get_git_describe_tags("{}/meza".format(install_dir)),
+		get_git_hash("{}/meza".format(install_dir)),
+		get_git_hash("{}/conf-meza/secret".format(install_dir)),
+		get_git_hash("{}/conf-meza/public".format(install_dir)),
 		args_string
 	)
 
-	log_dir = os.path.dirname( os.path.realpath( deploy_log ) )
+	log_dir = os.path.dirname(os.path.realpath(deploy_log))
 
-	if not os.path.isdir( log_dir ):
-		os.makedirs( log_dir )
+	if not os.path.isdir(log_dir):
+		os.makedirs(log_dir)
 
 	with open(deploy_log, "a") as myfile:
-	    myfile.write(line)
+		myfile.write(line)
 
 # "meza deploy-check <ENV>" to return 0 on no deploy, 1 on deploy is active
-def meza_command_deploy_check (argv):
+def meza_command_deploy_check(argv):
+	"""
+	Check if a Meza environment is currently deploying.
+
+	Args:
+		argv (list): A list of command-line arguments. The first argument should be the environment name.
+
+	Returns:
+		None
+
+	Raises:
+		SystemExit: If the lock file exists, indicating that the environment is currently deploying.
+
+	"""
 	import os
 	env = argv[0]
 	lock_file = get_lock_file_path(env)
-	if os.path.isfile( lock_file ):
-		print("Meza environment '{}' deploying; {} exists".format(env,lock_file))
+	if os.path.isfile(lock_file):
+		print("Meza environment '{}' deploying; {} exists".format(env, lock_file))
 		sys.exit(1)
 	else:
 		print("Meza environment '{}' not deploying".format(env))
 		sys.exit(0)
 
-def meza_command_deploy_lock (argv):
+def meza_command_deploy_lock(argv):
+	"""
+	Locks the specified environment for deployment.
+
+	Args:
+		argv (list): A list containing the command-line arguments. The first element should be the environment name.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
 	success = request_lock_for_deploy(env)
 	if success:
@@ -344,7 +468,19 @@ def meza_command_deploy_lock (argv):
 		print("Environment '{}' could not be locked".format(env))
 		sys.exit(1)
 
-def meza_command_deploy_unlock (argv):
+def meza_command_deploy_unlock(argv):
+	"""
+	Unlocks the deploy lock for the specified environment.
+
+	Args:
+		argv (list): A list containing the command-line arguments. The first element should be the environment name.
+
+	Returns:
+		None
+
+	Raises:
+		None
+	"""
 	env = argv[0]
 	success = unlock_deploy(env)
 	if success:
@@ -354,76 +490,150 @@ def meza_command_deploy_unlock (argv):
 		print("Environment '{}' is not deploying".format(env))
 		sys.exit(1)
 
-def meza_command_deploy_kill (argv):
+def meza_command_deploy_kill(argv):
+	"""
+	Terminate a Meza deployment process for the specified environment.
+
+	Args:
+		argv (list): A list of command-line arguments. The first argument should be the environment.
+
+	Returns:
+		None
+
+	Raises:
+		None
+	"""
 	env = argv[0]
 	lock_file = get_lock_file_path(env)
-	if os.path.isfile( lock_file ):
+	if os.path.isfile(lock_file):
 		print("Meza environment {} deploying; killing...".format(env))
 		di = get_deploy_info(env)
-		os.system( "kill $(ps -o pid= --ppid {})".format(di['pid']) )
+		os.system("kill $(ps -o pid= --ppid {})".format(di['pid']))
 		import time
 		time.sleep(2)
-		os.system( 'wall "Meza deploy terminated using \'meza deploy-kill\' command."' )
+		os.system('wall "Meza deploy terminated using \'meza deploy-kill\' command."')
 		sys.exit(0)
 	else:
 		print("Meza environment '{}' not deploying".format(env))
 		sys.exit(1)
 
-def get_deploy_info (env):
+def get_deploy_info(env):
+	"""
+	Retrieves deployment information for a given environment.
+
+	Args:
+		env (str): The name of the environment.
+
+	Returns:
+		dict: A dictionary containing the deployment information, including the process ID (pid) and timestamp.
+
+	Raises:
+		FileNotFoundError: If the lock file for the environment does not exist.
+
+	"""
 	import os
 	lock_file = get_lock_file_path(env)
-	if not os.path.isfile( lock_file ):
-		print("Environment '{}' not deploying".format(env))
-		return False
-	with open( lock_file, 'r' ) as f:
+	if not os.path.isfile(lock_file):
+		raise FileNotFoundError("Environment '{}' not deploying".format(env))
+	with open(lock_file, 'r') as f:
 		pid = f.readline()
 		timestamp = f.readline()
 		f.close()
-		return { "pid": pid, "timestamp": timestamp }
+		return {"pid": pid, "timestamp": timestamp}
 
-def get_deploy_log_path (env):
+def get_deploy_log_path(env):
+	"""
+	Get the path to the deploy log file for a given environment.
+
+	Args:
+		env (str): The environment name.
+
+	Returns:
+		str: The path to the deploy log file.
+
+	"""
 	timestamp = get_deploy_info(env)["timestamp"]
-	filename = "{}-{}.log".format( env,timestamp )
+	filename = "{}-{}.log".format(env, timestamp)
 
-	log_dir = os.path.join( defaults['m_logs'], 'deploy-output' )
-	log_path = os.path.join( log_dir, filename )
+	log_dir = os.path.join(defaults['m_logs'], 'deploy-output')
+	log_path = os.path.join(log_dir, filename)
 
-	if not os.path.isdir( log_dir ):
-		os.makedirs( log_dir )
+	if not os.path.isdir(log_dir):
+		os.makedirs(log_dir)
 
 	return log_path
 
-def meza_command_deploy_log (argv):
+def meza_command_deploy_log(argv):
+	"""
+	Get the deploy log path for the specified environment.
+
+	Args:
+		argv (list): A list containing the environment name.
+
+	Returns:
+		str: The path to the deploy log file.
+
+	"""
 	env = argv[0]
 	print(get_deploy_log_path(env))
 
-def meza_command_deploy_tail (argv):
+def meza_command_deploy_tail(argv):
+	"""
+	Display the tail of the deploy log for the specified environment.
+
+	Args:
+		argv (list): A list of command-line arguments. The first element should be the environment.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
-	os.system( " ".join(["tail", "-f", get_deploy_log_path(env)]) )
+	os.system(" ".join(["tail", "-f", get_deploy_log_path(env)]))
 
-def get_git_hash ( dir ):
-	import subprocess, os
+def get_git_hash(dir):
+	"""
+	Get the git hash of a directory.
 
-	git_dir = "{}/.git".format( dir )
+	Args:
+		dir (str): The directory path.
 
-	if os.path.isdir( git_dir ):
+	Returns:
+		str: The git hash of the directory if it is a git repository, otherwise returns "not-a-git-repo".
+	"""
+	import subprocess
+	import os
+
+	git_dir = "{}/.git".format(dir)
+
+	if os.path.isdir(git_dir):
 		try:
-			commit = subprocess.check_output( ["git", "--git-dir={}".format( git_dir), "rev-parse", "HEAD" ] ).strip()
+			commit = subprocess.check_output(["git", "--git-dir={}".format(git_dir), "rev-parse", "HEAD"]).strip()
 		except:
 			commit = "git-error"
 		return commit
 	else:
 		return "not-a-git-repo"
 
+def get_git_describe_tags(dir):
+	"""
+	Get the description of the latest Git tag in the specified directory.
 
-def get_git_descripe_tags ( dir ):
-	import subprocess, os
+	Args:
+		dir (str): The directory path.
 
-	git_dir = "{}/.git".format( dir )
+	Returns:
+		str: The description of the latest Git tag if the directory is a Git repository,
+			 "git-error" if there was an error executing the Git command,
+			 or "not-a-git-repo" if the directory is not a Git repository.
+	"""
+	import subprocess
+	import os
 
-	if os.path.isdir( git_dir ):
+	git_dir = "{}/.git".format(dir)
+
+	if os.path.isdir(git_dir):
 		try:
-			tags = subprocess.check_output( ["git", "--git-dir={}".format( git_dir ), "describe", "--tags" ] ).strip()
+			tags = subprocess.check_output(["git", "--git-dir={}".format(git_dir), "describe", "--tags", "--always"]).strip()
 		except:
 			tags = "git-error"
 		return tags
@@ -434,22 +644,43 @@ def get_git_descripe_tags ( dir ):
 # dev
 # dev-networking --> vbox-networking ??
 # docker
-def meza_command_setup (argv):
+def meza_command_setup(argv):
+	"""
+	Sets up the command for the Meza script.
 
+	Args:
+		argv (list): The list of command line arguments.
+
+	Returns:
+		None
+	"""
 	sub_command = argv[0]
 	if sub_command == "dev-networking":
-		sub_command = "dev_networking" # hyphen not a valid function character
+		sub_command = "dev_networking"  # hyphen not a valid function character
 	command_fn = "meza_command_setup_" + sub_command
 
 	# if command_fn is a valid Python function, pass it all remaining args
-	if command_fn in globals() and callable( globals()[command_fn] ):
-		globals()[command_fn]( argv[1:] )
+	if command_fn in globals() and callable(globals()[command_fn]):
+		globals()[command_fn](argv[1:])
 	else:
 		print()
 		print(sub_command + " is not a valid sub-command for setup")
 		sys.exit(1)
 
-def meza_command_update (argv):
+def meza_command_update(argv):
+	"""
+	Update the Meza repository to a specific version or branch.
+
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+
+	Raises:
+		None
+
+	"""
 	import subprocess
 
 	# This function executes many Git commands that need to be from /otp/meza
@@ -460,28 +691,30 @@ def meza_command_update (argv):
 	# but these commands need HTTPS.
 	meza_remote = "mezaremote"
 
-	check_remotes = subprocess.check_output( ["git", "remote" ] ).strip().split("\n")
+	check_remotes = subprocess.check_output(["git", "remote"]).strip().split("\n")
 	if meza_remote not in check_remotes:
-		add_remote = subprocess.check_output( ["git", "remote", "add", meza_remote, "https://github.com/enterprisemediawiki/meza.git" ] )
+		add_remote = subprocess.check_output(
+			["git", "remote", "add", meza_remote, "https://github.com/nasa/meza.git"]
+		)
 
 	# Get latest commits and tags from mezaremote
-	fetch = subprocess.check_output( ["git", "fetch", meza_remote ] )
-	fetch = subprocess.check_output( ["git", "fetch", meza_remote, "--tags" ] )
-	tags_text = subprocess.check_output( ["git", "tag", "-l" ] )
+	fetch = subprocess.check_output(["git", "fetch", meza_remote])
+	fetch = subprocess.check_output(["git", "fetch", meza_remote, "--tags"])
+	tags_text = subprocess.check_output(["git", "tag", "-l"])
 
 	if len(argv) == 0:
 		# print fetch.strip()
 		print("The following versions are available:")
 		print(tags_text.strip())
 		print("")
-		closest_tag = subprocess.check_output( ["git", "describe", "--tags" ] )
+		closest_tag = subprocess.check_output(["git", "describe", "--tags", "--always"])
 		print("You are currently on version {}".format(closest_tag.strip()))
 		print("To change versions, do 'sudo meza update <version>'")
 	elif len(argv) > 1:
 		print("Unknown argument {}".format(argv[1]))
 	else:
-         # Needed else 'git status' gives bad response
-		status = subprocess.check_output( ["git", "status", "--untracked-files=no", "--porcelain" ] )
+		# Needed else 'git status' gives bad response
+		status = subprocess.check_output(["git", "status", "--untracked-files=no", "--porcelain"])
 		status = status.strip()
 		if status != "":
 			print("'git status' not empty:\n{}".format(status))
@@ -489,19 +722,22 @@ def meza_command_update (argv):
 		version = argv[0]
 		if status == "":
 			tags = tags_text.split("\n")
-			branches = subprocess.check_output( ["git", "branch", "-a" ] ).strip().split("\n")
+			branches = subprocess.check_output(["git", "branch", "-a"]).strip().split("\n")
 			branches = map(str.strip, branches)
 			if version in tags:
 				version_type = "at version"
 				tag_version = "tags/{}".format(version)
-				checkout = subprocess.check_output( ["git", "checkout", tag_version ], stderr=subprocess.STDOUT )
+				checkout = subprocess.check_output(["git", "checkout", tag_version], stderr=subprocess.STDOUT)
 			elif version in branches or "* {}".format(version) in branches:
 				version_type = "on branch"
-				checkout = subprocess.check_output( ["git", "checkout", version ], stderr=subprocess.STDOUT )
-				reset    = subprocess.check_output( ["git", "reset", "--hard", "mezaremote/{}".format(version) ] )
-			elif "remotes/{}/{}".format(meza_remote,version) in branches:
+				checkout = subprocess.check_output(["git", "checkout", version], stderr=subprocess.STDOUT)
+				reset = subprocess.check_output(["git", "reset", "--hard", "mezaremote/{}".format(version)])
+			elif "remotes/{}/{}".format(meza_remote, version) in branches:
 				version_type = "on branch"
-				checkout = subprocess.check_output( ["git", "checkout", "-b", version, '-t', "{}/{}".format(meza_remote,version) ], stderr=subprocess.STDOUT )
+				checkout = subprocess.check_output(
+					["git", "checkout", "-b", version, '-t', "{}/{}".format(meza_remote, version)],
+					stderr=subprocess.STDOUT,
+				)
 			else:
 				print("{} is not a valid version or branch".format(version))
 				sys.exit(1)
@@ -515,6 +751,23 @@ def meza_command_update (argv):
 
 # FIXME #824: This function is big.
 def meza_command_setup_env (argv, return_not_exit=False):
+	"""
+	Sets up the environment for the Meza deployment.
+
+	Args:
+		argv (str or list): The command line arguments passed to the function.
+			If a string is provided, it is treated as the environment name.
+			If a list is provided, the first element is treated as the environment name.
+		return_not_exit (bool, optional): If True, the function returns the exit code instead of exiting the program.
+			Defaults to False.
+
+	Returns:
+		int or None: The exit code if `return_not_exit` is True, otherwise None.
+
+	Raises:
+		Exception: If an error occurs while parsing the command line arguments.
+
+	"""
 
 	import json, string
 
@@ -642,28 +895,41 @@ def meza_command_setup_env (argv, return_not_exit=False):
 	else:
 		sys.exit(rc)
 
-def meza_command_setup_dev (argv):
+def meza_command_setup_dev(argv):
+	"""
+	Set up development environment for Meza.
 
-	dev_users          = prompt("dev_users")
-	dev_git_user       = prompt("dev_git_user")
+	This function prompts for dev_users, dev_git_user, and dev_git_user_email.
+	It then configures git settings for each dev_user, installs and configures vsftpd,
+	and sets up firewall rules. Finally, it prints a message with instructions to
+	setup SFTP in Sublime Text and exits the script.
+
+	Args:
+		argv: The command line arguments passed to the script.
+
+	Returns:
+		None
+	"""
+	dev_users = prompt("dev_users")
+	dev_git_user = prompt("dev_git_user")
 	dev_git_user_email = prompt("dev_git_user_email")
 
 	for dev_user in dev_users.split(' '):
-		os.system( "sudo -u {} git config --global user.name '{}'".format( dev_user, dev_git_user ) )
-		os.system( "sudo -u {} git config --global user.email {}".format( dev_user, dev_git_user_email ) )
-		os.system( "sudo -u {} git config --global color.ui true".format( dev_user ) )
+		os.system("sudo -u {} git config --global user.name '{}'".format(dev_user, dev_git_user))
+		os.system("sudo -u {} git config --global user.email {}".format(dev_user, dev_git_user_email))
+		os.system("sudo -u {} git config --global color.ui true".format(dev_user))
 
 	# ref: https://www.liquidweb.com/kb/how-to-install-and-configure-vsftpd-on-centos-7/
-	os.system( "yum -y install vsftpd" )
-	os.system( "sed -r -i 's/anonymous_enable=YES/anonymous_enable=NO/g;' /etc/vsftpd/vsftpd.conf" )
-	os.system( "sed -r -i 's/local_enable=NO/local_enable=YES/g;' /etc/vsftpd/vsftpd.conf" )
-	os.system( "sed -r -i 's/write_enable=NO/write_enable=YES/g;' /etc/vsftpd/vsftpd.conf" )
+	os.system("yum -y install vsftpd")
+	os.system("sed -r -i 's/anonymous_enable=YES/anonymous_enable=NO/g;' /etc/vsftpd/vsftpd.conf")
+	os.system("sed -r -i 's/local_enable=NO/local_enable=YES/g;' /etc/vsftpd/vsftpd.conf")
+	os.system("sed -r -i 's/write_enable=NO/write_enable=YES/g;' /etc/vsftpd/vsftpd.conf")
 
 	# Start FTP and setup firewall
-	os.system( "systemctl restart vsftpd" )
-	os.system( "systemctl enable vsftpd" )
-	os.system( "firewall-cmd --permanent --add-port=21/tcp" )
-	os.system( "firewall-cmd --reload" )
+	os.system("systemctl restart vsftpd")
+	os.system("systemctl enable vsftpd")
+	os.system("firewall-cmd --permanent --add-port=21/tcp")
+	os.system("firewall-cmd --reload")
 
 	print("To setup SFTP in Sublime Text, see:")
 	print("https://wbond.net/sublime_packages/sftp/settings#Remote_Server_Settings")
@@ -675,13 +941,41 @@ def meza_command_setup_dev_networking (argv):
 	print("  sudo bash /opt/meza/src/scripts/dev-networking.sh")
 	sys.exit(1)
 
-def meza_command_setup_docker (argv):
-	shell_cmd = playbook_cmd( "getdocker" )
-	rc = meza_shell_exec( shell_cmd )
+## @FIXME this is obsolete (because it's for CentOS) but should be updated
+def meza_command_setup_docker(argv):
+	"""
+	Set up Docker for the Meza command.
+
+	Args:
+		argv (list): The command line arguments.
+
+	Returns:
+		None
+	"""
+	shell_cmd = playbook_cmd("getdocker")
+	rc = meza_shell_exec(shell_cmd)
 	sys.exit(0)
 
-def meza_command_create (argv):
+def meza_command_create(argv):
+	"""
+	Create a wiki using prompts else use wiki-promptless. So the 'form' of the
+	command is 'meza create wiki' or 'meza create wiki-promptless'.
 
+	Environment must be specified as the second argument.
+
+	If it is 'promptless', the third and fourth arguments must be the wiki_id
+	and wiki_name, respectively.
+
+	Args:
+		argv (list): The command line arguments passed to the function.
+
+	Returns:
+		None
+
+	Raises:
+		SystemExit: If the required arguments are not provided.
+
+	"""
 	sub_command = argv[0]
 
 	if sub_command in ("wiki", "wiki-promptless"):
@@ -702,14 +996,27 @@ def meza_command_create (argv):
 			if len(argv) < 4:
 				print("create wiki-promptless requires wiki_id and wiki_name arguments")
 				sys.exit(1)
-			shell_cmd = playbook_cmd( playbook, env, { 'wiki_id': argv[2], 'wiki_name': argv[3] } )
+			shell_cmd = playbook_cmd(playbook, env, {'wiki_id': argv[2], 'wiki_name': argv[3]})
 		else:
-			shell_cmd = playbook_cmd( playbook, env )
+			shell_cmd = playbook_cmd(playbook, env)
 
-		rc = meza_shell_exec( shell_cmd )
+		rc = meza_shell_exec(shell_cmd)
 		meza_shell_exec_exit(rc)
 
-def meza_command_delete (argv):
+def meza_command_delete(argv):
+	"""
+	Delete a specific component in the Meza environment.
+
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+
+	Raises:
+		SystemExit: If the sub-command is not valid or if the environment is not specified.
+
+	"""
 
 	sub_command = argv[0]
 
@@ -733,15 +1040,24 @@ def meza_command_delete (argv):
 		if len(argv) < 3:
 			print("delete wiki-promptless requires wiki_id")
 			sys.exit(1)
-		shell_cmd = playbook_cmd( playbook, env, { 'wiki_id': argv[2] } )
+		shell_cmd = playbook_cmd(playbook, env, {'wiki_id': argv[2]})
 	else:
-		shell_cmd = playbook_cmd( playbook, env )
+		shell_cmd = playbook_cmd(playbook, env)
 
-	rc = meza_shell_exec( shell_cmd )
+	rc = meza_shell_exec(shell_cmd)
 	meza_shell_exec_exit(rc)
 
 
-def meza_command_backup (argv):
+def meza_command_backup(argv):
+	"""
+	Perform a backup operation for the specified environment.
+
+	Args:
+		argv (list): A list of command-line arguments.
+
+	Returns:
+		None
+	"""
 
 	env = argv[0]
 
@@ -749,25 +1065,31 @@ def meza_command_backup (argv):
 	if rc != 0:
 		meza_shell_exec_exit(rc)
 
-	shell_cmd = playbook_cmd( 'backup', env ) + argv[1:]
-	rc = meza_shell_exec( shell_cmd )
+	shell_cmd = playbook_cmd('backup', env) + argv[1:]
+	rc = meza_shell_exec(shell_cmd)
 
 	meza_shell_exec_exit(rc)
 
+def meza_command_setbaseconfig(argv):
+	"""
+	Executes the 'setbaseconfig' playbook command for the specified environment.
 
-def meza_command_setbaseconfig (argv):
+	Args:
+		argv (list): A list of command-line arguments passed to the function. The first element should be the environment.
 
+	Returns:
+		None
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
 	if rc != 0:
 		meza_shell_exec_exit(rc)
 
-	shell_cmd = playbook_cmd( 'setbaseconfig', env ) + argv[1:]
-	rc = meza_shell_exec( shell_cmd )
+	shell_cmd = playbook_cmd('setbaseconfig', env) + argv[1:]
+	rc = meza_shell_exec(shell_cmd)
 
 	meza_shell_exec_exit(rc)
-
 
 def meza_command_destroy (argv):
 	print("command not yet built")
@@ -778,50 +1100,113 @@ def meza_command_destroy (argv):
 #             you could do:
 #   $ meza maint runJobs + argv            --> run jobs on all wikis
 #   $ meza maint createAndPromote + argv   --> create a user on all wikis
-def meza_command_maint (argv):
+def meza_command_maint(argv):
+	"""
+	Executes the specified maintenance sub-command.
 
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+
+	Raises:
+		SystemExit: If the specified sub-command is not valid.
+
+	"""
 	# FIXME #711: This has no notion of environments and won't work in polylith
 
 	sub_command = argv[0]
 	command_fn = "meza_command_maint_" + sub_command
 
 	# if command_fn is a valid Python function, pass it all remaining args
-	if command_fn in globals() and callable( globals()[command_fn] ):
-		globals()[command_fn]( argv[1:] )
+	if command_fn in globals() and callable(globals()[command_fn]):
+		globals()[command_fn](argv[1:])
 	else:
 		print("")
 		print(sub_command + " is not a valid sub-command for maint")
 		sys.exit(1)
 
+def meza_command_maint_runJobs(argv):
+	"""
+	Run maintenance jobs for available wikis.
 
+	This function runs maintenance jobs for the available wikis in the `wikis_dir`.
+	It selects the first wiki found and executes the `runAllJobs.php` script using
+	the `php` command. If a specific wiki is provided as a command-line argument,
+	the function runs maintenance jobs only for that wiki.
 
-def meza_command_maint_runJobs (argv):
+	Args:
+		argv (list): List of command-line arguments.
 
-	#
+	Returns:
+		None
+	"""
 	# FIXME #711: THIS FUNCTION SHOULD STILL WORK ON MONOLITHS, BUT HAS NOT BE
 	#             RE-TESTED SINCE MOVING TO ANSIBLE. FOR NON-MONOLITHS IT WILL
 	#             NOT WORK AND NEEDS TO BE ANSIBLE-IZED.
-	#
 
 	wikis_dir = "{}/htdocs/wikis".format(install_dir)
-	wikis = os.listdir( wikis_dir )
+	wikis = os.listdir(wikis_dir)
 	for i in wikis:
 		if os.path.isdir(os.path.join(wikis_dir, i)):
-			anywiki=i
+			anywiki = i
 			break
 
 	if not anywiki:
 		print("No wikis available to run jobs")
 		sys.exit(1)
 
-	shell_cmd = ["WIKI="+anywiki, "php", "{}/meza/src/scripts/runAllJobs.php".format(install_dir)]
+	shell_cmd = ["WIKI=" + anywiki, "php", "{}/meza/src/scripts/runAllJobs.php".format(install_dir)]
 	if len(argv) > 0:
-		shell_cmd = shell_cmd + ["--wikis="+argv[1]]
-	rc = meza_shell_exec( shell_cmd )
+		shell_cmd = shell_cmd + ["--wikis=" + argv[1]]
+	rc = meza_shell_exec(shell_cmd)
 
 	meza_shell_exec_exit(rc)
 
-def meza_command_maint_rebuild (argv):
+def meza_command_maint_rebuild(argv):
+	"""
+	Rebuilds the specified environment and executes the 'rebuild-smw-and-index' playbook command.
+
+	Args:
+		argv (list): A list of command-line arguments passed to the function. The first argument is the environment.
+
+	Returns:
+		None
+	"""
+	env = argv[0]
+
+	rc = check_environment(env)
+
+	# return code != 0 means failure
+	if rc != 0:
+		meza_shell_exec_exit(rc)
+
+	more_extra_vars = False
+
+	# strip environment off of it
+	argv = argv[1:]
+
+	shell_cmd = playbook_cmd('rebuild-smw-and-index', env, more_extra_vars)
+	if len(argv) > 0:
+		shell_cmd = shell_cmd + argv
+
+	rc = meza_shell_exec(shell_cmd)
+
+	# exit with same return code as ansible command
+	meza_shell_exec_exit(rc)
+
+
+def meza_command_maint_cleanuploadstash(argv):
+	"""
+	Clean up the upload stash directory for a given environment.
+
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+	"""
 
 	env = argv[0]
 
@@ -836,43 +1221,35 @@ def meza_command_maint_rebuild (argv):
 	# strip environment off of it
 	argv = argv[1:]
 
-	shell_cmd = playbook_cmd( 'rebuild-smw-and-index', env, more_extra_vars )
+	shell_cmd = playbook_cmd('cleanup-upload-stash', env, more_extra_vars)
 	if len(argv) > 0:
 		shell_cmd = shell_cmd + argv
 
-	rc = meza_shell_exec( shell_cmd )
+	rc = meza_shell_exec(shell_cmd)
 
 	# exit with same return code as ansible command
 	meza_shell_exec_exit(rc)
 
 
-def meza_command_maint_cleanuploadstash (argv):
+def meza_command_maint_encrypt_string(argv):
+	"""
+	Encrypts a string using Ansible Vault.
 
-	env = argv[0]
+	Args:
+		argv (list): List of command-line arguments.
 
-	rc = check_environment(env)
+	Returns:
+		None
 
-	# return code != 0 means failure
-	if rc != 0:
-		meza_shell_exec_exit(rc)
+	Raises:
+		SystemExit: If the function is called without the required arguments.
 
-	more_extra_vars = False
-
-	# strip environment off of it
-	argv = argv[1:]
-
-	shell_cmd = playbook_cmd( 'cleanup-upload-stash', env, more_extra_vars )
-	if len(argv) > 0:
-		shell_cmd = shell_cmd + argv
-
-	rc = meza_shell_exec( shell_cmd )
-
-	# exit with same return code as ansible command
-	meza_shell_exec_exit(rc)
-
-
-def meza_command_maint_encrypt_string (argv):
-
+	Example:
+		encrypt_string requires value to encrypt. Ex:
+		  sudo meza maint encrypt_string <env> somesecretvalue
+		Additionally, you can supply the variable name. Ex:
+		  sudo meza maint encrypt_string <env> somesecretvalue var_name
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
@@ -892,24 +1269,44 @@ def meza_command_maint_encrypt_string (argv):
 		sys.exit(1)
 
 	varvalue = argv[0]
-	vault_pass_file = get_vault_pass_file( env )
+	vault_pass_file = get_vault_pass_file(env)
 
-	shell_cmd = ["ansible-vault","encrypt_string","--vault-id",vault_pass_file,varvalue]
+	shell_cmd = ["ansible-vault", "encrypt_string", "--vault-id", vault_pass_file, varvalue]
 
 	# If name argument passed in, use it
 	if len(argv) == 2:
-		shell_cmd = shell_cmd + ["--name",argv[1]]
+		shell_cmd = shell_cmd + ["--name", argv[1]]
 
 	# false = don't print command prior to running
-	rc = meza_shell_exec( shell_cmd, False )
+	rc = meza_shell_exec(shell_cmd, False)
 
 	# exit with same return code as ansible command
 	meza_shell_exec_exit(rc)
 
 
 # sudo meza maint decrypt_string <env> <encrypted_string>
-def meza_command_maint_decrypt_string (argv):
+def meza_command_maint_decrypt_string(argv):
+	"""
+	Decrypts an encrypted string using Ansible Vault.
 
+	Args:
+		argv (list): List of command-line arguments.
+
+	Returns:
+		None
+
+	Raises:
+		SystemExit: If no encrypted string is provided as an argument.
+
+	Example:
+		To decrypt a string, run the following command:
+		sudo meza maint decrypt_string <env> '$ANSIBLE_VAULT;1.1;AES256
+		31386561343430626435373766393066373464656262383063303630623032616238383838346132
+		6162313461666439346337616166396133616466363935360a373333313165343535373761333634
+		62636634306632633539306436363866323639363332613363346663613235653138373837303337
+		6133383864613430370a623661653462336565376565346638646238643132636663383761613966
+		6566'
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
@@ -924,26 +1321,26 @@ def meza_command_maint_decrypt_string (argv):
 	if len(argv) == 0:
 		print("decrypt_string requires you to supply encrypted string. Ex:")
 		print("""
-sudo meza maint decrypt_string <env> '$ANSIBLE_VAULT;1.1;AES256
-31386561343430626435373766393066373464656262383063303630623032616238383838346132
-6162313461666439346337616166396133616466363935360a373333313165343535373761333634
-62636634306632633539306436363866323639363332613363346663613235653138373837303337
-6133383864613430370a623661653462336565376565346638646238643132636663383761613966
-6566'
-""")
+		sudo meza maint decrypt_string <env> '$ANSIBLE_VAULT;1.1;AES256
+		31386561343430626435373766393066373464656262383063303630623032616238383838346132
+		6162313461666439346337616166396133616466363935360a373333313165343535373761333634
+		62636634306632633539306436363866323639363332613363346663613235653138373837303337
+		6133383864613430370a623661653462336565376565346638646238643132636663383761613966
+		6566'
+		""")
 		sys.exit(1)
 
 	encrypted_string = argv[0]
-	vault_pass_file = get_vault_pass_file( env )
+	vault_pass_file = get_vault_pass_file(env)
 
-	tmp_file = write_vault_decryption_tmp_file( env, encrypted_string )
+	tmp_file = write_vault_decryption_tmp_file(env, encrypted_string)
 
-	shell_cmd = ["ansible-vault","decrypt",tmp_file,"--vault-password-file",vault_pass_file]
+	shell_cmd = ["ansible-vault", "decrypt", tmp_file, "--vault-password-file", vault_pass_file]
 
 	# false = don't print command prior to running
-	rc = meza_shell_exec( shell_cmd, False )
+	rc = meza_shell_exec(shell_cmd, False)
 
-	decrypted_value = read_vault_decryption_tmp_file( env )
+	decrypted_value = read_vault_decryption_tmp_file(env)
 
 	print("")
 	print("Decrypted value:")
@@ -952,8 +1349,21 @@ sudo meza maint decrypt_string <env> '$ANSIBLE_VAULT;1.1;AES256
 	# exit with same return code as ansible command
 	meza_shell_exec_exit(rc)
 
+## @FIXME this is obsolete (because all Docker functionality is untested)
+## Should be updated or removed - especially the hard-link to enterprisemediawiki	 
+def meza_command_docker(argv):
+	"""
+	Executes Docker commands based on the provided arguments.
 
-def meza_command_docker (argv):
+	Args:
+		argv (list): A list of command-line arguments.
+
+	Raises:
+		SystemExit: If the provided command is not valid or if required arguments are missing.
+
+	Returns:
+		None
+	"""
 
 	if argv[0] == "run":
 
@@ -962,15 +1372,14 @@ def meza_command_docker (argv):
 		else:
 			docker_repo = argv[1]
 
-		rc = meza_shell_exec([ "bash", "{}/meza/src/scripts/build-docker-container.sh".format(install_dir), docker_repo])
+		rc = meza_shell_exec(["bash", "{}/meza/src/scripts/build-docker-container.sh".format(install_dir), docker_repo])
 		meza_shell_exec_exit(rc)
-
 
 	elif argv[0] == "exec":
 
 		if len(argv) < 2:
 			print("Please provide docker container id")
-			meza_shell_exec(["docker", "ps" ])
+			meza_shell_exec(["docker", "ps"])
 			sys.exit(1)
 		else:
 			container_id = argv[1]
@@ -979,45 +1388,64 @@ def meza_command_docker (argv):
 			print("Please supply a command for your container")
 			sys.exit(1)
 
-		shell_cmd = ["docker","exec","--tty",container_id,"env","TERM=xterm"] + argv[2:]
-		rc = meza_shell_exec( shell_cmd )
+		shell_cmd = ["docker", "exec", "--tty", container_id, "env", "TERM=xterm"] + argv[2:]
+		rc = meza_shell_exec(shell_cmd)
 
 	else:
 		print(argv[0] + " is not a valid command")
 		sys.exit(1)
 
 
-def meza_command_push_backup (argv):
+def meza_command_push_backup(argv):
+	"""
+	Pushes the backup for the specified environment.
 
+	Args:
+		argv (list): A list of command-line arguments.
+
+	Returns:
+		None
+	"""
 	env = argv[0]
 
 	rc = check_environment(env)
 	if rc != 0:
 		meza_shell_exec_exit(rc)
 
-	shell_cmd = playbook_cmd( 'push-backup', env ) + argv[1:]
-	rc = meza_shell_exec( shell_cmd )
+	shell_cmd = playbook_cmd('push-backup', env) + argv[1:]
+	rc = meza_shell_exec(shell_cmd)
 
 	meza_shell_exec_exit(rc)
 
 
-def playbook_cmd ( playbook, env=False, more_extra_vars=False ):
+def playbook_cmd(playbook, env=False, more_extra_vars=False):
+	"""
+	Constructs the command to execute an Ansible playbook.
+
+	Args:
+		playbook (str): The name of the playbook to execute.
+		env (str, optional): The environment for the playbook execution. Defaults to False.
+		more_extra_vars (dict, optional): Additional extra variables to pass to the playbook. Defaults to False.
+
+	Returns:
+		list: The constructed command as a list of strings.
+	"""
 	command = ['sudo', '-u', 'meza-ansible', 'ansible-playbook',
-		'{}/meza/src/playbooks/{}.yml'.format(install_dir, playbook)]
+			   '{}/meza/src/playbooks/{}.yml'.format(install_dir, playbook)]
 	if env:
 		host_file = "{}/conf-meza/secret/{}/hosts".format(install_dir, env)
 
 		# Meza _needs_ to be able to load this file. Be perhaps a little
 		# overzealous and chown/chmod it everytime
 		secret_file = '{}/conf-meza/secret/{}/secret.yml'.format(install_dir, env)
-		meza_chown( secret_file, 'meza-ansible', 'wheel' )
-		os.chmod( secret_file, 0o660 )
+		meza_chown(secret_file, 'meza-ansible', 'wheel')
+		os.chmod(secret_file, 0o660)
 
 		# Setup password file if not exists (environment info is potentially encrypted)
-		vault_pass_file = get_vault_pass_file( env )
+		vault_pass_file = get_vault_pass_file(env)
 
-		command = command + [ '-i', host_file, '--vault-password-file', vault_pass_file ]
-		extra_vars = { 'env': env }
+		command = command + ['-i', host_file, '--vault-password-file', vault_pass_file]
+		extra_vars = {'env': env}
 
 	else:
 		extra_vars = {}
@@ -1028,14 +1456,24 @@ def playbook_cmd ( playbook, env=False, more_extra_vars=False ):
 
 	if len(extra_vars) > 0:
 		import json
-		command = command + ["--extra-vars", "'{}'".format(json.dumps(extra_vars)).replace('"','\\"') ]
+		command = command + ["--extra-vars", "'{}'".format(json.dumps(extra_vars)).replace('"', '\\"')]
 
 	return command
 
 # FIXME install --> setup dev-networking, setup docker, deploy monolith (special case)
 
-def meza_shell_exec ( shell_cmd, print_command=True, log_file=False ):
+def meza_shell_exec(shell_cmd, print_command=True, log_file=False):
+	"""
+	Executes a shell command and returns the return code.
 
+	Args:
+		shell_cmd (list): The shell command to execute, as a list of strings.
+		print_command (bool, optional): Whether to print the command before executing it. Defaults to True.
+		log_file (str, optional): The path to the log file to write the command output to. Defaults to False.
+
+	Returns:
+		int: The return code of the executed shell command.
+	"""
 	# Get errors with user meza-ansible trying to write to the calling-user's
 	# home directory if don't cd to a neutral location. By cd'ing to this
 	# location you can pick up ansible.cfg and use vars there.
@@ -1080,105 +1518,186 @@ def meza_shell_exec ( shell_cmd, print_command=True, log_file=False ):
 # may be out of the range accepted by sys.exit(). For example, return codes in
 # the 30000 range were not being interpretted as failures. This function will
 # instead take any non-zero return code and make it return the integer 1.
-def meza_shell_exec_exit( return_code=0 ):
+def meza_shell_exec_exit(return_code=0):
+	"""
+	Exits the script with the given return code.
+
+	Args:
+		return_code (int): The return code to exit with.
+
+	Returns:
+		None
+	"""
 	if int(return_code) > 0:
 		print("Exiting with return code {}".format(return_code))
 		sys.exit(1)
 	else:
 		sys.exit(0)
 
-def get_vault_pass_file ( env ):
+def get_vault_pass_file(env):
+	"""
+	Get the path to the vault password file for the given environment.
+
+	Args:
+		env (str): The environment for which the vault password file is needed.
+
+	Returns:
+		str: The path to the vault password file.
+
+	Raises:
+		None
+
+	"""
 	import pwd
 	import grp
 
 	home_dir = defaults['m_home']
-	legacy_file = '{}/meza-ansible/.vault-pass-{}.txt'.format(home_dir,env)
+	legacy_file = '{}/meza-ansible/.vault-pass-{}.txt'.format(home_dir, env)
 
 	vault_dir = defaults['m_config_vault']
 	vault_pass_file = '{}/vault-pass-{}.txt'.format(vault_dir, env)
 
-	if not os.path.isfile( vault_pass_file ):
-		if not os.path.exists( vault_dir ):
-			os.mkdir( vault_dir )
-			meza_chown( vault_dir, 'meza-ansible', 'wheel' )
-			os.chmod( vault_dir, 0o700 )
+	if not os.path.isfile(vault_pass_file):
+		if not os.path.exists(vault_dir):
+			os.mkdir(vault_dir)
+			meza_chown(vault_dir, 'meza-ansible', 'wheel')
+			os.chmod(vault_dir, 0o700)
 
 		# If legacy vault password file exists copy that into new location.
 		# Otherwise, create one in the new location
-		if os.path.isfile( legacy_file ):
+		if os.path.isfile(legacy_file):
 			from shutil import copyfile
 			copyfile(legacy_file, vault_pass_file)
 		else:
-			with open( vault_pass_file, 'w' ) as f:
-				f.write( random_string( num_chars=64 ) )
+			with open(vault_pass_file, 'w') as f:
+				f.write(random_string(num_chars=64))
 				f.close()
 
 	# Run this everytime, since it should be fast and if meza-ansible can't
 	# read this then you're stuck!
-	meza_chown( vault_pass_file, 'meza-ansible', 'wheel' )
-	os.chmod( vault_pass_file, 0o600 )
+	meza_chown(vault_pass_file, 'meza-ansible', 'wheel')
+	os.chmod(vault_pass_file, 0o600)
 
 	return vault_pass_file
 
-def write_vault_decryption_tmp_file ( env, value ):
-	home_dir = defaults['m_home']
-	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir,env)
+def write_vault_decryption_tmp_file(env, value):
+	"""
+	Write the given value to a temporary file for vault decryption.
 
-	with open( temp_decrypt_file, 'w' ) as filetowrite:
-	    filetowrite.write( value )
-	    filetowrite.close()
+	Args:
+		env (str): The environment name.
+		value (str): The value to be written to the file.
+
+	Returns:
+		str: The path of the temporary file.
+
+	"""
+	home_dir = defaults['m_home']
+	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir, env)
+
+	with open(temp_decrypt_file, 'w') as filetowrite:
+		filetowrite.write(value)
 
 	return temp_decrypt_file
 
-def read_vault_decryption_tmp_file ( env ):
-	home_dir = defaults['m_home']
-	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir,env)
+def read_vault_decryption_tmp_file(env):
+	"""
+	Read the contents of a temporary decryption file.
 
-	f = open( temp_decrypt_file, "r" )
+	Args:
+		env (str): The environment name.
+
+	Returns:
+		str: The contents of the temporary decryption file, or "[decryption error]" if an error occurs.
+	"""
+	home_dir = defaults['m_home']
+	temp_decrypt_file = '{}/meza-ansible/.vault-temp-decrypt-{}.txt'.format(home_dir, env)
+
+	f = open(temp_decrypt_file, "r")
 	if f.mode == 'r':
 		contents = f.read()
 		f.close()
-		os.remove( temp_decrypt_file )
+		os.remove(temp_decrypt_file)
 	else:
 		contents = "[decryption error]"
 
 	return contents
 
 
-def meza_chown ( path, username, groupname ):
+def meza_chown(path, username, groupname):
+	"""
+	Change the ownership of a file or directory to the specified user and group.
+
+	Args:
+		path (str): The path to the file or directory.
+		username (str): The name of the user.
+		groupname (str): The name of the group.
+
+	Returns:
+		None
+	"""
 	import pwd
 	import grp
-	uid = pwd.getpwnam( username ).pw_uid
-	gid = grp.getgrnam( groupname ).gr_gid
-	os.chown( path, uid, gid )
+	uid = pwd.getpwnam(username).pw_uid
+	gid = grp.getgrnam(groupname).gr_gid
+	os.chown(path, uid, gid)
 
 def display_docs(name):
+	"""
+	Display the contents of a text file with the given name.
+
+	Args:
+		name (str): The name of the text file to display.
+
+	Returns:
+		None
+	"""
 	f = open('/opt/meza/manual/meza-cmd/{}.txt'.format(name),'r')
 	print(f.read())
 
-def prompt(varname,default=False):
+def prompt(varname, default=False):
+	"""
+	Prompts the user for input and returns the value entered.
 
+	Args:
+		varname (str): The name of the variable being prompted for.
+		default (bool, optional): The default value to use if the user does not provide any input. Defaults to False.
+
+	Returns:
+		str: The value entered by the user.
+
+	"""
 	# Pretext message is prior to the actual line the user types on. Input msg
 	# is on the same line and will be repeated if the user does not give good
 	# input
-	pretext_msg = i18n["MSG_prompt_pretext_"+varname]
-	input_msg = i18n["MSG_prompt_input_"+varname]
+	pretext_msg = i18n["MSG_prompt_pretext_" + varname]
+	input_msg = i18n["MSG_prompt_input_" + varname]
 
 	print("")
 	print(pretext_msg)
 
-	value = input( input_msg )
+	value = input(input_msg)
 	if default:
 		# If there's a default, either use user entry or default
 		value = value or default
 	else:
 		# If no default, keep asking until user supplies a value
 		while (not value):
-			value = raw_input( input_msg )
+			value = input(input_msg)
 
 	return value
 
 def prompt_secure(varname):
+	"""
+	Prompts the user to enter a secure value for the given variable name.
+
+	Args:
+		varname (str): The name of the variable for which the user is prompted.
+
+	Returns:
+		str: The secure value entered by the user.
+
+	"""
 	import getpass
 
 	# See prompt() for more info
@@ -1188,14 +1707,28 @@ def prompt_secure(varname):
 	print()
 	print(pretext_msg)
 
-	value = getpass.getpass( input_msg )
+	value = getpass.getpass(input_msg)
 	if not value:
 		value = random_string()
 
 	return value
 
 def random_string(**params):
-	import string, random
+	"""
+	Generate a random string.
+
+	Args:
+		params (dict): Optional parameters for generating the random string.
+			- num_chars (int): The length of the random string. Default is 32.
+			- valid_chars (str): The characters to choose from when generating the random string.
+			  Default is all uppercase and lowercase letters, digits, and the special characters '!@$%^*'.
+
+	Returns:
+		str: The randomly generated string.
+
+	"""
+	import string
+	import random
 
 	if 'num_chars' in params:
 		num_chars = params['num_chars']
@@ -1212,12 +1745,21 @@ def random_string(**params):
 
 # return code 0 success, 1+ failure
 def check_environment(env):
+	"""
+	Check if the specified environment exists and is valid.
+
+	Args:
+		env (str): The name of the environment to check.
+
+	Returns:
+		int: Returns 0 if the environment is valid, 1 otherwise.
+	"""
 	import os
 
 	conf_dir = "{}/conf-meza/secret".format(install_dir)
 
-	env_dir = os.path.join( conf_dir, env )
-	if not os.path.isdir( env_dir ):
+	env_dir = os.path.join(conf_dir, env)
+	if not os.path.isdir(env_dir):
 
 		if env == "monolith":
 			return 1
@@ -1226,11 +1768,11 @@ def check_environment(env):
 		print('"{}" is not a valid environment.'.format(env))
 		print("Please choose one of the following:")
 
-		conf_dir_stuff = os.listdir( conf_dir )
+		conf_dir_stuff = os.listdir(conf_dir)
 		valid_envs = []
 		for x in conf_dir_stuff:
-			if os.path.isdir( os.path.join( conf_dir, x ) ):
-				valid_envs.append( x )
+			if os.path.isdir(os.path.join(conf_dir, x)):
+				valid_envs.append(x)
 
 		if len(valid_envs) > 0:
 			for x in valid_envs:
@@ -1241,25 +1783,47 @@ def check_environment(env):
 
 		return 1
 
-	host_file = os.path.join( env_dir, "hosts" )
-	if not os.path.isfile( host_file ):
+	host_file = os.path.join(env_dir, "hosts")
+	if not os.path.isfile(host_file):
 		print()
-		print("{} not a valid file".format( host_file ))
+		print("{} not a valid file".format(host_file))
 		return 1
 
 	return 0
 
 # http://stackoverflow.com/questions/1994488/copy-file-or-directories-recursively-in-python
-def copy (src, dst):
-	import shutil, errno
+def copy(src, dst):
+	"""
+	Copy a file or directory from source to destination.
+
+	Args:
+		src (str): The path of the source file or directory.
+		dst (str): The path of the destination directory.
+
+	Raises:
+		OSError: If an error occurs while copying the file or directory.
+
+	Returns:
+		None
+	"""
+	import shutil
+	import errno
 
 	try:
 		shutil.copytree(src, dst)
-	except OSError as exc: # python >2.5
+	except OSError as exc:
 		if exc.errno == errno.ENOTDIR:
 			shutil.copy(src, dst)
-		else: raise
+		else:
+			raise
+
 def get_datetime_string():
+	"""
+	Returns the current date and time as a formatted string.
+
+	Returns:
+		str: The current date and time in the format 'YYYY-MM-DD HH:MM:SS'.
+	"""
 	import time, datetime
 	ts = time.time()
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')

@@ -26,7 +26,7 @@
     mode: "{{ m_config_secret_file_mode }}"
 
     # We don't want to overwrite an existing hosts file with the default
-    force: no
+    force: false
 
 - name: Ensure secret.yml configured
   template:
@@ -37,4 +37,4 @@
     mode: "{{ m_config_secret_file_mode }}"
 
     # don't overwrite existing
-    force: no
+    force: false

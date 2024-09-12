@@ -1,6 +1,6 @@
 ---
 # Variable configuration.
-- include: variables.yml
+- include_tasks: variables.yml
 
 # Setup/install tasks.
 - include_tasks: setup-RedHat.yml
@@ -14,15 +14,21 @@
     mysql_install_packages: "{{ (rh_mysql_install_packages is defined and rh_mysql_install_packages.changed) or (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed) }}"
 
 # Configure MySQL.
-- include: configure.yml
-- include: secure-installation.yml
+- include_tasks: configure.yml
+- include_tasks: secure-installation.yml
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
-- include: databases.yml
+- include_tasks: databases.yml
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
-- include: users.yml
+- include_tasks: users.yml
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
-- include: replication.yml
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
+# don't run replication in check mode
+- include_tasks: replication.yml
+  when: >
+    (docker_skip_tasks is not defined)
+    or
+    (not docker_skip_tasks)
+    or
+    not ansible_check_mode

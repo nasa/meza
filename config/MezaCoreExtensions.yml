@@ -149,12 +149,17 @@ list:
     config: |
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
-
+   
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
   # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
+
+  # UrlGetParameters - enables you to use and/or display the "GET" parameters of the URL
+  - name: UrlGetParameters
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters.git
+    version: "{{ mediawiki_default_branch }}"
 
 #  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
 #  # to the annotations within software such as Google Docs

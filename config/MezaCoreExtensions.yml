@@ -17,6 +17,7 @@ list:
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
+      $smwgParserFeatures = $smwgParserFeatures | SMW_PARSER_LINV;
       $smwgPageSpecialProperties[] = '_LEDT';
       $smwgPageSpecialProperties[] = '_MDAT';
       $smwgPageSpecialProperties[] = '_CDAT';

@@ -17,6 +17,7 @@ list:
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
+      $smwgParserFeatures = $smwgParserFeatures | SMW_PARSER_LINV;
       $smwgPageSpecialProperties[] = '_LEDT';
       $smwgPageSpecialProperties[] = '_MDAT';
       $smwgPageSpecialProperties[] = '_CDAT';
@@ -74,6 +75,7 @@ list:
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
       $wgPageFormsAutoeditNamespaces[] = NS_USER;
+      $wgPageFormsDelayReload = true;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
@@ -148,6 +150,11 @@ list:
     config: |
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
+
+  # Gadgets
+  - name: Gadgets
+    repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
+    version: "{{ mediawiki_default_branch }}"
 
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------

@@ -76,6 +76,7 @@ list:
       $wgPageFormsLinkAllRedLinksToForms = false;
       $wgPageFormsAutoeditNamespaces[] = NS_USER;
       $wgPageFormsDelayReload = true;
+      $wgPageFormsUseDisplayTitle = false;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
@@ -155,6 +156,12 @@ list:
   - name: Gadgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
     version: "{{ mediawiki_default_branch }}"
+
+  # UrlGetParameters
+  - name: UrlGetParameters
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters    .git
+    version: "{{ mediawiki_default_branch }}"
+
 
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------

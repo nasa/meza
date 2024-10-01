@@ -8,8 +8,11 @@ elasticsearch_http_port: 9200
 elasticsearch_transport_port: 9300
 
 # An example of how to use the uri module to check if Elasticsearch is running
-# ansible localhost -m uri -a "url='http://localhost:9200' method=GET user=elastic password='eApmGGeHMeJcn3ZuaBk5'"
-elasticsearch_password: 'eApmGGeHMeJcn3ZuaBk5'
+# ansible localhost -m uri -a "url='http://localhost:9200' method=GET user=elastic password='your password here'"
+
+# This may not be in defaults. You must configure it.
+# elasticsearch_password: pick a secure password here
+
 elasticsearch_username: "elastic"
 
 elasticsearch_version: "7.10.2"

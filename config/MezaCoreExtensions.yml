@@ -159,9 +159,8 @@ list:
 
   # UrlGetParameters
   - name: UrlGetParameters
-    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters    .git
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters.git
     version: "{{ mediawiki_default_branch }}"
-
 
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------

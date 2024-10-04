@@ -571,13 +571,12 @@
 
 # Wikis are totally built at this point, but SMW and search need rebuilding
 # FIXME #811: Will this work when controller is not an app server?
-- name: "(Re-)build search index for: {{ wikis_to_rebuild_data | join(', ') }}"
-  shell: 'bash {{ m_deploy }}/elastic-rebuild-all.sh "{{ wikis_to_rebuild_data | join('' '') }}"'
-  when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (wikis_to_rebuild_data|length > 0)
+- name: "(Re-)build search index for {{ list_of_wikis | join(', ') }}"
+  shell: 'bash {{ m_deploy | quote }}/elastic-rebuild-all.sh "{{ list_of_wikis | join('' '') }}"'
+  when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (list_of_wikis|length > 0)
   # FIXME: REMOVE? and (not es_do_upgrade)
   run_once: true
-  tags:
-    - search-index
+  tags: [search-index, never]
 
     # FIXME This task should be removed from this role.
     # SMW and Elasticsearch need their own roles and playbooks.
@@ -585,15 +584,15 @@
     # See freephile/meza Issue #80
     # With the 'never' tag, this task will ONLY be run if you specifically ask
     # for it with the --tags=smw-data option (or --tags=never option).
-- name: "(Re-)build SemanticMediaWiki data for: {{ wikis_to_rebuild_data | join(', ') }}"
+- name: "(Re-)build SemanticMediaWiki data for: {{ list_of_wikis | join(', ') }}"
   shell: >
-    'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ wikis_to_rebuild_data | join('' '') }}"
+    'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}"
     >
     {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
   args:
     chdir: "{{ m_logs }}/smw-rebuilddata/"
     creates: smw-rebuild-all.log
-  when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (wikis_to_rebuild_data|length > 0)
+  when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (list_of_wikis|length > 0)
   run_once: true
   tags: [smw-data, never]
 

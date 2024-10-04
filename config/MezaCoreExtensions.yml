@@ -119,12 +119,20 @@ list:
     config: |
       wfLoadExtension( 'Mermaid' );
 
-  # Bootstrap - Used for chameleon skin
+  # Load Bootstrap and BootstrapComponents - for Chameleon skin etc.
   - name: Bootstrap
-    composer: mediawiki/bootstrap
-    version: "~4.0"
+    composer: "mediawiki/bootstrap"
+    version: ~4.5
     config: |
       wfLoadExtension( 'Bootstrap' );
+      // Bootstrap modules are loaded in 'override.php'
+
+  # Adds Tooltips, Cards, Carousel etc.
+  - name: BootstrapComponents
+    composer: "mediawiki/bootstrap-components"
+    version: ^4.0
+    config: |
+      wfLoadExtension( 'BootstrapComponents' );
 
   # Network - Allows for adding interactive network visualizations to your wiki pages
   - name: Network

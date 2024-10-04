@@ -266,13 +266,13 @@ list:
   # InputBox - Adds already created HTML forms to wiki pages.
   - name: InputBox
     repo: https://github.com/wikimedia/mediawiki-extensions-InputBox.git
-    version: "master"
+    version: "{{ mediawiki_default_branch }}"
 
   # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
   # global string find-and-replace on both the text and titles of the wiki's content pages
   - name: ReplaceText
     repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText.git
-    version: "master"
+    version: "{{ mediawiki_default_branch }}"
 
   # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
   # actions made with it.

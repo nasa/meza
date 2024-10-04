@@ -108,8 +108,10 @@
   run_once: True
 
 - name: Ensure SSL cert and key are encrypted
+  become: yes
+  become_user: meza-ansible
   shell: >
-    /usr/local/bin/ansible-vault encrypt
+    ~/.local/bin/ansible-vault encrypt
     {{ item }}
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   failed_when: False
@@ -120,8 +122,10 @@
     - "{{ m_local_secret }}/{{ env }}/ssl/meza.crt"
 
 - name: Read SSL key into variable
+  become: yes
+  become_user: meza-ansible
   shell: >
-    /usr/local/bin/ansible-vault view
+    ~/.local/bin/ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.key
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_key
@@ -129,8 +133,10 @@
   run_once: True
 
 - name: Read SSL cert into variable
+  become: yes
+  become_user: meza-ansible
   shell: >
-    /usr/local/bin/ansible-vault view
+    ~/.local/bin/ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.crt
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_cert

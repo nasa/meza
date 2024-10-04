@@ -41,11 +41,11 @@ New Features:
 - Only execute SMW Rebuild Data when requested explicitly. 
   This feature improves the separation of concerns between "platform updates"
   and "special maintenance". It is accomplished using the tags feature
-  of Ansible: `meza deploy monolith --tags smw-data` 
+  of Ansible: `meza deploy monolith --tags base,smw-data` 
   
   Note that you can use the `meza maint rebuild` command to rebuild 
   SMW data **and** Elasticsearch indexes. This command is equivalent to 
-  `meza deploy monolith --tags smw-data,search-index`
+  `meza deploy monolith --tags base,smw-data,search-index`
 
 - Pretty URLs 
   There is no *index.php* in URLs, just `mysite.com/wiki/SomePage`

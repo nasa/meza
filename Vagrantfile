@@ -317,7 +317,7 @@ EOL
       fi
 
       # Make the vagrant environment configured for development
-      echo 'm_use_production_settings: False' >> #{install_directory}/conf-meza/public/public.yml
+      echo 'm_opcache_production_mode: False' >> #{install_directory}/conf-meza/public/public.yml
 
       cat #{install_directory}/conf-meza/public/public.yml
     SHELL

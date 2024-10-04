@@ -4,9 +4,11 @@
 # Config file for putting non-secure items needed for configuration during
 # deploy of the application
 
-# This variable tells certain aspects of meza to be better suited for production
-# or for development servers.
-m_use_production_settings: True
+# production mode toggles opcache to NOT validate timestamps
+# so live edits will NOT be seen without restarting the webserver
+# production mode decreases opcache log verbosity to exclude warnings
+# Toggle this to 'false' for any development
+m_opcache_production_mode: True
 
 # Set a default authentication method for all wikis that don't specify one
 # FIXME #763: List types, and descriptions

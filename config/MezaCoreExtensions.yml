@@ -37,7 +37,7 @@ list:
     version: "4.0.1"
     config: |
       wfLoadExtension( 'SemanticResultFormats' );
-      @TODO Document the formats as features.
+      # @TODO Document the formats as features.
       $srfgFormats[] = 'excel';
       $srfgFormats[] = 'filtered';
       $srfgFormats[] = 'exhibit';

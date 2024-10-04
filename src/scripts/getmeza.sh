@@ -82,9 +82,12 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			;;
 
 		rocky)
+			# https://docs.fedoraproject.org/en-US/epel/getting-started/
+			# just enable 'powertools' and install epel-release
 			dnf config-manager --set-enabled powertools
-			dnf install -y epel-release
 			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+			
+			
 			dnf module -y reset php
 			sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo
 			echo "exclude = ansible ansible-core python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
@@ -136,7 +139,8 @@ case ${distro} in
 		;;
 
 	rocky)
-		dnf install -y centos-release-ansible-29
+		# as of 2024-08 this repo is unavailable as Centos is not a thing 
+		# dnf install -y centos-release-ansible-29
 		dnf install -y python36
 		dnf install -y git ansible-2.9.27-1.el8.noarch
 		dnf install -y python3-libselinux

@@ -109,7 +109,7 @@
 
 - name: Ensure SSL cert and key are encrypted
   shell: >
-    ansible-vault encrypt
+    /usr/local/bin/ansible-vault encrypt
     {{ item }}
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   failed_when: False
@@ -121,7 +121,7 @@
 
 - name: Read SSL key into variable
   shell: >
-    ansible-vault view
+    /usr/local/bin/ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.key
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_key
@@ -130,7 +130,7 @@
 
 - name: Read SSL cert into variable
   shell: >
-    ansible-vault view
+    /usr/local/bin/ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.crt
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_cert

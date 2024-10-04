@@ -6,6 +6,9 @@
 # FIXME #729: Move this into a role
 - hosts: localhost
   become: true
+  # due to our local installation of ansible, add /usr/local/bin to meza-ansible user $PATH
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   tasks:
   # Can't run set-vars yet, so bootstrap m_home and m_config_vault for now.
   # Meza install path retrieved in same way in set-vars role

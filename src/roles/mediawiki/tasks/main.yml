@@ -238,11 +238,11 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
 
-- name: Run composer install on MediaWiki for dependencies
+- name: Run composer update on MediaWiki for dependencies
   become: true
   become_user: "meza-ansible"
   composer:
-    command: install
+    command: update
     working_dir: "{{ m_mediawiki }}"
     no_dev: true
   tags:

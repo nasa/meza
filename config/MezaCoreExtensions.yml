@@ -630,16 +630,16 @@ list:
   - name: HeaderFooter
     repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
     version: "{{ mediawiki_default_branch }}"
-
-  # Semantic Dependancy Updated (SDU) - Monitors pages for changes in their semantic data. If the "Semantic Dependency" 
-  # property is found, this extension will update (null-edit) all pages that have been selected through that property.
+# Uncomment the log line to debug issues; otherwise do not consume disk space 
+# SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
+# extension will update (null-edit) all pages that have been selected through that property.
   - name: SemanticDependencyUpdater
-    repo: https://github.com/ndc-rkevans/SemanticDependencyUpdater.git
+    repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
     version: master
     config: |
       $wgSDUProperty = 'Semantic Dependency';
-      $wgSDUUseJobQueue = true;
-      $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
+      $wgSDUUseJobQueue = false;
+      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
 # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
 # - name: Html5mediator

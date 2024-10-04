@@ -142,7 +142,7 @@ case ${distro} in
 		# as of 2024-08 this repo is unavailable as Centos is not a thing 
 		# dnf install -y centos-release-ansible-29
 		dnf install -y python36
-		dnf install -y git ansible-2.9.27-1.el8.noarch
+		dnf install -y git
 		dnf install -y python3-libselinux
 		alternatives --set python /usr/bin/python3
 		;;
@@ -155,7 +155,7 @@ case ${distro} in
 				;;
 
 			8.*)
-				dnf install -y python36 git ansible python3-libselinux
+				dnf install -y python36 git python3-libselinux
 				alternatives --set python /usr/bin/python3
 				;;
 
@@ -243,5 +243,13 @@ chown meza-ansible:wheel ${INSTALL_DIR}/meza
 sed -r -i "s/^Defaults\\s+requiretty/#Defaults requiretty/g;" /etc/sudoers
 sed -r -i "s/^Defaults\\s+\!visiblepw/#Defaults \\!visiblepw/g;" /etc/sudoers
 
+
+# install ansible into the ansible user's environment
+su - meza-ansible
+pip3 install --user ansible
+cd /opt/meza/config
+ansible-galaxy collection install -r ../requirements.yml
+
+# @todo At what point do we no longer need sudo?
 echo "meza command installed. Use it:"
-echo "  sudo meza deploy monolith"
+echo "  sudo meza deploy monolith -vvv"

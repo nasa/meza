@@ -15,3 +15,6 @@ venv/*
 
 # ignore vscode settings wherever they are
 **/.vscode
+
+# ignore Ansible collections (3rd party code)
+collections

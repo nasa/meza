@@ -12,8 +12,11 @@ list:
     version: "~4.2"
     config: |
       wfLoadExtension( 'SemanticMediaWiki' );
+      # @CHECK_ME should wgServer really be here?
       enableSemantics( $wgServer . '/' . $wikiId . '/' );
       $smwgQMaxSize = 5000;
+
+      # allow semantic properties in Talk and Template namespaces
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
@@ -34,6 +37,7 @@ list:
     version: "4.0.1"
     config: |
       wfLoadExtension( 'SemanticResultFormats' );
+      @TODO Document the formats as features.
       $srfgFormats[] = 'excel';
       $srfgFormats[] = 'filtered';
       $srfgFormats[] = 'exhibit';
@@ -58,7 +62,7 @@ list:
     version: "3.0.0"
     config: |
       wfLoadExtension( 'SubPageList' );
-      // automatically refresh the tree after a subpage is created or deleted
+      # automatically refresh the tree after a subpage is created or deleted
       $egSPLAutorefresh = true;
 
   # Maps - Extension to visualize and work with geographical information
@@ -205,12 +209,14 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-ParserFunctions.git
     version: "{{ mediawiki_default_branch }}"
     config: |
+      # Also enable StringFunctions, like len, pos, sub, replace, explode
+      # https://www.mediawiki.org/wiki/Extension:StringFunctions
       $wgPFEnableStringFunctions = true;
 
   # ExternalData - Allows MediaWiki pages to retrieve, filter, and format structured data from one or more sources.
   - name: ExternalData
     repo: https://github.com/wikimedia/mediawiki-extensions-ExternalData.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # LabeledSectionTransclusion - Allows for a more granular transclusion of wiki pages by 'headings' or 'sections'
   - name: LabeledSectionTransclusion
@@ -260,13 +266,13 @@ list:
   # InputBox - Adds already created HTML forms to wiki pages.
   - name: InputBox
     repo: https://github.com/wikimedia/mediawiki-extensions-InputBox.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
   # global string find-and-replace on both the text and titles of the wiki's content pages
   - name: ReplaceText
     repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
   # actions made with it.
@@ -280,15 +286,21 @@ list:
   - name: YouTube
     repo: https://github.com/wikimedia/mediawiki-extensions-YouTube.git
     version: "{{ mediawiki_default_branch }}"
-
+  
   #  # ULS - Allows users to select a language and configure its support in an easy way.
-  #  - name: UniversalLanguageSelector
-  #    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
-  #    version: "{{ mediawiki_default_branch }}"
-  #    config: |
-  #      $wgULSIMEEnabled = false;
+  - name: UniversalLanguageSelector
+    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      # Disable international phoenetic alphabet selector that breaks searching for
+      # English users. From docs:
+      # $wgULSIMEEnabled - Disable the input methods feature for all users by
+      # default. Can still be enabled manually by the user.
+      # Refs:
+      # https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
+      # https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
+      $wgULSIMEEnabled = false;
 
-  # VE - Allows for editing pages as rich content
   - name: VisualEditor
     repo: https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git
     version: "{{ mediawiki_default_branch }}"
@@ -366,7 +378,7 @@ list:
   # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
   - name: AdminLinks
     repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
 
@@ -381,20 +393,24 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-ContributionScores.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      // Exclude Bots from the reporting - Can be omitted.
+      # Exclude Bots from the reporting - Can be omitted.
       $wgContribScoreIgnoreBots = true;
-      // Exclude Blocked Users from the reporting - Can be omitted.
+      # Exclude Blocked Users from the reporting - Can be omitted.
       $wgContribScoreIgnoreBlockedUsers = true;
-      // Exclude specific usernames from the reporting - Can be omitted.
+      # Exclude specific usernames from the reporting - Can be omitted.
       $wgContribScoreIgnoreUsernames = [];
-      // Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
+      # Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
       $wgContribScoresUseRealName = true;
-      // Set to true to disable cache for parser function and inclusion of table.
+      # Set to true to disable cache for parser function and inclusion of table.
       $wgContribScoreDisableCache = false;
-      // Use the total edit count to compute the Contribution score.
+      # Use the total edit count to compute the Contribution score.
       $wgContribScoreUseRoughEditCount = false;
-      // Each array defines a report - 7,50 is "past 7 days" and "LIMIT 50" - Can be omitted.
-      $wgContribScoreReports = array( array(7,50), array(30,50), array(0,50) );
+      # Each array defines a report.
+      $wgContribScoreReports = [ 
+        [7, 50],  # "past 7 days" and "LIMIT 50"
+        [30, 50], # past 30 days, limit 50
+        [0, 50] 
+      ];
 
   # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
   # interpreted as an argument delimiter
@@ -407,9 +423,9 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      // CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
-      // cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
-      // is included directly in LocalSettings.php.j2
+      # CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
+      # cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
+      # is included directly in LocalSettings.php.j2
 
   # Echo - Provides an in-wiki notification system that can be used by other extensions
   - name: Echo
@@ -422,7 +438,7 @@ list:
   # import possible in both XML, CSV and some spreadsheet formats.
   - name: DataTransfer
     repo: https://github.com/wikimedia/mediawiki-extensions-DataTransfer.git
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
 
   # NumerAlpha - Provides syntax to insert auto-incrementing numbers, letters, and roman numerals into pages
   - name: NumerAlpha

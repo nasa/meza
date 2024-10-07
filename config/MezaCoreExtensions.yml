@@ -125,7 +125,7 @@ list:
     version: ~4.5
     config: |
       wfLoadExtension( 'Bootstrap' );
-      // Bootstrap modules are loaded in 'override.php'
+      # Bootstrap modules are loaded in 'override.php'
 
   # Adds Tooltips, Cards, Carousel etc.
   - name: BootstrapComponents
@@ -463,12 +463,33 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
+      # Set the default content format for Flow
       $wgFlowContentFormat = 'html';
-      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_TALK] = true;
-      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Permit at least one "group" to create Flow boards
       $wgGroupPermissions['user']['flow-create-board'] = true;
+
+      # Configure Content Model for namespaces using Flow
+      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
+      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
+      # Configure "subpages" feature for the same namespaces
+      $wgNamespacesWithSubpages[NS_TALK] = true;
+      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Flow needs Parsoid if using VE, and with MW 1.39 Flow still ignores zero-config Parsoid
+      wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
+      # Flow ignores RESTBase, but we did not test or document this setting
+      # $wmgUseRestbaseVRS= false;
+
+      $wgVirtualRestConfig['modules']['parsoid'] = [
+        'url' => "http://localhost:8080/$wikiId/rest.php",
+      # server and port variables would be better here, but other Meza roles are not yet ready
+      # 'url' => "$wgServer/$wikiId/rest.php",
+      # 'domain' => $wikiId,
+        'prefix' => $wikiId,
+      # Forward cookies is dangerous for non-private wikis
+      # 'forwardCookies' => true
+      ];
 
   # CommentStreams - Adds a commenting system for wikis.
   - name: CommentStreams

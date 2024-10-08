@@ -439,12 +439,28 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
+      # Set the default content format for Flow
       $wgFlowContentFormat = 'html';
-      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_TALK] = true;
-      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Permit at least one "group" to create Flow boards
       $wgGroupPermissions['user']['flow-create-board'] = true;
+
+      # Configure Content Model for namespaces using Flow
+      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
+      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
+      # Configure "subpages" feature for the same namespaces
+      $wgNamespacesWithSubpages[NS_TALK] = true;
+      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Flow needs Parsoid if using VE, and with MW 1.39 Flow still ignores zero-config Parsoid
+      wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
+
+      $wgVirtualRestConfig['modules']['parsoid'] = [
+        'url' => "http://localhost:8080/$wikiId/rest.php",
+        'prefix' => $wikiId,
+      # Cookie forwarding should only be set by system administrators who understand the full context
+        'forwardCookies' => true
+      ];
 
   # CommentStreams - Adds a commenting system for wikis.
   - name: CommentStreams

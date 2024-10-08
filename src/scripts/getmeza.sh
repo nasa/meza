@@ -89,8 +89,8 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			
 			
 			dnf module -y reset php
-			sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo
-			echo "exclude = ansible ansible-core python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
+			sed -i.meza -e 's;countme=1$;countme=1\nexclude = python38;g' /etc/yum.repos.d/epel.repo
+			echo "exclude = python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
 			cp /etc/yum.repos.d/epel.repo ${INSTALL_DIR}/conf-meza/epel.repo-withexcludes
 			cp /etc/yum.repos.d/Rocky-AppStream.repo ${INSTALL_DIR}/conf-meza/Rocky-AppStream.repo
 			;;
@@ -139,10 +139,8 @@ case ${distro} in
 		;;
 
 	rocky)
-		# as of 2024-08 this repo is unavailable as Centos is not a thing 
-		# dnf install -y centos-release-ansible-29
 		dnf install -y python36
-		dnf install -y git
+		dnf install -y git ansible
 		dnf install -y python3-libselinux
 		alternatives --set python /usr/bin/python3
 		;;

@@ -475,7 +475,7 @@ list:
       # @CHECK_ME should wgServer really be here?
       enableSemantics( $wgServer . '/' . $wikiId . '/' );
       $smwgQMaxSize = 5000;
-
+      $wgObjectCacheSessionExpiry = 86400;
       # allow semantic properties in Talk and Template namespaces
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;

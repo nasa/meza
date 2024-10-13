@@ -14,6 +14,7 @@ list:
       wfLoadExtension( 'SemanticMediaWiki' );
       enableSemantics( $wgServer . '/' . $wikiId . '/' );
       $smwgQMaxSize = 5000;
+      $wgObjectCacheSessionExpiry = 86400;
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];

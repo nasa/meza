@@ -98,18 +98,6 @@
   tags:
     - mediawiki-core
 
-# create symlink to core for short urls
-# tag it latest, so that the symlink gets created whenever core is downloaded
-- name: Create symlink to core, to enable short urls
-  file:
-    src: "{{ m_mediawiki }}"
-    dest: "{{ m_htdocs }}/{{ item }}"
-    state: link
-  with_items:
-    - "{{ list_of_wikis }}"
-  tags:
-    - latest
-
 #
 # EXTENSIONS AND SKINS
 #
@@ -495,6 +483,18 @@
   ansible.builtin.debug:
     msg: "{{ item }}"
   loop: "{{ list_of_wikis|flatten(levels=1) }}"
+
+# create symlink to core for short urls
+# tag it latest, so that the symlink gets created whenever core is downloaded
+- name: Create symlink to core, to enable short urls
+  file:
+    src: "{{ m_mediawiki }}"
+    dest: "{{ m_htdocs }}/{{ item }}"
+    state: link
+  with_items:
+    - "{{ list_of_wikis }}"
+  tags:
+    - latest
 
 # Check that all wikis in config are present on app and DB servers
 - name: Ensure defined wikis exist

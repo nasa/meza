@@ -109,9 +109,9 @@
 
 - name: Ensure SSL cert and key are encrypted
   become: yes
-  become_user: meza-ansible
+  become_user: root
   shell: >
-    ~/.local/bin/ansible-vault encrypt
+    ansible-vault encrypt
     {{ item }}
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   failed_when: False
@@ -123,9 +123,9 @@
 
 - name: Read SSL key into variable
   become: yes
-  become_user: meza-ansible
+  become_user: root
   shell: >
-    ~/.local/bin/ansible-vault view
+    ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.key
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_key
@@ -134,9 +134,9 @@
 
 - name: Read SSL cert into variable
   become: yes
-  become_user: meza-ansible
+  become_user: root
   shell: >
-    ~/.local/bin/ansible-vault view
+    ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.crt
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_cert

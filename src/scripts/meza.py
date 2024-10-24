@@ -1271,7 +1271,7 @@ def meza_command_maint_encrypt_string(argv):
 	varvalue = argv[0]
 	vault_pass_file = get_vault_pass_file(env)
 
-	shell_cmd = ["~/.local/bin/ansible-vault", "encrypt_string", "--vault-id", vault_pass_file, varvalue]
+	shell_cmd = ["ansible-vault", "encrypt_string", "--vault-id", vault_pass_file, varvalue]
 
 	# If name argument passed in, use it
 	if len(argv) == 2:
@@ -1335,7 +1335,7 @@ def meza_command_maint_decrypt_string(argv):
 
 	tmp_file = write_vault_decryption_tmp_file(env, encrypted_string)
 
-	shell_cmd = ["~/.local/bin/ansible-vault", "decrypt", tmp_file, "--vault-password-file", vault_pass_file]
+	shell_cmd = ["ansible-vault", "decrypt", tmp_file, "--vault-password-file", vault_pass_file]
 
 	# false = don't print command prior to running
 	rc = meza_shell_exec(shell_cmd, False)
@@ -1430,7 +1430,7 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
 	Returns:
 		list: The constructed command as a list of strings.
 	"""
-	command = ['sudo', '-u', 'meza-ansible', '~/.local/bin/ansible-playbook',
+	command = ['sudo', '-u', 'meza-ansible', 'ansible-playbook',
 			   '{}/meza/src/playbooks/{}.yml'.format(install_dir, playbook)]
 	if env:
 		host_file = "{}/conf-meza/secret/{}/hosts".format(install_dir, env)

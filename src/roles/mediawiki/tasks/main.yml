@@ -260,6 +260,9 @@
     - latest
     - skins
 
+# @TODO replace shell with command module; escape variables with |quote
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/quote_filter.html#ansible-collections-ansible-builtin-quote-filter
 - name: Ensure Git submodule requirements met for core meza extensions
   become: true
   become_user: "meza-ansible"
@@ -564,6 +567,7 @@
 #     es_do_upgrade: False
 #   when: not es_do_upgrade_stat.stat.exists
 
+# @TODO this only runs on the first wiki -- that seems wrong
 - name: Verify metastore index upgraded
   shell: WIKI={{ list_of_wikis[0] }} php {{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php --upgrade
   run_once: true
@@ -584,11 +588,10 @@
     # See freephile/meza Issue #80
     # With the 'never' tag, this task will ONLY be run if you specifically ask
     # for it with the --tags=smw-data option (or --tags=never option).
+    # Also note: the shell module 'creates' parameter means that the step will NOT be run if the (log) file already exists! 
+    # @See https://github.com/freephile/meza/issues/80
 - name: "(Re-)build SemanticMediaWiki data for: {{ list_of_wikis | join(', ') }}"
-  shell: >
-    'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}"
-    >
-    {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
+  shell: 'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
   args:
     chdir: "{{ m_logs }}/smw-rebuilddata/"
     creates: smw-rebuild-all.log

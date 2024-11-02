@@ -1,0 +1,68 @@
+---
+- name: Test playbook
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    bands:
+      - The Beatles
+      - Led Zeppelin
+      - Tom Petty
+      - Stevie Ray Vaughan and Double Trouble
+    bands2: ['Dave Matthews Band', 'Pink', 'Chris Stapleton']
+
+  tasks:
+    # https://yaml-multiline.info/
+    - name: T01 - A multiline block scalar
+      ansible.builtin.set_fact:
+        a: >
+          {{ 123 == 345 or
+            123 > 345 }}
+
+    - name: T02 - B a quoted scalar value
+      ansible.builtin.set_fact:
+        b_quoted:
+          "{{ 123 == 345 or
+              123 > 345 }}"
+
+    # https://yaml.org/spec/1.2.2/#8112-block-chomping-indicator
+    - name: T03 - C using the chomp
+      ansible.builtin.set_fact:
+        c_chomped: >-
+          {{ 123 == 345 or
+            123 > 345 }}
+
+    - name: T04 - Print bands
+      ansible.builtin.debug:
+        msg: "{{ bands }}"
+
+    - name: T04_1 - Print bands adding a filter
+      ansible.builtin.debug:
+        msg: "{{ bands | join('' '') }}"
+
+    - name: T05 - Print bands using a loop
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ bands }}"
+
+    - name: T06 - Print specific element of bands
+      ansible.builtin.debug:
+        msg: "{{ bands[0] }}"
+    
+    - name: T07 - Add item to bands2
+      ansible.builtin.set_fact:
+        bands2: "{{ bands2 + ['Rolling Stones'] }}" 
+
+    - name: T08 - Difference between bands2 and bands
+      ansible.builtin.debug:
+        msg: "{{ bands2 | difference(bands) }}" 
+
+    - name: T09 - Show the data type of a list
+      ansible.builtin.debug:
+        msg: "{{ bands | type_debug }}"
+
+    # this will only print with -vvvv
+    - name: Display all variables/facts known for a host
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]
+        verbosity: 4

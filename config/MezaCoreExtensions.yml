@@ -168,6 +168,11 @@ list:
   - name: Gadgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
     version: "{{ mediawiki_default_branch }}"
+    config: |
+      # Supposedly these permissions are not granted to anyone so we need to
+      # be explicit about who can edit Gadgets
+      $wgGroupPermissions['interface-admin']['gadgets-edit'] = true;
+      $wgGroupPermissions['interface-admin']['gadgets-definition-edit'] = true;
 
   # UrlGetParameters
   - name: UrlGetParameters

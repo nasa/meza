@@ -232,7 +232,7 @@
   composer:
     command: update
     working_dir: "{{ m_mediawiki }}"
-    no_dev: true
+    no_dev: "{{ m_disable_composer_dev_dependencies| default(false, true) }}"
   tags:
     - composer-extensions
     - latest
@@ -253,7 +253,7 @@
   composer:
     command: update
     working_dir: "{{ m_mediawiki }}"
-    no_dev: true
+    no_dev: "{{ m_disable_composer_dev_dependencies| default(false, true) }}"
   tags:
     - extensions
     - composer-extensions

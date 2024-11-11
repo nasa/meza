@@ -20,11 +20,16 @@
 # as part of the Autodeployer https://www.mediawiki.org/wiki/Meza/Autodeployer
 meza_repository_url: https://github.com/nasa/meza.git
 
+# Should composer install Dev Dependencies
+# Toggle this to 'false' for any development
+# 'true' Disables require-dev packages
+m_disable_composer_dev_dependencies: false
+
 # production mode toggles opcache to NOT validate timestamps
 # so live edits will NOT be seen without restarting the webserver
 # production mode decreases opcache log verbosity to exclude warnings
 # Toggle this to 'false' for any development
-m_opcache_production_mode: true
+m_opcache_production_mode: false
 
 m_httpd_server_admin: "admin@example.com"
 m_timezone: "America/New_York"
@@ -82,7 +87,7 @@ mysql_slow_query_time: "5"
 mysql_performance_schema: "on"
 
 # Netdata is a monitoring and alerting system
-m_install_netdata: true
+m_install_netdata: false
 # netdata runs on 19999 by default. We'll expose it at 20000
 netdata_internal_port: 19999
 netdata_external_port: 20000

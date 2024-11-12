@@ -122,7 +122,7 @@ list:
   # Load Bootstrap and BootstrapComponents - for Chameleon skin etc.
   - name: Bootstrap
     composer: "mediawiki/bootstrap"
-    version: ~4.5
+    version: ~5.0
     config: |
       wfLoadExtension( 'Bootstrap' );
       # Bootstrap modules are loaded in 'override.php'
@@ -130,7 +130,7 @@ list:
   # Adds Tooltips, Cards, Carousel etc.
   - name: BootstrapComponents
     composer: "mediawiki/bootstrap-components"
-    version: ^4.0
+    version: ^5.0
     config: |
       wfLoadExtension( 'BootstrapComponents' );
 

@@ -20,7 +20,7 @@ list:
 - name: chameleon
   composer: mediawiki/chameleon-skin
   type: skins
-  version: "~4.0"
+  version: "~5.0@dev"
   config: |
     wfLoadSkin( 'chameleon' );
     $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';

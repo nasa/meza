@@ -355,9 +355,9 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-PdfHandler.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      $wgPdfProcessor = 'gs';
-      $wgPdfPostProcessor = 'convert';
-      $wgPdfInfo = 'pdfinfo';
+      $wgPdfProcessor = '/bin/gs';
+      $wgPdfPostProcessor = '/bin/convert';
+      $wgPdfInfo = '/bin/pdfinfo';
       $wgFileExtensions[] = 'pdf';
       $wgUseImageMagick = true;
       $wgMaxShellMemory = 1024 * 500;

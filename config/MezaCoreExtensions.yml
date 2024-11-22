@@ -1,123 +1,21 @@
 ---
 list:
-  # ----------------------------------------------------------------------------
-  # ----------------------------------------------------------------------------
-  # Well-documented and well-maintained extensions installed by version number
-  # ----------------------------------------------------------------------------
-  # ----------------------------------------------------------------------------
-
-  # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
-  - name: Semantic MediaWiki
-    composer: "mediawiki/semantic-media-wiki"
-    version: "~4.2"
+  # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
+  - name: AdminLinks
+    repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git
+    version: "master"
     config: |
-      wfLoadExtension( 'SemanticMediaWiki' );
-      # @CHECK_ME should wgServer really be here?
-      enableSemantics( $wgServer . '/' . $wikiId . '/' );
-      $smwgQMaxSize = 5000;
+      $wgGroupPermissions['sysop']['adminlinks'] = true;
 
-      # allow semantic properties in Talk and Template namespaces
-      $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
-      $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
-      $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
-      $smwgParserFeatures = $smwgParserFeatures | SMW_PARSER_LINV;
-      $smwgPageSpecialProperties[] = '_LEDT';
-      $smwgPageSpecialProperties[] = '_MDAT';
-      $smwgPageSpecialProperties[] = '_CDAT';
-      $smwgPageSpecialProperties[] = '_MIME';
-      $smwgPageSpecialProperties[] = '_MEDIA';
-      $smwgPageSpecialProperties[] = '_NEWP';
-      $smwgPageSpecialProperties[] = '_DTITLE';
-      $smwgPageSpecialProperties[] = '_ATTCH_LINK';
+  # AdvancedSearch - Better Search capabilties
+  - name: AdvancedSearch
+    repo: https://github.com/wikimedia/mediawiki-extensions-AdvancedSearch.git
+    version: "{{ mediawiki_default_branch }}"
 
-
-  # SRF - Extends SMW to display quesry results in many different formats
-  - name: Semantic Result Formats
-    composer: "mediawiki/semantic-result-formats"
-    version: "4.0.1"
-    config: |
-      wfLoadExtension( 'SemanticResultFormats' );
-      # @TODO Document the formats as features.
-      $srfgFormats[] = 'excel';
-      $srfgFormats[] = 'filtered';
-      $srfgFormats[] = 'exhibit';
-
-  # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
-  - name: SemanticCompoundQueries
-    composer: "mediawiki/semantic-compound-queries"
-    version: "2.2.0"
-    config: |
-      wfLoadExtension( 'SemanticCompoundQueries' );
-
-  # Semantic Scribunto - Extends Scribunto base capability to support SMW
-  - name: "Semantic Scribunto"
-    composer: "mediawiki/semantic-scribunto"
-    version: "2.2.0"
-    config: |
-      wfLoadExtension( 'SemanticScribunto' );
-
-  # SubPageList - Allows the display and count of subpages
-  - name: SubPageList
-    composer: "mediawiki/sub-page-list"
-    version: "3.0.0"
-    config: |
-      wfLoadExtension( 'SubPageList' );
-      # automatically refresh the tree after a subpage is created or deleted
-      $egSPLAutorefresh = true;
-
-  # Maps - Extension to visualize and work with geographical information
-  - name: Maps
-    composer: "mediawiki/maps"
-    version: "10.1.1"
-    config: |
-      wfLoadExtension( 'Maps' );
-
-  # PF - Allows users to add, edit and query data using forms.
-  - name: PageForms
-    repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
-    version: "5.8.1"
-    config: |
-      $wgPageFormsLinkAllRedLinksToForms = false;
-      $wgPageFormsAutoeditNamespaces[] = NS_USER;
-      $wgPageFormsDelayReload = true;
-      $wgPageFormsUseDisplayTitle = false;
-
-  # SESP - Adds additional (extra) special properties to all content pages in the wiki
-  - name: SemanticExtraSpecialProperties
-    composer: "mediawiki/semantic-extra-special-properties"
-    version: "3.0.5"
-    config: |
-      $sespgEnabledPropertyList = [
-        '_EUSER',
-        '_CUSER',
-        '_REVID',
-        '_PAGEID',
-        '_PAGELGTH',
-        '_NREV',
-        '_NTREV',
-        '_SUBP',
-        '_USERREG',
-        '_USEREDITCNT',
-        '_USERBLOCK',
-        '_USERGROUP',
-        '_USERRIGHT',
-        '_EXIFDATA'
-      ];
-      wfLoadExtension( 'SemanticExtraSpecialProperties' );
-
-  # SimpleBatchUpload - Allows for customized in-page uploads with templates
-  - name: SimpleBatchUpload
-    composer: "mediawiki/simple-batch-upload"
-    version: "^2.0"
-    config: |
-      wfLoadExtension( 'SimpleBatchUpload' );
-
-  # Mermaid - Allows for flow charts, gantt charts, and sequence diagrams in pages
-  - name: Mermaid
-    composer: "mediawiki/mermaid"
-    version: "3.1.0"
-    config: |
-      wfLoadExtension( 'Mermaid' );
+  # Arrays - Creates an additional set of parser functions that operate on arrays.
+  - name: Arrays
+    repo: https://github.com/wikimedia/mediawiki-extensions-Arrays.git
+    version: "{{ mediawiki_default_branch }}"
 
   # Load Bootstrap and BootstrapComponents - for Chameleon skin etc.
   - name: Bootstrap
@@ -134,106 +32,19 @@ list:
     config: |
       wfLoadExtension( 'BootstrapComponents' );
 
-  # Network - Allows for adding interactive network visualizations to your wiki pages
-  - name: Network
-    composer: professional-wiki/network
-    version: "~1.3"
-    config: |
-      wfLoadExtension( 'Network' );
+  # CharInsert - Allows to create JavaScript links that when clicked, insert predefined text into the text box
+  - name: CharInsert
+    repo: https://github.com/wikimedia/mediawiki-extensions-CharInsert.git
+    version: "{{ mediawiki_default_branch }}"
 
-  # ModernTimeline - Provides a modern timeline visualization for Semantic MediaWiki as a result format.
-  - name: ModernTimeline
-    composer: professional-wiki/modern-timeline
-    version: "1.2.1"
-    config: |
-      wfLoadExtension( 'ModernTimeline' );
-
-#  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
-#  - name: SubpageNavigation
-#    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation.git
-#    version: master
-#    config: |
-#      $wgSubpageNavigationShowArticleHeader = false;
-#      $wgSubpageNavigationShowTree = false;
-
-  # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
-  - name: HeaderTabs
-    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
-    version: master
-    config: |
-      $wgHeaderTabsEditTabLink = false;
-      $wgHeaderTabsRenderSingleTab = true;
-
-  # Gadgets
-  - name: Gadgets
-    repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
+  # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
+  - name: CirrusSearch
+    repo: https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # Supposedly these permissions are not granted to anyone so we need to
-      # be explicit about who can edit Gadgets
-      $wgGroupPermissions['interface-admin']['gadgets-edit'] = true;
-      $wgGroupPermissions['interface-admin']['gadgets-definition-edit'] = true;
-
-  # UrlGetParameters
-  - name: UrlGetParameters
-    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # -----------------------------------------------------------------------------------------------------
-  # -----------------------------------------------------------------------------------------------------
-  # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------
-  # -----------------------------------------------------------------------------------------------------
-  # -----------------------------------------------------------------------------------------------------
-
-#  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
-#  # to the annotations within software such as Google Docs
-#  - name: InlineComments
-#    repo: https://github.com/wikimedia/mediawiki-extensions-InlineComments.git
-#    version: "{{ mediawiki_default_branch }}"
-
-#  # Dark Mode - Adds a toggleable dark mode for the MediaWiki user interface.
-#  - name: DarkMode
-#    repo: https://github.com/wikimedia/mediawiki-extensions-DarkMode.git
-#    version: "{{ mediawiki_default_branch }}"
-
-  # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
-  - name: FlexDiagrams
-    repo: https://github.com/wikimedia/mediawiki-extensions-FlexDiagrams.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # Scribunto - Allows for embedding scripting languages in MediaWiki
-  - name: Scribunto
-    repo: https://github.com/wikimedia/mediawiki-extensions-Scribunto.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgScribuntoDefaultEngine = 'luastandalone';
-      $wgScribuntoUseGeSHi = true;
-      $wgScribuntoUseCodeEditor = true;
-
-  # DisplayTitle - Allows a page's display title to be used as the default link text in links to the page - both links
-  # from other pages as well as self-links on the page.
-  - name: DisplayTitle
-    repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # ParserFunctions - Enhances the wikitext parser with helpful functions, mostly related to logic and string-handling
-  - name: ParserFunctions
-    repo: https://github.com/wikimedia/mediawiki-extensions-ParserFunctions.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      # Also enable StringFunctions, like len, pos, sub, replace, explode
-      # https://www.mediawiki.org/wiki/Extension:StringFunctions
-      $wgPFEnableStringFunctions = true;
-
-  # ExternalData - Allows MediaWiki pages to retrieve, filter, and format structured data from one or more sources.
-  - name: ExternalData
-    repo: https://github.com/wikimedia/mediawiki-extensions-ExternalData.git
-    version: "master"
-
-  # LabeledSectionTransclusion - Allows for a more granular transclusion of wiki pages by 'headings' or 'sections'
-  - name: LabeledSectionTransclusion
-    repo: https://github.com/wikimedia/mediawiki-extensions-LabeledSectionTransclusion.git
-    version: "{{ mediawiki_default_branch }}"
+      # CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
+      # cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
+      # is included directly in LocalSettings.php.j2
 
   # Cite - Allows a user to create references as footnotes on a page.
   - name: Cite
@@ -242,32 +53,6 @@ list:
     config: |
       $wgCiteEnablePopups = true;
 
-  # CharInsert - Allows to create JavaScript links that when clicked, insert predefined text into the text box
-  - name: CharInsert
-    repo: https://github.com/wikimedia/mediawiki-extensions-CharInsert.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # DismissableSiteNotice - Allows users to close the sitenotice, using cookies
-  - name: DismissableSiteNotice
-    repo: https://github.com/wikimedia/mediawiki-extensions-DismissableSiteNotice.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # WikiEditor - Provides an improved interface (primarily a toolbar) for editing wikitext.
-  - name: WikiEditor
-    repo: https://github.com/wikimedia/mediawiki-extensions-WikiEditor.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgDefaultUserOptions['usebetatoolbar'] = 1;
-      $wgDefaultUserOptions['usebetatoolbar-cgd'] = 1;
-      $wgDefaultUserOptions['wikieditor-publish'] = 1; # displays publish button
-      $wgDefaultUserOptions['wikieditor-preview'] = 1; # Displays the Preview and Changes tabs
-
-  # SyntaxHighlight - Provides rich formatting of source code using the syntaxhighlight tag
-  - name: SyntaxHighlight_GeSHi
-    repo: https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi.git
-    version: "{{ mediawiki_default_branch }}"
-    composer_merge: true
-
   # CodeEditor - Extends the WikiEditor advanced editing toolbar with an embedded Ace editor widget, providing some
   # handy features for user/site JavaScript pages, CSS pages, JSON pages, and when extension Scribunto is also
   # installed, for Lua pages
@@ -275,82 +60,9 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-CodeEditor.git
     version: "{{ mediawiki_default_branch }}"
 
-  # InputBox - Adds already created HTML forms to wiki pages.
-  - name: InputBox
-    repo: https://github.com/wikimedia/mediawiki-extensions-InputBox.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
-  # global string find-and-replace on both the text and titles of the wiki's content pages
-  - name: ReplaceText
-    repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
-  # actions made with it.
-  - name: Interwiki
-    repo: https://github.com/wikimedia/mediawiki-extensions-Interwiki.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgGroupPermissions['sysop']['interwiki'] = true;
-
-  # YouTube - Allows users to embed YouTube and Google Videos movies
-  - name: YouTube
-    repo: https://github.com/wikimedia/mediawiki-extensions-YouTube.git
-    version: "{{ mediawiki_default_branch }}"
-  
-  #  # ULS - Allows users to select a language and configure its support in an easy way.
-  - name: UniversalLanguageSelector
-    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      # Disable international phoenetic alphabet selector that breaks searching for
-      # English users. From docs:
-      # $wgULSIMEEnabled - Disable the input methods feature for all users by
-      # default. Can still be enabled manually by the user.
-      # Refs:
-      # https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
-      # https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
-      $wgULSIMEEnabled = false;
-
-  - name: VisualEditor
-    repo: https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git
-    version: "{{ mediawiki_default_branch }}"
-    git_submodules: true
-    config: |
-      $wgVisualEditorEnableDiffPage = true;
-      $wgDefaultUserOptions['visualeditor-enable'] = 1;
-      $wgHiddenPrefs[] = 'visualeditor-enable';
-      $wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
-      $wgGroupPermissions['user']['writeapi'] = true;
-      $wgVisualEditorAvailableNamespaces = [
-          "User" => true,
-          "Project" => true,
-          "Help" => true,
-          "_merge_strategy" => "array_plus"
-      ];
-
-  # TemplateData - Adds templatedata tag and API which allow editors to define the VisualEditor's template interface
-  - name: TemplateData
-    repo: https://github.com/wikimedia/mediawiki-extensions-TemplateData.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # Elastica - Provides base elasticsearch functionality
-  - name: Elastica
-    repo: https://github.com/wikimedia/mediawiki-extensions-Elastica.git
-    version: "{{ mediawiki_default_branch }}"
-    composer_merge: true
-
-  # Thanks - Adds a quick way to give positive feedback for productive contributions to MediaWiki sites.
-  - name: Thanks
-    repo: https://github.com/wikimedia/mediawiki-extensions-Thanks.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgThanksConfirmationRequired = false;
-
-  # RevisionSlider - Adds a slider interface to the diff view, so that you can easily move between revisions.
-  - name: RevisionSlider
-    repo: https://github.com/wikimedia/mediawiki-extensions-RevisionSlider.git
+  # CodeMirror - Provides syntax highlighting in MediaWiki's wikitext editor.
+  - name: CodeMirror
+    repo: https://github.com/wikimedia/mediawiki-extensions-CodeMirror.git
     version: "{{ mediawiki_default_branch }}"
 
   # CollapsibleVector - Restores the collapsible navigation portals to the sidebar that were removed from Vector skin.
@@ -358,47 +70,17 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-CollapsibleVector
     version: "{{ mediawiki_default_branch }}"
 
-  # ImageMap - Allows clickable image maps
-  - name: ImageMap
-    repo: https://github.com/wikimedia/mediawiki-extensions-ImageMap
-    version: "{{ mediawiki_default_branch }}"
-
-  # WhoIsWatching - Allows to find out who is watching a particular page, and add others to watchlist for that page
-  - name: WhoIsWatching
-    repo: https://github.com/wikimedia/mediawiki-extensions-WhoIsWatching.git
+  # CommentStreams - Adds a commenting system for wikis.
+  - name: CommentStreams
+    repo: https://github.com/wikimedia/mediawiki-extensions-CommentStreams.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      $wgPageShowWatchingUsers = true;
+      $wgAllowDisplayTitle = true;
+      $wgRestrictDisplayTitle = false;
+      $wgCommentStreamsEnableVoting = true;
+      $wgCommentStreamsModeratorFastDelete = true;
+      $wgCommentStreamsAllowedNamespaces = -1;
 
-  #  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event,
-  #  # both of which are used to define "internal objects" for SMW
-  #  - name: SemanticInternalObjects
-  #    repo: https://github.com/wikimedia/mediawiki-extensions-SemanticInternalObjects.git
-  #    version: "{{ mediawiki_default_branch }}"
-  #    legacy_load: true
-
-  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
-  - name: SemanticDrilldown
-    repo: https://github.com/freephile/SemanticDrilldown.git
-    version: master
-
-  # Arrays - Creates an additional set of parser functions that operate on arrays.
-  - name: Arrays
-    repo: https://github.com/wikimedia/mediawiki-extensions-Arrays.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
-  - name: AdminLinks
-    repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git
-    version: "master"
-    config: |
-      $wgGroupPermissions['sysop']['adminlinks'] = true;
-
-  # Variables - Allows variables to be defined in a page and used later in that same page or included templates,
-  # change its value, possibly to a value given by an expression in terms of the old value, etc.
-  - name: Variables
-    repo: https://github.com/wikimedia/mediawiki-extensions-Variables.git
-    version: "master"
 
   # ContributionScores - Polls the wiki database to locate contributors with the highest contribution volume
   - name: ContributionScores
@@ -424,20 +106,54 @@ list:
         [0, 50] 
       ];
 
-  # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
-  # interpreted as an argument delimiter
-  - name: PipeEscape
-    repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
-  - name: CirrusSearch
-    repo: https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git
+  # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
+  - name: CreateUserPage
+    repo: https://github.com/wikimedia/mediawiki-extensions-CreateUserPage.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
-      # cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
-      # is included directly in LocalSettings.php.j2
+      $wgCreateUserPage_OnLogin = true;
+
+  # CSS - Allows for custom CSS code in pages
+  - name: CSS
+    repo: https://github.com/wikimedia/mediawiki-extensions-CSS.git
+    version: "{{ mediawiki_default_branch }}"
+
+  #  # Dark Mode - Adds a toggleable dark mode for the MediaWiki user interface.
+  #  - name: DarkMode
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-DarkMode.git
+  #    version: "{{ mediawiki_default_branch }}"
+
+  # DataTransfer - Allows users to both export and import data from and to the wiki, with export done in XML format and
+  # import possible in both XML, CSV and some spreadsheet formats.
+  - name: DataTransfer
+    repo: https://github.com/wikimedia/mediawiki-extensions-DataTransfer.git
+    version: "master"
+
+  # DeleteBatch - Adds a special page that allows users w rights to delete multiple pages easily
+  - name: DeleteBatch
+    repo: https://github.com/wikimedia/mediawiki-extensions-DeleteBatch.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
+
+  # DismissableSiteNotice - Allows users to close the sitenotice, using cookies
+  - name: DismissableSiteNotice
+    repo: https://github.com/wikimedia/mediawiki-extensions-DismissableSiteNotice.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # DisplayTitle - Allows a page's display title to be used as the default link text in links to the page - both links
+  # from other pages as well as self-links on the page.
+  - name: DisplayTitle
+    repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # DynamicSidebar - Allows for custom sidebar based on user page or assigned group
+  - name: DynamicSidebar
+    repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgDynamicSidebarUseUserpages = true;
+      $wgDynamicSidebarUseGroups = true;
 
   # Echo - Provides an in-wiki notification system that can be used by other extensions
   - name: Echo
@@ -446,21 +162,28 @@ list:
     config: |
       $wgEchoEmailFooterAddress = $wgPasswordSender;
 
-  # DataTransfer - Allows users to both export and import data from and to the wiki, with export done in XML format and
-  # import possible in both XML, CSV and some spreadsheet formats.
-  - name: DataTransfer
-    repo: https://github.com/wikimedia/mediawiki-extensions-DataTransfer.git
+  # Elastica - Provides base elasticsearch functionality
+  - name: Elastica
+    repo: https://github.com/wikimedia/mediawiki-extensions-Elastica.git
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
+
+  # ExternalData - Allows MediaWiki pages to retrieve, filter, and format structured data from one or more sources.
+  - name: ExternalData
+    repo: https://github.com/wikimedia/mediawiki-extensions-ExternalData.git
     version: "master"
 
-  # NumerAlpha - Provides syntax to insert auto-incrementing numbers, letters, and roman numerals into pages
-  - name: NumerAlpha
-    repo: https://github.com/wikimedia/mediawiki-extensions-NumerAlpha.git
+  # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
+  - name: FlexDiagrams
+    repo: https://github.com/wikimedia/mediawiki-extensions-FlexDiagrams.git
     version: "{{ mediawiki_default_branch }}"
 
-  # CodeMirror - Provides syntax highlighting in MediaWiki's wikitext editor.
-  - name: CodeMirror
-    repo: https://github.com/wikimedia/mediawiki-extensions-CodeMirror.git
-    version: "{{ mediawiki_default_branch }}"
+  #  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
+  #  # Documentation: https://www.mediawiki.org/wiki/Extension:FlexForm
+  #  - name: FlexForm
+  #    repo: https://github.com/Open-CSP/FlexForm.git
+  #    version: "REL1_39"
+  #    compoaser_merge: true
 
   # Flow - Provides threaded discussions on talk pages
   - name: Flow
@@ -496,28 +219,405 @@ list:
       # 'forwardCookies' => true
       ];
 
-  # CommentStreams - Adds a commenting system for wikis.
-  - name: CommentStreams
-    repo: https://github.com/wikimedia/mediawiki-extensions-CommentStreams.git
+  # Gadgets
+  - name: Gadgets
+    repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      $wgAllowDisplayTitle = true;
-      $wgRestrictDisplayTitle = false;
-      $wgCommentStreamsEnableVoting = true;
-      $wgCommentStreamsModeratorFastDelete = true;
-      $wgCommentStreamsAllowedNamespaces = -1;
+      # Supposedly these permissions are not granted to anyone so we need to
+      # be explicit about who can edit Gadgets
+      $wgGroupPermissions['interface-admin']['gadgets-edit'] = true;
+      $wgGroupPermissions['interface-admin']['gadgets-definition-edit'] = true;
 
-  # AdvancedSearch - Better Search capabilties
-  - name: AdvancedSearch
-    repo: https://github.com/wikimedia/mediawiki-extensions-AdvancedSearch.git
+  # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format
+  # that renders a Vega-based graph.
+  - name: Graph
+    repo: https://github.com/wikimedia/mediawiki-extensions-Graph.git
     version: "{{ mediawiki_default_branch }}"
 
-  # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
-  - name: CreateUserPage
-    repo: https://github.com/wikimedia/mediawiki-extensions-CreateUserPage.git
+  # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
+  - name: HeaderFooter
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
+  - name: HeaderTabs
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs.git
+    version: master
+    config: |
+      $wgHeaderTabsEditTabLink = false;
+      $wgHeaderTabsRenderSingleTab = true;
+
+# Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
+# - name: Html5mediator
+#   repo: https://github.com/lightbinder/Html5mediator.git
+#   version: master
+#   legacy_load: true
+
+  # ImageMap - Allows clickable image maps
+  - name: ImageMap
+    repo: https://github.com/wikimedia/mediawiki-extensions-ImageMap
+    version: "{{ mediawiki_default_branch }}"
+
+#  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
+#  # to the annotations within software such as Google Docs
+#  - name: InlineComments
+#    repo: https://github.com/wikimedia/mediawiki-extensions-InlineComments.git
+#    version: "{{ mediawiki_default_branch }}"
+
+  # InputBox - Adds already created HTML forms to wiki pages.
+  - name: InputBox
+    repo: https://github.com/wikimedia/mediawiki-extensions-InputBox.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
+  # actions made with it.
+  - name: Interwiki
+    repo: https://github.com/wikimedia/mediawiki-extensions-Interwiki.git
     version: "{{ mediawiki_default_branch }}"
     config: |
-      $wgCreateUserPage_OnLogin = true;
+      $wgGroupPermissions['sysop']['interwiki'] = true;
+
+  # LabeledSectionTransclusion - Allows for a more granular transclusion of wiki pages by 'headings' or 'sections'
+  - name: LabeledSectionTransclusion
+    repo: https://github.com/wikimedia/mediawiki-extensions-LabeledSectionTransclusion.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Lockdown - namespace level protection
+  - name: Lockdown
+    repo: https://github.com/wikimedia/mediawiki-extensions-Lockdown.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Maps - Extension to visualize and work with geographical information
+  - name: Maps
+    composer: "mediawiki/maps"
+    version: "10.1.1"
+    config: |
+      wfLoadExtension( 'Maps' );
+
+  # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of
+  # various media files in both local and remote repositories
+  - name: MediaFunctions
+    repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Mermaid - Allows for flow charts, gantt charts, and sequence diagrams in pages
+  - name: Mermaid
+    composer: "mediawiki/mermaid"
+    version: "3.1.0"
+    config: |
+      wfLoadExtension( 'Mermaid' );
+
+  # ModernTimeline - Provides a modern timeline visualization for Semantic MediaWiki as a result format.
+  - name: ModernTimeline
+    composer: professional-wiki/modern-timeline
+    version: "1.2.1"
+    config: |
+      wfLoadExtension( 'ModernTimeline' );
+
+  # MultimediaViewer - Gives the user of a wiki a different interface for viewing full-size, or nearly full-size, images
+  # in their browser.
+  - name: MultimediaViewer
+    repo: https://github.com/wikimedia/mediawiki-extensions-MultimediaViewer.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # MyVariables - Makes things like CURRENTUSER availbale as magic words
+  - name: MyVariables
+    repo: https://github.com/wikimedia/mediawiki-extensions-MyVariables.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Network - Allows for adding interactive network visualizations to your wiki pages
+  - name: Network
+    composer: professional-wiki/network
+    version: "~1.3"
+    config: |
+      wfLoadExtension( 'Network' );
+
+  # NumerAlpha - Provides syntax to insert auto-incrementing numbers, letters, and roman numerals into pages
+  - name: NumerAlpha
+    repo: https://github.com/wikimedia/mediawiki-extensions-NumerAlpha.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # OpenLayers - makes the OpenLayer JS library availbale internally to mediawiki
+  - name: OpenLayers
+    repo: https://github.com/wikimedia/mediawiki-extensions-OpenLayers.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # PF - Allows users to add, edit and query data using forms.
+  - name: PageForms
+    repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git
+    version: "5.8.1"
+    config: |
+      $wgPageFormsLinkAllRedLinksToForms = false;
+      $wgPageFormsAutoeditNamespaces[] = NS_USER;
+      $wgPageFormsDelayReload = true;
+      $wgPageFormsUseDisplayTitle = false;
+
+  # PageImages - Collects information about images used on a page
+  - name: PageImages
+    repo: https://github.com/wikimedia/mediawiki-extensions-PageImages.git
+    version: "{{ mediawiki_default_branch }}"
+  
+  # ParserFunctions - Enhances the wikitext parser with helpful functions, mostly related to logic and string-handling
+  - name: ParserFunctions
+    repo: https://github.com/wikimedia/mediawiki-extensions-ParserFunctions.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      # Also enable StringFunctions, like len, pos, sub, replace, explode
+      # https://www.mediawiki.org/wiki/Extension:StringFunctions
+      $wgPFEnableStringFunctions = true;
+
+  # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
+  # interpreted as an argument delimiter
+  - name: PipeEscape
+    repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
+  # global string find-and-replace on both the text and titles of the wiki's content pages
+  - name: ReplaceText
+    repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText.git
+    version: "{{ mediawiki_default_branch }}"
+
+
+  # RevisionSlider - Adds a slider interface to the diff view, so that you can easily move between revisions.
+  - name: RevisionSlider
+    repo: https://github.com/wikimedia/mediawiki-extensions-RevisionSlider.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Scribunto - Allows for embedding scripting languages in MediaWiki
+  - name: Scribunto
+    repo: https://github.com/wikimedia/mediawiki-extensions-Scribunto.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgScribuntoDefaultEngine = 'luastandalone';
+      $wgScribuntoUseGeSHi = true;
+      $wgScribuntoUseCodeEditor = true;
+
+  # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
+  - name: SemanticCompoundQueries
+    composer: "mediawiki/semantic-compound-queries"
+    version: "2.2.0"
+    config: |
+      wfLoadExtension( 'SemanticCompoundQueries' );
+
+  # Uncomment the log line to debug issues; otherwise do not consume disk space 
+  # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
+  # extension will update (null-edit) all pages that have been selected through that property.
+  - name: SemanticDependencyUpdater
+    repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
+    version: master
+    config: |
+      $wgSDUProperty = 'Semantic Dependency';
+      $wgSDUUseJobQueue = false;
+      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
+
+  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
+  - name: SemanticDrilldown
+    repo: https://github.com/freephile/SemanticDrilldown.git
+    version: master
+
+  # SESP - Adds additional (extra) special properties to all content pages in the wiki
+  - name: SemanticExtraSpecialProperties
+    composer: "mediawiki/semantic-extra-special-properties"
+    version: "3.0.5"
+    config: |
+      $sespgEnabledPropertyList = [
+        '_EUSER',
+        '_CUSER',
+        '_REVID',
+        '_PAGEID',
+        '_PAGELGTH',
+        '_NREV',
+        '_NTREV',
+        '_SUBP',
+        '_USERREG',
+        '_USEREDITCNT',
+        '_USERBLOCK',
+        '_USERGROUP',
+        '_USERRIGHT',
+        '_EXIFDATA'
+      ];
+      wfLoadExtension( 'SemanticExtraSpecialProperties' );
+
+  #  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event,
+  #  # both of which are used to define "internal objects" for SMW
+  #  - name: SemanticInternalObjects
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-SemanticInternalObjects.git
+  #    version: "{{ mediawiki_default_branch }}"
+  #    legacy_load: true
+
+  # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
+  - name: Semantic MediaWiki
+    composer: "mediawiki/semantic-media-wiki"
+    version: "~4.2"
+    config: |
+      wfLoadExtension( 'SemanticMediaWiki' );
+      # @CHECK_ME should wgServer really be here?
+      enableSemantics( $wgServer . '/' . $wikiId . '/' );
+      $smwgQMaxSize = 5000;
+
+      # allow semantic properties in Talk and Template namespaces
+      $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
+      $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
+      $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
+      $smwgParserFeatures = $smwgParserFeatures | SMW_PARSER_LINV;
+      $smwgPageSpecialProperties[] = '_LEDT';
+      $smwgPageSpecialProperties[] = '_MDAT';
+      $smwgPageSpecialProperties[] = '_CDAT';
+      $smwgPageSpecialProperties[] = '_MIME';
+      $smwgPageSpecialProperties[] = '_MEDIA';
+      $smwgPageSpecialProperties[] = '_NEWP';
+      $smwgPageSpecialProperties[] = '_DTITLE';
+      $smwgPageSpecialProperties[] = '_ATTCH_LINK';
+
+  # SRF - Extends SMW to display quesry results in many different formats
+  - name: Semantic Result Formats
+    composer: "mediawiki/semantic-result-formats"
+    version: "4.0.1"
+    config: |
+      wfLoadExtension( 'SemanticResultFormats' );
+      # @TODO Document the formats as features.
+      $srfgFormats[] = 'excel';
+      $srfgFormats[] = 'filtered';
+      $srfgFormats[] = 'exhibit';
+
+  # Semantic Scribunto - Extends Scribunto base capability to support SMW
+  - name: "Semantic Scribunto"
+    composer: "mediawiki/semantic-scribunto"
+    version: "2.2.0"
+    config: |
+      wfLoadExtension( 'SemanticScribunto' );
+
+  # SimpleBatchUpload - Allows for customized in-page uploads with templates
+  - name: SimpleBatchUpload
+    composer: "mediawiki/simple-batch-upload"
+    version: "^2.0"
+    config: |
+      wfLoadExtension( 'SimpleBatchUpload' );
+
+  # SimpleMathJax - Uses the JavaScript MathJax library for representing mathematical equations in MediaWiki
+  - name: SimpleMathJax
+    repo: https://github.com/jmnote/SimpleMathJax
+    version: "main"
+
+  # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which
+  # you can't get with MediaWikis existing magic Words
+  - name: SubpageFun
+    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageFun.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # SubPageList - Allows the display and count of subpages
+  - name: SubPageList
+    composer: "mediawiki/sub-page-list"
+    version: "3.0.0"
+    config: |
+      wfLoadExtension( 'SubPageList' );
+      # automatically refresh the tree after a subpage is created or deleted
+      $egSPLAutorefresh = true;
+
+  #  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
+  #  - name: SubpageNavigation
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation.git
+  #    version: master
+  #    config: |
+  #      $wgSubpageNavigationShowArticleHeader = false;
+  #      $wgSubpageNavigationShowTree = false;
+
+  # SyntaxHighlight - Provides rich formatting of source code using the syntaxhighlight tag
+  - name: SyntaxHighlight_GeSHi
+    repo: https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi.git
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
+
+  # # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
+  # - name: TalkRight
+  #   repo: https://github.com/enterprisemediawiki/TalkRight.git
+  #   version: tags/2.0.0
+
+  # TemplateData - Adds templatedata tag and API which allow editors to define the VisualEditor's template interface
+  - name: TemplateData
+    repo: https://github.com/wikimedia/mediawiki-extensions-TemplateData.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # TextExtracts - Provides an API which allows to retrieve plain-text or limited HTML
+  - name: TextExtracts
+    repo: https://github.com/wikimedia/mediawiki-extensions-TextExtracts.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Thanks - Adds a quick way to give positive feedback for productive contributions to MediaWiki sites.
+  - name: Thanks
+    repo: https://github.com/wikimedia/mediawiki-extensions-Thanks.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgThanksConfirmationRequired = false;
+
+  #  # ULS - Allows users to select a language and configure its support in an easy way.
+  - name: UniversalLanguageSelector
+    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      # Disable international phoenetic alphabet selector that breaks searching for
+      # English users. From docs:
+      # $wgULSIMEEnabled - Disable the input methods feature for all users by
+      # default. Can still be enabled manually by the user.
+      # Refs:
+      # https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
+      # https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
+      $wgULSIMEEnabled = false;
+
+  # UrlGetParameters
+  - name: UrlGetParameters
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # Variables - Allows variables to be defined in a page and used later in that same page or included templates,
+  # change its value, possibly to a value given by an expression in terms of the old value, etc.
+  - name: Variables
+    repo: https://github.com/wikimedia/mediawiki-extensions-Variables.git
+    version: "master"
+
+  # VE4All - Allows for visual editor to be used in form pages
+  - name: VEForAll
+    repo: https://github.com/wikimedia/mediawiki-extensions-VEForAll.git
+    version: "master"
+
+  - name: VisualEditor
+    repo: https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git
+    version: "{{ mediawiki_default_branch }}"
+    git_submodules: true
+    config: |
+      $wgVisualEditorEnableDiffPage = true;
+      $wgDefaultUserOptions['visualeditor-enable'] = 1;
+      $wgHiddenPrefs[] = 'visualeditor-enable';
+      $wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
+      $wgGroupPermissions['user']['writeapi'] = true;
+      $wgVisualEditorAvailableNamespaces = [
+          "User" => true,
+          "Project" => true,
+          "Help" => true,
+          "_merge_strategy" => "array_plus"
+      ];
+
+#  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
+#  # wiki as a whole is, as well as to invite users to watch and review neglected pages
+#  - name: WatchAnalytics
+#    repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics.git
+#    version: "master"
+#    config: |
+#      $egPendingReviewsEmphasizeDays = 10;
+
+  # Whitelist Pages - Allows site administrators to specify which pages are publicaly viewable
+  - name: WhitelistPages
+    repo: https://github.com/wikimedia/mediawiki-extensions-WhitelistPages.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # WhoIsWatching - Allows to find out who is watching a particular page, and add others to watchlist for that page
+  - name: WhoIsWatching
+    repo: https://github.com/wikimedia/mediawiki-extensions-WhoIsWatching.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgPageShowWatchingUsers = true;
 
   # WhosOnline - Provides a special page that shows who is
   # (or has very recently been) logged-in
@@ -528,90 +628,21 @@ list:
     config: |
       $wgWhosOnlineShowRealName = true;
 
-  # DeleteBatch - Adds a special page that allows users w rights to delete multiple pages easily
-  - name: DeleteBatch
-    repo: https://github.com/wikimedia/mediawiki-extensions-DeleteBatch.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
-
-  # CSS - Allows for custom CSS code in pages
-  - name: CSS
-    repo: https://github.com/wikimedia/mediawiki-extensions-CSS.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # DynamicSidebar - Allows for custom sidebar based on user page or assigned group
-  - name: DynamicSidebar
-    repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      $wgDynamicSidebarUseUserpages = true;
-      $wgDynamicSidebarUseGroups = true;
-
-  # MyVariables - Makes things like CURRENTUSER availbale as magic words
-  - name: MyVariables
-    repo: https://github.com/wikimedia/mediawiki-extensions-MyVariables.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # MultimediaViewer - Gives the user of a wiki a different interface for viewing full-size, or nearly full-size, images
-  # in their browser.
-  - name: MultimediaViewer
-    repo: https://github.com/wikimedia/mediawiki-extensions-MultimediaViewer.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # OpenLayers - makes the OpenLayer JS library availbale internally to mediawiki
-  - name: OpenLayers
-    repo: https://github.com/wikimedia/mediawiki-extensions-OpenLayers.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # VE4All - Allows for visual editor to be used in form pages
-  - name: VEForAll
-    repo: https://github.com/wikimedia/mediawiki-extensions-VEForAll.git
-    version: "master"
-
-  # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format
-  # that renders a Vega-based graph.
-  - name: Graph
-    repo: https://github.com/wikimedia/mediawiki-extensions-Graph.git
-    version: "{{ mediawiki_default_branch }}"
-
   # Widgets - Allows the creation of raw HTML pages that can be embedded (similarly to templates) in normal wiki pages.
   - name: Widgets
     repo: https://github.com/wikimedia/mediawiki-extensions-Widgets.git
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
-  # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of
-  # various media files in both local and remote repositories
-  - name: MediaFunctions
-    repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions.git
+  # WikiEditor - Provides an improved interface (primarily a toolbar) for editing wikitext.
+  - name: WikiEditor
+    repo: https://github.com/wikimedia/mediawiki-extensions-WikiEditor.git
     version: "{{ mediawiki_default_branch }}"
-
-  # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which
-  # you can't get with MediaWikis existing magic Words
-  - name: SubpageFun
-    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageFun.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # PageImages - Collects information about images used on a page
-  - name: PageImages
-    repo: https://github.com/wikimedia/mediawiki-extensions-PageImages.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # TextExtracts - Provides an API which allows to retrieve plain-text or limited HTML
-  - name: TextExtracts
-    repo: https://github.com/wikimedia/mediawiki-extensions-TextExtracts.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # Whitelist Pages - Allows site administrators to specify which pages are publicaly viewable
-  - name: WhitelistPages
-    repo: https://github.com/wikimedia/mediawiki-extensions-WhitelistPages.git
-    version: "{{ mediawiki_default_branch }}"
-
-  # Lockdown - namespace level protection
-  - name: Lockdown
-    repo: https://github.com/wikimedia/mediawiki-extensions-Lockdown.git
-    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgDefaultUserOptions['usebetatoolbar'] = 1;
+      $wgDefaultUserOptions['usebetatoolbar-cgd'] = 1;
+      $wgDefaultUserOptions['wikieditor-publish'] = 1; # displays publish button
+      $wgDefaultUserOptions['wikieditor-preview'] = 1; # Displays the Preview and Changes tabs
 
 #  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
 #  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
@@ -623,59 +654,13 @@ list:
 #      $wgWikiLoveTabIcon = true;
 #      $wgWikiLoveLogging = true;
 
-#  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
-#  # Documentation: https://www.mediawiki.org/wiki/Extension:FlexForm
-#  - name: FlexForm
-#    repo: https://github.com/Open-CSP/FlexForm.git
-#    version: "REL1_39"
-#    compoaser_merge: true
-
-  # -----------------------------------------------------------------------------------------------------
-  # -----------------------------------------------------------------------------------------------------
-  # ---- Non-Wikimedia extensions  ----------------------------------------------------------------------
-  # -----------------------------------------------------------------------------------------------------
-  # -----------------------------------------------------------------------------------------------------
-
-  # SimpleMathJax - Uses the JavaScript MathJax library for representing mathematical equations in MediaWiki
-  - name: SimpleMathJax
-    repo: https://github.com/jmnote/SimpleMathJax
-    version: "main"
-
-  # # TalkRight - Adds the 'talk' right making a permission for editing talk pages distinct from the editing of articles
-  # - name: TalkRight
-  #   repo: https://github.com/enterprisemediawiki/TalkRight.git
-  #   version: tags/2.0.0
 
   # # Wiretap - Provides special pages for tracking user page viewing stats
   # - name: Wiretap
   #   repo: https://github.com/enterprisemediawiki/Wiretap.git
   #   version: tags/0.2.0
 
-#  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
-#  # wiki as a whole is, as well as to invite users to watch and review neglected pages
-#  - name: WatchAnalytics
-#    repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics.git
-#    version: "master"
-#    config: |
-#      $egPendingReviewsEmphasizeDays = 10;
-
-  # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
-  - name: HeaderFooter
-    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter.git
+  # YouTube - Allows users to embed YouTube and Google Videos movies
+  - name: YouTube
+    repo: https://github.com/wikimedia/mediawiki-extensions-YouTube.git
     version: "{{ mediawiki_default_branch }}"
-# Uncomment the log line to debug issues; otherwise do not consume disk space 
-# SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
-# extension will update (null-edit) all pages that have been selected through that property.
-  - name: SemanticDependencyUpdater
-    repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
-    version: master
-    config: |
-      $wgSDUProperty = 'Semantic Dependency';
-      $wgSDUUseJobQueue = false;
-      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
-
-# Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
-# - name: Html5mediator
-#   repo: https://github.com/lightbinder/Html5mediator.git
-#   version: master
-#   legacy_load: true

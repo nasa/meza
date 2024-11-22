@@ -1,7 +1,8 @@
 ---
-# run with:
-# cd /opt/meza/ansible
-# sudo -u meza-ansible ansible-playbook site.yml
+# login as or switch to user meza-ansible and run:
+# cd /opt/meza/config
+# sudo meza deploy monolith -vvv
+# Docs at https://www.mediawiki.org/wiki/Meza
 
 # FIXME #729: Move this into a role
 - hosts: localhost
@@ -63,10 +64,10 @@
       with_items:
         - name: known_hosts
           mode: "0600"
+
   # Note: without this, if the user decides to encrypt secret.yml with Ansible
   # vault then it changes mode to 0600 and ownership to root:root. This makes it
   # impossible to include_vars later.
-
     - name: Ensure secret.yml owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}/secret/{{ env }}/secret.yml"
@@ -88,6 +89,7 @@
   become: true
   roles:
     - umask-set
+
 - hosts: localhost
   become: true
   roles:
@@ -99,6 +101,7 @@
   tags:
     - autodeployer
     - controller
+
 - hosts: localhost
   become: true
   roles:
@@ -140,6 +143,7 @@
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
       # NOTE: firewalld ports 80 and 443 opened to ALL within haproxy role
     - haproxy
+
 - hosts: app_servers
   become: true
   tags: apache-php
@@ -259,6 +263,7 @@
       # FIXME #801: Some docs said ports 38465, 38466, 38467 needed for Gluster
     - role: gluster
       when: groups['app_servers']|length|int > 1
+
 - hosts: memcached_servers
   become: true
   tags: memcached
@@ -271,6 +276,7 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - memcached
+
 - hosts: db_master
   become: true
   tags: database
@@ -293,6 +299,7 @@
       # FIXME #802: Should replication master be set only if slaves exist?
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: master
+
 - hosts: db_slaves
   become: true
   tags: database
@@ -309,12 +316,14 @@
       # or not included at all if no replication should be performed.
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: slave
+
 - hosts: backup_servers
   become: true
   tags: backup_servers
   roles:
     - set-vars
     - backup-config
+
 - hosts: elastic_servers
   become: true
   tags: elasticsearch
@@ -356,6 +365,7 @@
     - role: lua
       when: m_install_lua
     - mediawiki
+
 - hosts: logging_servers
   become: true
   tags: logging
@@ -363,6 +373,7 @@
     - set-vars
     - role: meza-log
       when: docker_skip_tasks is not defined or not docker_skip_tasks
+
 - hosts: backup_servers
   become: true
   tags:
@@ -371,6 +382,7 @@
     - set-vars
     - role: backups-cleanup
       when: backups_cleanup is defined and backups_cleanup.crontime is defined
+
 - hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
   become: true
   tags:

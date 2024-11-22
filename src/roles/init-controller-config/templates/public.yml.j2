@@ -4,10 +4,10 @@
 # Config file for putting non-secure items needed for configuration during
 # deploy of the application
 
-# production mode toggles opcache to NOT validate timestamps
-# so live edits will NOT be seen without restarting the webserver
-# production mode decreases opcache log verbosity to exclude warnings
-# Toggle this to 'false' for any development
+# Production mode toggles opcache to ignore timestamps
+# so live edits will NOT be seen without restarting the webserver or php-fpm.
+# Production mode decreases opcache log verbosity to exclude warnings.
+# Toggle this to 'false' for any development.
 # The template defaults this to 'true' - including the case where it is ''
 m_opcache_production_mode: {{ m_opcache_production_mode | default(true, true) }}
 

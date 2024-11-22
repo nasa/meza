@@ -348,6 +348,20 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-PageExchange
     version: master
 
+  # PdfHandler - Allows for the display of PDFs in the browser
+  # FileExtensions is also found in conf-meza/base
+  # Shell memory is also found in the conf-meza/overrides
+  - name: PdfHandler
+    repo: https://github.com/wikimedia/mediawiki-extensions-PdfHandler.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgPdfProcessor = 'gs';
+      $wgPdfPostProcessor = 'convert';
+      $wgPdfInfo = 'pdfinfo';
+      $wgFileExtensions[] = 'pdf';
+      $wgUseImageMagick = true;
+      $wgMaxShellMemory = 1024 * 500;
+
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git

@@ -343,6 +343,11 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-OpenLayers.git
     version: "{{ mediawiki_default_branch }}"
 
+  # PageExchange - Allows for exporting and importing pages
+  - name: PageExchange
+    repo: https://github.com/wikimedia/mediawiki-extensions-PageExchange
+    version: master
+
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
     repo: https://github.com/wikimedia/mediawiki-extensions-PageForms.git

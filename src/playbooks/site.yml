@@ -146,6 +146,8 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - haproxy
+    - role: certbot
+      when: use_certbot
 
 - name: Configure app servers
   hosts: app_servers

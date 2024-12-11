@@ -70,12 +70,12 @@ frontend www-http
 	default_backend www-backend
 
 frontend www-https
-	bind *:443 ssl crt /etc/haproxy/certs/meza.pem
+	bind *:443 ssl crt /etc/haproxy/certs/
 	reqadd X-Forwarded-Proto:\ https
 
-	# Keep letsencrypt stuff here for now. Probably add it back later.
-	# acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-	# use_backend letsencrypt-backend if letsencrypt-acl
+	# Certbot (Let's Encrypt) configuration
+	acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+	use_backend letsencrypt-backend if letsencrypt-acl
 
 	default_backend www-backend
 
@@ -83,7 +83,7 @@ frontend www-https
 	use_backend nonwiki-backend if nonwiki
 
 backend www-backend
-	redirect scheme https if !{ ssl_fc }
+	redirect scheme https code 301 if !{ ssl_fc }
 	{% for host in groups['app_servers'] -%}
 		{%- if host == inventory_hostname -%}
 			server apache{{ loop.index }} 127.0.0.1:8080 check
@@ -123,11 +123,7 @@ listen php-profiling
 	{% endfor %}
 {% endif %}
 
-
-
-
 {% if load_balancer_handle_internal %}
-
 listen mediawiki-internal
 	bind *:8081
 	{% for host in groups['app_servers'] -%}
@@ -138,14 +134,12 @@ listen mediawiki-internal
 		{%- endif %}
 
 	{% endfor %}
-
 {% endif %}
-
 
 
 {% if enable_haproxy_stats %}
 listen stats
-	bind *:1936 ssl crt /etc/haproxy/certs/meza.pem
+	bind *:1936 ssl crt {{ ssl_certificate_file }}
 	stats enable
 	stats hide-version
 	stats realm Haproxy\ Statistics
@@ -154,5 +148,5 @@ listen stats
 	stats refresh 30s
 {% endif %}
 
-# backend letsencrypt-backend
-# 	server letsencrypt 127.0.0.1:54321
+backend letsencrypt-backend
+	server letsencrypt 127.0.0.1:54321

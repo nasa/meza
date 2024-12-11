@@ -1,0 +1,5 @@
+- name: Run Certbot Role by itself
+  hosts: localhost
+  become: true
+  roles:
+    - certbot

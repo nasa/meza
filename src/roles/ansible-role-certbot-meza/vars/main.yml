@@ -1,0 +1,44 @@
+---
+# vars file for certbot
+
+
+# Certbot auto-renew cron job configuration (for certificate renewals).
+certbot_auto_renew: true
+certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+certbot_auto_renew_hour: "3"
+certbot_auto_renew_minute: "30"
+certbot_auto_renew_options: "--quiet --deploy-hook /etc/letsencrypt/renewal-hooks/deploy/concat.pem.sh"
+
+
+# Change this to false after testing (or comment the line for default behavior)
+# certbot_testmode: true
+certbot_testmode: false
+certbot_hsts: false
+
+# Parameters used when creating new Certbot certs.
+certbot_create_if_missing: True
+certbot_create_method: standalone
+certbot_admin_email: greg.rundlett@gmail.com
+# certbot_admin_email: "{{ m_httpd_server_admin }}"
+
+certbot_create_extra_args: ""
+
+certbot_create_standalone_stop_services:
+  - httpd
+  - haproxy
+
+
+
+# Default webroot, overwritten by individual per-cert webroot directories
+# certbot_webroot: /var/www/letsencrypt
+certbot_webroot: "{{ m_htdocs }}"
+
+
+certbot_certs:
+  # - email: greg.rundlett@gmail.com
+  #   webroot: "/opt/htdocs/mediawiki/"
+  #   domains:
+  #     - meza.freephile.org
+  #     - wiki.freephile.org
+  - domains:
+      - meza.freephile.org

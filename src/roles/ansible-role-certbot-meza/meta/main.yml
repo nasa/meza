@@ -1,0 +1,19 @@
+galaxy_info:
+  author: Greg Rundlett 
+  description: Add letsencrypt certificates to your server
+  company: eQuality Technology
+
+  license: AGPL-3.0-or-later
+
+  min_ansible_version: 2.1
+
+  requirements:
+    - firewall_port
+
+  galaxy_tags: 
+    - letsencrypt
+    - ssl
+    - certificates
+    - certbot
+    - haproxy
+

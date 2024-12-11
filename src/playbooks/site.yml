@@ -146,7 +146,7 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - haproxy
-    - role: certbot
+    - role: ansible-role-certbot-meza
       when: use_certbot
 
 - name: Configure app servers

@@ -16,12 +16,13 @@ certbot_testmode: false
 certbot_hsts: false
 
 # Parameters used when creating new Certbot certs.
-certbot_create_if_missing: True
+certbot_create_if_missing: true
 certbot_create_method: standalone
 certbot_admin_email: greg.rundlett@gmail.com
 # certbot_admin_email: "{{ m_httpd_server_admin }}"
 
-certbot_create_extra_args: ""
+# certbot_create_extra_args: "--expand --http-01-port=54321"
+certbot_create_extra_args: "--expand"
 
 certbot_create_standalone_stop_services:
   - httpd
@@ -41,4 +42,7 @@ certbot_certs:
   #     - meza.freephile.org
   #     - wiki.freephile.org
   - domains:
+  # list new domains first to have them created
+      - wiki.freephile.org
       - meza.freephile.org
+

@@ -70,6 +70,9 @@ enable_wiki_emails: true
 # Enable the use of LetsEncrypt certificates
 use_certbot: true
 
+# Enable the use of Kibana as an interface to ElasticSearch
+m_install_kibana: true
+
 enable_haproxy_stats: false
 haproxy_stats_user: admin
 haproxy_stats_password: password

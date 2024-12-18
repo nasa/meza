@@ -9,7 +9,8 @@ vagrantconf.yml
 
 # ignore Jeff Geerling roles downloaded from ansible-galaxy
 src/roles/geerlingguy*
-
+# don't ignore the kibana role
+!src/roles/geerlingguy.kibana
 # ignore virtualenv
 venv/*
 

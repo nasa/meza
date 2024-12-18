@@ -332,7 +332,9 @@
       firewall_protocol: tcp
       firewall_servers: "{{ groups['elastic_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
-    - elasticsearch
+    - role: elasticsearch
+    - role: geerlingguy.kibana
+      when: m_install_kibana
 
 - name: Configure MediaWiki on app servers
   hosts: app_servers

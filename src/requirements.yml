@@ -21,5 +21,7 @@
 
 roles:
   #  https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/kibana/documentation/
+  # had to manually install with 
+  # sudo ansible-galaxy role install --force https://github.com/geerlingguy/ansible-role-kibana/archive/refs/tags/4.0.2.tar.gz
   - name: geerlingguy.kibana
     version: 4.0.2

@@ -1,0 +1,5 @@
+---
+
+# we need to match the version of Elasticsearch exactly
+# MediaWiki 1.39 requires Elasticsearch 7.10.2
+kibana_downgrade_version: kibana-7.10.2-1

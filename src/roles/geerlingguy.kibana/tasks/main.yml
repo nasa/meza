@@ -9,6 +9,13 @@
   package:
     name: "{{ kibana_package }}"
     state: "{{ kibana_package_state }}"
+    allow_downgrade: yes
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/dnf_versionlock_module.html
+- name: Keep kibana package from upgrading with general system updates.
+  community.general.dnf_versionlock:
+    name: "{{ kibana_downgrade_version }}"
+    state: present
 
 - name: Ensure Kibana is started and enabled at boot.
   service:

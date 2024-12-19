@@ -5,13 +5,14 @@
 - include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
+# Allow downgrade because we need to match the version of Elasticsearch exactly
 - name: Install Kibana.
   package:
     name: "{{ kibana_package }}"
     state: "{{ kibana_package_state }}"
     allow_downgrade: yes
 
-# https://docs.ansible.com/ansible/latest/collections/community/general/dnf_versionlock_module.html
+# We can versionlock in Ansible with the community.general.dnf_versionlock module
 - name: Keep kibana package from upgrading with general system updates.
   community.general.dnf_versionlock:
     name: "{{ kibana_downgrade_version }}"

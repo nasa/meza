@@ -469,7 +469,7 @@ list:
   # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
   - name: Semantic MediaWiki
     composer: "mediawiki/semantic-media-wiki"
-    version: "~4.2"
+    version: "dev-master"
     config: |
       wfLoadExtension( 'SemanticMediaWiki' );
       # @CHECK_ME should wgServer really be here?

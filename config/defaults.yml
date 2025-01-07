@@ -18,7 +18,7 @@
 # The variable here is NOT used to check out new versions of meza on deploys
 # but rather used in playbooks/check-for-changes and roles/enforce-meza-version
 # as part of the Autodeployer https://www.mediawiki.org/wiki/Meza/Autodeployer
-meza_repository_url: https://github.com/nasa/meza.git
+meza_repository_url: https://github.com/freephile/meza.git
 
 # Should composer install Dev Dependencies
 # Toggle this to 'false' for any development
@@ -114,21 +114,21 @@ m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
 #
 
 # Version of MediaWiki core
-mediawiki_version: "REL1_39"  # FIXME set a specific version
+mediawiki_version: "REL1_43"  # FIXME set a specific version
 
 # Depth of MediaWiki clone - to avoid having ALL the project history
 mediawiki_git_depth: "100"
 
 # Branch to use for extensions and skins without a more specific version
-mediawiki_default_branch: "REL1_39"
+mediawiki_default_branch: "REL1_43"
 
 # CAUTION: if set to true, a deploy will overwrite manual changes made on disk
 # to MediaWiki core, Meza core extensions and skins + Local extensions and skins
 overwrite_local_git_changes: true
 
 # PHP version
-php_ius_version: "php74"
-php_debian_version: "7.4"
+php_ius_version: "php81"
+php_debian_version: "8.1"
 
 # See Extension:CirrusSearch for ElasticSearch requirements
 # Meza before 31.x had ElasticSearch 1.6 or 2.x

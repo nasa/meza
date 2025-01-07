@@ -156,6 +156,7 @@ list:
       $wgDynamicSidebarUseGroups = true;
 
   # Echo - Provides an in-wiki notification system that can be used by other extensions
+  # Bundled since 1.40
   - name: Echo
     repo: https://github.com/wikimedia/mediawiki-extensions-Echo.git
     version: "{{ mediawiki_default_branch }}"
@@ -413,51 +414,51 @@ list:
       $wgScribuntoUseGeSHi = true;
       $wgScribuntoUseCodeEditor = true;
 
-  # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
-  - name: SemanticCompoundQueries
-    composer: "mediawiki/semantic-compound-queries"
-    version: "2.2.0"
-    config: |
-      wfLoadExtension( 'SemanticCompoundQueries' );
+  # # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
+  # - name: SemanticCompoundQueries
+  #   composer: "mediawiki/semantic-compound-queries"
+  #   version: "2.2.0"
+  #   config: |
+  #     wfLoadExtension( 'SemanticCompoundQueries' );
 
-  # Uncomment the log line to debug issues; otherwise do not consume disk space 
-  # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
-  # extension will update (null-edit) all pages that have been selected through that property.
-  - name: SemanticDependencyUpdater
-    repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
-    version: master
-    config: |
-      $wgSDUProperty = 'Semantic Dependency';
-      $wgSDUUseJobQueue = false;
-      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
+  # # Uncomment the log line to debug issues; otherwise do not consume disk space 
+  # # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
+  # # extension will update (null-edit) all pages that have been selected through that property.
+  # - name: SemanticDependencyUpdater
+  #   repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
+  #   version: master
+  #   config: |
+  #     $wgSDUProperty = 'Semantic Dependency';
+  #     $wgSDUUseJobQueue = false;
+  #     # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
-  # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
-  - name: SemanticDrilldown
-    repo: https://github.com/freephile/SemanticDrilldown.git
-    version: master
+  # # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
+  # - name: SemanticDrilldown
+  #   repo: https://github.com/freephile/SemanticDrilldown.git
+  #   version: master
 
-  # SESP - Adds additional (extra) special properties to all content pages in the wiki
-  - name: SemanticExtraSpecialProperties
-    composer: "mediawiki/semantic-extra-special-properties"
-    version: "3.0.5"
-    config: |
-      $sespgEnabledPropertyList = [
-        '_EUSER',
-        '_CUSER',
-        '_REVID',
-        '_PAGEID',
-        '_PAGELGTH',
-        '_NREV',
-        '_NTREV',
-        '_SUBP',
-        '_USERREG',
-        '_USEREDITCNT',
-        '_USERBLOCK',
-        '_USERGROUP',
-        '_USERRIGHT',
-        '_EXIFDATA'
-      ];
-      wfLoadExtension( 'SemanticExtraSpecialProperties' );
+  # # SESP - Adds additional (extra) special properties to all content pages in the wiki
+  # - name: SemanticExtraSpecialProperties
+  #   composer: "mediawiki/semantic-extra-special-properties"
+  #   version: "3.0.5"
+  #   config: |
+  #     $sespgEnabledPropertyList = [
+  #       '_EUSER',
+  #       '_CUSER',
+  #       '_REVID',
+  #       '_PAGEID',
+  #       '_PAGELGTH',
+  #       '_NREV',
+  #       '_NTREV',
+  #       '_SUBP',
+  #       '_USERREG',
+  #       '_USEREDITCNT',
+  #       '_USERBLOCK',
+  #       '_USERGROUP',
+  #       '_USERRIGHT',
+  #       '_EXIFDATA'
+  #     ];
+  #     wfLoadExtension( 'SemanticExtraSpecialProperties' );
 
   #  # SemanticInternalObjects - Add 2 parser functions: #set_internal and #set_internal_recurring_event,
   #  # both of which are used to define "internal objects" for SMW
@@ -490,23 +491,23 @@ list:
       $smwgPageSpecialProperties[] = '_DTITLE';
       $smwgPageSpecialProperties[] = '_ATTCH_LINK';
 
-  # SRF - Extends SMW to display quesry results in many different formats
-  - name: Semantic Result Formats
-    composer: "mediawiki/semantic-result-formats"
-    version: "4.0.1"
-    config: |
-      wfLoadExtension( 'SemanticResultFormats' );
-      # @TODO Document the formats as features.
-      $srfgFormats[] = 'excel';
-      $srfgFormats[] = 'filtered';
-      $srfgFormats[] = 'exhibit';
+  # # SRF - Extends SMW to display quesry results in many different formats
+  # - name: Semantic Result Formats
+  #   composer: "mediawiki/semantic-result-formats"
+  #   version: "4.0.1"
+  #   config: |
+  #     wfLoadExtension( 'SemanticResultFormats' );
+  #     # @TODO Document the formats as features.
+  #     $srfgFormats[] = 'excel';
+  #     $srfgFormats[] = 'filtered';
+  #     $srfgFormats[] = 'exhibit';
 
-  # Semantic Scribunto - Extends Scribunto base capability to support SMW
-  - name: "Semantic Scribunto"
-    composer: "mediawiki/semantic-scribunto"
-    version: "2.2.0"
-    config: |
-      wfLoadExtension( 'SemanticScribunto' );
+  # # Semantic Scribunto - Extends Scribunto base capability to support SMW
+  # - name: "Semantic Scribunto"
+  #   composer: "mediawiki/semantic-scribunto"
+  #   version: "2.2.0"
+  #   config: |
+  #     wfLoadExtension( 'SemanticScribunto' );
 
   # SimpleBatchUpload - Allows for customized in-page uploads with templates
   - name: SimpleBatchUpload
@@ -526,14 +527,14 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-SubpageFun.git
     version: "{{ mediawiki_default_branch }}"
 
-  # SubPageList - Allows the display and count of subpages
-  - name: SubPageList
-    composer: "mediawiki/sub-page-list"
-    version: "3.0.0"
-    config: |
-      wfLoadExtension( 'SubPageList' );
-      # automatically refresh the tree after a subpage is created or deleted
-      $egSPLAutorefresh = true;
+  # # SubPageList - Allows the display and count of subpages
+  # - name: SubPageList
+  #   composer: "mediawiki/sub-page-list"
+  #   version: "3.0.0"
+  #   config: |
+  #     wfLoadExtension( 'SubPageList' );
+  #     # automatically refresh the tree after a subpage is created or deleted
+  #     $egSPLAutorefresh = true;
 
   #  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
   #  - name: SubpageNavigation

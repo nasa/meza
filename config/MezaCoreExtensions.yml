@@ -414,12 +414,12 @@ list:
       $wgScribuntoUseGeSHi = true;
       $wgScribuntoUseCodeEditor = true;
 
-  # # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
-  # - name: SemanticCompoundQueries
-  #   composer: "mediawiki/semantic-compound-queries"
-  #   version: "2.2.0"
-  #   config: |
-  #     wfLoadExtension( 'SemanticCompoundQueries' );
+  # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
+  - name: SemanticCompoundQueries
+    composer: "mediawiki/semantic-compound-queries"
+    version: "3.x-dev"
+    config: |
+      wfLoadExtension( 'SemanticCompoundQueries' );
 
   # # Uncomment the log line to debug issues; otherwise do not consume disk space 
   # # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this

@@ -226,34 +226,14 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
 
-- name: Run composer update on MediaWiki for dependencies
+- name: Run composer update on MediaWiki and composer local extensions
   become: true
   become_user: "meza-ansible"
   composer:
     command: update
     working_dir: "{{ m_mediawiki }}"
     no_dev: "{{ m_disable_composer_dev_dependencies| default(false, true) }}"
-  tags:
-    - composer-extensions
-    - latest
-    - skins
-
-# Remove IdeAliases before running composer update. Hopefully this keeps
-# this file from showing up in autoload_files.php
-#
-- name: Remove SMW IdeAliases
-  file:
-    state: absent
-    path: "{{ m_mediawiki }}/extensions/SemanticMediaWiki/includes/IdeAliases.php"
-
-# install doesn't appear to do extensions
-- name: Run composer update on MediaWiki for extensions
-  become: true
-  become_user: "meza-ansible"
-  composer:
-    command: update
-    working_dir: "{{ m_mediawiki }}"
-    no_dev: "{{ m_disable_composer_dev_dependencies| default(false, true) }}"
+    prefer_source: true
   tags:
     - extensions
     - composer-extensions

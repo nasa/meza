@@ -548,10 +548,10 @@
 #   when: not es_do_upgrade_stat.stat.exists
 
 # @TODO this only runs on the first wiki -- that seems wrong
-- name: Verify metastore index upgraded
-  shell: WIKI={{ list_of_wikis[0] }} php {{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php --upgrade
-  run_once: true
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
+# - name: Verify metastore index upgraded
+#   shell: WIKI={{ list_of_wikis[0] }} php {{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php --upgrade
+#   run_once: true
+#   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 # Wikis are totally built at this point, but SMW and search need rebuilding
 # FIXME #811: Will this work when controller is not an app server?

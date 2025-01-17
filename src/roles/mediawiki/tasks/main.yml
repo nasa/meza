@@ -547,9 +547,9 @@
 #     es_do_upgrade: False
 #   when: not es_do_upgrade_stat.stat.exists
 
-# @TODO this only runs on the first wiki -- that seems wrong
+# @TODO this only runs on the first wiki -- that is wrong -- it should run on all wikis
 # - name: Verify metastore index upgraded
-#   shell: WIKI={{ list_of_wikis[0] }} php {{ m_mediawiki }}/extensions/CirrusSearch/maintenance/Metastore.php --upgrade
+#   shell: WIKI={{ list_of_wikis[0] }} {{ m_mediawiki }}/maintenance/run CirrusSearch:Metastore --upgrade
 #   run_once: true
 #   when: docker_skip_tasks is not defined or not docker_skip_tasks
 

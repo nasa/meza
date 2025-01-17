@@ -93,23 +93,23 @@ done;
 # 	for dir in 0 1 2 3 4 5 6 7 8 9 a b c d e f
 # 	do
 # 		echo "Importing from $m_uploads_dir/$wiki/$dir"
-# 		WIKI="$wiki_id" php "$m_mediawiki/maintenance/importImages.php" --search-recursively "$m_uploads_dir/$wiki/$dir"
+# 		WIKI="$wiki_id" "$m_mediawiki/maintenance/run importImages" --search-recursively "$m_uploads_dir/$wiki/$dir"
 # 	done
 # done
 
 # Seemed to be a memory leak in rebuildall.php. Breaking it up into its
 # component scripts to limit impact.
-# WIKI="$wiki_id" php "$m_mediawiki/maintenance/rebuildall.php"
+# WIKI="$wiki_id" "$m_mediawiki/maintenance/run rebuildall"
 
 
 # FIXME: Is this even necessary with elasticsearch?
 echo "Beginning rebuildtextindex.php script"
-WIKI="$wiki_id" php "$m_mediawiki/maintenance/rebuildtextindex.php"
+WIKI="$wiki_id" "$m_mediawiki/maintenance/run rebuildtextindex"
 
 echo "Beginning rebuildrecentchanges.php script"
-WIKI="$wiki_id" php "$m_mediawiki/maintenance/rebuildrecentchanges.php"
+WIKI="$wiki_id" "$m_mediawiki/maintenance/run rebuildrecentchanges"
 
-# num_pages=$(WIKI="$wiki_id" php "$m_mediawiki/maintenance/showSiteStats.php" | grep "Total pages" | sed 's/[^0-9]*//g')
+# num_pages=$(WIKI="$wiki_id" "$m_mediawiki/maintenance/run showSiteStats.php" | grep "Total pages" | sed 's/[^0-9]*//g')
 num_pages=$(mysql -s -r -e"USE wiki_$wiki_id; SELECT page_id FROM page ORDER BY page_id DESC LIMIT 1;" | sed -n "1p")
 end_id=0
 delta=2000
@@ -122,12 +122,12 @@ while [ "$end_id" -lt "$num_pages" ]; do
 	start_id=$(($end_id + 1))
 	end_id=$(($end_id + $delta))
 	echo "Running refreshLinks.php from $start_id to $end_id"
-	WIKI="$wiki_id" php "$m_mediawiki/maintenance/refreshLinks.php" --e "$end_id" -- "$start_id"
+	WIKI="$wiki_id" "$m_mediawiki/maintenance/run refreshLinks" --e "$end_id" -- "$start_id"
 done
 
 start_id=$(($end_id + 1))
 echo "Running final refreshLinks.php in case there are more pages beyond num_pages, beyond $start_id"
-WIKI="$wiki_id" php "$m_mediawiki/maintenance/refreshLinks.php" "$start_id"
+WIKI="$wiki_id" "$m_mediawiki/maintenance/run refreshLinks" "$start_id"
 
 # Merge watchlists
 echo -e "\nMerging watchlists..."

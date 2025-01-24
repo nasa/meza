@@ -31,7 +31,7 @@ for d in $do_wikis; do
 	echo "    $out_log"
 
 
-	wiki_id="$wiki_id" bash "{{ m_deploy }}/elastic-build-index.sh" > "$out_log"  2>&1
+	wiki_id=$wiki_id {{ m_deploy }}/elastic-build-index.sh > $out_log 2>&1
 
 	endtimestamp=$(date +"%F_%T")
 

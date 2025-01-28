@@ -28,7 +28,7 @@ list:
   # Adds Tooltips, Cards, Carousel etc.
   - name: BootstrapComponents
     composer: "mediawiki/bootstrap-components"
-    version: ^5.0
+    version: "dev-master"
     config: |
       wfLoadExtension( 'BootstrapComponents' );
 
@@ -305,7 +305,7 @@ list:
   # Mermaid - Allows for flow charts, gantt charts, and sequence diagrams in pages
   - name: Mermaid
     composer: "mediawiki/mermaid"
-    version: "3.1.0"
+    version: "dev-master"
     config: |
       wfLoadExtension( 'Mermaid' );
 

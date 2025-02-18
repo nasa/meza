@@ -190,7 +190,7 @@
         name: dnf-command(versionlock)
         state: installed
 
-    - name: Pin packages for Ansible and Python 
+    - name: Pin packages for Ansible and Python
       ansible.builtin.shell:
         cmd: dnf versionlock add {{ item }}
       with_items:
@@ -206,7 +206,7 @@
     - ansible_facts['distribution_major_version'] == "8"
   become: true
   become_user: root
-  # do not ignore errors because if we don't versionlock, then uncontrolled 
+  # do not ignore errors because if we don't versionlock, then uncontrolled
   # upgrades to these central packages could occur
   ignore_errors: false
 

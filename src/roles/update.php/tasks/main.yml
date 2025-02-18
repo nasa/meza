@@ -1,6 +1,6 @@
 ---
 
-- ansible.builtin.debug: { msg: "Running role:update.php for {{ wiki_id }}" }
+- ansible.builtin.debug: {msg: "Running role:update.php for {{ wiki_id }}"}
 
 - name: Set backup timestamp fact
   set_fact:
@@ -22,9 +22,9 @@
   import_role:
     name: remote-mysqldump
   vars:
-    remote_server:      "{{ groups['db_master'][0] }}"
-    dump_database:      "wiki_{{ wiki_id }}"
-    target_server:      "{{ groups['backup_servers'][0] }}"
+    remote_server: "{{ groups['db_master'][0] }}"
+    dump_database: "wiki_{{ wiki_id }}"
+    target_server: "{{ groups['backup_servers'][0] }}"
     target_server_path: "{{ m_backups }}/{{ env }}/{{ wiki_id }}/{{ backup_timestamp }}_wiki.sql"
   run_once: true
   tags:

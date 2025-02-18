@@ -39,7 +39,7 @@
     state: directory
     owner: mysql
     group: mysql
-    mode:  0755
+    mode: 0755
     setype: mysqld_db_t
 
 - name: Set ownership on slow query log file (if configured).

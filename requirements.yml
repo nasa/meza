@@ -1,11 +1,13 @@
 ---
 
+[]
+
 # Define all the Ansible community modules that we need for Meza to work
 #
 # Note that due to support by RedHat
 # we only need to 'dnf install ansible' on Rocky Linux 8 and RHEL 8
 # https://github.com/freephile/meza/issues/51#issuecomment-2452963358
-# 
+#
 # Install from the 'config' directory with
 # ansible-galaxy collection install -r requirements.yml
 # or the full invocation would be

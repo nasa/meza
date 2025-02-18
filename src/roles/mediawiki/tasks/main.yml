@@ -568,7 +568,7 @@
     # See freephile/meza Issue #80
     # With the 'never' tag, this task will ONLY be run if you specifically ask
     # for it with the --tags=smw-data option (or --tags=never option).
-    # Also note: the shell module 'creates' parameter means that the step will NOT be run if the (log) file already exists! 
+    # Also note: the shell module 'creates' parameter means that the step will NOT be run if the (log) file already exists!
     # @See https://github.com/freephile/meza/issues/80
 - name: "(Re-)build SemanticMediaWiki data for: {{ list_of_wikis | join(', ') }}"
   shell: 'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
@@ -626,7 +626,7 @@
     - latest
   when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "7"
 
-# REMOVE these tasks and the extra config var introduced. 
+# REMOVE these tasks and the extra config var introduced.
 # https://github.com/freephile/meza/issues/41#issuecomment-2045506153
 
 # If we're using an 8 version of RedHat family we're already using python3

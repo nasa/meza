@@ -131,11 +131,6 @@
         - secret_config_repo.repo is defined
         - secret_config_repo.version is defined
 
-
-
-
-
-
     #
     # PUBLIC CONFIG
     #
@@ -256,11 +251,6 @@
         - local_config_repo.repo is defined
         - local_config_repo.version is defined
 
-
-
-
-
-
     #
     # MEZA
     #
@@ -366,9 +356,6 @@
         - meta: end_play
 
       when: enforce_meza_version is defined
-
-
-
 
     #
     # Not doing deploy? End play

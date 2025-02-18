@@ -1,5 +1,5 @@
 galaxy_info:
-  author: Greg Rundlett 
+  author: Greg Rundlett
   description: Add letsencrypt certificates to your server
   company: eQuality Technology
 
@@ -10,10 +10,9 @@ galaxy_info:
   requirements:
     - firewall_port
 
-  galaxy_tags: 
+  galaxy_tags:
     - letsencrypt
     - ssl
     - certificates
     - certbot
     - haproxy
-

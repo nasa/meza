@@ -83,9 +83,9 @@
 
 - name: Remove anonymous MySQL users.
   mysql_user:
-     name: ""
-     host: "{{ item }}"
-     state: absent
+    name: ""
+    host: "{{ item }}"
+    state: absent
   with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
 
 - name: Remove MySQL test database.

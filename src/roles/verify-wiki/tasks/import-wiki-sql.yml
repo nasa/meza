@@ -68,7 +68,7 @@
   when: not wiki_exists or do_overwrite_db_from_backup
 
 - name: Did DB import?
-  ansible.builtin.debug: { var: did_db_import }
+  ansible.builtin.debug: {var: did_db_import}
 
 
 #

@@ -35,7 +35,7 @@
     file: "{{ m_install }}/meza/config/defaults.yml"
 
 #FIXME remove this
-# - ansible.builtin.debug: { msg: "{{ m_i18n }} TEST {{ m_db_replication_log_pos }} " }
+# - ansible.builtin.debug: {msg: "{{ m_i18n }} TEST {{ m_db_replication_log_pos }} "}
 
 #
 # Gluster mods

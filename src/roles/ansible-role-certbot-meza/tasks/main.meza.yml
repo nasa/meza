@@ -32,7 +32,7 @@
 
 # What is in the certs directory?
 - name: Check for existing cert(s)
-  find: 
+  find:
     paths: /etc/haproxy/certs
     patterns: '*.pem'
   register: certs
@@ -61,5 +61,3 @@
     name: Certbot automatic renewal
     state: absent
   when: not use_certbot or not certbot_auto_renew
-
-

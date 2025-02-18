@@ -134,7 +134,7 @@
     - filename: "SAMLConfig.php"
       dest_path: "{{ m_deploy }}"
 
-# The simpleSAMLphp cache directory is hard-coded to the default in 
+# The simpleSAMLphp cache directory is hard-coded to the default in
 # meza/src/roles/saml/templates/config.php.j2
 - name: "Ensure SimpleSAMLphp cache directory exists"
   file:
@@ -160,7 +160,7 @@
     group: "{{ m_htdocs_group }}"
     recurse: true
 
-# DEPRECATED since 2024 
+# DEPRECATED since 2024
 # Extension:SimpleSamlAuth that this copies is archived
 # https://www.mediawiki.org/w/index.php?oldid=4123921
 # Meanwhile, the simplesamlphp.org library has had a major version upgrade

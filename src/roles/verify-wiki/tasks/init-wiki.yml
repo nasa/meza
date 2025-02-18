@@ -6,4 +6,3 @@
     WIKI="{{ wiki_id }}" "{{ m_mediawiki }}/maintenance/run createAndPromote" --force --sysop --bureaucrat Admin adminpass!
   run_once: true
   when: wiki_id == "demo"
-

@@ -200,8 +200,6 @@
     # - 503
     # - 504
 
-
-
 # FIXME #746: Why does HAProxy specify this different method for firewall? Is
 # it an SELinux thing (which at present we don't have in enforcing)?
 - name: Ensure firewalld haproxy service files in place

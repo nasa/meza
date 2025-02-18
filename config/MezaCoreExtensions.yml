@@ -100,10 +100,10 @@ list:
       # Use the total edit count to compute the Contribution score.
       $wgContribScoreUseRoughEditCount = false;
       # Each array defines a report.
-      $wgContribScoreReports = [ 
+      $wgContribScoreReports = [
         [7, 50],  # "past 7 days" and "LIMIT 50"
         [30, 50], # past 30 days, limit 50
-        [0, 50] 
+        [0, 50]
       ];
 
   # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
@@ -377,7 +377,7 @@ list:
   - name: PageImages
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PageImages
     version: "{{ mediawiki_default_branch }}"
-  
+
   # ParserFunctions - Enhances the wikitext parser with helpful functions, mostly related to logic and string-handling
   - name: ParserFunctions
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ParserFunctions
@@ -421,7 +421,7 @@ list:
   #   config: |
   #     wfLoadExtension( 'SemanticCompoundQueries' );
 
-  # # Uncomment the log line to debug issues; otherwise do not consume disk space 
+  # # Uncomment the log line to debug issues; otherwise do not consume disk space
   # # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
   # # extension will update (null-edit) all pages that have been selected through that property.
   # - name: SemanticDependencyUpdater

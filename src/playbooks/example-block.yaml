@@ -48,14 +48,14 @@
     - name: T06 - Print specific element of bands
       ansible.builtin.debug:
         msg: "{{ bands[0] }}"
-    
+
     - name: T07 - Add item to bands2
       ansible.builtin.set_fact:
-        bands2: "{{ bands2 + ['Rolling Stones'] }}" 
+        bands2: "{{ bands2 + ['Rolling Stones'] }}"
 
     - name: T08 - Difference between bands2 and bands
       ansible.builtin.debug:
-        msg: "{{ bands2 | difference(bands) }}" 
+        msg: "{{ bands2 | difference(bands) }}"
 
     - name: T09 - Show the data type of a list
       ansible.builtin.debug:

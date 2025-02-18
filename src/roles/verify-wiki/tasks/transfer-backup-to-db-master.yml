@@ -24,15 +24,13 @@
 
 - name: "{{ wiki_id }} - Set fact if backups server DOES have {{ sql_dir_path }}"
   set_fact:
-    backup_dir_exists: True
+    backup_dir_exists: true
   when: backups_dir_stat.stat.exists == true
 
 - name: "{{ wiki_id }} - Set fact if backups server DOES NOT have {{ sql_dir_path }}"
   set_fact:
-    backup_dir_exists: False
+    backup_dir_exists: false
   when: backups_dir_stat.stat.exists == false
-
-
 
 # This will find the latest sql file by name, or wiki.sql over any timestamped one
 # assuming timestamp-named files like 20170220000002_wiki.sql
@@ -42,12 +40,12 @@
   delegate_to: "{{ sql_backup_server }}"
   run_once: true
   remote_user: "{{ db_backup_server_remote_user }}"
-  failed_when: False
+  failed_when: false
   when: backup_dir_exists and (not wiki_exists or intend_overwrite_from_backup)
 
 - name: "{{ wiki_id }} - Set fact if _PUSHED_ SQL file DOES exist"
   set_fact:
-    sql_file_pushed_exists: True
+    sql_file_pushed_exists: true
   when:
     - wiki_sql_push_file is defined
     - wiki_sql_push_file.rc is defined
@@ -56,7 +54,7 @@
 
 - name: "{{ wiki_id }} - Set fact if _PUSHED_ SQL file DOES NOT exist"
   set_fact:
-    sql_file_pushed_exists: False
+    sql_file_pushed_exists: false
   when: >
     (
       wiki_sql_push_file is not defined
@@ -75,7 +73,7 @@
   delegate_to: "{{ sql_backup_server }}"
   run_once: true
   remote_user: "{{ db_backup_server_remote_user }}"
-  failed_when: False
+  failed_when: false
   when:
     - not sql_file_pushed_exists
     - backup_dir_exists
@@ -83,7 +81,7 @@
 
 - name: "{{ wiki_id }} - If no pushed SQL file, set fact if any SQL file DOES exist"
   set_fact:
-    sql_file_exists: True
+    sql_file_exists: true
   when:
     - not sql_file_pushed_exists
     - wiki_sql_file is defined
@@ -93,7 +91,7 @@
 
 - name: "{{ wiki_id }} - If no pushed SQL file, set fact if any other SQL file DOES NOT exist"
   set_fact:
-    sql_file_exists: False
+    sql_file_exists: false
   when:
     - not sql_file_pushed_exists
     - >
@@ -128,11 +126,11 @@
   include_role:
     name: rsync
   vars:
-    pulling_to_server:   "{{ groups['db_master'][0] }}"
-    pulling_to_path:     "{{ m_tmp }}/wiki.sql"
+    pulling_to_server: "{{ groups['db_master'][0] }}"
+    pulling_to_path: "{{ m_tmp }}/wiki.sql"
     pulling_from_server: "{{ sql_backup_server }}"
-    pulling_from_path:   "{{ wiki_sql_file_path }}"
-    pulling_from_user:   "{{ db_backup_server_remote_user }}"
+    pulling_from_path: "{{ wiki_sql_file_path }}"
+    pulling_from_user: "{{ db_backup_server_remote_user }}"
   run_once: true
   when:
     - wiki_sql_file_path is defined

@@ -17,7 +17,7 @@
     state: present
 
 # Environment setup.
-- name: Set JAVA_HOME if configured. 
+- name: Set JAVA_HOME if configured.
   template:
     src: java_home.sh.j2
     dest: /etc/profile.d/java_home.sh
@@ -25,7 +25,7 @@
 
 # ================================================================================
 # INSTALL ELASTICSEARCH
-# ================================================================================ 
+# ================================================================================
 
 # equivalent to command-line
 # rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch

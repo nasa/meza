@@ -4,21 +4,20 @@
   become: true
   tasks:
 
-  - name: Set vars
-    include_role:
-      name: set-vars
-    tags:
-    - always
+    - name: Set vars
+      include_role:
+        name: set-vars
+      tags:
+        - always
 
-  - name: (Re-)build search index for each wiki
-    shell: "bash {{ m_deploy }}/elastic-rebuild-all.sh"
-    run_once: true
-    tags:
-    - search-index
+    - name: (Re-)build search index for each wiki
+      shell: "bash {{ m_deploy }}/elastic-rebuild-all.sh"
+      run_once: true
+      tags:
+        - search-index
 
-  - name: Rebuild SemanticMediaWiki data for each wiki
-    shell: "bash {{ m_deploy }}/smw-rebuild-all.sh > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log"
-    run_once: true
-    tags:
-    - smw-data
-
+    - name: Rebuild SemanticMediaWiki data for each wiki
+      shell: "bash {{ m_deploy }}/smw-rebuild-all.sh > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log"
+      run_once: true
+      tags:
+        - smw-data

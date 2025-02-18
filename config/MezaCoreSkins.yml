@@ -1,112 +1,112 @@
 ---
 list:
 
-# Notes - Chameleon is the default skin
-# All the other skins either ship with MW Core (1.39) or they were listed at:
-# https://www.pro.wiki/articles/best-mediawiki-skins
+  # Notes - Chameleon is the default skin
+  # All the other skins either ship with MW Core (1.39) or they were listed at:
+  # https://www.pro.wiki/articles/best-mediawiki-skins
 
-# Skin:Vector - The is the default skin for MediaWiki
-- name: Vector
-  repo: https://github.com/wikimedia/mediawiki-skins-Vector.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
-  # There are no Vector specific configurations per-say, however, let's take advantage of the universality
-  # of the Vector Skin load and use it to load core Mediawiki Site configuratons here as well:
-  config: | 
-    $wgAllowSiteCSSOnRestrictedPages = true;
+  # Skin:Vector - The is the default skin for MediaWiki
+  - name: Vector
+    repo: https://github.com/wikimedia/mediawiki-skins-Vector.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
+    # There are no Vector specific configurations per-say, however, let's take advantage of the universality
+    # of the Vector Skin load and use it to load core Mediawiki Site configuratons here as well:
+    config: |
+      $wgAllowSiteCSSOnRestrictedPages = true;
 
-# Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
-# Documentation:
-- name: chameleon
-  composer: mediawiki/chameleon-skin
-  type: skins
-  version: "~5.0@dev"
-  config: |
-    wfLoadSkin( 'chameleon' );
-    $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';
-    $wgDefaultSkin = 'Chameleon';
+  # Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
+  # Documentation:
+  - name: chameleon
+    composer: mediawiki/chameleon-skin
+    type: skins
+    version: "~5.0@dev"
+    config: |
+      wfLoadSkin( 'chameleon' );
+      $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';
+      $wgDefaultSkin = 'Chameleon';
 
-# Skin: Pivot - focuses on mobile first but will pivot to all viewports with elegance.
-# Documentation: https://www.mediawiki.org/wiki/Skin:Pivot
-- name: Pivot
-  repo: https://github.com/wikimedia/mediawiki-skins-Pivot.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: Pivot - focuses on mobile first but will pivot to all viewports with elegance.
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Pivot
+  - name: Pivot
+    repo: https://github.com/wikimedia/mediawiki-skins-Pivot.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: Refreshed - a clean, modern skin.
-# Documentation: https://www.mediawiki.org/wiki/Skin:Refreshed
-- name: Refreshed
-  repo: https://github.com/wikimedia/mediawiki-skins-Refreshed.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: Refreshed - a clean, modern skin.
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Refreshed
+  - name: Refreshed
+    repo: https://github.com/wikimedia/mediawiki-skins-Refreshed.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: Modern (MW Core)
-# Documentation: 
-- name: Modern
-  repo: https://github.com/wikimedia/mediawiki-skins-Modern.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: Modern (MW Core)
+  # Documentation:
+  - name: Modern
+    repo: https://github.com/wikimedia/mediawiki-skins-Modern.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: CologneBlue (MW Core)
-# Documentation: 
-- name: CologneBlue
-  repo: https://github.com/wikimedia/mediawiki-skins-CologneBlue.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: CologneBlue (MW Core)
+  # Documentation:
+  - name: CologneBlue
+    repo: https://github.com/wikimedia/mediawiki-skins-CologneBlue.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: MonoBook (MW Core)
-# Documentation: 
-- name: MonoBook
-  repo: https://github.com/wikimedia/mediawiki-skins-MonoBook.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: MonoBook (MW Core)
+  # Documentation:
+  - name: MonoBook
+    repo: https://github.com/wikimedia/mediawiki-skins-MonoBook.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: MinervaNeue - the skin that serves mobile traffic for Wikimedia projects across the world
-# Documentation: https://www.mediawiki.org/wiki/Skin:Minerva_Neue
-- name: MinervaNeue
-  repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: MinervaNeue - the skin that serves mobile traffic for Wikimedia projects across the world
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Minerva_Neue
+  - name: MinervaNeue
+    repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: Timeless (MW Core) - strongly supports responsive web design
-# Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
-- name: MinervaNeue
-  repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: Timeless (MW Core) - strongly supports responsive web design
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
+  - name: MinervaNeue
+    repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: Foreground
-# Documentation: https://www.mediawiki.org/wiki/Skin:Foreground
-- name: Foreground
-  repo: https://github.com/wikimedia/mediawiki-skins-Foreground.git
-  type: skins
-  version: "{{ mediawiki_default_branch }}"
+  # Skin: Foreground
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Foreground
+  - name: Foreground
+    repo: https://github.com/wikimedia/mediawiki-skins-Foreground.git
+    type: skins
+    version: "{{ mediawiki_default_branch }}"
 
-# Skin: Poncho - a skin for MediaWiki
-# Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
-# Note - removed until we have time to debug it
-#- name: Poncho
-#  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
-#  type: skins
-#  version: "{{ mediawiki_default_branch }}"
+  # Skin: Poncho - a skin for MediaWiki
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
+  # Note - removed until we have time to debug it
+  #- name: Poncho
+  #  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
+  #  type: skins
+  #  version: "{{ mediawiki_default_branch }}"
 
-# Skin: Tweeki - a skin based on Bootstrap (v4.6.2) framework
-# Documentation: https://www.mediawiki.org/wiki/Skin:Tweeki
-# Compatibility Policy: tbd
-- name: Tweeki
-  repo: https://github.com/thaider/Tweeki.git
-  type: skins
-  version: tags/v4.39.1
+  # Skin: Tweeki - a skin based on Bootstrap (v4.6.2) framework
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Tweeki
+  # Compatibility Policy: tbd
+  - name: Tweeki
+    repo: https://github.com/thaider/Tweeki.git
+    type: skins
+    version: tags/v4.39.1
 
-# Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
-# Documentation: https://www.mediawiki.org/wiki/Skin:Medik
-# Compatibility Policy: Master maintains backwards compatibility.
-# - name: Medik
-#   repo: https://bitbucket.org/wikiskripta/medik.git
-#   type: skins
-#   version: "tags/v4.0.3"
+  # Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
+  # Compatibility Policy: Master maintains backwards compatibility.
+  # - name: Medik
+  #   repo: https://bitbucket.org/wikiskripta/medik.git
+  #   type: skins
+  #   version: "tags/v4.0.3"
 
-#
-# NOTE - If you'd like to use any other skins it is recommended
-# that you add them in /opt/conf-meza/public/MezaLocalSkins.yml
-#
+  #
+  # NOTE - If you'd like to use any other skins it is recommended
+  # that you add them in /opt/conf-meza/public/MezaLocalSkins.yml
+  #

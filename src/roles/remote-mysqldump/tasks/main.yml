@@ -10,7 +10,7 @@
 #   target_server
 #   target_server_path
 
-- ansible.builtin.debug: { msg: "Running role:remote-mysqldump for {{ wiki_id }}" }
+- ansible.builtin.debug: {msg: "Running role:remote-mysqldump for {{ wiki_id }}"}
 
 
 #
@@ -57,8 +57,6 @@
     remote_server_ssh_user: "meza-ansible"
   when: remote_server_ssh_user is not defined
 
-
-
 #
 # Verify wiki exists on source server before attempting to dump from it
 #
@@ -92,7 +90,7 @@
       | grep -v Wildcard
       | grep -o {{ dump_database }}
   when: remote_server == target_server
-- ansible.builtin.debug: { msg: "{{ mysqlshow_command }}" }
+- ansible.builtin.debug: {msg: "{{ mysqlshow_command }}"}
 
 - name: "{{ wiki_id }} - check if wiki database exists ON SOURCE SERVER"
   shell: "{{ mysqlshow_command }}"
@@ -114,8 +112,6 @@
   set_fact:
     source_wiki_exists: False
   when: source_wiki_exists_check is defined and source_wiki_exists_check.rc != 0
-
-
 
 #
 # If remote_server != target_server, use SSH to run mysqldump. Else, doit locally
@@ -146,7 +142,7 @@
       > {{ target_server_path }}
   when: remote_server == target_server
 
-- ansible.builtin.debug: { msg: "{{ mysqldump_command }}" }
+- ansible.builtin.debug: {msg: "{{ mysqldump_command }}"}
 
 #
 # DO mysqldump

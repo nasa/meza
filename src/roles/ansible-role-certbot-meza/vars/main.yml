@@ -28,8 +28,6 @@ certbot_create_standalone_stop_services:
   - httpd
   - haproxy
 
-
-
 # Default webroot, overwritten by individual per-cert webroot directories
 # certbot_webroot: /var/www/letsencrypt
 certbot_webroot: "{{ m_htdocs }}"
@@ -45,4 +43,3 @@ certbot_certs:
   # list new domains first to have them created
       - wiki.freephile.org
       - meza.freephile.org
-

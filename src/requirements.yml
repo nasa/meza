@@ -5,7 +5,7 @@
 # Note that thanks to support from RedHat
 # we only need to 'dnf install ansible' on Rocky Linux 8 and RHEL 8
 # https://github.com/freephile/meza/issues/51#issuecomment-2452963358
-# 
+#
 # Install from the 'config' directory with
 # ansible-galaxy collection install -r requirements.yml
 # or the full invocation would be
@@ -21,7 +21,7 @@
 
 roles:
   #  https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/kibana/documentation/
-  # had to manually install with 
+  # had to manually install with
   # sudo ansible-galaxy role install --force https://github.com/geerlingguy/ansible-role-kibana/archive/refs/tags/4.0.2.tar.gz
   - name: geerlingguy.kibana
     version: 4.0.2

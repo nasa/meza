@@ -177,7 +177,7 @@ packages_php_debian:
   #   "{{ php_ius_version }}-pdo"
 
 # SAML
-# The library version to install. 
+# The library version to install
 # For MW 1.39, we need the library at 2.1.1 and PHP >=8.0
 ## @FIXME: changing library blows away the existing installation directory
 ## DO NOT CHANGE THIS WITHOUT BACKING UP YOUR CONFIG AND LOGS

@@ -43,8 +43,8 @@
   run_once: true
   when: remote_server == inventory_hostname
 
-- ansible.builtin.debug: { var: remote_dir_check }
-- ansible.builtin.debug: { var: local_dir_check }
+- ansible.builtin.debug: {var: remote_dir_check}
+- ansible.builtin.debug: {var: local_dir_check}
 
 - set_fact:
     local_dir_check: False

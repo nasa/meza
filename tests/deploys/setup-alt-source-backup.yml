@@ -41,7 +41,6 @@
     - name: Set MariaDB root password
       shell: mysqladmin -u root password 1234
 
-
     # This will find the latest sql file by name, or wiki.sql over any timestamped one
     # assuming timestamp-named files like 20170220000002_wiki.sql
     - name: Find SQL file
@@ -105,4 +104,3 @@
     - name: Ensure no password on test-user
       shell: passwd --delete test-user
       failed_when: False
-

@@ -10,7 +10,7 @@
     dnf config-manager --set-enabled crb
   changed_when: false
 
-  when: 
+  when:
     - ansible_distribution_major_version | int > 8
 
 - name: Enable powertools for Rocky/AlmaLinux 8.
@@ -18,5 +18,5 @@
     dnf config-manager --set-enabled powertools
   changed_when: false
 
-  when: 
+  when:
     - ansible_distribution_major_version | int <= 9

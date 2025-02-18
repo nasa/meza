@@ -1,12 +1,7 @@
 ---
-# FIXME #748: Eventually add the ability to get SSL cert from letsencrypt
-#     ref: https://www.digitalocean.com/community/tutorials/how-to-secure-haproxy-with-let-s-encrypt-on-centos-7
-# Other refs:
-#     https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Load_Balancer_Administration/install_haproxy_example1.html
-#     https://gist.github.com/thisismitch/7c91e9b2b63f837a0c4b
-#     https://www.unixmen.com/configure-high-available-load-balancer-haproxy-keepalived/
 
-
+# @FIXME: These facts are redundant with the conditions in the only place the
+# fact is used below. We should remove these facts and just use the conditions.
 - name: Set fact if this load balancer will handle external connections (80/443)
   set_fact:
     load_balancer_handle_external: True
@@ -96,7 +91,10 @@
   delegate_to: localhost
   run_once: True
 
-# FIXME: Better would be "if not exists setup letsencrypt"
+# FIXME: Extract 'self-signed certificate' into a role
+# and only run if not 'use_certbot'
+# Self-signed certificate is useful only in limited circumstances
+# Perhaps better control whether it is possible to run in http mode.
 - name: If not exists, create self-signed SSL cert on CONTROLLER
   command: |
     openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
@@ -108,6 +106,8 @@
   run_once: True
 
 - name: Ensure SSL cert and key are encrypted
+  become: yes
+  become_user: root
   shell: >
     ansible-vault encrypt
     {{ item }}
@@ -120,6 +120,8 @@
     - "{{ m_local_secret }}/{{ env }}/ssl/meza.crt"
 
 - name: Read SSL key into variable
+  become: yes
+  become_user: root
   shell: >
     ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.key
@@ -129,6 +131,8 @@
   run_once: True
 
 - name: Read SSL cert into variable
+  become: yes
+  become_user: root
   shell: >
     ansible-vault view
     {{ m_local_secret }}/{{ env }}/ssl/meza.crt
@@ -136,34 +140,6 @@
   register: decrypted_cert
   delegate_to: localhost
   run_once: True
-
-# - name: Ensure cert and key on load balancers
-#   copy:
-#     src: "{{ m_local_secret }}/{{ env }}/ssl/{{ item }}"
-#     dest: "/etc/haproxy/certs/{{ item }}"
-#   with_items:
-#     - meza.key
-#     - meza.crt
-#   notify:
-#     - restart haproxy
-
-- name: Ensure SSL cert on load balancers
-  copy:
-    content: "{{ decrypted_cert.stdout }}"
-    dest: "/etc/haproxy/certs/meza.crt"
-  # this task will be skipped in --check mode
-  when: not ansible_check_mode
-  notify:
-    - restart haproxy
-
-- name: Ensure SSL key on load balancers
-  copy:
-    content: "{{ decrypted_key.stdout }}"
-    dest: "/etc/haproxy/certs/meza.key"
-  # this task will be skipped in --check mode
-  when: not ansible_check_mode
-  notify:
-    - restart haproxy
 
 - name: Ensure cert and key assembled into into pem file
   copy:
@@ -175,13 +151,6 @@
   when: not ansible_check_mode
   notify:
     - restart haproxy
-
-# - name: Ensure cert and key assembled into into pem file
-#   assemble:
-#     src: "/opt/conf-meza/secret/{{ env }}/ssl"
-#     dest: /etc/haproxy/certs/meza.pem
-#   notify:
-#     - restart haproxy
 
 - name: Ensure haproxy certs have secure permissions
   file:

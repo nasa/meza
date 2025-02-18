@@ -259,6 +259,7 @@
       - rsyslog
       - selinux-policy
       - tree
+      - xpdf
       - vim
     state: installed
   tags:

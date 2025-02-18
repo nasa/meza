@@ -17,7 +17,7 @@
     state: present
 
 # Environment setup.
-- name: Set JAVA_HOME if configured.
+- name: Set JAVA_HOME if configured. 
   template:
     src: java_home.sh.j2
     dest: /etc/profile.d/java_home.sh
@@ -123,62 +123,3 @@
     delay: 3
     timeout: 300
   when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-
-# Previously, elasticsearch plugins Head and Kopf (and at one time Bigdesk and
-# Inquisitor) were installed here.
-
-
-#
-# Perform checks on Elasticsearch version
-#
-- name: Check current Elasticsearch version
-  uri:
-    url: "http://localhost:{{ elasticsearch_http_port }}"
-    method: GET
-    # user: "{{ elasticsearch_username }}"
-    # password: "{{ elasticsearch_password }}"
-  register: version_found
-  retries: 10
-  delay: 10
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-- name: Display current Elasticsearch full version number
-  ansible.builtin.debug:
-    var: version_found.json.version.number
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-- name: Display desired Elasticsearch version
-  ansible.builtin.debug:
-    var: elasticsearch_major_version
-
-- name: Set the Elasticsearch major version found
-  set_fact:
-    es_version_found: "{{ version_found.json.version.number | list | first }}"
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-- name: "Docker image building only: set found version to desired version"
-  set_fact:
-    es_version_found: "{{ elasticsearch_major_version | list | first }}"
-  when: docker_skip_tasks is defined and docker_skip_tasks
-
-- name: Set the Elasticsearch major version desired
-  set_fact:
-    es_version_desired: "{{ elasticsearch_major_version | list | first }}"
-
-# Do false first. Then force_do_elasticsearch_upgrade can override
-- name: Set do_elasticsearch_upgrade to FALSE
-  set_fact:
-    do_elasticsearch_upgrade: False
-  when: es_version_found|int == es_version_desired|int
-
-# Note: force_do_elasticsearch_upgrade not set anywhere. This can be used with:
-#       `meza deploy ... --extra-vars "force_do_elasticsearch_upgrade=True"`
-- name: Set do_elasticsearch_upgrade to TRUE
-  set_fact:
-    do_elasticsearch_upgrade: True
-  when: (es_version_found|int != es_version_desired|int) or (force_do_elasticsearch_upgrade is defined and force_do_elasticsearch_upgrade)
-
-- name: Include upgrade tasks for ES 5.x --> 6.x
-  include_tasks: es_upgrade.yml
-  when: do_elasticsearch_upgrade

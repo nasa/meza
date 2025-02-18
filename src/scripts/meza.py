@@ -346,7 +346,7 @@ def request_lock_for_deploy(env):
 			grp.getgrnam('apache')
 			meza_chown(lock_file, 'meza-ansible', 'apache')
 		except KeyError:
-			print('Group apache does not exist. Set "wheel" as group for lock file.')
+			print('Group apache does not exist. Using "wheel" as the group for our lock file.')
 			meza_chown(lock_file, 'meza-ansible', 'wheel')
 
 		os.chmod(lock_file, 0o664)

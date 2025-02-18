@@ -1,7 +1,6 @@
 # meza
 
-[![Build Status](https://travis-ci.org/enterprisemediawiki/meza.svg?branch=master)](https://travis-ci.org/enterprisemediawiki/meza)
-[![Code Climate](https://codeclimate.com/github/enterprisemediawiki/meza/badges/gpa.svg)](https://codeclimate.com/github/enterprisemediawiki/meza)
+[![Lint YAML Files](https://github.com/freephile/meza/actions/workflows/yamllint.yml/badge.svg)](https://github.com/freephile/meza/actions/workflows/yamllint.yml)
 
 <img src="https://raw.githubusercontent.com/enterprisemediawiki/meza/master/manual/commands.gif">
 

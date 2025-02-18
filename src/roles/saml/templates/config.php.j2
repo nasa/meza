@@ -55,39 +55,67 @@ $config = [
      | DATABASE CONFIGURATION |
      **************************/
 
-    'database.dsn'            => 'mysql:host=localhost;dbname=saml',
-    'database.username'       => 'simplesamlphp',
-    'database.password'       => 'secret',
-    'database.options'        => [],
-    'database.prefix'         => '',
-    'database.driver_options' => [],
-    'database.persistent'     => false,
-    'database.secondaries'    => [],
-    'enable.saml20-idp'       => true,
-    'enable.adfs-idp'         => false,
+    /*
+     * This database configuration is optional. If you are not using
+     * core functionality or modules that require a database, you can
+     * skip this configuration.
+     */
+	'database.dsn' => 'mysql:host=localhost;dbname=saml',
+	'database.username' => 'simplesamlphp',
+	'database.password' => 'secret',
+	'database.options' => [],
+	'database.prefix' => '',
+	'database.persistent' => false,
+	'database.secondaries' => [],
 
-    'module.enable' => [
-        'exampleauth' => true,
-        'core'        => true,
-        'admin'       => true,
-        'saml'        => true
-    ],
+	'enable.saml20-idp' => false,
+	'enable.adfs-idp' => false,
 
-    'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
-    'session.datastore.timeout'     => (4 * 60 * 60), // 4 hours
-    'session.state.timeout'         => (60 * 60), // 1 hour
-    'session.cookie.name'           => 'SimpleSAMLSessionID',
-    'session.cookie.lifetime'       => 0,
-    'session.cookie.path'           => '/',
-    'session.cookie.domain'         => '',
-    'session.cookie.samesite'       => $httpUtils->canSetSameSiteNone() ? 'None' : null,
-    'session.phpsession.cookiename' => 'SimpleSAML',
-    'session.phpsession.savepath'   => null,
-    'session.phpsession.httponly'   => true,
-    'session.authtoken.cookiename'  => 'SimpleSAMLAuthToken',
-    'session.rememberme.enable'     => false,
-    'session.rememberme.checked'    => false,
-    'session.rememberme.lifetime'   => (14 * 86400),
+	# This should be _less_ than memcache_store.expires. See below.
+	'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
+
+	'session.datastore.timeout' => (4 * 60 * 60), // 4 hours
+	'session.state.timeout' => (60 * 60), // 1 hour
+	'session.cookie.name' => 'SimpleSAMLSessionID',
+	'session.cookie.lifetime' => 0,
+	'session.cookie.path' => '/',
+	'session.cookie.domain' => '{{ wiki_app_fqdn }}',
+	    /*
+     * Set the secure flag in the cookie.
+     *
+     * Set this to TRUE if the user only accesses your service
+     * through https. If the user can access the service through
+     * both http and https, this must be set to FALSE.
+     */
+	'session.cookie.secure' => true,
+    /*
+     * Set the SameSite attribute in the cookie.
+     *
+     * You can set this to the strings 'None', 'Lax', or 'Strict' to support
+     * the RFC6265bis SameSite cookie attribute. If set to null, no SameSite
+     * attribute will be sent.
+     *
+     * A value of "None" is required to properly support cross-domain POST
+     * requests which are used by different SAML bindings. Because some older
+     * browsers do not support this value, the canSetSameSiteNone function
+     * can be called to only set it for compatible browsers.
+     *
+     * You must also set the 'session.cookie.secure' value above to true.
+     *
+     * Example:
+     *  'session.cookie.samesite' => 'None',
+     */
+    // 'session.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
+	// This has to be 'None' for Chrome browser to login to the Admin panel
+	'session.cookie.samesite' => 'None',
+	'session.phpsession.cookiename' => 'SimpleSAML',
+	'session.phpsession.savepath' => null,
+	'session.phpsession.httponly' => true,
+	'session.authtoken.cookiename' => 'SimpleSAMLAuthToken',
+	'session.rememberme.enable' => false,
+	'session.rememberme.checked' => false,
+	'session.rememberme.lifetime' => (14 * 86400),
+
 
         'memcache_store.servers' => [
                 [

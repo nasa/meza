@@ -1,0 +1,20 @@
+---
+
+# Define all the Ansible community modules that we need for Meza to work
+#
+# Note that due to support by RedHat
+# we only need to 'dnf install ansible' on Rocky Linux 8 and RHEL 8
+# https://github.com/freephile/meza/issues/51#issuecomment-2452963358
+# 
+# Install from the 'config' directory with
+# ansible-galaxy collection install -r requirements.yml
+# or the full invocation would be
+# ansible-galaxy collection install -vvv -r ../requirements.yml -p ../collections/
+# You can leave off the 'collections path' argument since that is stipulated in config/ansible.cfg
+#
+# Newer versions of ansible-galaxy do not require the 'collection' keyword
+# collections:
+#     - 'community.general'
+#     - 'ansible.posix'
+#     - 'gluster.gluster'
+#     - 'community.mysql'

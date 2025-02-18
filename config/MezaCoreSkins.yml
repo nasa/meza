@@ -20,7 +20,7 @@ list:
 - name: chameleon
   composer: mediawiki/chameleon-skin
   type: skins
-  version: "~4.0"
+  version: "~5.0@dev"
   config: |
     wfLoadSkin( 'chameleon' );
     $egChameleonLayoutFile= '/opt/htdocs/mediawiki/skins/chameleon/layouts/fixedhead.xml';
@@ -96,15 +96,15 @@ list:
 - name: Tweeki
   repo: https://github.com/thaider/Tweeki.git
   type: skins
-  version: "{{ mediawiki_default_branch }}"
+  version: tags/v4.39.1
 
 # Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
 # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
 # Compatibility Policy: Master maintains backwards compatibility.
-- name: Medik
-  repo: https://bitbucket.org/wikiskripta/medik.git
-  type: skins
-  version: "tags/v4.0.3"
+# - name: Medik
+#   repo: https://bitbucket.org/wikiskripta/medik.git
+#   type: skins
+#   version: "tags/v4.0.3"
 
 #
 # NOTE - If you'd like to use any other skins it is recommended

@@ -18,12 +18,18 @@
 # The variable here is NOT used to check out new versions of meza on deploys
 # but rather used in playbooks/check-for-changes and roles/enforce-meza-version
 # as part of the Autodeployer https://www.mediawiki.org/wiki/Meza/Autodeployer
-meza_repository_url: https://github.com/nasa/meza.git
+meza_repository_url: https://github.com/freephile/meza.git
 
-# Use development or production settings for this server
-# production being as performant and secure as possible
-# development being less secure and providing optional features useful for dev
-m_use_production_settings: true
+# Should composer install Dev Dependencies
+# Toggle this to 'false' for any development
+# 'true' Disables require-dev packages
+m_disable_composer_dev_dependencies: false
+
+# Production mode toggles opcache to ignore timestamps
+# so live edits will NOT be seen without restarting the webserver or php-fpm.
+# Production mode decreases opcache log verbosity to exclude warnings.
+# Toggle this to 'false' for any development.
+m_opcache_production_mode: false
 
 m_httpd_server_admin: "admin@example.com"
 m_timezone: "America/New_York"
@@ -61,6 +67,12 @@ m_force_debug: false
 
 enable_wiki_emails: true
 
+# Enable the use of LetsEncrypt certificates
+use_certbot: true
+
+# Enable the use of Kibana as an interface to ElasticSearch
+m_install_kibana: true
+
 enable_haproxy_stats: false
 haproxy_stats_user: admin
 haproxy_stats_password: password
@@ -81,7 +93,7 @@ mysql_slow_query_time: "5"
 mysql_performance_schema: "on"
 
 # Netdata is a monitoring and alerting system
-m_install_netdata: true
+m_install_netdata: false
 # netdata runs on 19999 by default. We'll expose it at 20000
 netdata_internal_port: 19999
 netdata_external_port: 20000
@@ -102,21 +114,22 @@ m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
 #
 
 # Version of MediaWiki core
-mediawiki_version: "REL1_39"  # FIXME set a specific version
+mediawiki_version: "REL1_43"  # FIXME set a specific version
 
 # Depth of MediaWiki clone - to avoid having ALL the project history
 mediawiki_git_depth: "100"
 
 # Branch to use for extensions and skins without a more specific version
-mediawiki_default_branch: "REL1_39"
+mediawiki_default_branch: "REL1_43"
 
 # CAUTION: if set to true, a deploy will overwrite manual changes made on disk
 # to MediaWiki core, Meza core extensions and skins + Local extensions and skins
 overwrite_local_git_changes: true
 
 # PHP version
-php_ius_version: "php74"
-php_debian_version: "7.4"
+php_ius_version: "php81"
+php_debian_version: "8.1"
+php_memory_limit: "128M" # 128M is default
 
 # See Extension:CirrusSearch for ElasticSearch requirements
 # Meza before 31.x had ElasticSearch 1.6 or 2.x

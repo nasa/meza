@@ -58,7 +58,7 @@
 
     - name: Run update.php on this wiki
       shell: >
-        WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/maintenance/update.php" --quick --doshared >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run update --quick --doshared >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
 
@@ -80,21 +80,21 @@
 
     #
     # IF IT'S A MULTI-CONTENT REVISIONS ISSUE
-    #
+    # @todo: This is a temporary fix for T212428 affecting REL1_35 and should be removed now that the issue is resolved
     - ansible.builtin.debug:
         msg: "Multi-Content Revisions error detected. Ref https://phabricator.wikimedia.org/T212428"
       when: '"Main slot of revision not found in database" in update_php_log_output'
 
     - name: "Run populateContentTables.php to fix Multi-Content Revisions issue"
       shell: >
-        WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/maintenance/populateContentTables.php" >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id }} {{ m_mediawiki }}/maintenance/run populateContentTables >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
       when: '"Main slot of revision not found in database" in update_php_log_output'
 
     - name: "Retry update.php after populateContentTables.php"
       shell: >
-        WIKI="{{ wiki_id }}" php "{{ m_mediawiki }}/maintenance/update.php" --quick >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id }} {{ m_mediawiki }}/maintenance/run update --quick >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
       when: '"Main slot of revision not found in database" in update_php_log_output'

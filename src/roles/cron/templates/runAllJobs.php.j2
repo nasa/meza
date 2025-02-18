@@ -37,7 +37,7 @@ foreach ($wikis as $wiki_id) {
 	if ( sys_getloadavg()[0] < $maxload ) {
 
 		echo "Running jobs for $wiki_id\n";
-		$command = "WIKI=$wiki_id php {{ m_mediawiki }}/maintenance/runJobs.php $maxtime $maxjobs";
+		$command = "WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run runJobs $maxtime $maxjobs";
 		$output = shell_exec( $command );
 		echo $output . "\n";
 

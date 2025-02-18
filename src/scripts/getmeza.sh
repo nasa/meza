@@ -82,9 +82,12 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			;;
 
 		rocky)
+			# https://docs.fedoraproject.org/en-US/epel/getting-started/
+			# just enable 'powertools' and install epel-release
 			dnf config-manager --set-enabled powertools
-			dnf install -y epel-release
 			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+			
+			
 			dnf module -y reset php
 			sed -i.meza -e 's;countme=1$;countme=1\nexclude = python38;g' /etc/yum.repos.d/epel.repo
 			echo "exclude = python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
@@ -150,7 +153,7 @@ case ${distro} in
 				;;
 
 			8.*)
-				dnf install -y python36 git ansible python3-libselinux
+				dnf install -y python36 git python3-libselinux
 				alternatives --set python /usr/bin/python3
 				;;
 
@@ -238,5 +241,13 @@ chown meza-ansible:wheel ${INSTALL_DIR}/meza
 sed -r -i "s/^Defaults\\s+requiretty/#Defaults requiretty/g;" /etc/sudoers
 sed -r -i "s/^Defaults\\s+\!visiblepw/#Defaults \\!visiblepw/g;" /etc/sudoers
 
+
+# install ansible into the ansible user's environment
+su - meza-ansible
+pip3 install --user ansible
+cd /opt/meza/config
+ansible-galaxy collection install -r ../requirements.yml
+
+# @todo At what point do we no longer need sudo?
 echo "meza command installed. Use it:"
-echo "  sudo meza deploy monolith"
+echo "  sudo meza deploy monolith -vvv"

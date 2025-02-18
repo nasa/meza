@@ -1,5 +1,8 @@
 ---
 
+# This task is not being used. The file is not being templated
+# There is no reference to es_reindex.yml in the playbooks or roles.
+
 - name: Ensure Elasticsearch reindex script on elasticsearch servers
   template:
     src: elastic-reindex.sh.j2

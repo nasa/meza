@@ -85,7 +85,7 @@ list:
   # Skin: Poncho - a skin for MediaWiki
   # Documentation: https://www.mediawiki.org/wiki/Skin:Poncho
   # Note - removed until we have time to debug it
-  #- name: Poncho
+  # - name: Poncho
   #  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
   #  type: skins
   #  version: "{{ mediawiki_default_branch }}"
@@ -98,15 +98,15 @@ list:
     type: skins
     version: tags/v4.39.1
 
-  # Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
-  # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
-  # Compatibility Policy: Master maintains backwards compatibility.
-  # - name: Medik
-  #   repo: https://bitbucket.org/wikiskripta/medik.git
-  #   type: skins
-  #   version: "tags/v4.0.3"
+    # Skin: Medik - a simple and clean MediaWiki skin based on Bootstrap 5
+    # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
+    # Compatibility Policy: Master maintains backwards compatibility.
+    # - name: Medik
+    #   repo: https://bitbucket.org/wikiskripta/medik.git
+    #   type: skins
+    #   version: "tags/v4.0.3"
 
-  #
-  # NOTE - If you'd like to use any other skins it is recommended
-  # that you add them in /opt/conf-meza/public/MezaLocalSkins.yml
-  #
+    #
+    # NOTE - If you'd like to use any other skins it is recommended
+    # that you add them in /opt/conf-meza/public/MezaLocalSkins.yml
+    #

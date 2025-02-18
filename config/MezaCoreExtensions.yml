@@ -249,22 +249,22 @@ list:
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
 
-# Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
-# - name: Html5mediator
-#   repo: https://github.com/lightbinder/Html5mediator.git
-#   version: master
-#   legacy_load: true
+  # Html5mediator - Defines a new tag - html5media - which can be used to embed HTML5 video and/or audio.
+  # - name: Html5mediator
+  #   repo: https://github.com/lightbinder/Html5mediator.git
+  #   version: master
+  #   legacy_load: true
 
   # ImageMap - Allows clickable image maps
   - name: ImageMap
     repo: https://github.com/wikimedia/mediawiki-extensions-ImageMap
     version: "{{ mediawiki_default_branch }}"
 
-#  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
-#  # to the annotations within software such as Google Docs
-#  - name: InlineComments
-#    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/InlineComments
-#    version: "{{ mediawiki_default_branch }}"
+  #  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
+  #  # to the annotations within software such as Google Docs
+  #  - name: InlineComments
+  #    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/InlineComments
+  #    version: "{{ mediawiki_default_branch }}"
 
   # InputBox - Adds already created HTML forms to wiki pages.
   - name: InputBox

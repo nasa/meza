@@ -73,7 +73,8 @@ list:
   # CommentStreams - Adds a commenting system for wikis.
   - name: CommentStreams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
-    version: "{{ mediawiki_default_branch }}"
+    version: "master"
+    composer_merge: true
     config: |
       $wgAllowDisplayTitle = true;
       $wgRestrictDisplayTitle = false;
@@ -105,6 +106,11 @@ list:
         [30, 50], # past 30 days, limit 50
         [0, 50]
       ];
+  # # Currently has a problem with 1.43
+  # # Crawler Protection
+  # - name: CrawlerProtection
+  #   repo: https://github.com/Mywikis/CrawlerProtection
+  #   version: "main"
 
   # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
   - name: CreateUserPage
@@ -244,7 +250,7 @@ list:
   # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
   - name: HeaderTabs
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/HeaderTabs
-    version: master
+    version: "master"
     config: |
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
@@ -288,6 +294,13 @@ list:
   - name: Lockdown
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Lockdown
     version: "{{ mediawiki_default_branch }}"
+    config: |
+      # handle web crawlers
+      # https://www.mediawiki.org/wiki/Handling_web_crawlers#Lockdown
+      $wgNamespaceProtection[NS_SPECIAL]['read'] = [ 'user' ];
+      $wgSpecialPageLockdown['Recentchangeslinked'] = ['user'];
+      $wgActionLockdown['history'] = [ 'user' ];
+
 
   # Maps - Extension to visualize and work with geographical information
   - name: Maps

@@ -501,6 +501,7 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
+      $wgGroupPermissions['sysop']['deletebatch'] = true;
 
   # CSS - Allows for custom CSS code in pages
   - name: CSS

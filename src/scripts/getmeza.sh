@@ -24,8 +24,8 @@ checkInternetConnection() {
 	declare -i sleepDuration=3
 	declare -i minutes=$(($pingRetries * $sleepDuration / 60))
 
-	while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 mirrorlist.centos.org >/dev/null 2>&1; do
-		echo "Could not connect to mirrorlist.centos.org. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
+	while [[ $pingRetries -gt 0 ]] && ! ping -c 1 -W 1 cdn.redhat.com >/dev/null 2>&1; do
+		echo "Could not connect to cdn.redhat.com. Internet connection might be down. Retrying (#$pingRetries) in $sleepDuration seconds..."
 		((pingRetries -= 1))
 		sleep $sleepDuration
 	done
@@ -86,8 +86,8 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			dnf install -y epel-release
 			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 			dnf module -y reset php
-			sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo
-			echo "exclude = ansible ansible-core python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
+			sed -i.meza -e 's;countme=1$;countme=1\nexclude = python38;g' /etc/yum.repos.d/epel.repo
+			echo "exclude = python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
 			cp /etc/yum.repos.d/epel.repo ${INSTALL_DIR}/conf-meza/epel.repo-withexcludes
 			cp /etc/yum.repos.d/Rocky-AppStream.repo ${INSTALL_DIR}/conf-meza/Rocky-AppStream.repo
 			;;
@@ -136,9 +136,8 @@ case ${distro} in
 		;;
 
 	rocky)
-		dnf install -y centos-release-ansible-29
 		dnf install -y python36
-		dnf install -y git ansible-2.9.27-1.el8.noarch
+		dnf install -y git ansible
 		dnf install -y python3-libselinux
 		alternatives --set python /usr/bin/python3
 		;;

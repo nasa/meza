@@ -14,6 +14,7 @@ list:
       wfLoadExtension( 'SemanticMediaWiki' );
       enableSemantics( $wgServer . '/' . $wikiId . '/' );
       $smwgQMaxSize = 5000;
+      $wgObjectCacheSessionExpiry = 86400;
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
@@ -75,6 +76,8 @@ list:
     config: |
       $wgPageFormsLinkAllRedLinksToForms = false;
       $wgPageFormsAutoeditNamespaces[] = NS_USER;
+      $wgPageFormsDelayReload = true;
+      $wgPageFormsUseDisplayTitle = false;
 
   # SESP - Adds additional (extra) special properties to all content pages in the wiki
   - name: SemanticExtraSpecialProperties
@@ -149,7 +152,17 @@ list:
     config: |
       $wgHeaderTabsEditTabLink = false;
       $wgHeaderTabsRenderSingleTab = true;
-   
+
+  # Gadgets
+  - name: Gadgets
+    repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets.git
+    version: "{{ mediawiki_default_branch }}"
+
+  # UrlGetParameters
+  - name: UrlGetParameters
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters.git
+    version: "{{ mediawiki_default_branch }}"
+
   # -----------------------------------------------------------------------------------------------------
   # -----------------------------------------------------------------------------------------------------
   # ---- Wikimedia extensions installed per default MW branch version  ----------------------------------
@@ -432,12 +445,28 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
+      # Set the default content format for Flow
       $wgFlowContentFormat = 'html';
-      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_TALK] = true;
-      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
-      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Permit at least one "group" to create Flow boards
       $wgGroupPermissions['user']['flow-create-board'] = true;
+
+      # Configure Content Model for namespaces using Flow
+      $wgNamespaceContentModels[NS_TALK] = 'flow-board';
+      $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
+      # Configure "subpages" feature for the same namespaces
+      $wgNamespacesWithSubpages[NS_TALK] = true;
+      $wgNamespacesWithSubpages[NS_USER_TALK] = true;
+
+      # Flow needs Parsoid if using VE, and with MW 1.39 Flow still ignores zero-config Parsoid
+      wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
+
+      $wgVirtualRestConfig['modules']['parsoid'] = [
+        'url' => "http://localhost:8080/$wikiId/rest.php",
+        'prefix' => $wikiId,
+      # Cookie forwarding should only be set by system administrators who understand the full context
+        'forwardCookies' => true
+      ];
 
   # CommentStreams - Adds a commenting system for wikis.
   - name: CommentStreams
@@ -477,6 +506,7 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
+      $wgGroupPermissions['sysop']['deletebatch'] = true;
 
   # CSS - Allows for custom CSS code in pages
   - name: CSS

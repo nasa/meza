@@ -299,6 +299,7 @@ list:
       # https://www.mediawiki.org/wiki/Handling_web_crawlers#Lockdown
       $wgNamespaceProtection[NS_SPECIAL]['read'] = [ 'user' ];
       $wgSpecialPageLockdown['Recentchangeslinked'] = ['user'];
+      $wgSpecialPageLockdown['WhatLinksHere'] = ['user'];
       $wgActionLockdown['history'] = [ 'user' ];
 
 

@@ -322,6 +322,8 @@ list:
     version: "dev-master"
     config: |
       wfLoadExtension( 'Mermaid' );
+      # Default theme for Mermaid diagrams. One of 'default', 'forest', 'dark', 'neutral', 'base'
+      $mermaidgDefaultTheme = 'neutral'; 
 
   # ModernTimeline - Provides a modern timeline visualization for Semantic MediaWiki as a result format.
   - name: ModernTimeline

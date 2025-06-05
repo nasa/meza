@@ -440,16 +440,16 @@ list:
   #   config: |
   #     wfLoadExtension( 'SemanticCompoundQueries' );
 
-  # # Uncomment the log line to debug issues; otherwise do not consume disk space
-  # # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
-  # # extension will update (null-edit) all pages that have been selected through that property.
-  # - name: SemanticDependencyUpdater
-  #   repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
-  #   version: master
-  #   config: |
-  #     $wgSDUProperty = 'Semantic Dependency';
-  #     $wgSDUUseJobQueue = false;
-  #     # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
+  # Uncomment the log line to debug issues; otherwise do not consume disk space
+  # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
+  # extension will update (null-edit) all pages that have been selected through that property.
+  - name: SemanticDependencyUpdater
+    repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
+    version: master
+    config: |
+      $wgSDUProperty = 'Semantic Dependency';
+      $wgSDUUseJobQueue = false;
+      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
   # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
   - name: SemanticDrilldown

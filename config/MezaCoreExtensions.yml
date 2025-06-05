@@ -63,6 +63,9 @@ list:
   # CodeMirror - Provides syntax highlighting in MediaWiki's wikitext editor.
   - name: CodeMirror
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CodeMirror
+    config: |
+      # Enables use of CodeMirror by default but still allow users to disable it
+      $wgDefaultUserOptions['usecodemirror'] = 1;
     version: "{{ mediawiki_default_branch }}"
 
   # CollapsibleVector - Restores the collapsible navigation portals to the sidebar that were removed from Vector skin.

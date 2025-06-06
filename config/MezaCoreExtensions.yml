@@ -433,12 +433,12 @@ list:
       $wgScribuntoUseGeSHi = true;
       $wgScribuntoUseCodeEditor = true;
 
-  # # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
-  # - name: SemanticCompoundQueries
-  #   composer: "mediawiki/semantic-compound-queries"
-  #   version: "3.x-dev"
-  #   config: |
-  #     wfLoadExtension( 'SemanticCompoundQueries' );
+  # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
+  - name: SemanticCompoundQueries
+    composer: "mediawiki/semantic-compound-queries"
+    version: "3.x-dev"
+    config: |
+      wfLoadExtension( 'SemanticCompoundQueries' );
 
   # Uncomment the log line to debug issues; otherwise do not consume disk space
   # SDU - Monitors pages for changes in their semantic data. If the "Semantic Dependency" property is found, this
@@ -504,16 +504,16 @@ list:
       $smwgPageSpecialProperties[] = '_DTITLE';
       $smwgPageSpecialProperties[] = '_ATTCH_LINK';
 
-  # # SRF - Extends SMW to display quesry results in many different formats
-  # - name: Semantic Result Formats
-  #   composer: "mediawiki/semantic-result-formats"
-  #   version: "4.0.1"
-  #   config: |
-  #     wfLoadExtension( 'SemanticResultFormats' );
-  #     # @TODO Document the formats as features.
-  #     $srfgFormats[] = 'excel';
-  #     $srfgFormats[] = 'filtered';
-  #     $srfgFormats[] = 'exhibit';
+  # SRF - Extends SMW to display quesry results in many different formats
+  - name: Semantic Result Formats
+    composer: "mediawiki/semantic-result-formats"
+    version: "^5.0"
+    config: |
+      wfLoadExtension( 'SemanticResultFormats' );
+      # @TODO Document the formats as features.
+      $srfgFormats[] = 'excel';
+      $srfgFormats[] = 'filtered';
+      $srfgFormats[] = 'exhibit';
 
   # Semantic Scribunto - Extends Scribunto base capability to support SMW
   - name: "Semantic Scribunto"

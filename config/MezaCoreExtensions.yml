@@ -1,5 +1,11 @@
 ---
 list:
+  # AbuseFilter - Provides a way to filter edits and log them, as well as block users from making certain edits.
+  - name: AbuseFilter
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AbuseFilter
+    version: "{{ mediawiki_default_branch }}"
+
+
   # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
   - name: AdminLinks
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AdminLinks
@@ -144,6 +150,12 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
+
+  # DiscussionTools - Tools for working with talk pages
+  - name: DiscussionTools
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DiscussionTools
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
 
   # DismissableSiteNotice - Allows users to close the sitenotice, using cookies
   - name: DismissableSiteNotice
@@ -293,6 +305,11 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/LabeledSectionTransclusion
     version: "{{ mediawiki_default_branch }}"
 
+  # Linter - Helps identify wikitext that will not be supported by the visual editor
+  - name: Linter
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Linter
+    version: "{{ mediawiki_default_branch }}"
+
   # Lockdown - namespace level protection
   - name: Lockdown
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Lockdown
@@ -305,6 +322,10 @@ list:
       $wgSpecialPageLockdown['WhatLinksHere'] = ['user'];
       $wgActionLockdown['history'] = [ 'user' ];
 
+  # LoginNotify - Notifies users about suspicious login attempts
+  - name: LoginNotify
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/LoginNotify
+    version: "{{ mediawiki_default_branch }}"
 
   # Maps - Extension to visualize and work with geographical information
   - name: Maps
@@ -312,6 +333,16 @@ list:
     version: "10.1.1"
     config: |
       wfLoadExtension( 'Maps' );
+
+  # Math - Allows to render mathematical formulas on wiki pages
+  - name: Math
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Math
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
+    config: |
+      wfLoadExtension( 'Math' );
+      $wgMathValidModes = ['mathml'];
+      $wgDefaultUserOptions['math'] = 'mathml';
 
   # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of
   # various media files in both local and remote repositories
@@ -357,6 +388,12 @@ list:
   - name: NumerAlpha
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/NumerAlpha
     version: "{{ mediawiki_default_branch }}"
+
+  # OATHAuth - Provides authentication using HMAC based one-time passwords
+  - name: OATHAuth
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/OATHAuth
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
 
   # OpenLayers - makes the OpenLayer JS library availbale internally to mediawiki
   - name: OpenLayers
@@ -432,6 +469,11 @@ list:
       $wgScribuntoDefaultEngine = 'luastandalone';
       $wgScribuntoUseGeSHi = true;
       $wgScribuntoUseCodeEditor = true;
+
+  # SecureLinkFixer - Automatically fixes URLs to use HTTPS when a site requires it
+  - name: SecureLinkFixer
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SecureLinkFixer
+    version: "{{ mediawiki_default_branch }}"
 
   # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
   - name: SemanticCompoundQueries
@@ -534,6 +576,11 @@ list:
     repo: https://github.com/jmnote/SimpleMathJax
     version: "main"
 
+  # SpamBlacklist - Provides protection against URLs in a blacklist
+  - name: SpamBlacklist
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SpamBlacklist
+    version: "{{ mediawiki_default_branch }}"
+
   # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which
   # you can't get with MediaWikis existing magic Words
   - name: SubpageFun
@@ -584,6 +631,11 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgThanksConfirmationRequired = false;
+
+  # TitleBlacklist - Allows administrators to forbid the creation of pages and user accounts with specified titles
+  - name: TitleBlacklist
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TitleBlacklist
+    version: "{{ mediawiki_default_branch }}"
 
   #  # ULS - Allows users to select a language and configure its support in an easy way.
   - name: UniversalLanguageSelector

@@ -707,11 +707,12 @@ list:
   # WhosOnline - Provides a special page that shows who is
   # (or has very recently been) logged-in
   # Use 'master' because bugfixes are not backported
-  - name: WhosOnline
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WhosOnline
-    version: "master"
-    config: |
-      $wgWhosOnlineShowRealName = true;
+  ## Disabled 2025-07-09 due to DB issues it triggers and the fact that it is only maintained by bots
+  # - name: WhosOnline
+  #   repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WhosOnline
+  #   version: "master"
+  #   config: |
+  #     $wgWhosOnlineShowRealName = true;
 
   # Widgets - Allows the creation of raw HTML pages that can be embedded (similarly to templates) in normal wiki pages.
   - name: Widgets

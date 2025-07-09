@@ -1,4 +1,4 @@
-<?php1
+<?php
 /**
  * This script will list the extensions found in Meza 'Core' extensions.
  * It relies on PHP's native 'yaml' parser which is not always included.

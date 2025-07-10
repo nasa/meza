@@ -89,7 +89,7 @@ list:
   #  repo: https://github.com/wikimedia/mediawiki-skins-Poncho.git
   #  type: skins
   #  version: "{{ mediawiki_default_branch }}"
-  
+
   # Timeless skin - A responsive skin developed as part of the Reading department's focus on mobile
   - name: Timeless
     repo: https://gerrit.wikimedia.org/r/mediawiki/skins/Timeless

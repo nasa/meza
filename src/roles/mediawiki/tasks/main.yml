@@ -73,7 +73,7 @@
   git:
     repo: https://github.com/wikimedia/mediawiki.git
     dest: "{{ m_mediawiki }}"
-    force: "{{ overwrite_local_git_changes }}"
+    force: "{{ overwrite_local_changes }}"
     version: "{{ mediawiki_version }}"
     depth: "{{ mediawiki_git_depth }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -132,7 +132,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
-    force: "{{ overwrite_local_git_changes }}"
+    force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
     umask: "0002"
@@ -158,7 +158,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
-    force: "{{ overwrite_local_git_changes }}"
+    force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
   with_items: "{{ meza_core_skins.list }}"
@@ -177,7 +177,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
-    force: "{{ overwrite_local_git_changes }}"
+    force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
     umask: "0002"
@@ -197,7 +197,7 @@
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
-    force: "{{ overwrite_local_git_changes }}"
+    force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
   with_items: "{{ meza_local_skins.list }}"
@@ -225,6 +225,10 @@
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
+    # Setting these in the task didn't modify the result so commenting, but
+    # leaving here for reference.
+    # lstrip_blocks: false
+    # trim_blocks: true
 
 - name: Run composer update on MediaWiki and composer local extensions
   become: true

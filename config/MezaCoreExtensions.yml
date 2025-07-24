@@ -362,7 +362,7 @@ list:
   # ModernTimeline - Provides a modern timeline visualization for Semantic MediaWiki as a result format.
   - name: ModernTimeline
     composer: professional-wiki/modern-timeline
-    version: "1.2.1"
+    version: "~2.0"
     config: |
       wfLoadExtension( 'ModernTimeline' );
 

@@ -75,6 +75,7 @@
     dest: "{{ m_mediawiki }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ mediawiki_version }}"
+    single_branch: true
     depth: "{{ mediawiki_git_depth }}"
     refspec: "{{ item.refspec | default('') }}"
     track_submodules: false

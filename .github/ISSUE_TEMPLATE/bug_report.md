@@ -43,4 +43,4 @@ If your bug is about a user experience, it is most likely an **upstream** bug in
  - Device: [e.g. iPhone6, Pixel7]
  - OS: [e.g. iOS8.1, Android 16]
  - Browser [e.g. stock browser, safari, chrome, firefox]
- - Browser Version [e.g. 22]
+ - Browser version [e.g. 22]

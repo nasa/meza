@@ -20,6 +20,6 @@ A clear and concise description of any alternative solutions or features you've 
 Add any other context or screenshots about the feature request here.
 
 **Environment**
-- Host environment or Virtual Machine details: (VirtualBox, VMWare, Digital Ocean, AWS, etc)
+- Host environment or Virtual Machine details: (VirtualBox, VMWare, Digital Ocean, AWS, etc.)
 - Operating System: (`cat /etc/os-release` or `uname -a`)
 - meza version: (`meza --version`)

@@ -71,7 +71,7 @@ enable_wiki_emails: true
 use_certbot: false
 
 # Enable the use of Kibana as an interface to ElasticSearch
-m_install_kibana: true
+m_install_kibana: false
 
 enable_haproxy_stats: false
 haproxy_stats_user: admin

@@ -68,7 +68,7 @@ m_force_debug: false
 enable_wiki_emails: true
 
 # Enable the use of LetsEncrypt certificates
-use_certbot: true
+use_certbot: false
 
 # Enable the use of Kibana as an interface to ElasticSearch
 m_install_kibana: true

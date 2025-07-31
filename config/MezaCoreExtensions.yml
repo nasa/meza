@@ -4,7 +4,7 @@ list:
   - name: AbuseFilter
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AbuseFilter
     version: "{{ mediawiki_default_branch }}"
-
+    composer_merge: true
 
   # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
   - name: AdminLinks

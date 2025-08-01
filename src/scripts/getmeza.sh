@@ -2,7 +2,8 @@
 #
 # Bootstrap meza
 #
-#
+# @TODO refactor and document this script better
+# @See https://github.com/freephile/meza/issues/172#issuecomment-3141998590 
 
 if [ "$(whoami)" != "root" ]; then
 	echo "Try running this script with sudo: \"sudo bash getmeza.sh\""

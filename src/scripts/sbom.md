@@ -11,24 +11,33 @@ This directory contains automatically generated Software Bill of Materials (SBOM
 
 ## Generation
 
-SBOMs are automatically generated:
+SBOMs are automatically generated from both `composer.lock` and `composer.local.lock` (if present):
 
-1. **On every push** that modifies `composer.lock` or `composer.json`
+1. **On every push** that modifies `composer.lock`, `composer.json`, or `composer.local.lock`
 2. **Weekly** on Sundays at 2 AM UTC
 3. **Manually** via GitHub Actions workflow dispatch
+
+### Dependency Sources
+
+The SBOM generator analyzes multiple files to create a comprehensive inventory:
+
+- **`composer.lock`**: Primary dependency file with locked versions
+- **`composer.local.lock`**: Local overrides and additional dependencies (if present)
+
+When both files contain the same package, the version from `composer.lock` takes precedence. Additional packages from `composer.local.lock` are included with a `[LOCAL]` indicator in the text format.
 
 ### Manual Generation
 
 To generate SBOM files locally:
 
 ```bash
-# Generate all formats
+# Generate all formats (automatically detects composer.local.lock)
 php scripts/generate-sbom.php
 
 # Generate specific format
 php scripts/generate-sbom.php --format spdx --output my-sbom.json
 
-# Show package statistics
+# Show package statistics including source file breakdown
 php scripts/generate-sbom.php --stats
 ```
 
@@ -42,6 +51,7 @@ SPDX is an open standard for communicating software bill of materials informatio
 - License information
 - Security vulnerability data
 - Relationship information
+- Source file tracking (composer.lock vs composer.local.lock)
 
 **Use cases:**
 - License compliance
@@ -52,10 +62,11 @@ SPDX is an open standard for communicating software bill of materials informatio
 
 CycloneDX is designed for application security contexts and supply chain component analysis. It includes:
 
-- Component inventory
+- Component inventory with source file metadata
 - Dependency relationships
 - License and copyright information
 - Known vulnerabilities
+- Custom properties for Meza-specific data
 
 **Use cases:**
 - DevSecOps integration
@@ -66,8 +77,9 @@ CycloneDX is designed for application security contexts and supply chain compone
 
 Human-readable format showing:
 - All dependencies organized by scope (runtime/development/platform)
+- Source file indicators (`[LOCAL]` for composer.local.lock packages)
 - License information for each package
-- Summary statistics
+- Summary statistics by source file
 
 ## Package Categories
 
@@ -88,9 +100,15 @@ System-level requirements:
 - PHP runtime and extensions
 - Operating system requirements
 
+### Local Dependencies
+Additional packages from `composer.local.lock`:
+- Environment-specific overrides
+- Development customizations
+- Local testing dependencies
+
 ## License Compliance
 
-The SBOM includes comprehensive license information for all dependencies. Key licenses include:
+The SBOM includes comprehensive license information for all dependencies from both composer files. Key licenses include:
 
 - **GPL-2.0-or-later**: MediaWiki and related components
 - **MIT**: Many PHP libraries
@@ -103,10 +121,10 @@ Review the license summary in the text format SBOM for complete details.
 
 SBOMs are valuable for:
 
-1. **Vulnerability Management**: Identify components with known security issues
-2. **Supply Chain Security**: Track all software components and their sources
+1. **Vulnerability Management**: Identify components with known security issues across all dependency sources
+2. **Supply Chain Security**: Track all software components and their sources (including local modifications)
 3. **Compliance**: Meet regulatory requirements for software transparency
-4. **Risk Assessment**: Evaluate the security posture of dependencies
+4. **Risk Assessment**: Evaluate the security posture of both standard and local dependencies
 
 ## Integration
 
@@ -119,6 +137,8 @@ These SBOM files can be integrated with:
 
 ## Updates
 
-SBOMs are automatically updated when dependencies change. For the most current information, always refer to the latest generated files.
+SBOMs are automatically updated when dependencies change in either `composer.lock` or `composer.local.lock`. For the most current information, always refer to the latest generated files.
+
+The generator will note when packages exist in both files and which version is being used in the final SBOM.
 
 Last updated: [Generated timestamp in SBOM files]

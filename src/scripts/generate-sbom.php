@@ -1,9 +1,10 @@
+#!/usr/bin/env php
 <?php
 
 /**
  * Generate Software Bill of Materials (SBOM) for Meza project
  * 
- * This script parses composer.lock and generates SBOM in multiple formats:
+ * This script parses composer.lock and composer.local.lock to generate SBOM in multiple formats:
  * - SPDX JSON format
  * - CycloneDX JSON format
  * - Human-readable format
@@ -12,11 +13,12 @@
 class SBOMGenerator
 {
     private array $composerData;
+    private array $composerLocalData;
     private array $packages = [];
     private string $projectName;
     private string $projectVersion;
 
-    public function __construct(string $composerLockPath, string $projectName = 'Meza', string $projectVersion = '43.20.0')
+    public function __construct(string $composerLockPath, string $projectName = 'Meza', string $projectVersion = '1.1.0')
     {
         $this->projectName = $projectName;
         $this->projectVersion = $projectVersion;
@@ -25,6 +27,7 @@ class SBOMGenerator
             throw new Exception("Composer lock file not found: $composerLockPath");
         }
         
+        // Load main composer.lock
         $content = file_get_contents($composerLockPath);
         $this->composerData = json_decode($content, true);
         
@@ -32,46 +35,109 @@ class SBOMGenerator
             throw new Exception("Invalid JSON in composer.lock: " . json_last_error_msg());
         }
         
+        // Load composer.local.lock if it exists
+        $composerLocalLockPath = dirname($composerLockPath) . '/composer.local.lock';
+        if (file_exists($composerLocalLockPath)) {
+            echo "Found composer.local.lock, including local dependencies...\n";
+            $localContent = file_get_contents($composerLocalLockPath);
+            $this->composerLocalData = json_decode($localContent, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception("Invalid JSON in composer.local.lock: " . json_last_error_msg());
+            }
+        } else {
+            echo "No composer.local.lock found, using only composer.lock\n";
+            $this->composerLocalData = [];
+        }
+        
         $this->parsePackages();
     }
 
     private function parsePackages(): void
     {
-        // Parse main packages
+        $packageNames = [];
+        
+        // Parse main packages from composer.lock
         if (isset($this->composerData['packages'])) {
             foreach ($this->composerData['packages'] as $package) {
-                $this->packages[] = $this->extractPackageInfo($package, 'runtime');
+                $packageInfo = $this->extractPackageInfo($package, 'runtime', 'composer.lock');
+                $this->packages[] = $packageInfo;
+                $packageNames[$package['name']] = true;
             }
         }
         
-        // Parse dev packages
+        // Parse dev packages from composer.lock
         if (isset($this->composerData['packages-dev'])) {
             foreach ($this->composerData['packages-dev'] as $package) {
-                $this->packages[] = $this->extractPackageInfo($package, 'development');
+                $packageInfo = $this->extractPackageInfo($package, 'development', 'composer.lock');
+                $this->packages[] = $packageInfo;
+                $packageNames[$package['name']] = true;
             }
         }
         
-        // Add platform requirements
-        if (isset($this->composerData['platform'])) {
-            foreach ($this->composerData['platform'] as $name => $version) {
-                $this->packages[] = [
-                    'name' => $name,
-                    'version' => $version === '*' ? 'any' : $version,
-                    'type' => 'platform',
-                    'scope' => 'runtime',
-                    'license' => $this->getPlatformLicense($name),
-                    'description' => $this->getPlatformDescription($name),
-                    'homepage' => null,
-                    'repository' => null,
-                    'authors' => [],
-                    'source' => null,
-                    'dist' => null
-                ];
+        // Parse packages from composer.local.lock (if exists)
+        if (!empty($this->composerLocalData)) {
+            if (isset($this->composerLocalData['packages'])) {
+                foreach ($this->composerLocalData['packages'] as $package) {
+                    // Skip if package already exists from main composer.lock
+                    if (!isset($packageNames[$package['name']])) {
+                        $packageInfo = $this->extractPackageInfo($package, 'runtime', 'composer.local.lock');
+                        $this->packages[] = $packageInfo;
+                        $packageNames[$package['name']] = true;
+                    } else {
+                        echo "Note: Package {$package['name']} exists in both files, using composer.lock version\n";
+                    }
+                }
             }
+            
+            if (isset($this->composerLocalData['packages-dev'])) {
+                foreach ($this->composerLocalData['packages-dev'] as $package) {
+                    // Skip if package already exists from main composer.lock
+                    if (!isset($packageNames[$package['name']])) {
+                        $packageInfo = $this->extractPackageInfo($package, 'development', 'composer.local.lock');
+                        $this->packages[] = $packageInfo;
+                        $packageNames[$package['name']] = true;
+                    } else {
+                        echo "Note: Package {$package['name']} exists in both files, using composer.lock version\n";
+                    }
+                }
+            }
+        }
+        
+        // Add platform requirements (prioritize composer.lock, fall back to composer.local.lock)
+        $platformRequirements = [];
+        
+        if (isset($this->composerData['platform'])) {
+            $platformRequirements = array_merge($platformRequirements, $this->composerData['platform']);
+        }
+        
+        if (isset($this->composerLocalData['platform'])) {
+            foreach ($this->composerLocalData['platform'] as $name => $version) {
+                if (!isset($platformRequirements[$name])) {
+                    $platformRequirements[$name] = $version;
+                }
+            }
+        }
+        
+        foreach ($platformRequirements as $name => $version) {
+            $this->packages[] = [
+                'name' => $name,
+                'version' => $version === '*' ? 'any' : $version,
+                'type' => 'platform',
+                'scope' => 'runtime',
+                'license' => $this->getPlatformLicense($name),
+                'description' => $this->getPlatformDescription($name),
+                'homepage' => null,
+                'repository' => null,
+                'authors' => [],
+                'source' => null,
+                'dist' => null,
+                'source_file' => isset($this->composerData['platform'][$name]) ? 'composer.lock' : 'composer.local.lock'
+            ];
         }
     }
 
-    private function extractPackageInfo(array $package, string $scope): array
+    private function extractPackageInfo(array $package, string $scope, string $sourceFile): array
     {
         return [
             'name' => $package['name'] ?? 'unknown',
@@ -87,7 +153,8 @@ class SBOMGenerator
             'dist' => $package['dist'] ?? null,
             'time' => $package['time'] ?? null,
             'keywords' => $package['keywords'] ?? [],
-            'support' => $package['support'] ?? []
+            'support' => $package['support'] ?? [],
+            'source_file' => $sourceFile
         ];
     }
 
@@ -127,6 +194,7 @@ class SBOMGenerator
                 'creators' => ['Tool: Meza SBOM Generator'],
                 'licenseListVersion' => '3.21'
             ],
+            'documentDescribes' => ['SPDXRef-Package-' . $this->projectName],
             'packageVerificationCode' => [
                 'packageVerificationCodeValue' => hash('sha1', json_encode($this->packages))
             ],
@@ -143,7 +211,8 @@ class SBOMGenerator
             'licenseConcluded' => 'GPL-3.0-or-later',
             'licenseDeclared' => 'GPL-3.0-or-later',
             'copyrightText' => 'Copyright Enterprise MediaWiki',
-            'supplier' => 'Organization: Enterprise MediaWiki'
+            'supplier' => 'Organization: Enterprise MediaWiki',
+            'description' => 'MediaWiki Enterprise Application Platform'
         ];
 
         // Add dependencies
@@ -157,8 +226,13 @@ class SBOMGenerator
                 'licenseConcluded' => $this->formatLicenses($package['license']),
                 'licenseDeclared' => $this->formatLicenses($package['license']),
                 'copyrightText' => 'NOASSERTION',
+                'comment' => 'Source: ' . ($package['source_file'] ?? 'unknown'),
                 'externalRefs' => []
             ];
+
+            if (!empty($package['description'])) {
+                $spdxPackage['description'] = $package['description'];
+            }
 
             if ($package['homepage']) {
                 $spdxPackage['externalRefs'][] = [
@@ -210,7 +284,13 @@ class SBOMGenerator
                 'bom-ref' => $package['name'] . '@' . $package['version'],
                 'name' => $package['name'],
                 'version' => $package['version'],
-                'scope' => $package['scope'] === 'development' ? 'optional' : 'required'
+                'scope' => $package['scope'] === 'development' ? 'optional' : 'required',
+                'properties' => [
+                    [
+                        'name' => 'meza:source_file',
+                        'value' => $package['source_file'] ?? 'unknown'
+                    ]
+                ]
             ];
 
             if (!empty($package['description'])) {
@@ -233,6 +313,9 @@ class SBOMGenerator
             }
 
             if ($package['repository']) {
+                if (!isset($component['externalReferences'])) {
+                    $component['externalReferences'] = [];
+                }
                 $component['externalReferences'][] = [
                     'type' => 'vcs',
                     'url' => $package['repository']
@@ -250,9 +333,22 @@ class SBOMGenerator
         $output = "Software Bill of Materials (SBOM) for {$this->projectName}\n";
         $output .= str_repeat("=", 60) . "\n";
         $output .= "Generated: " . date('Y-m-d H:i:s T') . "\n";
-        $output .= "Total Components: " . count($this->packages) . "\n\n";
+        $output .= "Total Components: " . count($this->packages) . "\n";
+        
+        // Show source file breakdown
+        $sourceFiles = [];
+        foreach ($this->packages as $package) {
+            $sourceFile = $package['source_file'] ?? 'unknown';
+            $sourceFiles[$sourceFile] = ($sourceFiles[$sourceFile] ?? 0) + 1;
+        }
+        
+        $output .= "\nSource Files:\n";
+        foreach ($sourceFiles as $file => $count) {
+            $output .= "  $file: $count packages\n";
+        }
+        $output .= "\n";
 
-        // Group by scope
+        // Group by scope and source file
         $byScope = [];
         foreach ($this->packages as $package) {
             $byScope[$package['scope']][] = $package;
@@ -267,7 +363,8 @@ class SBOMGenerator
             usort($byScope[$scope], fn($a, $b) => strcmp($a['name'], $b['name']));
 
             foreach ($byScope[$scope] as $package) {
-                $output .= sprintf("%-40s %s\n", $package['name'], $package['version']);
+                $sourceIndicator = isset($package['source_file']) && $package['source_file'] === 'composer.local.lock' ? ' [LOCAL]' : '';
+                $output .= sprintf("%-40s %-15s%s\n", $package['name'], $package['version'], $sourceIndicator);
                 
                 if (!empty($package['license'])) {
                     $licenses = is_array($package['license']) ? implode(', ', $package['license']) : $package['license'];
@@ -303,10 +400,13 @@ class SBOMGenerator
         return $output;
     }
 
-    private function formatLicenses(array $licenses): string
+    private function formatLicenses($licenses): string
     {
         if (empty($licenses)) {
             return 'NOASSERTION';
+        }
+        if (is_string($licenses)) {
+            return $licenses;
         }
         if (count($licenses) === 1) {
             return $licenses[0];
@@ -364,12 +464,16 @@ class SBOMGenerator
             'total' => count($this->packages),
             'by_scope' => [],
             'by_type' => [],
-            'by_license' => []
+            'by_license' => [],
+            'by_source_file' => []
         ];
 
         foreach ($this->packages as $package) {
             $stats['by_scope'][$package['scope']] = ($stats['by_scope'][$package['scope']] ?? 0) + 1;
             $stats['by_type'][$package['type']] = ($stats['by_type'][$package['type']] ?? 0) + 1;
+            
+            $sourceFile = $package['source_file'] ?? 'unknown';
+            $stats['by_source_file'][$sourceFile] = ($stats['by_source_file'][$sourceFile] ?? 0) + 1;
             
             $licenses = is_array($package['license']) ? $package['license'] : [$package['license']];
             foreach ($licenses as $license) {
@@ -394,12 +498,14 @@ if (php_sapi_name() === 'cli') {
         echo "  -o, --output FILE     Output file (default: auto-generated)\n";
         echo "  --stats               Show package statistics\n";
         echo "  -h, --help            Show this help\n";
+        echo "\n";
+		echo "The script expects composer.lock at /opt/htdocs/mediawiki/composer.lock\n";
+		echo "The script will also automatically include composer.local.lock if found.\n";
+
         exit(0);
     }
 
     try {
-        // $composerLockPath = __DIR__ . '/../composer.lock';
-		// hardcoded path for Meza project
         $composerLockPath = '/opt/htdocs/mediawiki/composer.lock';
         $generator = new SBOMGenerator($composerLockPath, 'Meza');
         
@@ -408,7 +514,12 @@ if (php_sapi_name() === 'cli') {
             echo "Package Statistics:\n";
             echo "Total packages: {$stats['total']}\n\n";
             
-            echo "By scope:\n";
+            echo "By source file:\n";
+            foreach ($stats['by_source_file'] as $file => $count) {
+                echo "  $file: $count\n";
+            }
+            
+            echo "\nBy scope:\n";
             foreach ($stats['by_scope'] as $scope => $count) {
                 echo "  $scope: $count\n";
             }

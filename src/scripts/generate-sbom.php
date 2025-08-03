@@ -206,13 +206,13 @@ class SBOMGenerator
             'SPDXID' => 'SPDXRef-Package-' . $this->projectName,
             'name' => $this->projectName,
             'versionInfo' => $this->projectVersion,
-            'downloadLocation' => 'https://github.com/enterprisemediawiki/meza',
+            'downloadLocation' => 'https://github.com/nasa/meza',
             'filesAnalyzed' => false,
             'licenseConcluded' => 'GPL-3.0-or-later',
             'licenseDeclared' => 'GPL-3.0-or-later',
-            'copyrightText' => 'Copyright Enterprise MediaWiki',
-            'supplier' => 'Organization: Enterprise MediaWiki',
-            'description' => 'MediaWiki Enterprise Application Platform'
+            'copyrightText' => 'Copyright NASA',
+            'supplier' => 'Organization: NASA',
+            'description' => 'MediaWiki E-Z Administration'
         ];
 
         // Add dependencies
@@ -269,9 +269,19 @@ class SBOMGenerator
                     'bom-ref' => $this->projectName,
                     'name' => $this->projectName,
                     'version' => $this->projectVersion,
-                    'description' => 'MediaWiki Enterprise Application Platform',
+                    'description' => 'MediaWiki E-Z Administration',
                     'licenses' => [
                         ['license' => ['id' => 'GPL-3.0-or-later']]
+                    ],
+                    'externalReferences' => [
+                        [
+                            'type' => 'vcs',
+                            'url' => 'https://github.com/nasa/meza'
+                        ],
+                        [
+                            'type' => 'website',
+                            'url' => 'https://www.mediawiki.org/wiki/Meza'
+                        ]
                     ]
                 ]
             ],
@@ -499,8 +509,8 @@ if (php_sapi_name() === 'cli') {
         echo "  --stats               Show package statistics\n";
         echo "  -h, --help            Show this help\n";
         echo "\n";
-		echo "The script expects composer.lock at /opt/htdocs/mediawiki/composer.lock\n";
-		echo "The script will also automatically include composer.local.lock if found.\n";
+        echo "The script expects composer.lock at /opt/htdocs/mediawiki/composer.lock\n";
+        echo "The script will also automatically include composer.local.lock if found.\n";
 
         exit(0);
     }

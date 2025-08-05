@@ -1,0 +1,568 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Generate Software Bill of Materials (SBOM) for Meza project
+ * 
+ * This script parses composer.lock and composer.local.lock to generate SBOM in multiple formats:
+ * - SPDX JSON format
+ * - CycloneDX JSON format
+ * - Human-readable format
+ */
+
+class SBOMGenerator
+{
+	private array $composerData;
+	private array $composerLocalData;
+	private array $packages = [];
+	private string $projectName;
+	private string $projectVersion;
+
+	public function __construct(string $composerLockPath, string $projectName = 'Meza', string $projectVersion = '1.1.0')
+	{
+		$this->projectName = $projectName;
+		$this->projectVersion = $projectVersion;
+		
+		if (!file_exists($composerLockPath)) {
+			throw new Exception("Composer lock file not found: $composerLockPath");
+		}
+		
+		// Load main composer.lock
+		$content = file_get_contents($composerLockPath);
+		$this->composerData = json_decode($content, true);
+		
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			throw new Exception("Invalid JSON in composer.lock: " . json_last_error_msg());
+		}
+		
+		// Load composer.local.lock if it exists
+		$composerLocalLockPath = dirname($composerLockPath) . '/composer.local.lock';
+		if (file_exists($composerLocalLockPath)) {
+			echo "Found composer.local.lock, including local dependencies...\n";
+			$localContent = file_get_contents($composerLocalLockPath);
+			$this->composerLocalData = json_decode($localContent, true);
+			
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				throw new Exception("Invalid JSON in composer.local.lock: " . json_last_error_msg());
+			}
+		} else {
+			echo "No composer.local.lock found, using only composer.lock\n";
+			$this->composerLocalData = [];
+		}
+		
+		$this->parsePackages();
+	}
+
+	private function parsePackages(): void
+	{
+		$packageNames = [];
+		
+		// Parse main packages from composer.lock
+		if (isset($this->composerData['packages'])) {
+			foreach ($this->composerData['packages'] as $package) {
+				$packageInfo = $this->extractPackageInfo($package, 'runtime', 'composer.lock');
+				$this->packages[] = $packageInfo;
+				$packageNames[$package['name']] = true;
+			}
+		}
+		
+		// Parse dev packages from composer.lock
+		if (isset($this->composerData['packages-dev'])) {
+			foreach ($this->composerData['packages-dev'] as $package) {
+				$packageInfo = $this->extractPackageInfo($package, 'development', 'composer.lock');
+				$this->packages[] = $packageInfo;
+				$packageNames[$package['name']] = true;
+			}
+		}
+		
+		// Parse packages from composer.local.lock (if exists)
+		if (!empty($this->composerLocalData)) {
+			if (isset($this->composerLocalData['packages'])) {
+				foreach ($this->composerLocalData['packages'] as $package) {
+					// Skip if package already exists from main composer.lock
+					if (!isset($packageNames[$package['name']])) {
+						$packageInfo = $this->extractPackageInfo($package, 'runtime', 'composer.local.lock');
+						$this->packages[] = $packageInfo;
+						$packageNames[$package['name']] = true;
+					} else {
+						echo "Note: Package {$package['name']} exists in both files, using composer.lock version\n";
+					}
+				}
+			}
+			
+			if (isset($this->composerLocalData['packages-dev'])) {
+				foreach ($this->composerLocalData['packages-dev'] as $package) {
+					// Skip if package already exists from main composer.lock
+					if (!isset($packageNames[$package['name']])) {
+						$packageInfo = $this->extractPackageInfo($package, 'development', 'composer.local.lock');
+						$this->packages[] = $packageInfo;
+						$packageNames[$package['name']] = true;
+					} else {
+						echo "Note: Package {$package['name']} exists in both files, using composer.lock version\n";
+					}
+				}
+			}
+		}
+		
+		// Add platform requirements (prioritize composer.lock, fall back to composer.local.lock)
+		$platformRequirements = [];
+		
+		if (isset($this->composerData['platform'])) {
+			$platformRequirements = array_merge($platformRequirements, $this->composerData['platform']);
+		}
+		
+		if (isset($this->composerLocalData['platform'])) {
+			foreach ($this->composerLocalData['platform'] as $name => $version) {
+				if (!isset($platformRequirements[$name])) {
+					$platformRequirements[$name] = $version;
+				}
+			}
+		}
+		
+		foreach ($platformRequirements as $name => $version) {
+			$this->packages[] = [
+				'name' => $name,
+				'version' => $version === '*' ? 'any' : $version,
+				'type' => 'platform',
+				'scope' => 'runtime',
+				'license' => $this->getPlatformLicense($name),
+				'description' => $this->getPlatformDescription($name),
+				'homepage' => null,
+				'repository' => null,
+				'authors' => [],
+				'source' => null,
+				'dist' => null,
+				'source_file' => isset($this->composerData['platform'][$name]) ? 'composer.lock' : 'composer.local.lock'
+			];
+		}
+	}
+
+	private function extractPackageInfo(array $package, string $scope, string $sourceFile): array
+	{
+		return [
+			'name' => $package['name'] ?? 'unknown',
+			'version' => $package['version'] ?? 'unknown',
+			'type' => $package['type'] ?? 'library',
+			'scope' => $scope,
+			'license' => $package['license'] ?? [],
+			'description' => $package['description'] ?? '',
+			'homepage' => $package['homepage'] ?? null,
+			'repository' => $package['source']['url'] ?? null,
+			'authors' => $package['authors'] ?? [],
+			'source' => $package['source'] ?? null,
+			'dist' => $package['dist'] ?? null,
+			'time' => $package['time'] ?? null,
+			'keywords' => $package['keywords'] ?? [],
+			'support' => $package['support'] ?? [],
+			'source_file' => $sourceFile
+		];
+	}
+
+	private function getPlatformLicense(string $name): array
+	{
+		if (str_starts_with($name, 'php')) {
+			return ['PHP-3.01'];
+		}
+		if (str_starts_with($name, 'ext-')) {
+			return ['PHP-3.01']; // Most PHP extensions use PHP license
+		}
+		return ['Unknown'];
+	}
+
+	private function getPlatformDescription(string $name): string
+	{
+		if ($name === 'php') {
+			return 'PHP runtime';
+		}
+		if (str_starts_with($name, 'ext-')) {
+			$ext = substr($name, 4);
+			return "PHP $ext extension";
+		}
+		return "Platform requirement: $name";
+	}
+
+	public function generateSPDXJson(): array
+	{
+		$spdx = [
+			'spdxVersion' => 'SPDX-2.3',
+			'dataLicense' => 'CC0-1.0',
+			'SPDXID' => 'SPDXRef-DOCUMENT',
+			'name' => $this->projectName . ' SBOM',
+			'documentNamespace' => 'https://meza.org/sbom/' . uniqid(),
+			'creationInfo' => [
+				'created' => date('c'),
+				'creators' => ['Tool: Meza SBOM Generator'],
+				'licenseListVersion' => '3.21'
+			],
+			'documentDescribes' => ['SPDXRef-Package-' . $this->projectName],
+			'packageVerificationCode' => [
+				'packageVerificationCodeValue' => hash('sha1', json_encode($this->packages))
+			],
+			'packages' => []
+		];
+
+		// Add root package
+		$spdx['packages'][] = [
+			'SPDXID' => 'SPDXRef-Package-' . $this->projectName,
+			'name' => $this->projectName,
+			'versionInfo' => $this->projectVersion,
+			'downloadLocation' => 'https://github.com/nasa/meza',
+			'filesAnalyzed' => false,
+			'licenseConcluded' => 'GPL-3.0-or-later',
+			'licenseDeclared' => 'GPL-3.0-or-later',
+			'copyrightText' => 'Copyright NASA',
+			'supplier' => 'Organization: NASA',
+			'description' => 'MediaWiki E-Z Administration'
+		];
+
+		// Add dependencies
+		foreach ($this->packages as $package) {
+			$spdxPackage = [
+				'SPDXID' => 'SPDXRef-Package-' . str_replace(['/', '-', '.'], '_', $package['name']),
+				'name' => $package['name'],
+				'versionInfo' => $package['version'],
+				'downloadLocation' => $package['repository'] ?? 'NOASSERTION',
+				'filesAnalyzed' => false,
+				'licenseConcluded' => $this->formatLicenses($package['license']),
+				'licenseDeclared' => $this->formatLicenses($package['license']),
+				'copyrightText' => 'NOASSERTION',
+				'comment' => 'Source: ' . ($package['source_file'] ?? 'unknown'),
+				'externalRefs' => []
+			];
+
+			if (!empty($package['description'])) {
+				$spdxPackage['description'] = $package['description'];
+			}
+
+			if ($package['homepage']) {
+				$spdxPackage['externalRefs'][] = [
+					'referenceCategory' => 'OTHER',
+					'referenceType' => 'website',
+					'referenceLocator' => $package['homepage']
+				];
+			}
+
+			$spdx['packages'][] = $spdxPackage;
+		}
+
+		return $spdx;
+	}
+
+	public function generateCycloneDXJson(): array
+	{
+		$cycloneDx = [
+			'bomFormat' => 'CycloneDX',
+			'specVersion' => '1.4',
+			'serialNumber' => 'urn:uuid:' . $this->generateUuid(),
+			'version' => 1,
+			'metadata' => [
+				'timestamp' => date('c'),
+				'tools' => [
+					[
+						'vendor' => 'NASA',
+						'name' => 'SBOM Generator',
+						'version' => '1.0.0'
+					]
+				],
+				'component' => [
+					'type' => 'application',
+					'bom-ref' => $this->projectName,
+					'name' => $this->projectName,
+					'version' => $this->projectVersion,
+					'description' => 'MediaWiki E-Z Administration',
+					'licenses' => [
+						['license' => ['id' => 'GPL-3.0-or-later']]
+					],
+					'externalReferences' => [
+						[
+							'type' => 'vcs',
+							'url' => 'https://github.com/nasa/meza'
+						],
+						[
+							'type' => 'website',
+							'url' => 'https://www.mediawiki.org/wiki/Meza'
+						]
+					]
+				]
+			],
+			'components' => []
+		];
+
+		foreach ($this->packages as $package) {
+			$component = [
+				'type' => $this->mapPackageType($package['type']),
+				'bom-ref' => $package['name'] . '@' . $package['version'],
+				'name' => $package['name'],
+				'version' => $package['version'],
+				'scope' => $package['scope'] === 'development' ? 'optional' : 'required',
+				'properties' => [
+					[
+						'name' => 'meza:source_file',
+						'value' => $package['source_file'] ?? 'unknown'
+					]
+				]
+			];
+
+			if (!empty($package['description'])) {
+				$component['description'] = $package['description'];
+			}
+
+			if (!empty($package['license'])) {
+				$component['licenses'] = array_map(function($license) {
+					return ['license' => ['id' => $license]];
+				}, is_array($package['license']) ? $package['license'] : [$package['license']]);
+			}
+
+			if ($package['homepage']) {
+				$component['externalReferences'] = [
+					[
+						'type' => 'website',
+						'url' => $package['homepage']
+					]
+				];
+			}
+
+			if ($package['repository']) {
+				if (!isset($component['externalReferences'])) {
+					$component['externalReferences'] = [];
+				}
+				$component['externalReferences'][] = [
+					'type' => 'vcs',
+					'url' => $package['repository']
+				];
+			}
+
+			$cycloneDx['components'][] = $component;
+		}
+
+		return $cycloneDx;
+	}
+
+	public function generateHumanReadable(): string
+	{
+		$output = "Software Bill of Materials (SBOM) for {$this->projectName}\n";
+		$output .= str_repeat("=", 60) . "\n";
+		$output .= "Generated: " . date('Y-m-d H:i:s T') . "\n";
+		$output .= "Total Components: " . count($this->packages) . "\n";
+		
+		// Show source file breakdown
+		$sourceFiles = [];
+		foreach ($this->packages as $package) {
+			$sourceFile = $package['source_file'] ?? 'unknown';
+			$sourceFiles[$sourceFile] = ($sourceFiles[$sourceFile] ?? 0) + 1;
+		}
+		
+		$output .= "\nSource Files:\n";
+		foreach ($sourceFiles as $file => $count) {
+			$output .= "  $file: $count packages\n";
+		}
+		$output .= "\n";
+
+		// Group by scope and source file
+		$byScope = [];
+		foreach ($this->packages as $package) {
+			$byScope[$package['scope']][] = $package;
+		}
+
+		foreach (['runtime', 'development', 'platform'] as $scope) {
+			if (empty($byScope[$scope])) continue;
+			
+			$output .= strtoupper($scope) . " DEPENDENCIES (" . count($byScope[$scope]) . ")\n";
+			$output .= str_repeat("-", 40) . "\n";
+
+			usort($byScope[$scope], fn($a, $b) => strcmp($a['name'], $b['name']));
+
+			foreach ($byScope[$scope] as $package) {
+				$sourceIndicator = isset($package['source_file']) && $package['source_file'] === 'composer.local.lock' ? ' [LOCAL]' : '';
+				$output .= sprintf("%-40s %-15s%s\n", $package['name'], $package['version'], $sourceIndicator);
+				
+				if (!empty($package['license'])) {
+					$licenses = is_array($package['license']) ? implode(', ', $package['license']) : $package['license'];
+					$output .= "  License: $licenses\n";
+				}
+				
+				if (!empty($package['description'])) {
+					$output .= "  Description: " . substr($package['description'], 0, 80) . "\n";
+				}
+				
+				$output .= "\n";
+			}
+			$output .= "\n";
+		}
+
+		// License summary
+		$licenses = [];
+		foreach ($this->packages as $package) {
+			if (empty($package['license'])) continue;
+			$packageLicenses = is_array($package['license']) ? $package['license'] : [$package['license']];
+			foreach ($packageLicenses as $license) {
+				$licenses[$license] = ($licenses[$license] ?? 0) + 1;
+			}
+		}
+
+		$output .= "LICENSE SUMMARY\n";
+		$output .= str_repeat("-", 40) . "\n";
+		arsort($licenses);
+		foreach ($licenses as $license => $count) {
+			$output .= sprintf("%-30s %d packages\n", $license, $count);
+		}
+
+		return $output;
+	}
+
+	private function formatLicenses($licenses): string
+	{
+		if (empty($licenses)) {
+			return 'NOASSERTION';
+		}
+		if (is_string($licenses)) {
+			return $licenses;
+		}
+		if (count($licenses) === 1) {
+			return $licenses[0];
+		}
+		return '(' . implode(' OR ', $licenses) . ')';
+	}
+
+	private function mapPackageType(string $type): string
+	{
+		$mapping = [
+			'library' => 'library',
+			'mediawiki-extension' => 'library',
+			'mediawiki-skin' => 'library',
+			'composer-plugin' => 'library',
+			'platform' => 'library',
+			'project' => 'application'
+		];
+		return $mapping[$type] ?? 'library';
+	}
+
+	private function generateUuid(): string
+	{
+		return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+			mt_rand(0, 0xffff),
+			mt_rand(0, 0x0fff) | 0x4000,
+			mt_rand(0, 0x3fff) | 0x8000,
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+		);
+	}
+
+	public function saveToFile(string $format, string $filename): void
+	{
+		switch (strtolower($format)) {
+			case 'spdx':
+				$data = json_encode($this->generateSPDXJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+				break;
+			case 'cyclonedx':
+				$data = json_encode($this->generateCycloneDXJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+				break;
+			case 'text':
+				$data = $this->generateHumanReadable();
+				break;
+			default:
+				throw new Exception("Unsupported format: $format");
+		}
+
+		file_put_contents($filename, $data);
+		echo "SBOM saved to: $filename\n";
+	}
+
+	public function getPackageStats(): array
+	{
+		$stats = [
+			'total' => count($this->packages),
+			'by_scope' => [],
+			'by_type' => [],
+			'by_license' => [],
+			'by_source_file' => []
+		];
+
+		foreach ($this->packages as $package) {
+			$stats['by_scope'][$package['scope']] = ($stats['by_scope'][$package['scope']] ?? 0) + 1;
+			$stats['by_type'][$package['type']] = ($stats['by_type'][$package['type']] ?? 0) + 1;
+			
+			$sourceFile = $package['source_file'] ?? 'unknown';
+			$stats['by_source_file'][$sourceFile] = ($stats['by_source_file'][$sourceFile] ?? 0) + 1;
+			
+			$licenses = is_array($package['license']) ? $package['license'] : [$package['license']];
+			foreach ($licenses as $license) {
+				if ($license) {
+					$stats['by_license'][$license] = ($stats['by_license'][$license] ?? 0) + 1;
+				}
+			}
+		}
+
+		return $stats;
+	}
+}
+
+// CLI execution
+if (php_sapi_name() === 'cli') {
+	$options = getopt('f:o:h', ['format:', 'output:', 'help', 'stats']);
+	
+	if (isset($options['h']) || isset($options['help'])) {
+		echo "Usage: php generate-sbom.php [options]\n";
+		echo "Options:\n";
+		echo "  -f, --format FORMAT   Output format: spdx, cyclonedx, text (default: all)\n";
+		echo "  -o, --output FILE	 Output file (default: auto-generated)\n";
+		echo "  --stats			   Show package statistics\n";
+		echo "  -h, --help			Show this help\n";
+		echo "\n";
+		echo "The script expects composer.lock at /opt/htdocs/mediawiki/composer.lock\n";
+		echo "The script will also automatically include composer.local.lock if found.\n";
+
+		exit(0);
+	}
+
+	try {
+		$composerLockPath = '/opt/htdocs/mediawiki/composer.lock';
+		$generator = new SBOMGenerator($composerLockPath, 'Meza');
+		
+		if (isset($options['stats'])) {
+			$stats = $generator->getPackageStats();
+			echo "Package Statistics:\n";
+			echo "Total packages: {$stats['total']}\n\n";
+			
+			echo "By source file:\n";
+			foreach ($stats['by_source_file'] as $file => $count) {
+				echo "  $file: $count\n";
+			}
+			
+			echo "\nBy scope:\n";
+			foreach ($stats['by_scope'] as $scope => $count) {
+				echo "  $scope: $count\n";
+			}
+			
+			echo "\nBy type:\n";
+			foreach ($stats['by_type'] as $type => $count) {
+				echo "  $type: $count\n";
+			}
+			
+			echo "\nTop licenses:\n";
+			arsort($stats['by_license']);
+			$top = array_slice($stats['by_license'], 0, 10, true);
+			foreach ($top as $license => $count) {
+				echo "  $license: $count\n";
+			}
+			exit(0);
+		}
+
+		$format = $options['f'] ?? $options['format'] ?? 'all';
+		$outputBase = $options['o'] ?? $options['output'] ?? 'meza-sbom';
+
+		if ($format === 'all') {
+			$generator->saveToFile('spdx', $outputBase . '.spdx.json');
+			$generator->saveToFile('cyclonedx', $outputBase . '.cyclonedx.json');
+			$generator->saveToFile('text', $outputBase . '.txt');
+		} else {
+			$extension = $format === 'text' ? 'txt' : 'json';
+			$filename = strpos($outputBase, '.') ? $outputBase : "$outputBase.$format.$extension";
+			$generator->saveToFile($format, $filename);
+		}
+
+	} catch (Exception $e) {
+		echo "Error: " . $e->getMessage() . "\n";
+		exit(1);
+	}
+}

@@ -15,9 +15,9 @@ $extensions = yaml_parse($yamlContent);
 // Extract the name elements
 $names = [];
 foreach ($extensions['list'] as $extension) {
-    if (isset($extension['name'])) {
-        $names[] = $extension['name'];
-    }
+	if (isset($extension['name'])) {
+		$names[] = $extension['name'];
+	}
 }
 
 // Alphabetize the names
@@ -26,5 +26,5 @@ sort($names, SORT_STRING | SORT_FLAG_CASE);
 // Output the alphabetized list
 echo "MediaWiki Extensions:\n";
 foreach ($names as $name) {
-    echo "- $name\n";
+	echo "- $name\n";
 }

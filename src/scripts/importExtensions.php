@@ -17,7 +17,7 @@ $local = explode("\n", trim($local));
 $api = $argv[1];
 
 if ( ($api == null) || ($api == false) || ($api == '') ) {
-  exit (' Supply the full URL to your wiki API as the first argument. e.g. https://freephile.org/w/api.php to get a list of extensions which still need to be added locally' );
+	exit (' Supply the full URL to your wiki API as the first argument. e.g. https://freephile.org/w/api.php to get a list of extensions which still need to be added locally' );
 }
 $endpoint = $api . '?action=query&meta=siteinfo&siprop=extensions&format=json';
 // $extension_json = file_get_contents( 'https://freephile.org/w/api.php?action=query&meta=siteinfo&siprop=extensions&format=json' );
@@ -32,7 +32,7 @@ $extension_php = json_decode ( $extension_json );
 $extension_php = $extension_php->{'query'}->{'extensions'};
 
 function cmp( $a , $b ) {
-  return strcmp( $a->name, $b->name );
+	return strcmp( $a->name, $b->name );
 }
 // usort will sort the array in place
 usort( $extension_php, 'cmp' );
@@ -42,7 +42,7 @@ usort( $extension_php, 'cmp' );
 
 $names = array();
 foreach ( $extension_php as $ext ) {
-    $names[] = str_replace( " ", "", $ext->{name} );
+	$names[] = str_replace( " ", "", $ext->{name} );
 }
 
 
@@ -53,12 +53,14 @@ echo "Left with " . count( $unhandled ) . " not in core or local\n";
 
 
 foreach ( $extension_php as $ext ) {
-  if ( in_array( $ext->name, $unhandled ) ) {
-    echo "-";
-    echo " name: $ext->name\n";
-    echo "  repo: " . $ext->{"vcs-url"} . "\n";
-    echo $ext->{"vcs-version"} ? '  version: ' . $ext->{"vcs-version"} ."\n" : "  version: $ext->version\n";
-  }
+	if ( in_array( $ext->name, $unhandled ) ) {
+		echo "-";
+		echo " name: $ext->name\n";
+		echo "  repo: " . $ext->{"vcs-url"} . "\n";
+		echo $ext->{"vcs-version"} ?
+			'  version: ' . $ext->{"vcs-version"} ."\n" :
+			"  version: $ext->version\n";
+	}
 }
 
 // $existing = yaml_parse_file( '/opt/meza/config/MezaCoreExtensions.yml' );

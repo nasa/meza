@@ -1,3 +1,1453 @@
+commit 2be7babd70e896307b9f937cc1960ea0bf5046d1
+Merge: 131c9c20 ac1eb9c5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Aug 5 06:40:36 2025 -0400
+
+    Merge branch 'feature/sbom' into REL1_43
+    
+    Script to regularly generate a Software Bill Of Materials (SBOM)
+    
+    The generated SBOMs will include all 200+ packages
+    from your MediaWiki ecosystem, properly categorized
+    by scope and type, with complete license and metadata information.
+    
+    - Parse your composer.lock + composer.local.lock to extract all dependencies
+    - Generate industry-standard SBOM formats (SPDX, CycloneDX)
+    - Provide human-readable summaries
+    - Automatically update when dependencies change
+    - Support security and compliance requirements
+    - Integrate with CI/CD pipelines
+    
+    @see docs at https://github.com/freephile/meza/blob/REL1_43/src/scripts/sbom.md
+
+commit 131c9c205cb4170cb22b6e8fb41ac2d2b44325e4
+Merge: 3588683f 4f3323fe
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Aug 5 06:31:24 2025 -0400
+
+    Merge branch 'main' into REL1_43
+    
+    Add script to show git (annotated) tags
+    @see https://github.com/freephile/meza/blob/4f3323fe8c1eccc006b170b5d7c98a76b5f9fe9f/src/scripts/showTags.md
+
+commit ac1eb9c5a1aa47cd3e6a90cf1d13908295dbebdc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Aug 4 10:07:05 2025 -0400
+
+    Add the github action workflow
+    
+    This needs to be tested.
+
+commit 4f3323fe8c1eccc006b170b5d7c98a76b5f9fe9f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Aug 4 10:03:33 2025 -0400
+
+    Add script to show git (annotated) tags
+    
+    You SHOULD use Git Graph in VsCode, but this script is handy for Release Notes and so on.
+
+commit 6152f02216d1942ce7c2928e5c5c9a351a8de9dc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Aug 4 09:52:24 2025 -0400
+
+    spaces to tabs
+
+commit 16a93f8031be3b374f2336ec4afb180c157a69df
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Aug 2 22:28:12 2025 -0400
+
+    convert spaces to tabs per coding standards
+
+commit 6abeeac06a7828302f008c31573e7d8521e09283
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Aug 2 22:16:24 2025 -0400
+
+    Change root package reference to NASA
+    
+    - Updated download location: Changed from https://github.com/enterprisemediawiki/meza to https://github.com/nasa/meza
+    - Updated copyright: Changed from Copyright Enterprise MediaWiki to Copyright NASA
+    - Updated supplier: Changed from Organization: Enterprise MediaWiki to Organization: NASA
+    - Updated vendor in CycloneDX: Changed from Meza to NASA
+    - Added external references: Added both the GitHub repository and the MediaWiki documentation page for better reference
+    
+    These changes ensure that the SBOM correctly identifies NASA as the organization behind the Meza project and points to the correct repository location.
+
+commit 5170674ecdaf8a135433dee1939addb0846a2181
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Aug 2 22:01:47 2025 -0400
+
+    Update to include composer.LOCAL.lock
+    
+    Key improvements in this updated version:
+    
+    - Dual File Support: Automatically detects and includes composer.local.lock
+    - Conflict Resolution: When the same package exists in both files, uses the version from composer.lock
+    - Source Tracking: All packages include metadata about which file they came from
+    - Enhanced Reporting: Statistics and human-readable output show breakdown by source file
+    - Visual Indicators: Local packages are marked with [LOCAL] in text output
+    - Updated Documentation: Explains the dual-file approach and precedence rules
+    
+    Now the SBOM will include all dependencies from both your main composer.lock and any local overrides in composer.local.lock, giving you a complete picture of your dependency landscape.
+    
+    Note that when "looking" for composer.lock, the path is hard-coded as
+    /opt/htdocs/mediawiki/composer.lock. We could make it 'intelligently search' but for now we'll use the known path for Meza installations.
+
+commit 274a8e029565fc85529251a973c938dda8d4733f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Aug 2 10:33:51 2025 -0400
+
+    initial concept with just composer.json
+    
+    This comprehensive SBOM solution will:
+    
+    - Parse your composer.lock to extract all dependencies
+    - Generate industry-standard SBOM formats (SPDX, CycloneDX)
+    - Provide human-readable summaries
+    - Automatically update when dependencies change
+    - Support security and compliance requirements
+    - Integrate with CI/CD pipelines
+    
+    The generated SBOMs will include all 200+ packages
+    from your MediaWiki ecosystem, properly categorized
+    by scope and type, with complete license and metadata information.
+
+commit 6593381534227cf43bc722accf1938859411c335
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Aug 1 15:49:56 2025 -0400
+
+    Create SECURITY policy (#175)
+    
+    * Create SECURITY.md
+    
+    GitHub reads this root-level file as the repository's Security Policy (IOW it's standard)
+    
+    * Simplify link, add email, fix linting
+
+commit 3588683f741bfc2f90d84d8694b3804758993af5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Aug 1 15:43:03 2025 -0400
+
+    Add TODO comments
+
+commit bbfc7943be4bd3bee66f0e049863ea417a652739
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 31 00:57:14 2025 -0400
+
+    Turn off Kibana by default
+
+commit 373275a55b6ea6e362caa3e6a80b60faaa81cd5b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 31 00:53:51 2025 -0400
+
+    Turn off Certbot by default
+
+commit 04c92425d6d6d33437f3161141788a86dee697c2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 31 00:31:22 2025 -0400
+
+    Add missing composer merge for Abuse Filter
+    
+    May (likely!) fix Issue #168
+    Although it appeared to be a permission error, or
+    missing class, the underlying problem was missing
+    composer libraries needed by AbuseFilter
+
+commit 4dd476bc4c70ec7ae44a7c81053d59637385eadd
+Merge: 2a996bd0 5be1107c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jul 29 23:52:34 2025 -0400
+
+    Merge branch 'main' into REL1_43
+
+commit 5be1107cf819ee464767c447219d8794abebfc0f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jul 29 16:36:55 2025 -0400
+
+    Final nitpick changes fixes issue #170
+
+commit 0263f7199acd2ed068193414fc36a132d3647c13
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jul 29 14:37:48 2025 -0400
+
+    Update new issue workflow templates
+    
+    - updates Pull #169
+    - fixes Issue #170
+    - deletes (legacy) .github/ISSUE_TEMPLATE.md
+
+commit 91a52b1d592e0dd34d37da418c9e9f3c99cc2a27
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jul 29 13:35:13 2025 -0400
+
+    Update issue templates to new workflow
+    
+    See https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+
+commit 2a996bd0d66fb3a872b07ed31c21c27c018edf99
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 24 18:52:34 2025 +0000
+
+    DOWNGRADE MediaWiki to 1.43.1
+    
+    Avoid breaking changes in 1.43.2 which technically should
+    not happen in a point release; without announcment
+    if you follow semantic versioning and test backports.
+    
+    Addresses Issue #163
+
+commit 7d40d3ee2f782cd845c69cf1cb5179d6efbdc0db
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 24 18:49:25 2025 +0000
+
+    Upgrade ModernTimeline to 2.x
+    
+    Upgrade from 1.x to 2.x
+    Fixes #167
+    Was getting 500 error
+    
+    From Release Notes https://github.com/ProfessionalWiki/ModernTimeline#release-notes
+    
+    Released on July 7th, 2025.
+    
+    - Raised minimum PHP version to 8.0
+    - Raised minimum MediaWiki version to 1.39
+    - Upgraded to TimelineJS3 3.9.6
+    - Translation updates from https://translatewiki.net
+
+commit 9aab3a1b986bca953019d01b0e4fdef4b83203ec
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jul 23 03:23:19 2025 +0000
+
+    Enable 'overwrite_local_changes'  for Composer
+    
+    Add composer-installed skins and extensions to the switch for overwriting local changes. This gives parity with Git-controlled extensions and skins.
+    
+    The default is 'false' because neither git nor Composer want to clobber local changes. But if you want to be able to, it can be easily done with the Meza config variable 'overwrite_local_changes' (bool)
+
+commit 8a6d49329c72191c0c6fb1cb0ebe4a2c60cc11d7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jul 22 03:38:38 2025 +0000
+
+    Upgrade Maps from 10.x to 11.x
+    
+    Fixes #166 SMWPrintRequest not found
+
+commit 1896a15e7d22006881e114327d62843d876fe3ac
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jul 10 06:47:13 2025 -0400
+
+    Fix linting - remove trailing spaces
+
+commit 869607c082b8641135051d1eefc0456b4ad3458e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jul 9 21:19:45 2025 +0000
+
+    remove extraneous '1'
+
+commit db2e3b5cdfcb4ef26e630847c1683eb6aa57370e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jul 9 19:36:56 2025 +0000
+
+    Disable Who's Online for being problematic
+
+commit 37b9be51289b16868730cbc1070a188159323ee7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jun 6 17:32:49 2025 +0000
+
+    Add MW Core bundled extensions
+    
+    Fixes #135
+    Adds extensions
+    - AbuseFilter
+    - DiscussionTools
+    - Linter
+    - LoginNotify
+    - Math
+    - OATHAuth
+    - SecureLinkFixer
+    - SpamBlacklist
+    - TitleBlacklist
+    plus the skin Timeless
+
+commit 7581e79e9193c15bd33a932651b75fa1d861b23e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jun 6 16:48:21 2025 +0000
+
+    re-enable Semantic Extensions   SRF and SCQ
+    
+    update Semantic Result Formats
+        composer: "mediawiki/semantic-result-formats"
+        version: "^5.0"
+    enable SemanticCompoundQueries
+        composer: "mediawiki/semantic-compound-queries"
+        version: "3.x-dev"
+
+commit 9e3ff5552a385dd6b77484cef9eda1813ad5cd96
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jun 5 21:59:27 2025 +0000
+
+    Fix #140 enabling the SemanticDependencyUpdater and SRF
+    
+    SemanticDependencyUpdater and SemanticResultFormats
+    are the last of the SMW extensions to be re-enabled.
+
+commit 35a35c13ad8535bf062b460f92544c263b174b53
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jun 5 21:21:09 2025 +0000
+
+    Fixes #143 elimating duplicates between MezaCoreExtensions and MezaLocalExtensions
+    
+    Adds utility scripts that can be used to list core and diff to local.
+    A corresponding commit was made to the meza-conf repository affecting MezaLocalExtensions.yml.
+
+commit 41bbcd828ba8b4f3d2300876fa5fa06f98def198
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jun 5 15:15:28 2025 +0000
+
+    Fixes Issue #62 Url for Netdata install has changed
+    
+    Update the URL, and use sh instead of bash because that is
+    what the install guide does (hence there are no 'bashisms')
+
+commit 66d7a4b2ac5476625ae70c69e16ff57f5d7f9507
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jun 4 21:00:39 2025 +0000
+
+    specify theme (neutral) for Mermaid extension
+
+commit 6100d3c323277b0bd316ded760abe69864b4669b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jun 4 20:59:52 2025 +0000
+
+    Block WhatLinksHere using Lockdown against robots #156
+
+commit 7985579bbf7b9fb3aa63746a9b64006773536367
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Jun 1 03:07:00 2025 +0000
+
+    Fixes #157
+    
+    include CommentStreams composer.json in composer.local.json
+
+commit 63103b85feb5b9250ad23e45c4dac0770545a523
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu May 15 15:16:11 2025 -0400
+
+    Add logos of component technologies
+
+commit f37f706c79e40c2ba42af34bd37f4dcd4e4d4335
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Dec 19 16:59:04 2024 -0500
+
+    Update haproxy.cfg.j2
+    
+    removed commented-out obsolete configuration text in haproxy.cfg
+
+commit 9a7c99919480a300b1a6c5f355e764db15649d0a
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Mon Dec 2 07:46:33 2024 -0500
+
+    Update getmeza.sh
+    
+    Incorporates cowen23's fix for issue #57
+
+commit cf09936dec1b2bded9e36367c9488452d2ff0859
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Mar 28 12:25:52 2025 +0000
+
+    Add quotes to version spec for Bootstrap
+
+commit e4ba295c4705ba982ae3b5c100ce212d366c1330
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 18 02:06:23 2025 -0500
+
+    make lint command graceful
+
+commit a3add76458b1ea6f898d9651ce8565766e166b68
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 18 01:58:21 2025 -0500
+
+    final yamllint fixes
+
+commit 33cfdf177265f76a8cd4bf9c82d2738f5c23b811
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 18 01:50:13 2025 -0500
+
+    moved yamllint config
+
+commit f6ad58ee30620b34e3c27addd6c62387a6c72347
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 18 01:44:07 2025 -0500
+
+    Fix yaml files for syntax
+
+commit c0d1b8485a8978477ecf6f2869913a123b24a933
+Merge: bc3055ac fd7ac3a9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 17 23:34:26 2025 -0500
+
+    Merge qb-1.43 into main
+
+commit fd7ac3a95cab51444646a061cd5cc2048f00f0ec
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 17 22:36:45 2025 -0500
+
+    Update README with yamllint workflow badge
+
+commit 73c2c0f6684ef7b9cd7b007e8ae36daa3c772b1a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 17 22:11:38 2025 -0500
+
+    Add multiple branch patterns for the yamllint workflow
+
+commit f731209affac6983942616ba82caa403089350fa
+Merge: 900a1dc9 5c333f5e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 17 21:24:03 2025 -0500
+
+    Merge pull request #155 from freephile/feature/yamlint-workflow
+    
+    Add new linting workflow
+
+commit 5c333f5e1dc28215fb88a8e160a190926c0ed3e9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 17 21:20:46 2025 -0500
+
+    Add new linting workflow
+
+commit 900a1dc9802a881eec5ee71db5f6e48d4ad257f3
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 28 15:08:01 2025 +0000
+
+    Switch Mermaid and BootstrapComponents to dev-master
+    
+    Replace deprecated Class loading for \PHPUnit\Framework\TestCase
+    Fixes Issue #141
+
+commit 7bc8622d5fa46f7cbfb001b45c04fcdb4d55ed0c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 24 02:18:59 2025 +0000
+
+    Finish off Maintenance Script improvements
+    
+    Last commits for this round of maintenance script operations
+    Fixes Issue #142
+
+commit 7cb9091831caf8a3f72d9c8de44310f5c9e1ad9e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 24 02:12:42 2025 +0000
+
+    Add comments for $smwgParserFeatures (Links In Values feature)
+
+commit ab10ebe10fa294f4a8ce456269107281f2e2de18
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 17 19:08:51 2025 +0000
+
+    Maintenance Script update (missed these)
+    
+    Convert script calls to go through executable
+    'maintenance/run'
+    For extensions, use the class naming pattern
+    'Extension:ClassName'
+    Fixes Issue #142
+
+commit ca1791040ebf7ea5e7ff4cef04f6c3ef2d56f2d2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 17 19:01:19 2025 +0000
+
+    Finish Maintenance Script update
+    
+    Convert script calls to go through executable
+    'maintenance/run'
+    For extensions, use the class naming pattern
+    'Extension:ClassName'
+    Fixes Issue #142
+
+commit d624f7b4fbed42033dd8b6da3e786f9c1de53340
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:48:54 2025 +0000
+
+    A new tool to inspect the git repos on the controller
+
+commit e267f14854957206ba556812038c357e27db0116
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:48:12 2025 +0000
+
+    Update the Update.php role for new Maintenance script ops
+    
+    Issue #142
+
+commit 9e4de5e18ad148ff47660c6c22b5dbf6ace5c940
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:46:57 2025 +0000
+
+    Update maintenance scripts
+    
+    Server Performance logging/reporting role
+    (Probably needs to be eliminated altogether)
+    Issue #142
+
+commit 278c394ee70a00d86abcf13f434f6677723436b6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:45:38 2025 +0000
+
+    Update maintenance scripts
+    
+    showSiteStats and refreshLinks
+    Issue #142
+
+commit 57c9bb20231e76fed948d22ea93714cff24d53c6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:44:01 2025 +0000
+
+    Disable metastore maintenance
+    
+    All maintenance needs to be refactored
+    Issue #142
+    Also, this may be affected by upgrading to SMW 5.x
+    Issue #136
+
+commit 7ad66760bc98bfdf95f7774ad920c669510ca784
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:42:08 2025 +0000
+
+    Prefer source in composer managed extensions
+    
+    Use the --prefer-source option to composer
+    Eliminate the duplicate composer run
+    Eliminate the removal of a non-existant SMW file (IdeAliases.php)
+    needed for Issue #136
+
+commit f87b92b261035b4e8f91a169ecf9b286303de61c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 23:32:29 2025 +0000
+
+    Update maintenance scripts for MediaWiki 1.40
+    
+    Fixes Issue #142
+
+commit 4ca775d65b3f64907dd87990af28073d454702fa
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 16 22:56:48 2025 +0000
+
+    Update MezaCoreExtensions.yml for REL1_43
+    
+    Use full enableSemantics() call to fix URL pattern
+    Switch to gerrit because GitHub seems to throttle
+    SemanticDrilldown 3.05 -> dev-master
+    SemanticScribunto 2.2.0 -> dev-master
+    add quotes on SemanticDrilldown version spec
+    add quotes on SubPageList version spec
+
+commit e2873948a30a02fb56a8be6d40181f76101fad1c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 10 17:45:00 2025 +0000
+
+    Create a variable named php_memory_limit defaulting to 128M
+    
+    PHP normally defaults to 128M so we also default to that.
+    Templated in the php.ini template of the apache-php role.
+    Fixes issue #151
+
+commit 51c89233b3279fbdd76c371cbdd5f9b17552d614
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jan 8 01:39:19 2025 +0000
+
+    Enable SemanticCompoundQueries
+    
+    Was 2.2.0
+    Now 3.x-dev (same as dev-master)
+    Issue #140
+
+commit d2a87e79e3f039f7c81cc2ca091959698a11d99c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Jan 8 00:43:17 2025 +0000
+
+    Use SubPageList dev-master
+    
+    Fixes issue #138
+
+commit ca17aac64a4c1cd83be7ea4f22ac6b2732bdce06
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 7 21:38:15 2025 +0000
+
+    Disable or update non-working skins
+    
+    These skins need a version adjustment or update
+    to work with REL1_43
+    - Tweeki
+    - Medik
+    
+    Use tags/v4.39.1 for Tweeki
+    Issue #136
+
+commit cde7d8cfaa866bbcba6de5b32b34f1d94b1134e6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 7 21:09:29 2025 +0000
+
+    Disable non-working extensions
+    
+    These extensions do not work, or need a version adjustment,
+    to be compatible with REL1_43 and SMW 5.x
+    - SemanticCompoundQueries
+    - SemanticDependencyUpdater
+    - SemanticDrilldown
+    - SemanticExtraSpecialProperties
+    - SemanticResultFormats
+    - SemanticScribunto
+    - SubPageList
+
+commit 36567d8330bef1a28d923fd0f351f7ef6e26bdd8
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 7 21:04:38 2025 +0000
+
+    Switch SMW to dev-master
+    
+    Addresses Issue #137
+    composer show -a mediawiki/semantic-media-wiki
+    shows all available composer versions
+
+commit d7d6a88ecebedf8eb2a2d476d26d937696ba2809
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 7 17:33:33 2025 +0000
+
+    Upgrade to REL1_43
+    
+    Fixes Issue #136
+    set meza_repository_url to use freephile/meza
+    set mediawiki_version for core
+    set mediawiki_default_branch (for extensions)
+    set php_ius_version to php81
+
+commit 18d66875f1578784038524ca97f41ef40b9cde5e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Dec 19 02:29:27 2024 +0000
+
+    Kibana Security
+    
+    Do not allow connections from remote (the Internet)
+    Only allow localhost connections
+    Issue #60
+
+commit a2a849ca6d45c44ea728fc4aef7db6aaeaecefdc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Dec 19 02:27:49 2024 +0000
+
+    Comment our changes in the task file
+    
+    Issue #37
+
+commit a89045430b76f43eeb535a40258d94d46f491b68
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Dec 18 13:34:07 2024 +0000
+
+    Add versionlock to Kibana
+    
+    Issue #58 Issue #37
+
+commit 0a6ed4ed108622ad42faa9dc0ae4f145c16b465c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Dec 18 13:30:40 2024 +0000
+
+    Add Kibana frontend to Elasticsearch
+    
+    Fixes Issue #37
+    Uses Geerlingguy Kibana
+
+commit 721e7fbfc586c96c1a4af7ccb361a6354f13613d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 17 12:13:47 2024 +0000
+
+    rebased, but keep main comments
+    
+    Fixes Issue #58
+
+commit 6706b93f0daa093d0be2891cf2d87738cf09f65e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Mar 14 21:08:09 2024 -0400
+
+    Add Kibana frontend to Elasticsearch
+    
+    Using Ansible Galaxy and requirements.yml, we install Jeff Geeerling's
+    geerlingguy.kibana role. Fixes issue #37
+    
+    Kibana is available at port 5601
+    
+    This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15BA02B.
+
+commit 7c01ff549c4550d6f7cf01eb46211dba6e57a429
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 17 10:32:04 2024 +0000
+
+    We do not need a special port for certbot creation
+    
+    Issue #130
+
+commit ce07fdb975ebc158e6da994d0a34e543033d202b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 17 10:31:34 2024 +0000
+
+    Do not put crt and key into HAProxy
+    
+    Issue #130
+
+commit 39a6549447ee847e53c7cf3126c8a2f6a46c4ac1
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Sun Oct 13 13:11:50 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Added $wgObjectCacheSessionExpiry to SMW Config and set for 24 hours
+    
+    (cherry picked from commit bc3055accb69112040bf93839b1994e1d6a55c2c)
+
+commit 82d4cb44737645689d4fded935fd3e1ade6ea8c1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Dec 11 17:01:00 2024 +0000
+
+    role name change to ansible-role-certbot-meza
+
+commit f4d546162a4c79981e0a6dcbe8a20722324f6fd2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Dec 11 16:47:51 2024 +0000
+
+    Add TLS Certificate generation and auto-renewal (Certbot)
+    
+    Fixes Issue #130
+
+commit 682490800a3b24ea653845912801b0ddfe8a9a8b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Nov 27 21:28:10 2024 +0000
+
+    Promote comments into names for each play.
+    
+    This should help with readability and output clarity.
+    
+    Extract gluster comments into the gluster role default variables file
+
+commit 0f8252de4a6abf9caff2fc243fcb72aa3c11a13a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 21:26:41 2024 +0000
+
+    improve wording for m_opcache_production_mode
+
+commit da7993df6d8fcda3320e7d3dda74e09642902a3a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 21:07:10 2024 +0000
+
+    update instruction + minor formatting
+    
+    This playbook need massive re-organization. See issue #42
+
+commit 528002e4fb94f705b88faa62aca794707610a999
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 03:59:48 2024 +0000
+
+    Fix paths for PdfHandler
+    
+    Add full paths for commands to solve
+    pdfinfo not reporting any info about pdfs
+
+commit 7ad200636d568ce164c367ec1f053529d6b00b1f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 02:28:30 2024 +0000
+
+    Add PdfHandler extension
+    
+    The base task now installs xpdf for RockyLinux
+    
+    Solves Issue #128
+
+commit 6737d49ed579fdfb7e4d17a69dccd06412872321
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 02:02:08 2024 +0000
+
+    Add extension Page Exchange
+    
+    Solves Issue #126 but we still need
+    to identify and load at least one
+    package.
+    
+    Perhaps put the work into making the SemanticMeetingMinutes into a package
+
+commit a6cb3735b369c4d67bdd2310d2497b08eddb62f8
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Nov 22 01:49:59 2024 +0000
+
+    Alphabetize core extensions
+    
+    Fixes Issue #129
+
+commit 5042d74a5085b7923034ee630befba36d8740e66
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Nov 21 21:32:06 2024 +0000
+
+    remove obsolete commented tasks
+    
+    Rebuild Recent Changes was only necessary after
+    importing pages from script.
+    
+    See issue #126
+
+commit 5d47bd265cf33d54cdbb441159ab6c8f327acc78
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Nov 12 05:26:33 2024 +0000
+
+    Upgrade Bootstrap, BS Components, Chameleon to 5.x
+    
+    Fixes Issue #125
+    Fixes Issue  #107
+
+commit 69c5db7a0cb9396ae8f6a3f06ca3d41b64332a52
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Nov 11 13:47:16 2024 +0000
+
+    Default to DEVELOPMENT
+    
+    Change default Opcache behavior
+    Do NOT install Netdata monitoring by default
+    Adds option for Composer require-dev packages
+    Fixes issue #123
+    Fixes issue #121
+    Helps address issue #120
+
+commit 387ba9c32376cdd5b810c5f976946879b1b04df9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Nov 7 13:47:42 2024 +0000
+
+    Be explicit about who can edit Gadgets
+
+commit 85afac96ea7bb109f4d39e41acadb1afb509493b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Nov 2 18:06:19 2024 +0000
+
+    Remove Elasticsearch upgrade playbook Issue #118
+
+commit 69c8a213570c12512a1a58a77eff58261f220647
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Nov 2 11:50:07 2024 +0000
+
+    Comment the community collections previously setup for RL8
+    
+    Fixes Issue #51
+
+commit 8a7241b0be8dcf0c5b7c802ce6dfd1b7e2fa7164
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Nov 2 01:49:46 2024 +0000
+
+    Example playbook to observe the function of block scalars
+
+commit 964b65e79fab76727bd52796a4a48cebca55f722
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Nov 2 01:49:02 2024 +0000
+
+    Add a couple of 'ToDo' comments and reformat the smw index shell cmd
+    
+    The shell command was not working due to block folding the
+    list_of_wikis into a single string so the cmd was reformatted to a
+    single line (which is too long for yamllint compliance). But, at least
+    it nominally 'works'. A comment was added to address the issue that
+    this maintenance should not even exist in this role, but should be refactored. See issue #117
+
+commit 105a5363f6bcdab47cebfce159dc65ad2a212e85
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 24 13:01:36 2024 +0000
+
+    update github issue template
+
+commit 923758c1aa93eb911536035bce714977540d05ea
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 24 13:00:30 2024 +0000
+
+    Fix wiki symbolic links issue #115
+
+commit 1219d7240e3a7ccdf649b14635783cf6dc20ca6c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 24 01:09:30 2024 +0000
+
+    Use system ansible Issue #51
+
+commit aee09afea4bd2c2e582b0b3ba8a5def99903b60d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 24 01:08:56 2024 +0000
+
+    Fix ambiguous STDOUT messaging
+
+commit a77b91efe99cc3c79cb94ec05da7b3817f259d93
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 24 01:07:31 2024 +0000
+
+    Use root for ansible-vault key operations
+    
+    become module touches on issue # 72 privilege escalation
+    
+    Also switch back to using system-installed ansible
+    over a local user installed ansible touches on issue #51
+    Upgrade Ansible
+    
+    [meza-ansible@rockylinux-s-4vcpu-8gb-nyc3-01 config]$ ansible --version
+    ansible [core 2.16.3]
+      config file = /opt/meza/config/ansible.cfg
+      configured module search path = ['/opt/conf-meza/users/meza-ansible/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+      ansible python module location = /usr/lib/python3.12/site-packages/ansible
+      ansible collection location = /opt/meza/collections
+      executable location = /usr/bin/ansible
+      python version = 3.12.5 (main, Sep 24 2024, 09:41:18) [GCC 8.5.0 20210514 (Red Hat 8.5.0-22)] (/usr/bin/python3.12)
+      jinja version = 3.1.2
+      libyaml = True
+
+commit 13820f1707e45aafc6777df235e104fd4ffd9677
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Tue Oct 8 12:59:53 2024 -0400
+
+    Update getmeza.sh
+    
+    1) Don't exclude "ansible" and "ansible core" from epel.repo
+    2) Don't install repo centos-release-ansible-29, and
+    3) Don't specify the version of ansible to install.
+
+commit bc3055accb69112040bf93839b1994e1d6a55c2c
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Sun Oct 13 13:11:50 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Added $wgObjectCacheSessionExpiry to SMW Config and set for 24 hours
+
+commit 5857d81aff1f0cb25cac7db5df5f591399bb8cf2
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Tue Oct 8 14:45:47 2024 -0400
+
+    Update flow configuration in MezaCoreExtensions.yml
+    
+    Configured Flow to use Parsoid
+
+commit ba25a5df5f98b1911ca9e8c82d49915ec3837549
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Tue Oct 8 12:59:53 2024 -0400
+
+    Update getmeza.sh
+    
+    1) Don't exclude "ansible" and "ansible core" from epel.repo
+    2) Don't install of centos-release-ansible-29, and
+    3) Don't specify the version of ansible to install.
+
+commit 4810a1e67c29f4651f0cd3a765db283cf95a78d4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Oct 7 21:00:03 2024 +0000
+
+    Configure Flow (Structured Discussions) for MW 1.39 Fixes Issue #114
+    
+    Visual Editor was not working properly for Flow boards on MW1.39
+    (Parsoid-PHP) The easily provoked error was:
+    "Exception caught: Conversion from 'html' to 'wikitext' was requested, but core's Parser only supports 'wikitext' to 'html' conversion"
+    
+    In MW 1.39, Flow still ignores the zero-config setup of Parsoid-PHP.
+    So, we need to wfLoadExtension() the local vendored Parsoid library.
+    And, set $wgVirtualRestConfig
+    
+    This makes Flow usable on MW 1.39, but ultimately, Flow needs to be replaced as described in issue #39
+
+commit 6d27f55950bfd646b6b45d5d9860995c08f014c1
+Merge: 9c6b44ad 87956a53
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Oct 7 12:52:15 2024 -0400
+
+    Merge remote-tracking branch 'nasa/main' into qb-merge
+    
+    Grab the latest Meza Core Extension changes:
+    - Page Forms v5.8.1 (was master)
+    - drop erroneous space characters in
+    UrlGetParameters extension repo URL
+
+commit 9c6b44ad75b8f8dd73a35581508bbf0a62389f54
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    Temporary work-arounds for issue #72
+    
+    Do not run as root
+    Do not require 'sudo' for calling meza
+    Temporary or partial fixes for path and user problems
+
+commit eb39199df8e8a5ea95bd8f30a4a9d6e0a35fe569
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    update getmeza.sh to fix issue #51
+    
+    Install ansible as the meza-ansible user and
+    then run install collections
+
+commit 6b655263037f853a00558363e9f81e8e8279dca1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    Fix issue #113 with specific binary paths
+    
+    Use /usr/local/bin for ansible-galaxy commands
+    Both in the playbook, and in the tasks
+
+commit c2bde01c161db37380ae6dd375acda12967cb54a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    Fix Issue #108
+    
+    Introduce requirements.yml and ansible.cfg changes
+    to install community collections we depend on
+
+commit 2f0e5cf019204c7197068b0b771eb08e82a6a231
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    Ignore common clutter and artifacts
+
+commit 8b68356252e6b52d487a8a0faa782174101b9160
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    ignore Ansible collections
+
+commit 9cff9352b16cd386eb3c31ed24d089ec146cf3e1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    add comment for powertools and remove  centos-release-ansible-29
+
+commit 88f3b2a6547246541a759c3c43b2e813c238930a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:15 2024 -0400
+
+    bump bootstrap; add bootstrap components
+
+commit cb437664e61d2110544228f58902e7fd21e34fed
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:14 2024 -0400
+
+    Preliminary removal of Python install INSIDE MediaWiki role
+    
+    @TODO cleanup / remove the separate variables for package_pyhton3_pip and package_python3_pip_rhel8 See issue #41#issuecomment-2045506153
+
+commit a2c81668d672efae266f207ec17f6306cc8d11f8
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:41:14 2024 -0400
+
+    Re-enable Semantic Dependency Updater
+
+commit eab5d30c5a1084fb5d96f38e66ab83d29fd38cbc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Clarify opcache settings
+    
+    m_use_production_settings was vague
+    m_opcache_production_mode better describes this switch
+    
+    Add descriptive comments that explains what it does
+
+commit fedf9fbf3d939c91ab5eddda590265ecf871d93e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Fix rebuild SMW data and rebuild Elasticsearch
+    
+    Add 'base' tag to the deploy command
+    
+    fixes #98
+
+commit aed2dc954d10894b19dab8deb47543d5c89adf97
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Fix rebuild SMW data and rebuild Elasticsearch
+    
+    substitute list_of_wikis in place of wikis_to_rebuild_data
+    because the latter variable is undefined
+    
+    fixes issue #98
+
+commit 20f938f309fd061999a357490ea94a4783d8000f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Remove the footer in .git-commit-template.
+
+commit 59cfafe9c07a6b9999d89ef363d6a18bb64e4967
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    downgrade ReplaceText + InputBox
+    
+    These extensions' 'main' branch requires
+    a higher version of MediaWiki core. So, revert to
+    the REL1_39 branch for now.
+
+commit 4b80c01f4ec98418ade4a492e3b406e611f1e85c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Fix typo in MezaCoreExtensions.yml
+
+commit cfbe3c224ac4a2362211346fa6fc4171532bc72e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Remove SAML configuration
+    
+    The SAML configuration should go into a configuration repo
+    (e.g. conf-meza-myfarm) for wikis that use it.
+    
+    The 'opt/conf-meza/public' directory should
+    ALWAYS be turned into a 'conf-meza-myfarm' repo
+    after the first 'meza deploy', so that's where SAML
+    config can be put in e.g. base.php
+    
+    This way, Meza can be deployed and used with all
+    kinds of authentication options rather than a single
+    hard-coded option.
+
+commit ccc932fef1f23455f1491dd5e96abf2df7cd73fa
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Switch some repos to master
+    
+    Add comments about things that need to be fixed or checked
+    
+    Switch some repos to 'master'
+    - ExternalData
+    - InputBox
+    - ReplaceText
+    - AdminLinks
+    - DataTransfer
+    
+    Reformat line comments from PHP to YAML
+    so that the file is valid YAML
+
+commit 878373885e9ae6b91df968a7f6af7abb131779f2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Fix composer install bug
+    
+    Fix issue #94 which can happen when composer.json
+    has newer dependencies or requirements than
+    composer.lock
+
+commit 7166e16f6c2caeb3e02d4091a0af486a62436230
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 4 16:30:32 2024 -0400
+
+    Fix samesite cookie settings for a stubborn Chrome
+    
+    Chrome browser will error with
+    "State Information Lost" ( \SimpleSAML\Error\NoState: NOSTATE )
+    unless you set session.cookie.secure => true
+    and session.cookie.samesite => 'None'
+
+commit 87956a539786462fdd4eece2096f90999879e6a1
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Thu Oct 3 13:32:58 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Changing page forms version from master to 5.8.1
+
+commit 33588cc6971ba11d216c4fa02e1b088aff88f906
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Wed Oct 2 15:48:56 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Fixed spacing issue
+
+commit b8e7778ff1ec09456985222a473950aa7b4894cd
+Merge: c3ab0884 816854ad
+Author: darith27 <darith.s.yim@nasa.gov>
+Date:   Tue Oct 1 09:44:27 2024 -0500
+
+    Merge pull request #56 from nasa/remove-es-password
+    
+    fix(vuln): remove default elasticsearch password
+
+commit c3ab0884a47de51609532b527dbb3452a7c2499d
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Fri Sep 27 14:27:00 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    1. Added $wgPageFormsUseDisplayTitle = false;
+    2. Added UrlGetParameters
+
+commit 6d604cb0113e3dd9deb9440593db52b8d0ef77cc
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Thu Sep 26 16:00:14 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    1. Added $wgPageFormsDelayReload = true;
+    2. Added $smwgParserFeatures = $smwgParserFeatures | SMW_PARSER_LINV;
+    3. Added Gadgets extension
+
+commit 816854ade748f91cdc352c14470676d6d7902b7e
+Author: James Montalvo <edwin.j.montalvo@nasa.gov>
+Date:   Fri Sep 20 16:35:09 2024 -0500
+
+    fix(vuln): remove default elasticsearch password
+    
+    Setting a default password could cause installations to use that
+    password in production systems, which is a security vulnerability since
+    the default password is published on github.
+
+commit a0853fcd9a0bde7b1d71b48a93ecfb03643e6eb6
+Merge: fabcf0c3 6bd0c2d2
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Thu Sep 12 09:11:36 2024 -0400
+
+    Merge remote-tracking branch 'origin/39.x'
+
+commit 6bd0c2d24264c768262efd482b860bba8f05ec9b
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Wed Sep 11 15:43:42 2024 -0400
+
+    Removed WatchAnalytics in MezaCoreExtensions.yml
+    
+    Will add it back after full 1.39 checkout is complete.
+
+commit b48a745572721a80bf6c5fb82c71801051669e1d
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Wed Sep 11 15:32:16 2024 -0400
+
+    Update MezaCoreExtensions.yml so Extention HeaderTabs uses master
+
+commit 12a9ca6977dac781cf2aa7cbd5314ebef1615ccb
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Wed Sep 11 15:27:08 2024 -0400
+
+    removed extension not used in 1.34 MezaCoreExtensions.yml
+    
+    removed SubpageNavigation, InlineComments, DarkMode, WikiLove, FlexFormUpdate. Will add these extensions back after 1.39 is fully checked-out
+
+commit 7bc5f2f903e7d2ceea5e3bbe5245c670b47853aa
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Tue Sep 10 12:00:15 2024 -0400
+
+    Update LocalSettings.php.j2
+    
+    enabled 4 GB uploads and don't check fiile types
+
+commit 9ec786b16c8963415663bff2c2ba9d2e919b319e
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Tue Sep 10 11:54:54 2024 -0400
+
+    Update defaults.yml
+    
+    update max file size to 5G
+
+commit 41b35db406731a0302749dbedc429c2b0461bb11
+Merge: dfb15e15 89dccf34
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Sep 5 14:22:39 2024 -0400
+
+    Merge pull request #55 from amcgillivray-nasa/patch-2
+    
+    Update wgSDUUseJobQueue to true in MezaCoreExtensions.yml
+
+commit dfb15e152f3ca78ac11a2711a976a79b26ecd382
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Sep 5 13:40:57 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Bump SMW from 4.1.3 to ~4.2 + added config properties, switch back to normal Mediawiki version of PF version master, added SubPageNavigation config, changed SDU config to use Job Queue.
+
+commit 89dccf348d72386e2462749870c58af1e85dd45d
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Thu Sep 5 11:17:15 2024 -0400
+
+    Update wgSDUUseJobQueue to true in MezaCoreExtensions.yml
+    
+    SDU works when set to true, and does not work when set to false
+
+commit f26c6c57650be1d7b4d1cf7cf1564edc1fa9d4ea
+Merge: f55071aa 3a952f5b
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Jul 11 14:15:52 2024 -0400
+
+    Merge pull request #53 from amcgillivray-nasa/patch-1
+    
+    Update haproxy.cfg.j2
+
+commit 3a952f5b29a31d1d9c049db0a67a0e929b2b261a
+Author: amcgillivray-nasa <86375675+amcgillivray-nasa@users.noreply.github.com>
+Date:   Thu Jul 11 14:13:00 2024 -0400
+
+    Update haproxy.cfg.j2
+    
+    Removed "no-tlsv12" in order to maintain compatibility with mwclient on RHEL8 using OpenSSL 1.1.1
+
+commit f55071aa6ed779e93a31ea9f82e5269f4bf86309
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Wed Jul 3 15:51:37 2024 -0400
+
+    Add WikiLove, FlexForms, and change VEForAll brnach to master
+
+commit a5d919e380352ee40ca9aec1212c6bf48f38d937
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Mon Jun 10 11:50:47 2024 -0400
+
+    Update MezaCoreSkins.yml
+    
+    Add MediaWiki site configuration variables via the Vector skin config
+
+commit 9ff624e42dee0442638b645429ddc5d76d5a1c9b
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Mon Jun 10 11:24:39 2024 -0400
+
+    Update MezaCoreSkins.yml
+    
+    removed skin:Poncho until we have time to debug it
+
+commit 6f439740ef1fb8866ae98bf68b4fcfb37bd3d5b5
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Mon Jun 10 11:23:10 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    Configure Page Forms to allow autoedits in the User Namespace
+
+commit 2732e08e5399a2d3ff39ff7784a8036339260337
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Jun 6 17:56:15 2024 -0400
+
+    Update MezaCoreSkins.yml
+    
+    Notes - Chameleon is the default skin. All the other skins either ship with MW Core (1.39) or they were listed at: https://www.pro.wiki/articles/best-mediawiki-skins
+
+commit 13c853fa54a408efd281e671fe75522b8a4c2c5d
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Jun 6 17:44:53 2024 -0400
+
+    Update MezaCoreSkins.yml
+    
+    adding more skins to choose from
+
+commit ea52868f36e9af1bd8f65cdcdef7d3e385d92479
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Thu Jun 6 16:07:51 2024 -0400
+
+    replace depricated ansible includes with include_tasks
+
+commit 4f1fbe5a9570d10683115adb81cb93800a876908
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Thu Jun 6 16:04:11 2024 -0400
+
+    Re-enable SDU and fix CommentStreams config typo
+
+commit 2cb0b81a3b915728f4b4481f7d85be28c6ad0a4f
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Fri May 31 14:19:05 2024 -0400
+
+    Update MezaCoreExtensions.yml
+    
+    make it so that Comment Streams don't show on pages by default
+
+commit da64b3baa16778fff052e4873ee31051b08b5688
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Mon May 20 19:44:53 2024 -0400
+
+    Update .htaccess.j2
+    
+    Don't expose any files or folders with .git in the path
+
+commit 6ce641e0d17a90bfe44ea07f17990e35ecf83e0e
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Wed May 8 13:52:55 2024 -0400
+
+    Configure Apache ServerTokens to ProductOnly
+
+commit 83d38a0c2f2d7f44336287dddfbe8c15ff8df892
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Wed May 8 13:50:59 2024 -0400
+
+    Have meza overwrite local commits by default
+
+commit 932042ab7a324ea10b5c752891136839ba4da97f
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Wed May 8 13:48:59 2024 -0400
+
+    Add Extension SubpageNavigation to Meza Core Extension
+
+commit 8eb2240370e9c1f875facdda40ead13611d62c9b
+Author: ndc-rkevans <richard.k.evans@nasa.gov>
+Date:   Wed May 1 09:51:43 2024 -0400
+
+    saml configuration updates
+
+commit c94fe3110e3e16d32e1dcdf669fff09f2a4965d8
+Merge: ef05b3d9 d931e9cc
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Fri Mar 29 19:33:31 2024 -0400
+
+    Merge pull request #51 from freephile/REL1_39
+    
+    Final project fix and documentation
+
+commit d931e9cc1a6a9f1458f3b358b8bec0cf3c8f2faa
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Mar 29 21:33:34 2024 +0000
+
+    Add cache directory for SimpleSAMLphp
+    
+    The cachedir is templated in the config.php.j2 file.
+    The directory is created in the main tasks file.
+    Oddly enough, the system worked in prior tests without any cache defined.
+    See simplesamlphp/config/config.dist for all configurations available.
+    
+    See issue #74
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit 39dbcbf6feeda7179399ddd9b514ab9973eb3db2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Mar 29 16:41:15 2024 -0400
+
+    Update CHANGELOG and RELEASE NOTES
+    
+    Add details on new features.
+    See issue #52
+    See also #53 #54 #55
+    
+    This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+
+commit ef05b3d914941245dee6ec189b5b7cf5271c0d9d
+Merge: 0753a519 74e74a20
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Fri Mar 29 07:57:46 2024 -0400
+
+    Merge pull request #50 from freephile/REL1_39
+    
+    Small changes as we finish the 39.x upgrade
+
+commit 0753a519e0cbe9507e1732e07591eee89d245e23
+Merge: 5c890372 5e2200b7
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Thu Mar 28 07:49:17 2024 -0400
+
+    Merge pull request #49 from freephile/REL1_39
+    
+    4th Upgrade Meza to REL1_39 pull request
+
+commit fabcf0c3e4855f57ddbdcc0635bc8e27421494a8
+Merge: 9cdc90d9 9885e241
+Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
+Date:   Fri Jul 7 17:56:45 2023 -0400
+
+    Merge pull request #19 from nasa/35.x
+    
+    sync grc-atf to 35.x
+
 commit 86aea143c9546af22a3108cb6660658391915c93
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Commit: Greg Rundlett <greg.rundlett@gmail.com>

@@ -28,11 +28,13 @@
 // Dynamically determine Meza installation directory for portability
 
 // Method 1: Try to find meza command in PATH and determine install dir
-$mezaCommand = trim(shell_exec('which meza 2>/dev/null'));
-if ($mezaCommand && file_exists($mezaCommand)) {
-	// Get the real path and go up directories: /install/meza/src/scripts/meza.py -> /install
-	$installDir = dirname(dirname(dirname(dirname(realpath($mezaCommand)))));
-} else {
+$mezaCommand = "";
+if (function_exists('shell_exec') && !in_array('shell_exec', explode(',', ini_get('disable_functions')))) {
+	$mezaCommand = trim(shell_exec('which meza 2>/dev/null'));
+	if ($mezaCommand && file_exists($mezaCommand)) {
+		// Get the real path and go up directories: /install/meza/src/scripts/meza.py -> /install
+		$installDir = dirname(dirname(dirname(dirname(realpath($mezaCommand)))));
+	} else {
 	// Method 2: Fallback - assume current script is in /install/htdocs/BackupDownload/
 	// Go up from htdocs/BackupDownload to find install directory
 	$currentDir = dirname(dirname(__FILE__)); // htdocs directory
@@ -51,7 +53,10 @@ if (!file_exists($configPath)) {
 require_once($configPath);
 
 // hide notices
-@ini_set('error_reporting', E_ALL & ~ E_NOTICE);
+if (function_exists('ini_set')) {
+	ini_set('error_reporting', E_ALL & ~ E_NOTICE);
+}
+
 
 //- turn off compression on the server
 @apache_setenv('no-gzip', 1);
@@ -332,7 +337,11 @@ try {
 
 	// Stream file content
 	while (!feof($file)) {
-		print(@fread($file, 1024 * 8));
+		$chunk = (fread($file, 1024 * 8));
+		if ($chunk === false) {
+			break;
+		}
+		print($chunk);
 		ob_flush();
 		flush();
 		if (connection_status() != 0) {

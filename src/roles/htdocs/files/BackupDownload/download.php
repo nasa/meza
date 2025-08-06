@@ -266,8 +266,8 @@ try {
 
 	// Open file for download
 	$file_size = filesize($file_path);
-	$file = @fopen($file_path, "rb");
-	if (!$file) {
+	$file = fopen($file_path, "rb");
+	if ($file === false) {
 		header("HTTP/1.0 500 Internal Server Error");
 		exit("Cannot open file");
 	}

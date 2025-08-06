@@ -76,17 +76,17 @@ The test suite includes:
 ## Usage Examples
 
 ### Download a database backup
-```
+```http
 GET /download.php?wiki=mywiki&file=backup.sql.gz
 ```
 
 ### Download from subdirectory
-```
+```http
 GET /download.php?wiki=mywiki&dir=daily&file=daily_backup.sql.gz
 ```
 
 ### Download uploads archive
-```
+```http
 GET /download.php?wiki=mywiki&file=uploads.tar.gz
 ```
 

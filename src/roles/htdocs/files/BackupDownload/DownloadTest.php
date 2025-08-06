@@ -615,9 +615,13 @@ class DownloadTest extends BaseTestCase
 	}
 
 	/**
-	 * Helper methods to simulate the functions from download.php
-	 * These recreate the key validation logic for testing
-	 */
+	* Helper methods to simulate the functions from download.php
+	* These recreate the key validation logic for testing
+	* 
+	* IMPORTANT: These methods must be kept synchronized with the actual
+	* implementation in download.php. Any changes to the main functions
+	* should be reflected here to maintain test accuracy.
+	*/
 	private function callValidateInputs()
 	{
 		if (!isset($_REQUEST['file']) || empty($_REQUEST['file']) || 

@@ -1,25 +1,32 @@
 <?php
 /**
- * From http://www.media-division.com/the-right-way-to-handle-file-downloads-in-php/
+ * download.php
  *
- * Copyright 2012 Armand Niculescu - media-division.com
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
- * THIS SOFTWARE IS PROVIDED BY THE FREEBSD PROJECT "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FREEBSD PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Download backup files for a given wiki.
+ *
+ * Parameters:
+ * - file: The name of the file to download (required)
+ * - wiki: The wiki name (required)
+ * - dir: The directory within the wiki's backup folder (optional)
+ * - stream: If set, the file will be streamed inline; otherwise, it will be downloaded as an attachment.
+ *
+ * Authentication:
+ * - Requires Single Sign On (SSO) via SimpleSAMLphp.
+ *
+ * Security:
+ * - Validates input parameters to prevent path traversal and unauthorized access.
+ * - Checks user permissions against allowed downloaders.
+ *
+ * Usage:
+ * Example URL: /BackupDownload/download.php?file=backup.sql.gz&wiki=mywiki&dir=daily
+ *
+ * @author Greg Rundlett
+ * @license GPLv2 or later
  */
-
-# Debug
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
 
 // load meza config
 // FIXME: this assumes installed in /opt, which is not guaranteed
 require_once '/opt/.deploy-meza/config.php';
-
-
-// get the file request, throw error if nothing supplied
 
 // hide notices
 @ini_set('error_reporting', E_ALL & ~ E_NOTICE);
@@ -28,189 +35,287 @@ require_once '/opt/.deploy-meza/config.php';
 @apache_setenv('no-gzip', 1);
 @ini_set('zlib.output_compression', 'Off');
 
-if(!isset($_REQUEST['file']) || empty($_REQUEST['file']) || !isset($_REQUEST['wiki']) || empty($_REQUEST['wiki']) )
-{
-	header("HTTP/1.0 400 Bad Request");
-	exit;
+/**
+ * Validate and sanitize input parameters
+ */
+function validateInputs() {
+    if (!isset($_REQUEST['file']) || empty($_REQUEST['file']) || 
+        !isset($_REQUEST['wiki']) || empty($_REQUEST['wiki'])) {
+        header("HTTP/1.0 400 Bad Request");
+        exit;
+    }
+
+    // Validate wiki name - only allow alphanumeric, underscore, hyphen
+    $wiki = $_REQUEST['wiki'];
+    if (!preg_match('/^[a-zA-Z0-9_-]+$/', $wiki)) {
+        header("HTTP/1.0 400 Bad Request");
+        exit("Invalid wiki name");
+    }
+
+    // Validate directory name if provided
+    $directory = null;
+    if (isset($_REQUEST['dir']) && !empty($_REQUEST['dir'])) {
+        $directory = $_REQUEST['dir'];
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $directory)) {
+            header("HTTP/1.0 400 Bad Request");
+            exit("Invalid directory name");
+        }
+    }
+
+    // Validate filename - only basename, no path components
+    $requested_file = $_REQUEST['file'];
+    $file_name = basename($requested_file);
+    
+    // Ensure the basename matches the original request (no path traversal)
+    if ($file_name !== $requested_file) {
+        header("HTTP/1.0 400 Bad Request");
+        exit("Invalid file name");
+    }
+
+    // Validate file extension
+    $allowed_extensions = ['sql', 'xml', 'gz', 'zip', 'tar', 'bz2'];
+    $path_parts = pathinfo($file_name);
+    $file_ext = strtolower($path_parts['extension'] ?? '');
+    
+    if (!in_array($file_ext, $allowed_extensions)) {
+        header("HTTP/1.0 400 Bad Request");
+        exit("File type not allowed");
+    }
+
+    return [
+        'wiki' => $wiki,
+        'directory' => $directory,
+        'file_name' => $file_name,
+        'file_ext' => $file_ext
+    ];
 }
 
-// sanitize the file request, keep just the name and extension
-// also, replaces the file location with a preset one ('./myfiles/' in this example)
-$file_path  = $_REQUEST['file'];
-$path_parts = pathinfo($file_path);
-$file_name  = $path_parts['basename'];
-$file_ext   = $path_parts['extension'];
-$wiki       = $_REQUEST['wiki'];
-$directory  = $_REQUEST['dir'];
+/**
+ * Get the environment directory safely
+ */
+function getEnvironment($m_backups, $backups_environment = null) {
+    if (isset($backups_environment)) {
+        $env = $backups_environment;
+    } else {
+        $undesiredStrings = array(".", "..", ".DS_Store", ".htaccess", "README");
+        $envs = array_diff(scandir($m_backups), $undesiredStrings);
+        $env = array_pop($envs);
+    }
 
-// get environment
-if ( isset( $backups_environment ) ) {
-    $env = $backups_environment;
-}
-else {
-	$undesiredStrings = array(
-		".",
-		"..",
-		".DS_Store",
-		".htaccess",
-		"README",
-	);
+    // Validate environment name
+    if (!preg_match('/^[a-zA-Z0-9_-]+$/', $env)) {
+        header("HTTP/1.0 400 Bad Request");
+        exit("Invalid environment");
+    }
 
-    $envs = array_diff( scandir( $m_backups ), $undesiredStrings );
-
-    // if there are multiple environments backed up to this server, and
-    // $backups_environment isn't specified for which environment to disply in
-    // backupListing.php, then just guess the first one.
-    // FIXME #816: This probably is all totally broken in a polylithic setup.
-    $env = array_pop( $envs );
+    return $env;
 }
 
-// path to backups is backups directory + environment
-$path = realpath( "$m_backups/$env" );
+/**
+ * Build and validate the complete file path
+ */
+function buildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name) {
+    // Build base path
+    $base_path = realpath($m_backups . '/' . $env);
+    if ($base_path === false) {
+        header("HTTP/1.0 404 Not Found");
+        exit("Environment not found");
+    }
 
-// Assemble file path
-$file_path  = "$m_backups/$env/$wiki/";
-if( isset($directory) ){
-	$file_path .= $directory . "/";
+    // Build wiki path
+    $wiki_path = $base_path . '/' . $wiki;
+    if (!is_dir($wiki_path)) {
+        header("HTTP/1.0 404 Not Found");
+        exit("Wiki not found");
+    }
+
+    // Build directory path if specified
+    $target_dir = $wiki_path;
+    if ($directory !== null) {
+        $target_dir = $wiki_path . '/' . $directory;
+        if (!is_dir($target_dir)) {
+            header("HTTP/1.0 404 Not Found");
+            exit("Directory not found");
+        }
+    }
+
+    // Build final file path
+    $file_path = $target_dir . '/' . $file_name;
+    
+    // Ensure the resolved path is within our allowed directory
+    $real_file_path = realpath($file_path);
+    $real_base_path = realpath($base_path);
+    
+    if ($real_file_path === false || strpos($real_file_path, $real_base_path) !== 0) {
+        header("HTTP/1.0 403 Forbidden");
+        exit("Access denied");
+    }
+
+    return $real_file_path;
 }
-$file_path .= $file_name;
 
-// allow a file to be streamed instead of sent as an attachment
-$is_attachment = isset($_REQUEST['stream']) ? false : true;
+/**
+ * Get list of allowed files for the user and wiki
+ */
+function getAllowedFiles($file_path, $wiki, $userID, $wiki_backup_downloaders, $all_backup_downloaders) {
+    // Check if user has permission for this wiki
+    if (!isset($wiki_backup_downloaders) || !is_array($wiki_backup_downloaders)) {
+        $wiki_backup_downloaders = array();
+    }
+    if (!isset($all_backup_downloaders) || !is_array($all_backup_downloaders)) {
+        $all_backup_downloaders = array();
+    }
+    if (!isset($wiki_backup_downloaders[$wiki])) {
+        $wiki_backup_downloaders[$wiki] = array();
+    }
 
+    $allowedUsers = array_merge($all_backup_downloaders, $wiki_backup_downloaders[$wiki]);
+    
+    if (!in_array($userID, $allowedUsers)) {
+        return false;
+    }
 
-// if there's a SAML config file, we need to authenticate with SAML, like, now.
-if ( is_file( $m_deploy.'/SAMLConfig.php' ) ) {
-	require_once $m_htdocs.'/NonMediaWikiSimpleSamlAuth.php';
+    // Get list of actual files in the directory
+    $directory = dirname($file_path);
+    $requested_file = basename($file_path);
+    
+    if (!is_dir($directory)) {
+        return false;
+    }
+
+    $allowed_files = array();
+    $files = scandir($directory);
+    foreach ($files as $file) {
+        if ($file !== '.' && $file !== '..' && is_file($directory . '/' . $file)) {
+            $allowed_files[] = $file;
+        }
+    }
+
+    return in_array($requested_file, $allowed_files);
 }
-else {
-	header('HTTP/1.0 403 Forbidden');
-	echo "Backup downloading is not permitted without Single Sign On";
+
+// Main execution
+try {
+    // Validate inputs
+    $inputs = validateInputs();
+    $wiki = $inputs['wiki'];
+    $directory = $inputs['directory'];
+    $file_name = $inputs['file_name'];
+    $file_ext = $inputs['file_ext'];
+
+    // Get environment
+    $env = getEnvironment($m_backups, $backups_environment ?? null);
+
+    // Build secure file path
+    $file_path = buildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name);
+
+    // Check if streaming or attachment
+    $is_attachment = !isset($_REQUEST['stream']);
+
+    // Handle authentication
+    if (is_file($m_deploy . '/SAMLConfig.php')) {
+        require_once $m_htdocs . '/NonMediaWikiSimpleSamlAuth.php';
+    } else {
+        header('HTTP/1.0 403 Forbidden');
+        exit("Authentication is required for this operation.");
+    }
+
+    $as = new SimpleSAML_Auth_Simple('default-sp');
+    $as->requireAuth();
+    $attributes = $as->getAttributes();
+    $userID = $attributes[$saml_idp_username_attr][0];
+
+    // Validate file access permissions
+    if (!getAllowedFiles($file_path, $wiki, $userID, $wiki_backup_downloaders ?? [], $all_backup_downloaders ?? [])) {
+        header("HTTP/1.0 403 Forbidden");
+        exit("Access denied");
+    }
+
+    // Verify file exists and is readable
+    if (!is_file($file_path) || !is_readable($file_path)) {
+        header("HTTP/1.0 404 Not Found");
+        exit("File not found");
+    }
+
+    // Open file for download
+    $file_size = filesize($file_path);
+    $file = @fopen($file_path, "rb");
+    if (!$file) {
+        header("HTTP/1.0 500 Internal Server Error");
+        exit("Cannot open file");
+    }
+
+    // Set headers
+    header("Pragma: public");
+    header("Expires: -1");
+    header("Cache-Control: public, must-revalidate, post-check=0, pre-check=0");
+
+    // Set appropriate headers for attachment or streamed file
+    if ($is_attachment) {
+        header("Content-Disposition: attachment; filename=\"$file_name\"");
+    } else {
+        header('Content-Disposition: inline;');
+    }
+
+    // Set MIME type
+    $content_types = array(
+        "sql" => "application/sql",
+        "xml" => "application/xml",
+        "zip" => "application/zip",
+        "gz" => "application/gzip",
+        "tar" => "application/x-tar",
+        "bz2" => "application/x-bzip2"
+    );
+    $ctype = $content_types[$file_ext] ?? "application/octet-stream";
+    header("Content-Type: " . $ctype);
+
+    // Handle range requests
+    $range = '';
+    if (isset($_SERVER['HTTP_RANGE'])) {
+        list($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+        if ($size_unit == 'bytes') {
+            list($range, $extra_ranges) = explode(',', $range_orig, 2);
+        } else {
+            header('HTTP/1.1 416 Requested Range Not Satisfiable');
+            exit;
+        }
+    }
+
+    // Calculate download range
+    list($seek_start, $seek_end) = explode('-', $range, 2);
+    $seek_end = (empty($seek_end)) ? ($file_size - 1) : min(abs(intval($seek_end)), ($file_size - 1));
+    $seek_start = (empty($seek_start) || $seek_end < abs(intval($seek_start))) ? 0 : max(abs(intval($seek_start)), 0);
+
+    // Send appropriate headers
+    if ($seek_start > 0 || $seek_end < ($file_size - 1)) {
+        header('HTTP/1.1 206 Partial Content');
+        header('Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/' . $file_size);
+        header('Content-Length: ' . ($seek_end - $seek_start + 1));
+    } else {
+        header("Content-Length: $file_size");
+    }
+
+    header('Accept-Ranges: bytes');
+    set_time_limit(0);
+    fseek($file, $seek_start);
+
+    // Stream file content
+    while (!feof($file)) {
+        print(@fread($file, 1024 * 8));
+        ob_flush();
+        flush();
+        if (connection_status() != 0) {
+            @fclose($file);
+            exit;
+        }
+    }
+
+    @fclose($file);
+    exit;
+
+} catch (Exception $e) {
+    error_log("Download error: " . $e->getMessage());
+    header("HTTP/1.0 500 Internal Server Error");
+    exit("Internal server error");
 }
 
-$as = new SimpleSAML_Auth_Simple('default-sp');
-$as->requireAuth();
-$attributes = $as->getAttributes();
-$userID = $attributes[ $saml_idp_username_attr ][0];
-
-
-// wiki_backup_downloaders and all_backup_downloaders from config.php if set
-// FIXME #817: this is a lot of duplication with backupListing.php
-if ( ! isset( $wiki_backup_downloaders ) || ! is_array( $wiki_backup_downloaders ) ) {
-    $wiki_backup_downloaders = array();
-}
-if ( ! isset( $all_backup_downloaders ) || ! is_array( $all_backup_downloaders ) ) {
-    $all_backup_downloaders = array();
-}
-if ( ! isset( $wiki_backup_downloaders[ $wiki ] ) ) {
-    $wiki_backup_downloaders[ $wiki ] = array();
-}
-
-$allowedUsers = array_merge( $all_backup_downloaders, $wiki_backup_downloaders[ $wiki ] );
-
-// make sure the file exists, user has permission, and user isn't trying to snoop
-if ( is_file($file_path) && in_array($userID, $allowedUsers) && !strpos($file_path, "..") ) {
-
-	$file_size = filesize($file_path);
-	$file = @fopen($file_path,"rb");
-	if ($file)
-	{
-		// set the headers, prevent caching
-		header("Pragma: public");
-		header("Expires: -1");
-		header("Cache-Control: public, must-revalidate, post-check=0, pre-check=0");
-		header("Content-Disposition: attachment; filename=\"$file_name\"");
-
-        // set appropriate headers for attachment or streamed file
-        if ($is_attachment)
-                header("Content-Disposition: attachment; filename=\"$file_name\"");
-        else
-                header('Content-Disposition: inline;');
-
-        // set the mime type based on extension, add yours if needed.
-        $ctype_default = "application/octet-stream";
-        $content_types = array(
-                "exe" => "application/octet-stream",
-                "zip" => "application/zip",
-                "mp3" => "audio/mpeg",
-                "mpg" => "video/mpeg",
-                "avi" => "video/x-msvideo",
-        );
-        $ctype = isset($content_types[$file_ext]) ? $content_types[$file_ext] : $ctype_default;
-        header("Content-Type: " . $ctype);
-
-		//check if http_range is sent by browser (or download manager)
-		if(isset($_SERVER['HTTP_RANGE']))
-		{
-			list($size_unit, $range_orig) = explode('=', $_SERVER['HTTP_RANGE'], 2);
-			if ($size_unit == 'bytes')
-			{
-				//multiple ranges could be specified at the same time, but for simplicity only serve the first range
-				//http://tools.ietf.org/id/draft-ietf-http-range-retrieval-00.txt
-				list($range, $extra_ranges) = explode(',', $range_orig, 2);
-			}
-			else
-			{
-				$range = '';
-				header('HTTP/1.1 416 Requested Range Not Satisfiable');
-				exit;
-			}
-		}
-		else
-		{
-			$range = '';
-		}
-
-		//figure out download piece from range (if set)
-		list($seek_start, $seek_end) = explode('-', $range, 2);
-
-		//set start and end based on range (if set), else set defaults
-		//also check for invalid ranges.
-		$seek_end   = (empty($seek_end)) ? ($file_size - 1) : min(abs(intval($seek_end)),($file_size - 1));
-		$seek_start = (empty($seek_start) || $seek_end < abs(intval($seek_start))) ? 0 : max(abs(intval($seek_start)),0);
-
-		//Only send partial content header if downloading a piece of the file (IE workaround)
-		if ($seek_start > 0 || $seek_end < ($file_size - 1))
-		{
-			header('HTTP/1.1 206 Partial Content');
-			header('Content-Range: bytes '.$seek_start.'-'.$seek_end.'/'.$file_size);
-			header('Content-Length: '.($seek_end - $seek_start + 1));
-		}
-		else
-		  header("Content-Length: $file_size");
-
-		header('Accept-Ranges: bytes');
-
-		set_time_limit(0);
-		fseek($file, $seek_start);
-
-		while(!feof($file))
-		{
-			print(@fread($file, 1024*8));
-			ob_flush();
-			flush();
-			if (connection_status()!=0)
-			{
-				@fclose($file);
-				exit;
-			}
-		}
-
-		// file save was a success
-		@fclose($file);
-		exit;
-	}
-	else
-	{
-		// file couldn't be opened
-		header("HTTP/1.0 500 Internal Server Error");
-		exit;
-	}
-}
-else
-{
-	// file does not exist
-	header("HTTP/1.0 404 Not Found");
-	exit;
-}
-?>

@@ -718,7 +718,7 @@ class DownloadTest extends BaseTestCase
 		$real_file_path = realpath($file_path);
 		$real_base_path = realpath($base_path);
 		
-		if ($real_file_path === false || strpos($real_file_path, $real_base_path) !== 0) {
+		if ($real_file_path === false || strpos($real_file_path, $real_base_path . DIRECTORY_SEPARATOR) !== 0) {
 			throw new Exception("Access denied");
 		}
 

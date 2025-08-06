@@ -168,7 +168,7 @@ function buildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name) {
 	$real_file_path = realpath($file_path);
 	$real_base_path = realpath($base_path);
 	
-	if ($real_file_path === false || strpos($real_file_path, $real_base_path) !== 0) {
+	if ($real_file_path === false || strpos($real_file_path, $real_base_path . DIRECTORY_SEPARATOR) !== 0) {
 		header("HTTP/1.0 403 Forbidden");
 		exit("Access denied");
 	}
@@ -236,7 +236,12 @@ try {
 
 	// Handle authentication
 	if (is_file($m_deploy . '/SAMLConfig.php')) {
-		require_once $m_htdocs . '/NonMediaWikiSimpleSamlAuth.php';
+		$auth_file = $m_htdocs . '/NonMediaWikiSimpleSamlAuth.php';
+		if (!file_exists($auth_file)) {
+			header('HTTP/1.0 500 Internal Server Error');
+			exit("Unavailable without Authentication. Authentication module not found.");
+		}
+		require_once $auth_file;
 	} else {
 		header('HTTP/1.0 403 Forbidden');
 		exit("Authentication is required for this operation.");

@@ -199,6 +199,9 @@ if (class_exists('PHPUnit\Framework\TestCase')) {
  */
 class DownloadTest extends BaseTestCase
 {
+	// Regex pattern for validating alphanumeric names with underscores and hyphens
+	private const ALPHANUMERIC_PATTERN = '/^[a-zA-Z0-9_-]+$/';
+	
 	private $tempDir;
 	private $backupsDir;
 	private $testFiles = [];
@@ -631,7 +634,7 @@ class DownloadTest extends BaseTestCase
 
 		// Validate wiki name - only allow alphanumeric, underscore, hyphen
 		$wiki = $_REQUEST['wiki'];
-		if (!preg_match('/^[a-zA-Z0-9_-]+$/', $wiki)) {
+		if (!preg_match(self::ALPHANUMERIC_PATTERN, $wiki)) {
 			throw new Exception("Invalid wiki name");
 		}
 
@@ -639,7 +642,7 @@ class DownloadTest extends BaseTestCase
 		$directory = null;
 		if (isset($_REQUEST['dir']) && !empty($_REQUEST['dir'])) {
 			$directory = $_REQUEST['dir'];
-			if (!preg_match('/^[a-zA-Z0-9_-]+$/', $directory)) {
+			if (!preg_match(self::ALPHANUMERIC_PATTERN, $directory)) {
 				throw new Exception("Invalid directory name");
 			}
 		}
@@ -681,7 +684,7 @@ class DownloadTest extends BaseTestCase
 		}
 
 		// Validate environment name
-		if (!preg_match('/^[a-zA-Z0-9_-]+$/', $env)) {
+		if (!preg_match(self::ALPHANUMERIC_PATTERN, $env)) {
 			throw new Exception("Invalid environment");
 		}
 

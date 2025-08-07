@@ -31,10 +31,11 @@
 $mezaCommand = "";
 if (function_exists('shell_exec') && !in_array('shell_exec', explode(',', ini_get('disable_functions')))) {
 	$mezaCommand = trim(shell_exec('which meza 2>/dev/null'));
-	if ($mezaCommand && file_exists($mezaCommand)) {
-		// Get the real path and go up directories: /install/meza/src/scripts/meza.py -> /install
-		$installDir = dirname(dirname(dirname(dirname(realpath($mezaCommand)))));
-	} else {
+}
+if ($mezaCommand && file_exists($mezaCommand)) {
+	// Get the real path and go up directories: /install/meza/src/scripts/meza.py -> /install
+	$installDir = dirname(dirname(dirname(dirname(realpath($mezaCommand)))));
+} else {
 	// Method 2: Fallback - assume current script is in /install/htdocs/BackupDownload/
 	// Go up from htdocs/BackupDownload to find install directory
 	$currentDir = dirname(dirname(__FILE__)); // htdocs directory
@@ -51,6 +52,9 @@ if (!file_exists($configPath)) {
 
 // Include the generated configuration
 require_once($configPath);
+
+// Regex pattern for validating alphanumeric names with underscores and hyphens
+define('ALPHANUMERIC_PATTERN', '/^[a-zA-Z0-9_-]+$/');
 
 // hide notices
 if (function_exists('ini_set')) {
@@ -74,7 +78,7 @@ function validateInputs() {
 
 	// Validate wiki name - only allow alphanumeric, underscore, hyphen
 	$wiki = $_REQUEST['wiki'];
-	if (!preg_match('/^[a-zA-Z0-9_-]+$/', $wiki)) {
+	if (!preg_match(ALPHANUMERIC_PATTERN, $wiki)) {
 		header("HTTP/1.0 400 Bad Request");
 		exit("Invalid wiki name");
 	}
@@ -83,7 +87,7 @@ function validateInputs() {
 	$directory = null;
 	if (isset($_REQUEST['dir']) && !empty($_REQUEST['dir'])) {
 		$directory = $_REQUEST['dir'];
-		if (!preg_match('/^[a-zA-Z0-9_-]+$/', $directory)) {
+		if (!preg_match(ALPHANUMERIC_PATTERN, $directory)) {
 			header("HTTP/1.0 400 Bad Request");
 			exit("Invalid directory name");
 		}
@@ -130,7 +134,7 @@ function getEnvironment($m_backups, $backups_environment = null) {
 	}
 
 	// Validate environment name
-	if (!preg_match('/^[a-zA-Z0-9_-]+$/', $env)) {
+	if (!preg_match(ALPHANUMERIC_PATTERN, $env)) {
 		header("HTTP/1.0 400 Bad Request");
 		exit("Invalid environment");
 	}

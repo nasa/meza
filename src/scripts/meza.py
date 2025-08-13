@@ -72,7 +72,7 @@ def load_yaml(filepath):
 
 # Hard-coded for now, because I'm not sure where to set it yet
 language = "en"
-i18n = load_yaml(os.path.join(defaults['m_i18n'], language+".yml"))
+i18n = load_yaml(os.path.join(defaults['m_i18n'], language + ".yml"))
 
 
 def main(argv):
@@ -639,7 +639,7 @@ def get_git_hash(dir):
         try:
             commit = subprocess.check_output(
                 ["git", "--git-dir={}".format(git_dir), "rev-parse", "HEAD"]).strip()
-        except:
+        except BaseException:
             commit = "git-error"
         return commit
     else:
@@ -667,7 +667,7 @@ def get_git_describe_tags(dir):
         try:
             tags = subprocess.check_output(
                 ["git", "--git-dir={}".format(git_dir), "describe", "--tags", "--always"]).strip()
-        except:
+        except BaseException:
             tags = "git-error"
         return tags
     else:
@@ -886,8 +886,14 @@ def meza_command_setup_env(argv, return_not_exit=False):
 
     }
 
-    server_types = ['load_balancers', 'app_servers', 'memcached_servers',
-                    'db_slaves', 'elastic_servers', 'backup_servers', 'logging_servers']
+    server_types = [
+        'load_balancers',
+        'app_servers',
+        'memcached_servers',
+        'db_slaves',
+        'elastic_servers',
+        'backup_servers',
+        'logging_servers']
 
     for stype in server_types:
         if stype in os.environ:
@@ -930,7 +936,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     os.chmod(extra_vars_file, 0o664)
 
     shell_cmd = playbook_cmd("setup-env") + \
-        ["--extra-vars", '@'+extra_vars_file]
+        ["--extra-vars", '@' + extra_vars_file]
     rc = meza_shell_exec(shell_cmd)
 
     os.remove(extra_vars_file)
@@ -970,9 +976,11 @@ def meza_command_setup_dev(argv):
             "sudo -u {} git config --global user.name '{}'".format(dev_user, dev_git_user))
         os.system(
             "sudo -u {} git config --global user.email {}".format(dev_user, dev_git_user_email))
-        os.system("sudo -u {} git config --global color.ui true".format(dev_user))
+        os.system(
+            "sudo -u {} git config --global color.ui true".format(dev_user))
 
-    # ref: https://www.liquidweb.com/kb/how-to-install-and-configure-vsftpd-on-centos-7/
+    # ref:
+    # https://www.liquidweb.com/kb/how-to-install-and-configure-vsftpd-on-centos-7/
     os.system("yum -y install vsftpd")
     os.system(
         "sed -r -i 's/anonymous_enable=YES/anonymous_enable=NO/g;' /etc/vsftpd/vsftpd.conf")
@@ -1088,7 +1096,8 @@ def meza_command_delete(argv):
         sys.exit(1)
 
     if len(argv) < 2:
-        print("You must specify an environment: 'meza delete {} ENV'".format(sub_command))
+        print(
+            "You must specify an environment: 'meza delete {} ENV'".format(sub_command))
         sys.exit(1)
 
     env = argv[1]
@@ -1420,7 +1429,8 @@ def meza_command_maint_decrypt_string(argv):
     meza_shell_exec_exit(rc)
 
 # @FIXME this is obsolete (because all Docker functionality is untested)
-# Should be updated or removed - especially the hard-link to enterprisemediawiki
+# Should be updated or removed - especially the hard-link to
+# enterprisemediawiki
 
 
 def meza_command_docker(argv):
@@ -1516,7 +1526,8 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
         meza_chown(secret_file, 'meza-ansible', 'wheel')
         os.chmod(secret_file, 0o660)
 
-        # Setup password file if not exists (environment info is potentially encrypted)
+        # Setup password file if not exists (environment info is potentially
+        # encrypted)
         vault_pass_file = get_vault_pass_file(env)
 
         command = command + ['-i', host_file,
@@ -1538,7 +1549,8 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
 
     return command
 
-# FIXME install --> setup dev-networking, setup docker, deploy monolith (special case)
+# FIXME install --> setup dev-networking, setup docker, deploy monolith
+# (special case)
 
 
 def meza_shell_exec(shell_cmd, print_command=True, log_file=False):
@@ -1791,8 +1803,8 @@ def prompt_secure(varname):
     import getpass
 
     # See prompt() for more info
-    pretext_msg = i18n["MSG_prompt_pretext_"+varname]
-    input_msg = i18n["MSG_prompt_input_"+varname]
+    pretext_msg = i18n["MSG_prompt_pretext_" + varname]
+    input_msg = i18n["MSG_prompt_input_" + varname]
 
     print()
     print(pretext_msg)
@@ -1831,7 +1843,8 @@ def random_string(**params):
     else:
         valid_chars = string.ascii_letters + string.digits + '!@$%^*'
 
-    return ''.join(random.SystemRandom().choice(valid_chars) for _ in range(num_chars))
+    return ''.join(random.SystemRandom().choice(valid_chars)
+                   for _ in range(num_chars))
 
 
 # return code 0 success, 1+ failure

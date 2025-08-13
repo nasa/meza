@@ -3,12 +3,23 @@
 # meza command
 #
 
-import signal
-import sys
+import datetime
+import errno
 import getopt
+import getpass
+import grp
+import hashlib
+import json
 import os
+import pwd
+import random
+import shutil
+import signal
+import string
+import subprocess
+import sys
+import time
 import yaml
-import jinja2
 
 # Get installation directory, typically /opt, but configurable elsewhere
 install_dir = os.path.dirname(os.path.dirname(
@@ -96,7 +107,6 @@ def main(argv):
         display_docs('base')
         sys.exit(0)  # asking for help doesn't give error code
     elif argv[0] in ('-v', '--version'):
-        import subprocess
         version = subprocess.check_output(
             ["git", f"--git-dir={install_dir}/meza/.git", "describe", "--tags", "--always"])
         commit = subprocess.check_output(
@@ -181,7 +191,6 @@ def meza_command_deploy(argv):
     if len(more_extra_vars) == 0:
         more_extra_vars = False
 
-    import hashlib
     start = get_datetime_string()
     unique = hashlib.sha1((start + env).encode('utf-8')).hexdigest()[:8]
 
@@ -332,9 +341,6 @@ def request_lock_for_deploy(env):
         None
 
     """
-    import os
-    import datetime
-
     lock_file = get_lock_file_path(env)
 
     if os.path.isfile(lock_file):
@@ -354,8 +360,6 @@ def request_lock_for_deploy(env):
         with open(lock_file, 'w') as f:
             f.write(f"{pid}\n{timestamp}")
             f.close()
-
-        import grp
 
         try:
             grp.getgrnam('apache')
@@ -380,7 +384,6 @@ def unlock_deploy(env):
     Returns:
         bool: True if the lock file was successfully removed, False otherwise.
     """
-    import os
     lock_file = get_lock_file_path(env)
     if os.path.exists(lock_file):
         os.remove(lock_file)
@@ -399,7 +402,6 @@ def get_lock_file_path(env):
     Returns:
         str: The path of the lock file.
     """
-    import os
     lock_file = os.path.join(
         defaults['m_meza_data'], f"env-{env}-deploy.lock")
     return lock_file
@@ -419,9 +421,6 @@ def write_deploy_log(datetime, env, unique, condition, args_string):
     Returns:
         None
     """
-    import subprocess
-    import os
-
     deploy_log = defaults['m_logs_deploy']
 
     line = (f"{datetime}\t{env}\t{unique}\t{condition}\t"
@@ -457,7 +456,6 @@ def meza_command_deploy_check(argv):
         SystemExit: If the lock file exists, indicating that the environment is currently deploying.
 
     """
-    import os
     env = argv[0]
     lock_file = get_lock_file_path(env)
     if os.path.isfile(lock_file):
@@ -532,7 +530,6 @@ def meza_command_deploy_kill(argv):
         print(f"Meza environment {env} deploying; killing...")
         di = get_deploy_info(env)
         os.system(f"kill $(ps -o pid= --ppid {di['pid']})")
-        import time
         time.sleep(2)
         os.system(
             'wall "Meza deploy terminated using \'meza deploy-kill\' command."')
@@ -557,7 +554,6 @@ def get_deploy_info(env):
         FileNotFoundError: If the lock file for the environment does not exist.
 
     """
-    import os
     lock_file = get_lock_file_path(env)
     if not os.path.isfile(lock_file):
         raise FileNotFoundError(f"Environment '{env}' not deploying")
@@ -631,9 +627,6 @@ def get_git_hash(dir):
         str: The git hash of the directory if it is a git repository, otherwise returns
             "not-a-git-repo".
     """
-    import subprocess
-    import os
-
     git_dir = f"{dir}/.git"
 
     if os.path.isdir(git_dir):
@@ -659,9 +652,6 @@ def get_git_describe_tags(dir):
              "git-error" if there was an error executing the Git command,
              or "not-a-git-repo" if the directory is not a Git repository.
     """
-    import subprocess
-    import os
-
     git_dir = f"{dir}/.git"
 
     if os.path.isdir(git_dir):
@@ -718,8 +708,6 @@ def meza_command_update(argv):
         None
 
     """
-    import subprocess
-
     # This function executes many Git commands that need to be from /otp/meza
     os.chdir("/opt/meza")
 
@@ -817,9 +805,6 @@ def meza_command_setup_env(argv, return_not_exit=False):
         Exception: If an error occurs while parsing the command line arguments.
 
     """
-
-    import json
-    import string
 
     if isinstance(argv, str):
         env = argv
@@ -1546,7 +1531,6 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
             extra_vars[varname] = value
 
     if len(extra_vars) > 0:
-        import json
         command = command + \
             ["--extra-vars",
                 f"'{json.dumps(extra_vars)}'".replace('"', '\\"')]
@@ -1592,8 +1576,6 @@ def meza_shell_exec(shell_cmd, print_command=True, log_file=False):
 
     if print_command:
         print(cmd)
-
-    import subprocess
 
     if log_file:
         log = open(log_file, 'ab')
@@ -1649,9 +1631,6 @@ def get_vault_pass_file(env):
         None
 
     """
-    import pwd
-    import grp
-
     home_dir = defaults['m_home']
     legacy_file = f'{home_dir}/meza-ansible/.vault-pass-{env}.txt'
 
@@ -1667,8 +1646,7 @@ def get_vault_pass_file(env):
         # If legacy vault password file exists copy that into new location.
         # Otherwise, create one in the new location
         if os.path.isfile(legacy_file):
-            from shutil import copyfile
-            copyfile(legacy_file, vault_pass_file)
+            shutil.copyfile(legacy_file, vault_pass_file)
         else:
             with open(vault_pass_file, 'w') as f:
                 f.write(random_string(num_chars=64))
@@ -1740,8 +1718,6 @@ def meza_chown(path, username, groupname):
     Returns:
         None
     """
-    import pwd
-    import grp
     uid = pwd.getpwnam(username).pw_uid
     gid = grp.getgrnam(groupname).gr_gid
     os.chown(path, uid, gid)
@@ -1806,8 +1782,6 @@ def prompt_secure(varname):
         str: The secure value entered by the user.
 
     """
-    import getpass
-
     # See prompt() for more info
     pretext_msg = i18n["MSG_prompt_pretext_" + varname]
     input_msg = i18n["MSG_prompt_input_" + varname]
@@ -1837,9 +1811,6 @@ def random_string(**params):
         str: The randomly generated string.
 
     """
-    import string
-    import random
-
     if 'num_chars' in params:
         num_chars = params['num_chars']
     else:
@@ -1865,8 +1836,6 @@ def check_environment(env):
     Returns:
         int: Returns 0 if the environment is valid, 1 otherwise.
     """
-    import os
-
     conf_dir = f"{install_dir}/conf-meza/secret"
 
     env_dir = os.path.join(conf_dir, env)
@@ -1919,9 +1888,6 @@ def copy(src, dst):
     Returns:
         None
     """
-    import shutil
-    import errno
-
     try:
         shutil.copytree(src, dst)
     except OSError as exc:
@@ -1938,8 +1904,6 @@ def get_datetime_string():
     Returns:
         str: The current date and time in the format 'YYYY-MM-DD HH:MM:SS'.
     """
-    import time
-    import datetime
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
     return st

@@ -15,8 +15,9 @@ install_dir = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
 #
-# It'd be much better to pull this from config/paths.yml, but doing so requires processing YAML and Jinja
-# and Meza with Python 2.7 doesn't seem to have the dependiencies in place to make that happen easily.
+# It'd be much better to pull this from config/paths.yml, but doing so
+# requires processing YAML and Jinja and Meza with Python 2.7 doesn't seem
+# to have the dependiencies in place to make that happen easily.
 #
 defaults = {
     "m_i18n": f"{install_dir}/meza/config/i18n",
@@ -446,7 +447,8 @@ def meza_command_deploy_check(argv):
     Check if a Meza environment is currently deploying.
 
     Args:
-        argv (list): A list of command-line arguments. The first argument should be the environment name.
+        argv (list): A list of command-line arguments. The first argument should be the
+            environment name.
 
     Returns:
         None
@@ -471,7 +473,8 @@ def meza_command_deploy_lock(argv):
     Locks the specified environment for deployment.
 
     Args:
-        argv (list): A list containing the command-line arguments. The first element should be the environment name.
+        argv (list): A list containing the command-line arguments. The first element should be
+            the environment name.
 
     Returns:
         None
@@ -491,7 +494,8 @@ def meza_command_deploy_unlock(argv):
     Unlocks the deploy lock for the specified environment.
 
     Args:
-        argv (list): A list containing the command-line arguments. The first element should be the environment name.
+        argv (list): A list containing the command-line arguments. The first element should be
+            the environment name.
 
     Returns:
         None
@@ -546,7 +550,8 @@ def get_deploy_info(env):
         env (str): The name of the environment.
 
     Returns:
-        dict: A dictionary containing the deployment information, including the process ID (pid) and timestamp.
+        dict: A dictionary containing the deployment information, including the process ID (pid)
+            and timestamp.
 
     Raises:
         FileNotFoundError: If the lock file for the environment does not exist.
@@ -623,7 +628,8 @@ def get_git_hash(dir):
         dir (str): The directory path.
 
     Returns:
-        str: The git hash of the directory if it is a git repository, otherwise returns "not-a-git-repo".
+        str: The git hash of the directory if it is a git repository, otherwise returns
+            "not-a-git-repo".
     """
     import subprocess
     import os
@@ -801,8 +807,8 @@ def meza_command_setup_env(argv, return_not_exit=False):
         argv (str or list): The command line arguments passed to the function.
             If a string is provided, it is treated as the environment name.
             If a list is provided, the first element is treated as the environment name.
-        return_not_exit (bool, optional): If True, the function returns the exit code instead of exiting the program.
-            Defaults to False.
+        return_not_exit (bool, optional): If True, the function returns the exit code instead of
+            exiting the program. Defaults to False.
 
     Returns:
         int or None: The exit code if `return_not_exit` is True, otherwise None.
@@ -877,7 +883,8 @@ def meza_command_setup_env(argv, return_not_exit=False):
         'db_slave_pass': db_pass,
 
         # Generate a random secret key
-        'wg_secret_key': random_string(num_chars=64, valid_chars=string.ascii_letters + string.digits)
+        'wg_secret_key': random_string(
+            num_chars=64, valid_chars=string.ascii_letters + string.digits)
 
     }
 
@@ -1143,7 +1150,8 @@ def meza_command_setbaseconfig(argv):
     Executes the 'setbaseconfig' playbook command for the specified environment.
 
     Args:
-        argv (list): A list of command-line arguments passed to the function. The first element should be the environment.
+        argv (list): A list of command-line arguments passed to the function. The first element
+            should be the environment.
 
     Returns:
         None
@@ -1241,7 +1249,8 @@ def meza_command_maint_rebuild(argv):
     Rebuilds the specified environment and executes the 'rebuild-smw-and-index' playbook command.
 
     Args:
-        argv (list): A list of command-line arguments passed to the function. The first argument is the environment.
+        argv (list): A list of command-line arguments passed to the function. The first argument
+            is the environment.
 
     Returns:
         None
@@ -1504,7 +1513,8 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
     Args:
         playbook (str): The name of the playbook to execute.
         env (str, optional): The environment for the playbook execution. Defaults to False.
-        more_extra_vars (dict, optional): Additional extra variables to pass to the playbook. Defaults to False.
+        more_extra_vars (dict, optional): Additional extra variables to pass to the playbook.
+            Defaults to False.
 
     Returns:
         list: The constructed command as a list of strings.
@@ -1553,8 +1563,10 @@ def meza_shell_exec(shell_cmd, print_command=True, log_file=False):
 
     Args:
         shell_cmd (list): The shell command to execute, as a list of strings.
-        print_command (bool, optional): Whether to print the command before executing it. Defaults to True.
-        log_file (str, optional): The path to the log file to write the command output to. Defaults to False.
+        print_command (bool, optional): Whether to print the command before executing it.
+            Defaults to True.
+        log_file (str, optional): The path to the log file to write the command output to.
+            Defaults to False.
 
     Returns:
         int: The return code of the executed shell command.
@@ -1699,7 +1711,8 @@ def read_vault_decryption_tmp_file(env):
         env (str): The environment name.
 
     Returns:
-        str: The contents of the temporary decryption file, or "[decryption error]" if an error occurs.
+        str: The contents of the temporary decryption file, or "[decryption error]" if an error
+            occurs.
     """
     home_dir = defaults['m_home']
     temp_decrypt_file = f'{home_dir}/meza-ansible/.vault-temp-decrypt-{env}.txt'
@@ -1754,7 +1767,8 @@ def prompt(varname, default=False):
 
     Args:
         varname (str): The name of the variable being prompted for.
-        default (bool, optional): The default value to use if the user does not provide any input. Defaults to False.
+        default (bool, optional): The default value to use if the user does not provide any input.
+            Defaults to False.
 
     Returns:
         str: The value entered by the user.
@@ -1816,7 +1830,8 @@ def random_string(**params):
         params (dict): Optional parameters for generating the random string.
             - num_chars (int): The length of the random string. Default is 32.
             - valid_chars (str): The characters to choose from when generating the random string.
-              Default is all uppercase and lowercase letters, digits, and the special characters '!@$%^*'.
+              Default is all uppercase and lowercase letters, digits, and the special characters
+              '!@$%^*'.
 
     Returns:
         str: The randomly generated string.

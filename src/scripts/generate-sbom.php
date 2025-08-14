@@ -519,37 +519,54 @@ if (php_sapi_name() === 'cli') {
 		$composerLockPath = '/opt/htdocs/mediawiki/composer.lock';
 		$generator = new SBOMGenerator($composerLockPath, 'Meza');
 		
+		// Determine output base and format early so --stats can also write a file
+		$format = $options['f'] ?? $options['format'] ?? 'all';
+		$outputBase = $options['o'] ?? $options['output'] ?? 'meza-sbom';
+		// Accept only safe characters for output base
+		if (!preg_match('/^[A-Za-z0-9._-]+$/', $outputBase)) {
+			throw new Exception('Invalid output basename');
+		}
+		// Disallow path separators / traversal explicitly
+		if (strpos($outputBase, '/') !== false || strpos($outputBase, '\\') !== false || strpos($outputBase, '..') !== false) {
+			throw new Exception('Output base must not contain path separators');
+		}
 		if (isset($options['stats'])) {
 			$stats = $generator->getPackageStats();
-			echo "Package Statistics:\n";
-			echo "Total packages: {$stats['total']}\n\n";
 			
-			echo "By source file:\n";
+			$statsOutput = "Package Statistics:\n";
+			$statsOutput .= "Total packages: {$stats['total']}\n\n";
+			
+			$statsOutput .= "By source file:\n";
 			foreach ($stats['by_source_file'] as $file => $count) {
-				echo "  $file: $count\n";
+				$statsOutput .= "  $file: $count\n";
 			}
 			
-			echo "\nBy scope:\n";
+			$statsOutput .= "\nBy scope:\n";
 			foreach ($stats['by_scope'] as $scope => $count) {
-				echo "  $scope: $count\n";
+				$statsOutput .= "  $scope: $count\n";
 			}
 			
-			echo "\nBy type:\n";
+			$statsOutput .= "\nBy type:\n";
 			foreach ($stats['by_type'] as $type => $count) {
-				echo "  $type: $count\n";
+				$statsOutput .= "  $type: $count\n";
 			}
 			
-			echo "\nTop licenses:\n";
+			$statsOutput .= "\nTop licenses:\n";
 			arsort($stats['by_license']);
 			$top = array_slice($stats['by_license'], 0, 10, true);
 			foreach ($top as $license => $count) {
-				echo "  $license: $count\n";
+				$statsOutput .= "  $license: $count\n";
 			}
+		
+			// Print to console
+			echo $statsOutput;
+		
+			// Also save stats to a file named $outputBase-stats.txt
+			$statsFilename = $outputBase . '-stats.txt';
+			file_put_contents($statsFilename, $statsOutput);
+			echo "Stats saved to: $statsFilename\n";
 			exit(0);
 		}
-
-		$format = $options['f'] ?? $options['format'] ?? 'all';
-		$outputBase = $options['o'] ?? $options['output'] ?? 'meza-sbom';
 
 		if ($format === 'all') {
 			$generator->saveToFile('spdx', $outputBase . '.spdx.json');

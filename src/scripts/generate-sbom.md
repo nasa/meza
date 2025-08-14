@@ -7,7 +7,7 @@ This directory contains automatically generated Software Bill of Materials (SBOM
 - `meza-sbom.spdx.json` - SPDX 2.3 format SBOM
 - `meza-sbom.cyclonedx.json` - CycloneDX 1.4 format SBOM  
 - `meza-sbom.txt` - Human-readable text format
-- `package-stats.txt` - Package statistics and license summary
+- `meza-sbom-stats.txt` - Package statistics and license summary
 
 ## Generation
 
@@ -32,14 +32,17 @@ When both files contain the same package, the version from `composer.lock` takes
 To generate SBOM files locally:
 
 ```bash
+# Output will be in the directory where you execute the script
+cd /opt/meza/src/scripts
+
 # Generate all formats (automatically detects composer.local.lock)
-php scripts/generate-sbom.php
+php generate-sbom.php
 
 # Generate specific format
-php scripts/generate-sbom.php --format spdx --output my-sbom.json
+php generate-sbom.php --format spdx --output my-sbom.json
 
 # Show package statistics including source file breakdown
-php scripts/generate-sbom.php --stats
+php generate-sbom.php --stats
 ```
 
 ## SBOM Formats

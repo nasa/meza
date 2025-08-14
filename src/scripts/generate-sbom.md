@@ -11,11 +11,12 @@ This directory contains automatically generated Software Bill of Materials (SBOM
 
 ## Generation
 
-SBOMs are automatically generated from both `composer.lock` and `composer.local.lock` (if present):
+SBOMs are generated from both `composer.lock` and `composer.local.lock` (if present), manually.
 
-1. **On every push** that modifies `composer.lock`, `composer.json`, or `composer.local.lock`
-2. **Weekly** on Sundays at 2 AM UTC
-3. **Manually** via GitHub Actions workflow dispatch
+You should generate a new SBOM if your code changes will impact these files. We could do this automatically
+however these files are not tracked in this repository thus we'll use a manual procedure for now.
+
+1. **Manually** in a controller or deployed web node, execute the generate-sbom.php script.
 
 ### Dependency Sources
 
@@ -137,7 +138,7 @@ These SBOM files can be integrated with:
 
 ## Updates
 
-SBOMs are automatically updated when dependencies change in either `composer.lock` or `composer.local.lock`. For the most current information, always refer to the latest generated files.
+SBOMs are manually updated when dependencies change in either `composer.lock` or `composer.local.lock`. For the most current information, always refer to the latest generated files.
 
 The generator will note when packages exist in both files and which version is being used in the final SBOM.
 

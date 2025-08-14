@@ -21,71 +21,70 @@ on:
 jobs:
   generate-sbom:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: json, mbstring
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        extensions: json, mbstring
+      - name: Validate composer files
+        run: |
+          if [ ! -f composer.lock ]; then
+            echo "composer.lock not found"
+            exit 1
+          fi
 
-    - name: Validate composer files
-      run: |
-        if [ ! -f composer.lock ]; then
-          echo "composer.lock not found"
-          exit 1
-        fi
+          if [ -f composer.local.lock ]; then
+            echo "Found composer.local.lock, will include in SBOM"
+            php -l composer.local.lock || (echo "composer.local.lock syntax error" && exit 1)
+          else
+            echo "No composer.local.lock found"
+          fi
 
-        if [ -f composer.local.lock ]; then
-          echo "Found composer.local.lock, will include in SBOM"
-          php -l composer.local.lock || (echo "composer.local.lock syntax error" && exit 1)
-        else
-          echo "No composer.local.lock found"
-        fi
+          php -m | grep json || (echo "JSON extension required" && exit 1)
 
-        php -m | grep json || (echo "JSON extension required" && exit 1)
+      - name: Generate SBOM
+        run: |
+          mkdir -p sbom
+          php scripts/generate-sbom.php --format all --output sbom/meza-sbom
 
-    - name: Generate SBOM
-      run: |
-        mkdir -p sbom
-        php scripts/generate-sbom.php --format all --output sbom/meza-sbom
+      - name: Generate package statistics
+        run: |
+          php scripts/generate-sbom.php --stats > sbom/package-stats.txt
 
-    - name: Generate package statistics
-      run: |
-        php scripts/generate-sbom.php --stats > sbom/package-stats.txt
+      - name: Validate SBOM files
+        run: |
+          # Validate JSON files are well-formed
+          python3 -m json.tool sbom/meza-sbom.spdx.json > /dev/null
+          python3 -m json.tool sbom/meza-sbom.cyclonedx.json > /dev/null
+          echo "SBOM validation passed"
 
-    - name: Validate SBOM files
-      run: |
-        # Validate JSON files are well-formed
-        python3 -m json.tool sbom/meza-sbom.spdx.json > /dev/null
-        python3 -m json.tool sbom/meza-sbom.cyclonedx.json > /dev/null
-        echo "SBOM validation passed"
+      - name: Check for local dependencies
+        run: |
+          if grep -q "composer.local.lock" sbom/meza-sbom.txt; then
+            echo "::notice::SBOM includes dependencies from composer.local.lock"
+          fi
 
-    - name: Check for local dependencies
-      run: |
-        if grep -q "composer.local.lock" sbom/meza-sbom.txt; then
-          echo "::notice::SBOM includes dependencies from composer.local.lock"
-        fi
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: meza-sbom
+          path: sbom/
+          retention-days: 90
 
-    - name: Upload SBOM artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: meza-sbom
-        path: sbom/
-        retention-days: 90
-
-    - name: Commit SBOM to repository
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add sbom/
-        if git diff --staged --quiet; then
-          echo "No SBOM changes to commit"
-        else
-          git commit -m "Auto-update SBOM [skip ci]"
-          git push
-        fi
+      - name: Commit SBOM to repository
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add sbom/
+          if git diff --staged --quiet; then
+            echo "No SBOM changes to commit"
+          else
+            git commit -m "Auto-update SBOM [skip ci]"
+            git push
+          fi

@@ -4,7 +4,7 @@
 # fact is used below. We should remove these facts and just use the conditions.
 - name: Set fact if this load balancer will handle external connections (80/443)
   set_fact:
-    load_balancer_handle_external: True
+    load_balancer_handle_external: true
   when: >
     (
       'load_balancers' in groups
@@ -16,7 +16,7 @@
 
 - name: Set fact if this load balancer will NOT handle external connections
   set_fact:
-    load_balancer_handle_external: False
+    load_balancer_handle_external: false
   when: >
     not (
       (
@@ -30,7 +30,7 @@
 
 - name: Set fact if this load balancer will handle internal connections
   set_fact:
-    load_balancer_handle_internal: True
+    load_balancer_handle_internal: true
   when: >
     (
       'load_balancers' in groups
@@ -42,7 +42,7 @@
 
 - name: Set fact if this load balancer will NOT handle internal connections
   set_fact:
-    load_balancer_handle_internal: False
+    load_balancer_handle_internal: false
   when: >
     not (
       (
@@ -79,7 +79,7 @@
     path: "{{ m_local_secret }}/{{ env }}/ssl/meza.key"
   register: ssl_cert_stat_result
   delegate_to: localhost
-  run_once: True
+  run_once: true
 
 - name: Ensure config SSL directory exists
   file:
@@ -89,7 +89,7 @@
     group: "{{ m_config_secret_group }}"
     mode: "{{ m_config_secret_dir_mode }}"
   delegate_to: localhost
-  run_once: True
+  run_once: true
 
 # FIXME: Extract 'self-signed certificate' into a role
 # and only run if not 'use_certbot'
@@ -103,7 +103,7 @@
       -out {{ m_local_secret }}/{{ env }}/ssl/meza.crt
   when: ssl_cert_stat_result.stat.exists == False
   delegate_to: localhost
-  run_once: True
+  run_once: true
 
 - name: Ensure SSL cert and key are encrypted
   become: yes
@@ -112,9 +112,9 @@
     ansible-vault encrypt
     {{ item }}
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
-  failed_when: False
+  failed_when: false
   delegate_to: localhost
-  run_once: True
+  run_once: true
   with_items:
     - "{{ m_local_secret }}/{{ env }}/ssl/meza.key"
     - "{{ m_local_secret }}/{{ env }}/ssl/meza.crt"
@@ -128,7 +128,7 @@
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_key
   delegate_to: localhost
-  run_once: True
+  run_once: true
 
 - name: Read SSL cert into variable
   become: yes
@@ -139,7 +139,7 @@
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_cert
   delegate_to: localhost
-  run_once: True
+  run_once: true
 
 - name: Ensure cert and key assembled into into pem file
   copy:

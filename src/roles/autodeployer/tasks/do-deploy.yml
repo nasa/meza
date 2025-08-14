@@ -26,7 +26,7 @@
   shell: >
     meza deploy-unlock {{ env }}
     && meza deploy {{ env }} {{ deploy_args }}
-  failed_when: False
+  failed_when: false
   register: first_deploy
 
 - name: Declare success

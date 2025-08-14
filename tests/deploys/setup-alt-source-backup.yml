@@ -103,4 +103,4 @@
 
     - name: Ensure no password on test-user
       shell: passwd --delete test-user
-      failed_when: False
+      failed_when: false

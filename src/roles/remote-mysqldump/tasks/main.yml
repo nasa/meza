@@ -95,7 +95,7 @@
 - name: "{{ wiki_id }} - check if wiki database exists ON SOURCE SERVER"
   shell: "{{ mysqlshow_command }}"
   register: source_wiki_exists_check
-  failed_when: False
+  failed_when: false
   run_once: true
   delegate_to: "{{ target_server }}"
 
@@ -105,12 +105,12 @@
 
 - name: "{{ wiki_id }} - Set fact if database wiki_{{ wiki_id }} DOES exist ON SOURCE SERVER"
   set_fact:
-    source_wiki_exists: True
+    source_wiki_exists: true
   when: source_wiki_exists_check is defined and source_wiki_exists_check.rc == 0
 
 - name: "{{ wiki_id }} - Set fact if database wiki_{{ wiki_id }} DOES NOT exist ON SOURCE SERVER"
   set_fact:
-    source_wiki_exists: False
+    source_wiki_exists: false
   when: source_wiki_exists_check is defined and source_wiki_exists_check.rc != 0
 
 #

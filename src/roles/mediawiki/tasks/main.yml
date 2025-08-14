@@ -544,12 +544,12 @@
 
 # - name: Set es_do_upgrade to True if localhost file exists
 #   set_fact:
-#     es_do_upgrade: True
+#     es_do_upgrade: true
 #   when: es_do_upgrade_stat.stat.exists
 
 # - name: Set es_do_upgrade to False if localhost file does not exist
 #   set_fact:
-#     es_do_upgrade: False
+#     es_do_upgrade: false
 #   when: not es_do_upgrade_stat.stat.exists
 
 # @TODO this only runs on the first wiki -- that is wrong -- it should run on all wikis

@@ -25,4 +25,4 @@
     group: root
     mode: "0644"
   delegate_to: "{{ granted_server }}"
-  failed_when: False
+  failed_when: false

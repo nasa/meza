@@ -3,17 +3,17 @@
 - name: "Check if server log database exists"
   shell: 'mysqlshow "{{ meza_server_log_db }}" | grep -v Wildcard | grep -o {{ meza_server_log_db }}'
   register: register_server_log
-  failed_when: False
+  failed_when: false
   run_once: true
 
 - name: "Set fact if server log database DOES exist"
   set_fact:
-    server_log_exists: True
+    server_log_exists: true
   when: register_server_log.rc == 0
 
 - name: "Set fact if server log database DOES NOT exist"
   set_fact:
-    server_log_exists: False
+    server_log_exists: false
   when: register_server_log.rc != 0
 
 - name: "Copy meza_server_log.sql to remote database hosts"
@@ -41,17 +41,17 @@
 - name: "Check if disk_space table exists"
   shell: "sudo mysql -e\"USE {{ meza_server_log_db }}; SHOW TABLES LIKE 'disk_space'\" | grep disk_space"
   register: register_disk_space
-  failed_when: False
+  failed_when: false
   run_once: true
 
 - name: "Set fact if disk_space table DOES exist"
   set_fact:
-    disk_space_exists: True
+    disk_space_exists: true
   when: register_disk_space.rc == 0
 
 - name: "Set fact if disk_space table DOES NOT exist"
   set_fact:
-    disk_space_exists: False
+    disk_space_exists: false
   when: register_disk_space.rc != 0
 
 - name: "Copy table_disk_space.sql to remote database hosts"

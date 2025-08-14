@@ -20,12 +20,12 @@
 #
 - name: "{{ wiki_id }} - Set fact if SHOULD overwrite data (only possible if backup exists)"
   set_fact:
-    do_overwrite_db_from_backup: True
+    do_overwrite_db_from_backup: true
   when: intend_overwrite_from_backup and imported_wiki_sql_on_db_master.stat.exists
 
 - name: "{{ wiki_id }} - Set fact if SHOULD NOT overwrite data"
   set_fact:
-    do_overwrite_db_from_backup: False
+    do_overwrite_db_from_backup: false
   when: not intend_overwrite_from_backup or not imported_wiki_sql_on_db_master.stat.exists
 
 
@@ -76,11 +76,11 @@
 #
 - name: SET FACT - New wiki was created
   set_fact:
-    created_new_wiki: True
+    created_new_wiki: true
   when: (not wiki_exists) and (not imported_wiki_sql_on_db_master.stat.exists)
 - name: SET FACT - New wiki NOT created
   set_fact:
-    created_new_wiki: False
+    created_new_wiki: false
   # not a "new" wiki if one already existed _or_ an imported SQL file was used
   when: (wiki_exists) or (imported_wiki_sql_on_db_master.stat.exists)
 

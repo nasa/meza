@@ -123,3 +123,25 @@
     delay: 3
     timeout: 300
   when: docker_skip_tasks is not defined or not docker_skip_tasks
+
+# If requested, gather ES version info to use when running the reindex task.
+- name: Query Elasticsearch root endpoint for version information
+  uri:
+    url: "http://localhost:{{ elasticsearch_http_port }}/"
+    method: GET
+    return_content: yes
+    status_code: 200
+  register: version_found
+  failed_when: false
+  changed_when: false
+  when: docker_skip_tasks is not defined or not docker_skip_tasks
+
+# Conditionally include the reindex tasks. This is opt-in to keep playbook idempotent.
+# Set `elasticsearch_reindex: true` in inventory/group_vars/host_vars to enable.
+- name: Include Elasticsearch reindex tasks when reindexing is requested
+  include_tasks: es_reindex.yml
+  when:
+    - (elasticsearch_reindex | default(false)) | bool
+    - version_found.json is defined
+    - version_found.json.version is defined
+    - docker_skip_tasks is not defined or not docker_skip_tasks

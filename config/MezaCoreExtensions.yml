@@ -545,6 +545,15 @@ list:
       $smwgPageSpecialProperties[] = '_NEWP';
       $smwgPageSpecialProperties[] = '_DTITLE';
       $smwgPageSpecialProperties[] = '_ATTCH_LINK';
+      # Give 'smw-admin' right to 'smwadministrator' group
+      # sysops are automatically in this group
+      # Allows access to the Special:SemanticMediaWiki admin interface
+      # $wgGroupPermissions['smwadministrator']['smw-admin'] = true;
+      # Or, be more explicit and give sysops all SMW-defined rights directly
+      $wgGroupPermissions['sysop']['smw-admin'] = true;
+      $wgGroupPermissions['sysop']['smw-pageedit'] = true;
+      $wgGroupPermissions['sysop']['smw-patternedit'] = true;
+      $wgGroupPermissions['sysop']['smw-schemaedit'] = true;
 
   # SRF - Extends SMW to display quesry results in many different formats
   - name: Semantic Result Formats

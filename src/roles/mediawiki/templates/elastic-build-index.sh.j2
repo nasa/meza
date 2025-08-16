@@ -2,6 +2,42 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+log() { echo "[$(date +'%F %T')] $*"; }
+
+# Retry/backoff configuration: can be overridden by environment variables or Ansible template vars
+# Environment override takes precedence; otherwise Ansible-provided defaults are used.
+RETRY_MAX=${RETRY_MAX:-{{ elasticsearch_index_retry_max | default(5) }}}
+RETRY_INITIAL=${RETRY_INITIAL:-{{ elasticsearch_index_retry_initial | default(5) }}}
+
+# run_with_retries: execute a shell command (string) with retries and exponential backoff
+run_with_retries() {
+	local max_attempts=${RETRY_MAX}
+	local delay=${RETRY_INITIAL}
+	local attempt=1
+	local cmd="$*"
+
+	while [ $attempt -le $max_attempts ]; do
+		log "Attempt $attempt/$max_attempts: $cmd"
+		# Use sh -c to run the composed command string
+		if sh -c "$cmd"; then
+			log "Command succeeded"
+			return 0
+		else
+			rc=$?
+			log "Command failed with exit code $rc"
+			if [ $attempt -lt $max_attempts ]; then
+				log "Sleeping for ${delay}s before retry"
+				sleep $delay
+				delay=$((delay * 2))
+			fi
+		fi
+		attempt=$((attempt + 1))
+	done
+
+	log "Command failed after $max_attempts attempts: $cmd"
+	return 1
+}
+
 echo "******* Generating elasticsearch index for $wiki_id *******"
 
 # Lock to prevent concurrent rebuilds for the same wiki
@@ -39,8 +75,17 @@ fi
 
 # Bootstrap the search index (bulk indexing). These commands can take some time.
 # We deliberately run with refresh disabled above for performance.
-WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipLinks --indexOnSkip
-WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse
+log "Starting ForceSearchIndex (skipLinks/indexOnSkip) with retries"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipLinks --indexOnSkip"
+
+# After first pass, recompute indices to include any newly-created indices so we can restore settings later
+indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
+
+log "Starting ForceSearchIndex (skipParse) with retries"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse"
+
+# Recompute indices again to capture any additional indices created during indexing
+indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
 
 # Restore index settings (refresh interval and replicas) so Es can serve searches normally
 if [ -n "$indices" ]; then

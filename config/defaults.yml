@@ -142,6 +142,12 @@ php_memory_limit: "128M" # 128M is default
 # Meza 39.x uses 7.x
 elasticsearch_major_version: "7.x"
 
+# Retry/backoff defaults for CirrusSearch/ForceSearchIndex calls during bulk indexing
+# These can be overridden per-host/group via inventory, or via environment variables
+# when running the script (RETRY_MAX, RETRY_INITIAL).
+elasticsearch_index_retry_max: 5
+elasticsearch_index_retry_initial: 5
+
 # Whether or not to install Lua/luasandbox
 m_install_lua: false
 

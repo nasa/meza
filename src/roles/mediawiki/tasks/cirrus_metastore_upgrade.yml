@@ -1,0 +1,48 @@
+---
+# Ensure CirrusSearch metastore is upgraded and index templates are applied
+
+- name: Check for existing Cirrus metastore upgrade marker
+  ansible.builtin.stat:
+    path: "{{ m_meza_data }}/elasticsearch/.mediawiki_cirrus_metastore_upgraded_marker"
+  register: mediawiki_cirrus_metastore_marker
+
+- name: Check if we should upgrade CirrusSearch metastore
+  ansible.builtin.set_fact:
+    mediawiki_cirrus_metastore_upgrade: "{{ mediawiki_cirrus_metastore_upgrade | default(false) }}"
+
+- name: Run CirrusSearch Metastore upgrade (one-time)
+  ansible.builtin.shell: |
+    WIKI={{ item }} {{ m_mediawiki }}/maintenance/run CirrusSearch:Metastore --upgrade
+  with_items: "{{ list_of_wikis }}"
+  run_once: true
+  register: mediawiki_cirrus_metastore_result
+  failed_when: mediawiki_cirrus_metastore_result is failed
+  when:
+    - mediawiki_cirrus_metastore_upgrade | bool
+    - not mediawiki_cirrus_metastore_marker.stat.exists
+    - docker_skip_tasks is not defined or not docker_skip_tasks
+  changed_when: not mediawiki_cirrus_metastore_marker.stat.exists
+
+- name: Log metastore upgrade results
+  ansible.builtin.debug:
+    msg: "Cirrus Metastore upgrade: {{ mediawiki_cirrus_metastore_result }}"
+  when: mediawiki_cirrus_metastore_upgrade | bool and not mediawiki_cirrus_metastore_marker.stat.exists
+
+# Apply index templates for CirrusSearch indices (if provided)
+- name: Apply CirrusSearch index template to Elasticsearch
+  ansible.builtin.uri:
+    url: "http://localhost:{{ elasticsearch_http_port }}/_index_template/cirrussearch_template"
+    method: PUT
+    body: "{{ lookup('file', 'files/cirrussearch_index_template.json') }}"
+    body_format: json
+    status_code: [200, 201]
+  when:
+    - mediawiki_cirrus_metastore_upgrade | bool
+    - docker_skip_tasks is not defined or not docker_skip_tasks
+
+- name: Ensure metastore upgrade marker file exists
+  ansible.builtin.file:
+    path: "{{ m_meza_data }}/elasticsearch/.mediawiki_cirrus_metastore_upgraded_marker"
+    state: touch
+    mode: '0644'
+  when: mediawiki_cirrus_metastore_upgrade | bool

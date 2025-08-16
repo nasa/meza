@@ -11,8 +11,12 @@ vagrantconf.yml
 src/roles/geerlingguy*
 # don't ignore the kibana role
 !src/roles/geerlingguy.kibana
-# ignore virtualenv
-venv/*
+
+# ignore Python virtualenv (any dir ending in venv, including .venv, venv, my-venv etc)
+*venv/
+
+# ignore vendor directory for composer-installed dev tools
+vendor/
 
 # ignore vscode settings wherever they are
 **/.vscode

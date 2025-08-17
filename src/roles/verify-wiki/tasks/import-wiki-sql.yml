@@ -100,7 +100,7 @@
 
 - name: Setup SMW Store
   shell: >
-    WIKI="{{ wiki_id }}" "{{ m_mediawiki }}/maintenance/run SemanticMediaWiki:setupStore"
+    WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run SemanticMediaWiki:setupStore
   run_once: true
   when: created_new_wiki
 

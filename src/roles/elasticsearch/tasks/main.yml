@@ -102,7 +102,7 @@
     owner: root
     group: elasticsearch
     mode: 0750
-  notify: restart elasticsearch
+  notify: Restart elasticsearch
 
 # Consider adding this, ref geerlinguy
 # - name: Force a restart if configuration has changed.

@@ -15,7 +15,7 @@
 # - name: set firewalld zone interface
 #   command: /bin/firewall-cmd --zone={{item.key}} --change-interface={{item.value}} --permanent
 #   with_dict: "{{firewalld_zone_interface|default({})}}"
-#   notify: restart firewalld
+#   notify: Restart firewalld
 
 # - name: set firewalld zone source
 #   firewalld:

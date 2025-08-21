@@ -54,28 +54,28 @@ fi
 check_tools() {
     local missing_tools=()
     local install_cmd=""
-    
+
     # Determine installation method based on environment
     if [ -n "$VIRTUAL_ENV" ] || [ -d "$PROJECT_ROOT/.venv" ]; then
         install_cmd="pip install ansible-lint yamllint"
     else
         install_cmd="pip install --user ansible-lint yamllint"
     fi
-    
+
     if ! command -v ansible-lint >/dev/null 2>&1; then
         missing_tools+=("ansible-lint")
     fi
-    
+
     if ! command -v yamllint >/dev/null 2>&1; then
         missing_tools+=("yamllint")
     fi
-    
+
     if [ ${#missing_tools[@]} -gt 0 ]; then
         print_warning "Missing linting tools: ${missing_tools[*]}"
         print_status "Install with: $install_cmd"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -83,7 +83,7 @@ check_tools() {
 lint_yaml() {
     local file="$1"
     print_status "Linting YAML file: $file"
-    
+
     if yamllint "$file"; then
         print_success "YAML lint passed: $file"
         return 0
@@ -97,7 +97,7 @@ lint_yaml() {
 lint_ansible() {
     local file="$1"
     print_status "Linting Ansible file: $file"
-    
+
     # Use ansible-lint with project config
     if ansible-lint "$file"; then
         print_success "Ansible lint passed: $file"
@@ -112,19 +112,19 @@ lint_ansible() {
 lint_file() {
     local file="$1"
     local exit_code=0
-    
+
     # Skip files in excluded directories
     if [[ "$file" =~ ^\.venv/ ]] || [[ "$file" =~ ^vendor/ ]] || [[ "$file" =~ ^\.cache/ ]]; then
         print_status "Skipping excluded file: $file"
         return 0
     fi
-    
+
     # Check if file exists
     if [ ! -f "$file" ]; then
         print_warning "File not found: $file"
         return 0
     fi
-    
+
     # Determine file type and lint accordingly
     case "$file" in
         *.yml|*.yaml)
@@ -142,22 +142,22 @@ lint_file() {
             print_status "No linter configured for: $file"
             ;;
     esac
-    
+
     return $exit_code
 }
 
 # Main function
 main() {
     print_status "Starting Meza file linting..."
-    
+
     # Check if tools are available
     if ! check_tools; then
         exit 1
     fi
-    
+
     local files=()
     local exit_code=0
-    
+
     # If no arguments provided, find all relevant files
     if [ $# -eq 0 ]; then
         print_status "No files specified, finding all YAML files..."
@@ -166,9 +166,9 @@ main() {
     else
         files=("$@")
     fi
-    
+
     print_status "Found ${#files[@]} files to lint"
-    
+
     # Lint each file
     local failed_files=()
     for file in "${files[@]}"; do
@@ -177,11 +177,11 @@ main() {
             exit_code=1
         fi
     done
-    
+
     # Summary
     echo
     print_status "Linting complete!"
-    
+
     if [ $exit_code -eq 0 ]; then
         print_success "All files passed linting checks!"
     else
@@ -190,7 +190,7 @@ main() {
             echo "  - $file"
         done
     fi
-    
+
     return $exit_code
 }
 

@@ -1002,7 +1002,7 @@ def meza_command_setup_dev(argv):  # pylint: disable=unused-argument
 def meza_command_setup_dev_networking(argv):  # pylint: disable=unused-argument
     """
     Legacy function - functionality removed.
-    
+
     Args:
         argv (list): Command line arguments (unused).
     """
@@ -1172,7 +1172,7 @@ def meza_command_setbaseconfig(argv):
 def meza_command_destroy(argv):  # pylint: disable=unused-argument
     """
     Placeholder for destroy command - not yet implemented.
-    
+
     Args:
         argv (list): Command line arguments (unused).
     """

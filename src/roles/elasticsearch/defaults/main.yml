@@ -34,3 +34,6 @@ elasticsearch_enable_allocation: '{"persistent":{"cluster.routing.allocation.ena
 # For a rolling upgrade (e.g. not from one major version to another) use these:
 # elasticsearch_disable_allocation:  '{"transient":{"cluster.routing.allocation.enable":"none"}}'
 # elasticsearch_enable_allocation: '{"transient":{"cluster.routing.allocation.enable": "all"}}'
+
+# Set elasticsearch_reindex: true in your inventory, host_vars, or group_vars when you want the reindex tasks to run.
+elasticsearch_reindex: false

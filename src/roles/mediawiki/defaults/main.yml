@@ -32,3 +32,6 @@ m_force_debug: false
 m_command_line_debug: true
 
 wgPasswordSender: admin@example.com
+
+# Whether to upgrade CirrusSearch metastore and apply index templates
+mediawiki_cirrus_metastore_upgrade: false

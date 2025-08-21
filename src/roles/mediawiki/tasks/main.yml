@@ -656,7 +656,7 @@
 # to PHP files.
 # Ref: https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html
 - name: Reload (not restart) httpd to pick up changes to opcached php files
-  service:
+  ansible.builtin.service:
     name: "{{ service_apache }}"
     state: reloaded
   tags:
@@ -666,24 +666,12 @@
 # Might not need the above reload-apache anymore now that we're using PHP-FPM, but
 # keeping it for now. Must restart php-fpm to see changes.
 - name: Restart php-fpm to pick up changes to opcached php files
-  service:
+  ansible.builtin.service:
     name: "{{ service_php_fpm }}"
     state: restarted
   tags:
     - httpd-reload
   when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-# Extension:SyntaxHighlight requires Python 3.x present in path as `python3` for
-# MediaWiki 1.31+.
-- name: Ensure Python3 present on RedHat7 variant
-  yum:
-    name:
-      - "{{ package_python3 }}"
-      - "{{ package_python3_pip }}"
-    state: latest
-  tags:
-    - latest
-  when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "7"
 
 # REMOVE these tasks and the extra config var introduced.
 # https://github.com/freephile/meza/issues/41#issuecomment-2045506153
@@ -699,3 +687,9 @@
 #   tags:
 #     - latest
 #   when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
+
+- name: Include CirrusSearch metastore upgrade and templates (if requested)
+  ansible.builtin.include_tasks: cirrus_metastore_upgrade.yml
+  when:
+    - (mediawiki_cirrus_metastore_upgrade | default(false)) | bool
+    - docker_skip_tasks is not defined or not docker_skip_tasks

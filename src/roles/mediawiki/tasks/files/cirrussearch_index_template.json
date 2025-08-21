@@ -1,0 +1,25 @@
+{
+  "index_patterns": ["wiki_*_content*", "wiki_*_general*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "refresh_interval": "1s",
+      "analysis": {
+        "analyzer": {
+          "cirrus_analyzer": {
+            "type": "standard"
+          }
+        }
+      }
+    },
+    "mappings": {
+      "properties": {
+        "title": { "type": "text" },
+        "text": { "type": "text" },
+        "page_id": { "type": "keyword" },
+        "timestamp": { "type": "date" }
+      }
+    }
+  }
+}

@@ -152,6 +152,11 @@
     mode: "{{ m_simplesamlphp_mode }}"
     recurse: true
 
+# @FIXME: SimpleSamlAuth was replaced by SimpleSAMLphp extension
+# See and cherry-pick commit https://github.com/nasa/meza/commit/2fc4dd1f0db2cfb65eb47b812de14234aeabc2d0
+# from Oct 2021 or just merge the current May 2024 'saml' role from NASA
+# Still should be reviewed afterwards to at least replace
+# owner and group with user_apache and group_apache variables
 - name: Ensure _still_ good permissions on Extension:SimpleSamlAuth directory and subs
   file:
     path: "{{ m_mediawiki }}/extensions/SimpleSamlAuth"
@@ -169,8 +174,8 @@
   template:
     src: NonMediaWikiSimpleSamlAuth.php.j2
     dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
-    owner: meza-ansible
-    group: apache
+    owner: "{{ ansible_user }}"
+    group: "{{ group_apache }}"
     mode: 0755
 
 # We could use /var/log here, but still would need to ensure apache can write to it

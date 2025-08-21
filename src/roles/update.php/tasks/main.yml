@@ -48,7 +48,7 @@
     state: directory
     mode: "{{ m_logs_mode }}"
     owner: "{{ m_logs_owner }}"
-    group: "{{ m_logs_group }}"
+    group: "{{ group_wheel }}"
 
 - set_fact:
     update_php_log: "{{ m_logs }}/update.php/{{ wiki_id }}.{{ lookup('pipe','date +%Y%m%d%H%M%S') }}.log"

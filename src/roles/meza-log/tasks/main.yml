@@ -20,7 +20,7 @@
   copy:
     src: "{{ m_meza }}/src/roles/meza-log/files/meza_server_log.sql"
     dest: "/tmp/meza_server_log.sql"
-    owner: meza-ansible
+    owner: "{{ ansible_user }}"
     group: meza-ansible
     mode: u+r,g+r,o+r
   run_once: true
@@ -58,7 +58,7 @@
   copy:
     src: "{{ m_meza }}/src/roles/meza-log/files/table_disk_space.sql"
     dest: "/tmp/table_disk_space.sql"
-    owner: meza-ansible
+    owner: "{{ ansible_user }}"
     group: meza-ansible
     mode: u+r,g+r,o+r
   run_once: true

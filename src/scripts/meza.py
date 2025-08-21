@@ -366,15 +366,20 @@ def request_lock_for_deploy(env):
         f.write(f"{pid}\n{timestamp}")
         f.close()
 
+    # Improved group detection and fallback for lock file permissions
     try:
         grp.getgrnam('apache')
         meza_chown(lock_file, 'meza-ansible', 'apache')
+        os.chmod(lock_file, 0o664)
     except KeyError:
-        print(
-            'Group apache does not exist. Using "wheel" as the group for our lock file.')
-        meza_chown(lock_file, 'meza-ansible', 'wheel')
-
-    os.chmod(lock_file, 0o664)
+        try:
+            grp.getgrnam('www-data')  # Debian/Ubuntu fallback
+            meza_chown(lock_file, 'meza-ansible', 'www-data')
+            os.chmod(lock_file, 0o664)
+        except KeyError:
+            print('Neither apache nor www-data group exists. Using "wheel" as fallback.')
+            meza_chown(lock_file, 'meza-ansible', 'wheel')
+            os.chmod(lock_file, 0o664)
 
     return {"pid": pid, "timestamp": timestamp}
 

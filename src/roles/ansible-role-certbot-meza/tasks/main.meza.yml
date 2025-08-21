@@ -49,8 +49,8 @@
   template:
     src: concat.pem.sh.j2
     dest: /etc/letsencrypt/renewal-hooks/deploy/concat.pem.sh
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: u=rwx,g=rwx,o=rx
 
 # This would only happen if someone decided to stop using Certbot

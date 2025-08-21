@@ -44,12 +44,12 @@
         name: alt-meza-ansible
         move_home: true
         home: "{{ m_home }}/alt-meza-ansible"
-        group: wheel
+        group: "{{ group_wheel }}"
     - name: Ensure user alt-meza-ansible .ssh dir configured
       file:
         path: "{{ m_home }}/alt-meza-ansible/.ssh"
         owner: alt-meza-ansible
-        group: wheel
+        group: "{{ group_wheel }}"
         mode: 0700
         state: directory
     - name: Copy meza-ansible keys to alt-meza-ansible
@@ -57,7 +57,7 @@
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
         owner: alt-meza-ansible
-        group: wheel
+        group: "{{ group_wheel }}"
         mode: "{{ item.mode }}"
       with_items:
         - name: id_rsa
@@ -69,7 +69,7 @@
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
         owner: alt-meza-ansible
-        group: wheel
+        group: "{{ group_wheel }}"
         mode: "{{ item.mode }}"
       failed_when: false
       with_items:
@@ -82,14 +82,14 @@
     - name: Ensure secret.yml owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}/secret/{{ env }}/secret.yml"
-        owner: meza-ansible
-        group: wheel
+        owner: "{{ ansible_user }}"
+        group: "{{ group_wheel }}"
         mode: "0660"
     - name: Ensure {{ m_conf_dir }} owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}"
-        owner: meza-ansible
-        group: wheel
+        owner: "{{ ansible_user }}"
+        group: "{{ group_wheel }}"
         mode: "0755"
 
 # Perhaps this should move above localhost steps since

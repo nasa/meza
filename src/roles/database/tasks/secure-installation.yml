@@ -71,8 +71,8 @@
   template:
     src: "root-my.cnf.j2"
     dest: "{{ m_home }}/meza-ansible/.my.cnf"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: 0600
 
 - name: Get list of hosts for the anonymous user.

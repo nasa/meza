@@ -7,13 +7,29 @@
     name: sync-configs
 
 #
+# ENSURE PROPER USER/GROUP SETUP
+#
+- name: Ensure meza-ansible user is in apache group
+  ansible.builtin.user:
+    name: meza-ansible
+    groups: "{{ group_apache }}"
+    append: true
+  when: ansible_distribution_file_variety == 'RedHat'
+
+- name: Ensure meza-ansible user is in wheel group
+  ansible.builtin.user:
+    name: meza-ansible
+    groups: "{{ group_wheel }}"
+    append: true
+
+#
 # ENSURE APP SERVERS CAN GIT-CLONE OVER SSH
 #
 - name: Ensure user meza-ansible .ssh dir configured
   file:
     path: "{{ m_home }}/meza-ansible/.ssh"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: 0700
     state: directory
 
@@ -21,8 +37,8 @@
   copy:
     src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
     dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
   with_items:
     - name: id_rsa
@@ -34,8 +50,8 @@
   copy:
     src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
     dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
   failed_when: false
   with_items:
@@ -59,7 +75,7 @@
     path: "{{ m_mediawiki }}"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
     state: directory
     recurse: true
   tags:
@@ -215,7 +231,7 @@
     dest: "{{ m_deploy }}/Extensions.php"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
 
 # Adds extensions with composer param from MezaCoreExtensions.yml,
 # MezaLocalExtensions.yml, MezaCoreSkins.yml, and MezaLocalSkins.yml
@@ -225,7 +241,7 @@
     dest: "{{ m_mediawiki }}/composer.local.json"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
     # Setting these in the task didn't modify the result so commenting, but
     # leaving here for reference.
     # lstrip_blocks: false
@@ -310,14 +326,14 @@
     dest: "{{ m_mediawiki }}/LocalSettings.php"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
 
 - name: Ensure MediaWiki still properly owned
   file:
     path: "{{ m_mediawiki }}"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
     state: directory
     recurse: true
   tags:
@@ -329,17 +345,30 @@
     path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
   register: compiled_templates_folder
 
-- name: "Ensure compiled templates folder for widget extension is ownwed by apache"
+- name: "Ensure compiled templates folder for widget extension is owned by apache"
   file:
     path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-    owner: apache
-    group: apache
-    mode: "u=rwX,g=rX,o=rX"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: "u=rwX,g=rwX,o=rX"
     state: directory
     recurse: true
     modification_time: preserve
     access_time: preserve
   when: compiled_templates_folder.stat.exists
+
+- name: Ensure all MediaWiki directories have proper group permissions
+  file:
+    path: "{{ item }}"
+    state: directory
+    group: "{{ group_apache }}"
+    mode: "g+rwX"
+    recurse: true
+  loop:
+    - "{{ m_mediawiki }}/cache"
+    - "{{ m_mediawiki }}/images"
+    - "{{ m_uploads_dir }}"
+  when: ansible_distribution_file_variety == 'RedHat'
 
 #
 # LANDING PAGE
@@ -362,14 +391,14 @@
     dest: "{{ m_htdocs }}/WikiBlender/BlenderSettings.php"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
 
 - name: Ensure WikiBlender properly owned
   file:
     path: "{{ m_htdocs }}/WikiBlender"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
-    group: "{{ m_htdocs_group }}"
+    group: "{{ group_apache }}"
     state: directory
     recurse: true
 
@@ -382,25 +411,50 @@
   when: saml_public is defined
 
 #
+# ENSURE DATA DIRECTORY STRUCTURE WITH PROPER PERMISSIONS
+#
+- name: Ensure data-meza directory structure with proper permissions
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - {path: "{{ m_meza_data }}", owner: "{{ ansible_user }}", group: "{{ group_apache }}", mode: "2775"}
+    - {path: "{{ m_cache_directory }}", owner: "{{ user_apache }}", group: "{{ group_apache }}", mode: "2775"}
+    - {path: "{{ m_logs }}", owner: "{{ m_logs_owner }}", group: "{{ group_apache }}", mode: "2775"}
+    - {path: "{{ m_backups }}", owner: "{{ ansible_user }}", group: "{{ group_apache }}", mode: "2775"}
+
+#
 # Cache (at this time) for localization caching. Also can be used for caching
 # page contents, but this isn't as necessary for enterprise cases where
 # generally users are always logged in.
 #
-- name: Ensure localization cache root directory exists (each wiki with sub-directory)
+- name: Ensure localization cache root directory exists with proper permissions
   file:
     state: directory
     path: "{{ m_cache_directory }}"
     owner: "{{ m_cache_directory_owner }}"
-    group: "{{ m_cache_directory_group }}"
-    mode: "{{ m_cache_directory_mode }}"
+    group: "{{ group_apache }}"
+    mode: "2775"
+
+- name: Ensure meza-ansible can write to cache directory
+  file:
+    state: directory
+    path: "{{ m_cache_directory }}"
+    owner: "{{ m_cache_directory_owner }}"
+    group: "{{ group_apache }}"
+    mode: "2775"
+  when: m_cache_directory_owner != "meza-ansible"
 
 - name: "Ensure root uploads dir configured"
   file:
     path: "{{ m_uploads_dir }}"
     state: directory
     mode: "{{ m_uploads_dir_mode }}"
-    owner: "{{ m_uploads_dir_owner }}"
-    group: "{{ m_uploads_dir_group }}"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
 
 #
 # DEMO WIKI (if needed)
@@ -506,8 +560,8 @@
   template:
     src: "{{ item }}.j2"
     dest: "{{ m_install }}/.deploy-meza/{{ item }}"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: 0755
   with_items:
     - elastic-build-index.sh
@@ -519,7 +573,7 @@
   file:
     path: "{{ m_logs }}/{{ item }}"
     owner: "{{ m_logs_owner }}"
-    group: "{{ m_logs_group }}"
+    group: "{{ group_apache }}"
     mode: "{{ m_logs_mode }}"
     state: directory
   with_items:

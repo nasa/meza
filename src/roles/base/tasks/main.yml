@@ -3,7 +3,7 @@
   user:
     name: "{{ item }}"
     # primary group
-    group: wheel
+    group: "{{ group_wheel }}"
     move_home: true
     home: "{{ m_home }}/{{ item }}"
   with_items:
@@ -14,7 +14,7 @@
   file:
     path: "{{ m_home }}/alt-meza-ansible/.ssh"
     owner: alt-meza-ansible
-    group: wheel
+    group: "{{ group_wheel }}"
     mode: 0700
     state: directory
 
@@ -28,7 +28,7 @@
   file:
     path: "{{ m_home }}/{{ item }}/.ssh/authorized_keys"
     owner: "{{ item }}"
-    group: wheel
+    group: "{{ group_wheel }}"
     mode: 0644
   with_items:
     - meza-ansible
@@ -441,8 +441,8 @@
 - name: "Ensure {{ m_tmp }} exists"
   file:
     path: "{{ m_tmp }}"
-    owner: meza-ansible
-    group: wheel
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: 0755
     state: directory
 
@@ -450,7 +450,7 @@
   file:
     path: "{{ m_logs }}"
     owner: "{{ m_logs_owner }}"
-    group: "{{ m_logs_group }}"
+    group: "{{ group_wheel }}"
     mode: "{{ m_logs_mode }}"
     state: directory
 
@@ -458,7 +458,7 @@
   file:
     path: "{{ m_logs }}/{{ item }}"
     owner: "{{ m_logs_owner }}"
-    group: "{{ m_logs_group }}"
+    group: "{{ group_wheel }}"
     mode: "{{ m_logs_mode }}"
     state: directory
   with_items:
@@ -515,8 +515,8 @@
   template:
     src: "gitconfig.j2"
     dest: "{{ m_home }}/meza-ansible/.gitconfig"
-    owner: "meza-ansible"
-    group: "wheel"
+    owner: "{{ ansible_user }}"
+    group: "{{ group_wheel }}"
     mode: 0644
 
 - name: Check if obsolete Node.JS version of Parsoid exists on this server

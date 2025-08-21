@@ -26,6 +26,24 @@ mf_add_ssh_user() {
 
 	if ! mf_user_exists "$1"; then
 		useradd "$1" --home-dir "$meza_user_dir/$1"
+		
+		# Ensure meza-ansible is in required groups for file operations
+		if [ "$1" = "meza-ansible" ] && command -v usermod >/dev/null 2>&1; then
+			# Add to apache group for web file access
+			if getent group apache >/dev/null 2>&1; then
+				usermod -a -G apache "$1"
+				echo "Added $1 to apache group"
+			elif getent group www-data >/dev/null 2>&1; then
+				usermod -a -G www-data "$1"
+				echo "Added $1 to www-data group"
+			fi
+			
+			# Add to wheel group for sudo access
+			if getent group wheel >/dev/null 2>&1; then
+				usermod -a -G wheel "$1"
+				echo "Added $1 to wheel group"
+			fi
+		fi
 	fi
 
 	mkdir -p "$meza_user_dir/$1/.ssh"

@@ -1,0 +1,56 @@
+---
+# Verify meza-ansible group memberships and critical directory permissions
+
+- name: Verify meza-ansible group memberships
+  ansible.builtin.command: groups meza-ansible
+  register: meza_groups
+  changed_when: false
+
+- name: Display meza-ansible group memberships
+  ansible.builtin.debug:
+    msg: "meza-ansible groups: {{ meza_groups.stdout }}"
+
+- name: Verify critical directory permissions
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  register: dir_perms
+  loop:
+    - "{{ m_cache_directory }}"
+    - "{{ m_meza_data }}"
+    - "{{ m_uploads_dir }}"
+    - "{{ m_logs }}"
+
+- name: Display directory permissions
+  ansible.builtin.debug:
+    msg: "{{ item.item }}: owner={{ item.stat.pw_name }}, group={{ item.stat.gr_name }}, mode={{ '%04o' | format(item.stat.mode) }}"
+  loop: "{{ dir_perms.results }}"
+  when: item.stat.exists
+
+- name: Check if meza-ansible user is in apache group
+  ansible.builtin.command: id -Gn meza-ansible
+  register: user_groups
+  changed_when: false
+
+- name: Fail if meza-ansible is not in apache group
+  ansible.builtin.fail:
+    msg: "meza-ansible user is not in apache group. Groups: {{ user_groups.stdout }}"
+  when:
+    - ansible_distribution_file_variety == 'RedHat'
+    - "'apache' not in user_groups.stdout.split()"
+
+- name: Verify cache directory is writable by meza-ansible
+  ansible.builtin.file:
+    path: "{{ m_cache_directory }}/test-write"
+    state: touch
+    owner: "{{ ansible_user }}"
+    group: "{{ group_apache }}"
+    mode: '0664'
+  become: true
+  become_user: meza-ansible
+  register: cache_write_test
+
+- name: Remove test file
+  ansible.builtin.file:
+    path: "{{ m_cache_directory }}/test-write"
+    state: absent
+  when: cache_write_test is succeeded

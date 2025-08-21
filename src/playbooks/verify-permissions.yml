@@ -1,0 +1,17 @@
+---
+# Playbook to verify file permissions and group membership are correct
+# Usage: ansible-playbook -i hosts verify-permissions.yml
+
+- name: Verify Meza permissions and group membership
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Include permission verification role
+      ansible.builtin.include_role:
+        name: verify-permissions
+      tags:
+        - verify
+        - permissions
+        - groups

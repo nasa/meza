@@ -85,3 +85,10 @@ command_update_ca_trust: "update-ca-trust"
 user_apache: apache
 group_apache: apache
 user_memcached: memcached
+group_wheel: wheel
+
+# Group management for RedHat family (RHEL, CentOS, Rocky Linux, AlmaLinux)
+# Ensure consistent group membership requirements
+meza_required_groups:
+  - apache
+  - wheel

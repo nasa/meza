@@ -1,18 +1,18 @@
 ---
 
 - name: "Stop parsoid"
-  service:
+  ansible.builtin.service:
     name: parsoid
     state: stopped
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: "Ensure {{ m_parsoid_service_path }} removed"
-  file:
+  ansible.builtin.file:
     state: absent
     path: "{{ m_parsoid_service_path }}"
 
 - name: "Ensure Parsoid removed"
-  file:
+  ansible.builtin.file:
     state: absent
     path: "{{ m_parsoid_path }}"
 

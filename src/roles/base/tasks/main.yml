@@ -1,6 +1,6 @@
 ---
 - name: Ensure user's meza-ansible and alt-meza-ansible in group "wheel"
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     # primary group
     group: "{{ group_wheel }}"
@@ -11,7 +11,7 @@
     - alt-meza-ansible
 
 - name: Ensure user alt-meza-ansible .ssh dir configured
-  file:
+  ansible.builtin.file:
     path: "{{ m_home }}/alt-meza-ansible/.ssh"
     owner: alt-meza-ansible
     group: "{{ group_wheel }}"
@@ -19,13 +19,13 @@
     state: directory
 
 - name: Copy meza-ansible authorized_keys to alt-meza-ansible
-  shell: >
+  ansible.builtin.shell: >
     cp
     {{ m_home }}/meza-ansible/.ssh/authorized_keys
     {{ m_home }}/alt-meza-ansible/.ssh/authorized_keys
 
 - name: Ensure user meza-ansible and alt-meza-ansible authorized_keys configured
-  file:
+  ansible.builtin.file:
     path: "{{ m_home }}/{{ item }}/.ssh/authorized_keys"
     owner: "{{ item }}"
     group: "{{ group_wheel }}"
@@ -41,11 +41,11 @@
     key: "{{ lookup('file', '{{ m_home }}/meza-ansible/.ssh/id_rsa.pub') }}"
 
 - name: Ensure no password on alt-meza-ansible user
-  shell: passwd --delete alt-meza-ansible
+  ansible.builtin.shell: passwd --delete alt-meza-ansible
   failed_when: false
 
 - name: Ensure /etc/sudoers.d/meza-ansible in place
-  template:
+  ansible.builtin.template:
     src: "sudoers_meza-ansible.j2"
     dest: "{{ m_meza_sudeoers_file }}"
     owner: root
@@ -55,14 +55,14 @@
 # Without this, we sometimes get error "yum lockfile is held by another process"
 # because PackageKit will upgrade packages on its own
 - name: Ensure PackageKit is removed
-  yum:
+  ansible.builtin.dnf:
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: PackageKit
     state: absent
   when: ansible_distribution_file_variety == 'RedHat'
 
 - name: ensure deltarpm is installed and latest
-  yum:
+  ansible.builtin.dnf:
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: deltarpm
     state: latest
@@ -78,19 +78,23 @@
     )
 
 - name: Ensure apt cache updated (Debian only)
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   when: ansible_distribution_file_variety == "Debian"
 
 - name: Ensure aptitude installed to use Ansible 'package' (Debian only)
-  apt:
+  ansible.builtin.apt:
     name: aptitude
     state: present
     force_apt_get: true
   when: ansible_distribution_file_variety == "Debian"
 
+# @FIXME: Risky to upgrade without rollback and audit
+# Consider adding etckeeper and other tools
 - name: Upgrade all packages
-  package: name=* state=latest
+  ansible.builtin.package:
+    name: "*"
+    state: latest
   environment:
     # If `install_ms_sql_driver: true` is set in config, MS SQL drivers will be
     # installed. When these drivers are updated they require accepting end user
@@ -102,7 +106,7 @@
 
 # FIXME #807: for RedHat may need to enable "Optional RPMs"
 - name: Ensure EPEL installed via epel-release package (CentOS and Rocky Linux)
-  yum:
+  ansible.builtin.dnf:
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     name: epel-release
     state: present
@@ -111,7 +115,7 @@
     - latest
 
 - name: Check if EPEL repo is already configured (RedHat only)
-  stat:
+  ansible.builtin.stat:
     path: "/etc/yum.repos.d/epel.repo"
   register: epel_repofile_result
   when: ansible_distribution == "RedHat"
@@ -119,7 +123,7 @@
     - latest
 
 - name: Ensure EPEL installed via URL (RedHat only)
-  yum:
+  ansible.builtin.dnf:
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
     # yamllint disable-line rule:line-length
     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
@@ -136,7 +140,7 @@
     - latest
 
 - name: Import EPEL GPG key (RedHat only)
-  rpm_key:
+  ansible.builtin.rpm_key:
     # yamllint disable-line rule:line-length
     key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
     state: present
@@ -149,7 +153,7 @@
     - latest
 
 - name: Ensure optional repos enabled (RedHat Only)
-  shell: subscription-manager repos --enable rhel-7-server-optional-rpms
+  ansible.builtin.shell: subscription-manager repos --enable rhel-7-server-optional-rpms
   tags:
     - latest
   when:
@@ -157,7 +161,9 @@
     - ansible_facts['distribution_major_version'] == "7"
 
 - name: ensure libselinux-python installed prior to SELinux (RedHat/CentOS only)
-  yum: name=libselinux-python state=installed
+  ansible.builtin.dnf:
+    name: libselinux-python
+    state: installed
   tags:
     - latest
   when: >
@@ -184,6 +190,14 @@
 # Caution: getmeza.sh is what installs Ansible and Python in the first place.
 # getmeza.sh also sets up the CentOS package repo where we get the old packages.
 - name: Version lock packages for Ansible and Python
+  when:
+    - ansible_facts['distribution'] == "Rocky"
+    - ansible_facts['distribution_major_version'] == "8"
+  become: true
+  become_user: root
+  # do not ignore errors because if we don't versionlock, then uncontrolled
+  # upgrades to these central packages could occur
+  ignore_errors: false
   block:
     - name: Ensure dnf versionlock is installed
       ansible.builtin.dnf:
@@ -201,17 +215,9 @@
     - name: Show versionlock_result
       ansible.builtin.debug:
         msg: versionlock_result
-  when:
-    - ansible_facts['distribution'] == "Rocky"
-    - ansible_facts['distribution_major_version'] == "8"
-  become: true
-  become_user: root
-  # do not ignore errors because if we don't versionlock, then uncontrolled
-  # upgrades to these central packages could occur
-  ignore_errors: false
 
 - name: Ensure base packages installed CentOS7/RHEL7/Debian
-  package:
+  ansible.builtin.package:
     name:
       - ntp
       - ntpdate
@@ -275,7 +281,7 @@
 
 
 - name: Ensure selinux-policy installed (RedHat/CentOS only)
-  yum:
+  ansible.builtin.dnf:
     name: selinux-policy
     state: latest
   when: ansible_distribution_file_variety == "RedHat"
@@ -289,7 +295,7 @@
   when: ansible_distribution_file_variety == "RedHat"
 
 - name: Ensure firewalld is running and enable it at boot (RedHat/CentOS only)
-  service:
+  ansible.builtin.service:
     name: firewalld
     state: started
     enabled: true
@@ -298,7 +304,7 @@
     - ansible_distribution_file_variety == "RedHat"
 
 - name: Ensure UFW is enabled and denying access by default (Debian only)
-  ufw:
+  community.general.ufw:
     state: enabled
     direction: incoming
     policy: deny
@@ -308,7 +314,8 @@
 
 # Make sure we don't block SSH right away. Not sure why this isn't required for
 # firewalld/centos...must be different defaults.
-- ufw:
+- name: Ensure OpenSSH is allowed through the firewall (Debian only)
+  community.general.ufw:
     rule: allow
     name: OpenSSH
   when:
@@ -320,14 +327,14 @@
 # SSH config
 #
 - name: Ensure sshd is running and enabled
-  service:
+  ansible.builtin.service:
     name: "{{ service_ssh }}"
     state: started
     enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
 - name: Ensure SSH client and SSH Daemon configs in place
-  template:
+  ansible.builtin.template:
     src: "ssh_config.j2"
     dest: "/etc/ssh/ssh_config"
     owner: root
@@ -336,7 +343,7 @@
   when: use_default_ssh_config
 
 - name: Ensure SSH client and SSH Daemon configs in place
-  template:
+  ansible.builtin.template:
     src: "sshd_config.j2"
     dest: "/etc/ssh/sshd_config"
     owner: root
@@ -360,7 +367,7 @@
 #   when: use_ntp
 
 - name: Ensure NTP is running and enabled as configured.
-  service:
+  ansible.builtin.service:
     name: "{{ service_ntp }}"
     state: started
     enabled: true
@@ -376,7 +383,7 @@
     )
 
 - name: Enable chrony for Rocky/RHEL8
-  service:
+  ansible.builtin.service:
     name: chronyd
     state: started
     enabled: true
@@ -392,7 +399,9 @@
     )
 
 - name: Copy the ntp.conf template file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  ansible.builtin.template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
   notify:
     - restart ntp rhel7
   when: >
@@ -415,7 +424,7 @@
 #     name: cryptography
 
 - name: Ensure install directory configured
-  file:
+  ansible.builtin.file:
     path: "{{ m_paths.install.path }}"
     state: directory
     owner: "{{ m_paths.install.owner }}"
@@ -423,7 +432,7 @@
     mode: "{{ m_paths.install.mode }}"
 
 - name: Ensure data directory configured
-  file:
+  ansible.builtin.file:
     path: "{{ m_meza_data }}"
     state: directory
     owner: "{{ m_data_owner }}"
@@ -431,7 +440,7 @@
     mode: "{{ m_data_mode }}"
 
 - name: Ensure deploy directory in place
-  file:
+  ansible.builtin.file:
     path: "{{ m_deploy }}"
     state: directory
     owner: root
@@ -439,7 +448,7 @@
     mode: 0755
 
 - name: "Ensure {{ m_tmp }} exists"
-  file:
+  ansible.builtin.file:
     path: "{{ m_tmp }}"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
@@ -447,7 +456,7 @@
     state: directory
 
 - name: "Ensure {{ m_logs }} exists"
-  file:
+  ansible.builtin.file:
     path: "{{ m_logs }}"
     owner: "{{ m_logs_owner }}"
     group: "{{ group_wheel }}"
@@ -455,7 +464,7 @@
     state: directory
 
 - name: "Ensure {{ m_logs }} sub directories exist"
-  file:
+  ansible.builtin.file:
     path: "{{ m_logs }}/{{ item }}"
     owner: "{{ m_logs_owner }}"
     group: "{{ group_wheel }}"
@@ -472,7 +481,7 @@
 # Prevent runJobs and other scripts from running when application may be in
 # indeterminate state
 - name: Ensure crontab empty for meza-ansible when overwriting wikis
-  shell: crontab -u meza-ansible -r
+  ansible.builtin.shell: crontab -u meza-ansible -r
   when:
     - force_overwrite_from_backup is defined
     - force_overwrite_from_backup == true
@@ -482,13 +491,13 @@
   failed_when: false
 
 - name: Ensure CA package installed
-  package:
+  ansible.builtin.package:
     name: ca-certificates
     state: present
 
 # Ref: http://docs.ansible.com/ansible/playbooks_loops.html#id4
 - name: Copy any custom PEM-format CA certs into place
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ path_custom_pem_ca_trust }}"
     owner: root
@@ -498,7 +507,7 @@
   register: new_custom_pem_ca_certs
 
 - name: Copy any custom OpenSSL extended-format CA certs into place
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ path_custom_extended_ca_trust }}"
     owner: root
@@ -508,11 +517,11 @@
   register: new_custom_extended_ca_certs
 
 - name: Update CA trust if certs changed
-  shell: "{{ command_update_ca_trust }}"
+  ansible.builtin.shell: "{{ command_update_ca_trust }}"
   when: new_custom_pem_ca_certs.changed or new_custom_extended_ca_certs.changed
 
 - name: Ensure meza-ansible has .gitconfig
-  template:
+  ansible.builtin.template:
     src: "gitconfig.j2"
     dest: "{{ m_home }}/meza-ansible/.gitconfig"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
@@ -520,10 +529,10 @@
     mode: 0644
 
 - name: Check if obsolete Node.JS version of Parsoid exists on this server
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_parsoid_service_path }}"
   register: parsoid_stat_result
 
 - name: "Do Parsoid cleanup if {{ m_parsoid_service_path }} exists"
-  include_tasks: parsoid-cleanup.yml
+  ansible.builtin.include_tasks: parsoid-cleanup.yml
   when: parsoid_stat_result.stat.exists

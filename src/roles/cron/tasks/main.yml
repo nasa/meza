@@ -16,7 +16,7 @@
   template:
     src: meza-ansible.crontab.j2
     dest: "{{ m_home }}/meza-ansible/.ansible-cronfile"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
     mode: 0755
 
@@ -24,7 +24,7 @@
   template:
     src: runAllJobs.php.j2
     dest: "{{ m_install }}/.deploy-meza/runAllJobs.php"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
     mode: 0755
 

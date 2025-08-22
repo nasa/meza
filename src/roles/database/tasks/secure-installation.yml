@@ -71,7 +71,7 @@
   template:
     src: "root-my.cnf.j2"
     dest: "{{ m_home }}/meza-ansible/.my.cnf"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
     mode: 0600
 

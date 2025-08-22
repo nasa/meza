@@ -82,13 +82,13 @@
     - name: Ensure secret.yml owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}/secret/{{ env }}/secret.yml"
-        owner: "{{ ansible_user }}"
+        owner: "{{ ansible_user | default(ansible_env.USER) }}"
         group: "{{ group_wheel }}"
         mode: "0660"
     - name: Ensure {{ m_conf_dir }} owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}"
-        owner: "{{ ansible_user }}"
+        owner: "{{ ansible_user | default(ansible_env.USER) }}"
         group: "{{ group_wheel }}"
         mode: "0755"
 

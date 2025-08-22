@@ -174,7 +174,7 @@
   template:
     src: NonMediaWikiSimpleSamlAuth.php.j2
     dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_apache }}"
     mode: 0755
 

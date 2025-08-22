@@ -1,5 +1,9 @@
 ---
 
+- name: Show all variables
+  ansible.builtin.debug:
+    var: vars
+
 - name: Ensure secret config directory exists
   file:
     path: "{{ m_local_secret }}"

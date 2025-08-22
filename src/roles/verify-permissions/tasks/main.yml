@@ -42,7 +42,7 @@
   ansible.builtin.file:
     path: "{{ m_cache_directory }}/test-write"
     state: touch
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_apache }}"
     mode: '0664'
   become: true

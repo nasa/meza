@@ -441,7 +441,7 @@
 - name: "Ensure {{ m_tmp }} exists"
   file:
     path: "{{ m_tmp }}"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
     mode: 0755
     state: directory
@@ -515,7 +515,7 @@
   template:
     src: "gitconfig.j2"
     dest: "{{ m_home }}/meza-ansible/.gitconfig"
-    owner: "{{ ansible_user }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
     mode: 0644
 

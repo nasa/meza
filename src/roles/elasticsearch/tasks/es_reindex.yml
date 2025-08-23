@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: elastic-reindex.sh.j2
     dest: "{{ m_deploy }}/elastic-reindex.sh"
-    mode: 0644
+    mode: '0644'
 
 # 'creates' ensures idempotency because it will only run if the file doesn't exist.
 # However, it would prevent re-running the script if needed. (like Elasticsearch

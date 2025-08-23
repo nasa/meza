@@ -118,7 +118,7 @@
 # Import SQL file from above
 #
 - name: Import dump on slave(s)
-  mysql_db:
+  community.mysql.mysql_db:
     state: import
     name: all
     target: "{{ m_tmp }}/mysqldump-onslave.sql.gz"

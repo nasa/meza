@@ -20,5 +20,5 @@
   copy:
     src: luasandbox.ini
     dest: "{{ path_php_apache_conf_d }}/20-luasandbox.ini"
-    mode: 0600
+    mode: '0600'
     owner: root

@@ -30,7 +30,7 @@
     path: "{{ m_home }}/meza-ansible/.ssh"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0700
+    mode: '0700'
     state: directory
 
 - name: Copy meza-ansible keys to app servers
@@ -562,7 +562,7 @@
     dest: "{{ m_install }}/.deploy-meza/{{ item }}"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0755
+    mode: '0755'
   with_items:
     - elastic-build-index.sh
     - elastic-rebuild-all.sh

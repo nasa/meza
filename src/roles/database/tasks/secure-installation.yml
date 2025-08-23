@@ -19,7 +19,7 @@
     src: "user-my.cnf.j2"
     dest: "{{ mysql_user_home }}/.my.cnf"
     owner: "{{ mysql_user_name }}"
-    mode: 0600
+    mode: '0600'
   when: mysql_user_name != mysql_root_username and (mysql_install_packages | bool or mysql_user_password_update)
 
 - name: Disallow root login remotely
@@ -60,7 +60,7 @@
     dest: "{{ mysql_root_home }}/.my.cnf"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
   when: mysql_install_packages | bool or mysql_root_password_update
 
 # Also make sure meza-ansible has mysql root's .my.cnf. This allows `mysql` and
@@ -73,7 +73,7 @@
     dest: "{{ m_home }}/meza-ansible/.my.cnf"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0600
+    mode: '0600'
 
 - name: Get list of hosts for the anonymous user.
   command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
@@ -89,4 +89,4 @@
   with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
 
 - name: Remove MySQL test database.
-  mysql_db: "name='test' state=absent"
+  community.mysql.mysql_db: "name='test' state=absent"

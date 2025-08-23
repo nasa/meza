@@ -159,7 +159,7 @@
     recurse: true
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
   notify:
     - restart haproxy
 
@@ -176,7 +176,7 @@
 #     state: directory
 #     owner: root
 #     group: root
-#     mode: 0660
+#     mode: '0660'
 
 
 - name: Ensure error files directory in place
@@ -208,7 +208,7 @@
     dest: "/etc/firewalld/services/haproxy-{{ item }}.xml"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   with_items:
     - http
     - https

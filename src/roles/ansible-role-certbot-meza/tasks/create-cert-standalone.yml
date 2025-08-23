@@ -8,7 +8,7 @@
   file:
     path: /etc/letsencrypt/renewal-hooks/{{ item }}
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
   with_items:
@@ -21,7 +21,7 @@
     dest: /etc/letsencrypt/renewal-hooks/pre/stop_services
     owner: root
     group: root
-    mode: 0750
+    mode: '0750'
   when:
     - certbot_create_standalone_stop_services is defined
     - certbot_create_standalone_stop_services
@@ -32,7 +32,7 @@
     dest: /etc/letsencrypt/renewal-hooks/post/start_services
     owner: root
     group: root
-    mode: 0750
+    mode: '0750'
   when:
     - certbot_create_standalone_stop_services is defined
     - certbot_create_standalone_stop_services

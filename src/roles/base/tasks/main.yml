@@ -15,7 +15,7 @@
     path: "{{ m_home }}/alt-meza-ansible/.ssh"
     owner: alt-meza-ansible
     group: "{{ group_wheel }}"
-    mode: 0700
+    mode: '0700'
     state: directory
 
 - name: Copy meza-ansible authorized_keys to alt-meza-ansible
@@ -29,13 +29,13 @@
     path: "{{ m_home }}/{{ item }}/.ssh/authorized_keys"
     owner: "{{ item }}"
     group: "{{ group_wheel }}"
-    mode: 0644
+    mode: '0644'
   with_items:
     - meza-ansible
     - alt-meza-ansible
 
 - name: Set authorized key for alt-meza-ansible
-  authorized_key:
+  ansible.posix.authorized_key:
     user: alt-meza-ansible
     state: present
     key: "{{ lookup('file', '{{ m_home }}/meza-ansible/.ssh/id_rsa.pub') }}"
@@ -289,7 +289,7 @@
     - latest
 
 - name: put SELinux in permissive mode (RedHat/CentOS only)
-  selinux:
+  ansible.posix.selinux:
     policy: targeted
     state: permissive  # log actions that would be blocked if state=enforcing
   when: ansible_distribution_file_variety == "RedHat"
@@ -445,14 +445,14 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
 
 - name: "Ensure {{ m_tmp }} exists"
   ansible.builtin.file:
     path: "{{ m_tmp }}"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0755
+    mode: '0755'
     state: directory
 
 - name: "Ensure {{ m_logs }} exists"
@@ -526,7 +526,7 @@
     dest: "{{ m_home }}/meza-ansible/.gitconfig"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0644
+    mode: '0644'
 
 - name: Check if obsolete Node.JS version of Parsoid exists on this server
   ansible.builtin.stat:

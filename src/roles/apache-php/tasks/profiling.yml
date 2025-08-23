@@ -52,7 +52,7 @@
     path: "{{ m_profiling_xhgui_directory }}"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
     recurse: true
     state: directory
 
@@ -74,7 +74,7 @@
     # group: who?
 
     # FIXME #804: suggested per docs, but c'mon
-    mode: 0777
+    mode: '0777'
     recurse: true
     state: directory
 

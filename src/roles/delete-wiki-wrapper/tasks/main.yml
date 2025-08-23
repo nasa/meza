@@ -38,7 +38,7 @@
 
 # Delete database
 - name: Drop database from master DB
-  mysql_db:
+  community.mysql.mysql_db:
     name: "wiki_{{ wiki_id }}"
     state: absent
   delegate_to: "{{ groups['db_master'][0] }}"

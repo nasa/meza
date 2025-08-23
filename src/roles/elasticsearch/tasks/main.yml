@@ -21,7 +21,7 @@
   ansible.builtin.template:
     src: java_home.sh.j2
     dest: /etc/profile.d/java_home.sh
-    mode: 0644
+    mode: '0644'
 
 # ================================================================================
 # INSTALL ELASTICSEARCH
@@ -39,7 +39,7 @@
   ansible.builtin.template:
     src: elasticsearch.repo.j2
     dest: /etc/yum.repos.d/elasticsearch.repo
-    mode: 0644
+    mode: '0644'
   when: ansible_distribution_file_variety == 'RedHat'
 
 # sudo dnf install --enablerepo=elasticsearch elasticsearch
@@ -67,7 +67,7 @@
     line: '127.0.0.1 localhost meza'
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   when: '"127.0.0.1" not in elasticsearch_checkhostsfile.stdout'
 
 # ref: http://elasticsearch-users.115913.n3.nabble.com/Elasticsearch-Not-Working-td4059398.html
@@ -75,7 +75,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: elasticsearch
     recurse: true
   with_items:
@@ -101,7 +101,7 @@
     dest: /etc/elasticsearch/elasticsearch.yml
     owner: root
     group: elasticsearch
-    mode: 0750
+    mode: '0750'
   notify: Restart elasticsearch
 
 # Consider adding this, ref geerlinguy

@@ -50,7 +50,7 @@
         path: "{{ m_home }}/alt-meza-ansible/.ssh"
         owner: alt-meza-ansible
         group: "{{ group_wheel }}"
-        mode: 0700
+        mode: '0700'
         state: directory
     - name: Copy meza-ansible keys to alt-meza-ansible
       copy:

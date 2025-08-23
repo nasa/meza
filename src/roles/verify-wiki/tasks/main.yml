@@ -62,7 +62,7 @@
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
 - name: "{{ wiki_id }} - Ensure wiki config symlink in place"
   file:
     # dest = symlink, src = dir linked to
@@ -71,7 +71,7 @@
     state: link
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
 
 ###############################################################################
 #                                                                             #

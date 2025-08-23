@@ -30,5 +30,5 @@
     dest: "{{ kibana_config_file_path }}"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify: Restart kibana

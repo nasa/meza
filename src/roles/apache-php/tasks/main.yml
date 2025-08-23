@@ -10,7 +10,7 @@
     path: "{{ m_htdocs }}"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0775
+    mode: '0775'
 
 - name: Ensure mw-temp directory configured
   file:

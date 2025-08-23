@@ -46,7 +46,7 @@
 # DROP database
 #
 - name: "{{ wiki_id }} - Drop database if --overwrite (or -o) set"
-  mysql_db:
+  community.mysql.mysql_db:
     name: "wiki_{{ wiki_id }}"
     state: absent
   run_once: true
@@ -58,7 +58,7 @@
 # IMPORT SQL
 #
 - name: "{{ wiki_id }} - Import SQL file"
-  mysql_db:
+  community.mysql.mysql_db:
     name: "wiki_{{ wiki_id }}"
     state: import
     target: "{{ m_tmp }}/wiki.sql"

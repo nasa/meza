@@ -14,7 +14,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
 
@@ -22,7 +22,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}/{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
@@ -31,7 +31,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}/{{ item }}/uploads"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"

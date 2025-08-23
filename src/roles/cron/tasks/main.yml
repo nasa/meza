@@ -18,7 +18,7 @@
     dest: "{{ m_home }}/meza-ansible/.ansible-cronfile"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0755
+    mode: '0755'
 
 - name: Ensure runAllJobs.php in place
   template:
@@ -26,7 +26,7 @@
     dest: "{{ m_install }}/.deploy-meza/runAllJobs.php"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_wheel }}"
-    mode: 0755
+    mode: '0755'
 
 # Make sure sudo can be used in cron jobs
 - lineinfile:

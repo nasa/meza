@@ -176,7 +176,7 @@
     dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
     owner: "{{ ansible_user | default(ansible_env.USER) }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
 
 # We could use /var/log here, but still would need to ensure apache can write to it
 - name: Ensure ./log directory in place

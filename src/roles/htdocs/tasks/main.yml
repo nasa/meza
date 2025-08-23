@@ -36,7 +36,7 @@
     dest: "{{ m_htdocs }}/{{ item }}"
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
   with_items:
     - ".htaccess"
     - "index.php"

@@ -27,7 +27,7 @@
   when: not server_log_exists
 
 - name: "Import server log database structure"
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ meza_server_log_db }}"
     state: import
     target: "/tmp/meza_server_log.sql"
@@ -66,7 +66,7 @@
 
 
 - name: "Create table disk_space if not exists"
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ meza_server_log_db }}"
     state: import
     target: "/tmp/table_disk_space.sql"
@@ -81,7 +81,7 @@
   template:
     src: "{{ item }}.j2"
     dest: "{{ m_deploy }}/{{ item }}"
-    mode: 0755
+    mode: '0755'
   with_items:
     - server-performance.sh
     - disk-space-usage.sh

@@ -112,7 +112,7 @@
     dest: /etc/php.d/30-pdo_sqlsrv.ini
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
     - restart apache
     - restart php-fpm
@@ -122,7 +122,7 @@
     dest: /etc/php.d/20-sqlsrv.ini
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
     - restart apache
     - restart php-fpm

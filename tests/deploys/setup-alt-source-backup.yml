@@ -69,7 +69,7 @@
         path: /etc/sudoers.d/test-user
         owner: root
         group: root
-        mode: 0644
+        mode: '0644'
         state: touch
     - name: Ensure test-user is passwordless sudoer
       lineinfile:
@@ -84,7 +84,7 @@
         path: "/home/test-user/.ssh"
         owner: test-user
         group: "{{ group_wheel }}"
-        mode: 0700
+        mode: '0700'
         state: directory
 
     - name: Ensure authorized_keys configured
@@ -92,7 +92,7 @@
         path: "/home/test-user/.ssh/authorized_keys"
         owner: test-user
         group: "{{ group_wheel }}"
-        mode: 0644
+        mode: '0644'
         state: touch
 
     - name: Set authorized key test-user

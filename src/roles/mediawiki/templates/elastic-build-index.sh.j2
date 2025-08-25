@@ -56,7 +56,7 @@ echo -e "<?php\n\$wgDisableSearchUpdate = true;\n" > "$disable_search_file"
 
 # Run script to generate elasticsearch index mappings/config
 cd "{{ m_mediawiki }}"
-WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:UpdateSearchIndexConfig --startOver
+WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:UpdateSearchIndexConfig --startOver
 
 # Determine indices for this wiki (typical CirrusSearch index pattern)
 index_pattern="wiki_${wiki_id}_*"
@@ -76,13 +76,13 @@ fi
 # Bootstrap the search index (bulk indexing). These commands can take some time.
 # We deliberately run with refresh disabled above for performance.
 log "Starting ForceSearchIndex (skipLinks/indexOnSkip) with retries"
-run_with_retries "WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipLinks --indexOnSkip"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:ForceSearchIndex --skipLinks --indexOnSkip"
 
 # After first pass, recompute indices to include any newly-created indices so we can restore settings later
 indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
 
 log "Starting ForceSearchIndex (skipParse) with retries"
-run_with_retries "WIKI=$wiki_id {{ m_mediawiki }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse"
 
 # Recompute indices again to capture any additional indices created during indexing
 indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)

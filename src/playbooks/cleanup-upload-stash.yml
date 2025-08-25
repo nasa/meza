@@ -23,5 +23,5 @@
         list_of_wikis: "{{ wikis_dirs.files | map(attribute='path') | map('basename') | list }}"
 
     - name: Run cleanupUploadStash.php
-      shell: WIKI={{ item }} {{ m_mediawiki }}/maintenance/run cleanupUploadStash
+      shell: WIKI={{ item | quote }} {{ m_mediawiki | quote }}/maintenance/run cleanupUploadStash
       with_items: "{{ list_of_wikis }}"

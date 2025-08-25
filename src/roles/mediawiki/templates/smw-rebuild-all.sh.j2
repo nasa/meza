@@ -49,7 +49,7 @@ for d in $do_wikis; do
 		previous_start_id="$start_id"
 
 		WIKI="$wiki_id" \
-		"{{ m_mediawiki }}/maintenance/run SemanticMediaWiki:rebuildData" \
+		{{ m_mediawiki | quote }}/maintenance/run SemanticMediaWiki:rebuildData \
 		-d 5 -v $dependent_option --ignore-exceptions \
 		--debug \
 		--report-runtime \

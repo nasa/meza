@@ -606,12 +606,6 @@
 #     es_do_upgrade: false
 #   when: not es_do_upgrade_stat.stat.exists
 
-# @TODO this only runs on the first wiki -- that is wrong -- it should run on all wikis
-# - name: Verify metastore index upgraded
-#   shell: WIKI={{ list_of_wikis[0] }} {{ m_mediawiki }}/maintenance/run CirrusSearch:Metastore --upgrade
-#   run_once: true
-#   when: docker_skip_tasks is not defined or not docker_skip_tasks
-
 # Wikis are totally built at this point, but SMW and search need rebuilding
 # FIXME #811: Will this work when controller is not an app server?
 - name: "(Re-)build search index for {{ list_of_wikis | join(', ') }}"

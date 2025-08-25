@@ -12,7 +12,7 @@
 
 - name: Run CirrusSearch Metastore upgrade (one-time)
   ansible.builtin.shell: |
-    WIKI={{ item }} {{ m_mediawiki }}/maintenance/run CirrusSearch:Metastore --upgrade
+    WIKI={{ item | quote }} {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:Metastore --upgrade
   with_items: "{{ list_of_wikis }}"
   run_once: true
   register: mediawiki_cirrus_metastore_result

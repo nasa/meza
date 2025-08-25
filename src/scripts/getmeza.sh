@@ -3,7 +3,7 @@
 # Bootstrap meza
 #
 # @TODO refactor and document this script better
-# @See https://github.com/freephile/meza/issues/172#issuecomment-3141998590 
+# @See https://github.com/freephile/meza/issues/172#issuecomment-3141998590
 
 if [ "$(whoami)" != "root" ]; then
 	echo "Try running this script with sudo: \"sudo bash getmeza.sh\""
@@ -87,8 +87,8 @@ if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
 			# just enable 'powertools' and install epel-release
 			dnf config-manager --set-enabled powertools
 			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-			
-			
+
+
 			dnf module -y reset php
 			sed -i.meza -e 's;countme=1$;countme=1\nexclude = python38;g' /etc/yum.repos.d/epel.repo
 			echo "exclude = python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
@@ -169,17 +169,17 @@ case ${distro} in
 		;;
 esac
 
-# Meza repository URL and branch can be set in your system shell as environment variables so as to work locally with 
-# your preferred setup and/or test changes to this file in development without needing to alter this file explicitly. 
+# Meza repository URL and branch can be set in your system shell as environment variables so as to work locally with
+# your preferred setup and/or test changes to this file in development without needing to alter this file explicitly.
 #
-# Use 
+# Use
 # export MEZA_REPOSITORY_URL='https://github.com/freephile/meza.git'
 # in your shell to override the default repo URL set here
 MEZA_REPOSITORY_URL="${MEZA_REPOSITORY_URL:-https://github.com/nasa/meza.git}"
 
 # Declare which branch in the repo to use
-# 
-# Use 
+#
+# Use
 # export MEZA_BRANCH_NAME='REL1_39'
 # in your shell to override the default branch name set here
 MEZA_BRANCH_NAME="${MEZA_BRANCH_NAME:-main}"
@@ -249,6 +249,6 @@ pip3 install --user ansible
 cd /opt/meza/config
 ansible-galaxy collection install -r ../requirements.yml
 
-# @todo At what point do we no longer need sudo?
+# @todo [Run meza as non-root user](https://github.com/freephile/meza/issues/72)
 echo "meza command installed. Use it:"
 echo "  sudo meza deploy monolith -vvv"

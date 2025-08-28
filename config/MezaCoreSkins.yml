@@ -110,7 +110,7 @@ list:
   - name: Medik
     repo: https://bitbucket.org/wikiskripta/medik.git
     type: skins
-    version: "dev-main" # tag v5.1.3 is not compatible with REL1_43
+    version: "master" # tag v5.1.3 is not compatible with REL1_43
 
     #
     # NOTE - If you'd like to use any other skins it is recommended

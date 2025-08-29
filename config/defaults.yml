@@ -115,7 +115,8 @@ m_meza_sudeoers_file: "/etc/sudoers.d/meza-ansible"
 
 # Version of MediaWiki core. Normally a Release branch like REL1_43 is good.
 # Using the 1.43.1 tag until the DBAL breakage is fixed in extensions.
-mediawiki_version: "1.43.1"  # You can use a branch, tag, or SHA1
+# mediawiki_version: "1.43.1"  # You can use a branch, tag, or SHA1
+mediawiki_version: "REL1_43"
 
 
 # Depth of MediaWiki clone - to avoid having ALL the project history

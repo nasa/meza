@@ -62,12 +62,18 @@
 - name: Ensure PEAR channel up-to-date
   shell: pear channel-update pecl.php.net
 
+- name: Check if memcached PECL extension is installed
+  shell: php -m | grep -i memcached
+  register: memcached_pecl_installed
+  changed_when: false
+  failed_when: false
+
 # --configureoptions parameter is not supported in our version of pecl.
 - name: Install memcached PECL packages
   shell: >
     printf 'no\nno\nno\nno\nno\nno\nno\nyes\nyes\n' |
     pecl install memcached
-  ignore_errors: true
+  when: memcached_pecl_installed.stdout == ""
   notify:
     - restart apache
     - restart php-fpm

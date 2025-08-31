@@ -168,6 +168,13 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle
     version: "{{ mediawiki_default_branch }}"
 
+  # DynamicPageList3 - Provides a way to list pages dynamically based on certain criteria
+  - name: DynamicPageList3
+    composer: universal-omega/dynamic-page-list3
+    version: "^3.6"
+    config: |
+      wfLoadExtension( 'DynamicPageList3' );
+
   # DynamicSidebar - Allows for custom sidebar based on user page or assigned group
   - name: DynamicSidebar
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DynamicSidebar

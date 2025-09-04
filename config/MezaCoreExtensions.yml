@@ -428,9 +428,10 @@ list:
 
   # PF - Allows users to add, edit and query data using forms.
   - name: PageForms
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PageForms
-    version: "5.8.1"
+    composer: mediawiki/page-forms
+    version: "^6.0"
     config: |
+      wfLoadExtension( 'PageForms' );
       $wgPageFormsLinkAllRedLinksToForms = false;
       $wgPageFormsAutoeditNamespaces[] = NS_USER;
       $wgPageFormsDelayReload = true;
@@ -494,7 +495,7 @@ list:
   # extension will update (null-edit) all pages that have been selected through that property.
   - name: SemanticDependencyUpdater
     repo: https://github.com/gesinn-it-pub/SemanticDependencyUpdater
-    version: master
+    version: "master"
     config: |
       $wgSDUProperty = 'Semantic Dependency';
       $wgSDUUseJobQueue = false;

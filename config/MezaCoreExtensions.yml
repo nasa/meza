@@ -38,10 +38,56 @@ list:
     config: |
       wfLoadExtension( 'BootstrapComponents' );
 
+  # CategoryTree - Provides a <categorytree> tag to display a dynamic, expandable tree of subcategories and pages
+  # Bundled extension
+  - name: CategoryTree
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CategoryTree.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      //  Loads the first level of the tree in a <categorytree> dynamically.
+      //  This way, the cache does not need to be disabled. Default is false.
+      $wgCategoryTreeDynamicTag = true;
+      //  disables the parser cache for pages with a <categorytree> tag. Default is true.
+      $wgCategoryTreeDisableCache = false;
+      //  enable HTTP cache for anon users. Default is false.
+      $wgCategoryTreeHTTPCache = true;
+      //  do not show the namespace name for pages and categories.
+      //  Default is false, namespaces are shown unless showing categories only.
+      $wgCategoryTreeDefaultOptions['hideprefix'] = true;
+      //  an array defining the maximum depth for each mode, to which the tree may be expanded initially using the depth
+      //  parameter in a <category> tag. Per default, this is set to 2 for the "categories" mode, and 1 for other modes.
+      //  We set it to 3 for categories and 2 for other modes
+      $wgCategoryTreeMaxDepth= [10 => 2, 20 => 2, 0 => 3, 100 => 2];
+      //  the default mode to use when no mode attribute is specified in a <categorytree> tag. May be 0
+      //  (the default - categories), 10 (pages), or 20 (all).
+      $wgCategoryTreeDefaultMode = 20;
+      //  the mode to use when rendering trees on category pages.
+      $wgCategoryTreeCategoryPageOptions['mode'] = 20;
+      //  root category to use for integrating the category tree in the sidebar.
+      //  If not set, no tree is integrated (this is the default). Integrating
+      //  a CategoryTree into the sidebar only works with skins based upon SkinTemplate,
+      //  that is, Modern, Monobook, Chick, Simple, and MySkin, but not Standard, Nostalgia or CologneBlue.
+      $wgCategoryTreeSidebarRoot = 'People';
+      // if true, forces the scripts needed by CategoryTree on every page, instead of on-demand.
+      // This may be needed if a CategoryTree is embedded in an unusual way, for example in a custom skin or in a system message
+      // $wgCategoryTreeForceHeaders = true;
+
   # CharInsert - Allows to create JavaScript links that when clicked, insert predefined text into the text box
   - name: CharInsert
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CharInsert
     version: "{{ mediawiki_default_branch }}"
+
+  # CheckUser - Extension to help wiki admins check if a user is sockpuppeting or otherwise abusing their account
+  # Bundled extension
+  - name: CheckUser
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CheckUser.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgGroupPermissions['sysop']['checkuser'] = true;
+      $wgGroupPermissions['sysop']['checkuser-log'] = true;
+      $wgGroupPermissions['sysop']['investigate'] = true;
+      $wgGroupPermissions['sysop']['checkuser-temporary-account-log'] = true;
+      $wgGroupPermissions['sysop']['checkuser-temporary-account-no-preference'] = true;
 
   # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
   - name: CirrusSearch
@@ -58,6 +104,13 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgCiteEnablePopups = true;
+
+  # CiteThisPage - Adds a "Cite this page" link to the toolbox of each page, which leads to a special page that
+  # provides pre-formatted citations in various citation styles for the current page.
+  # Bundled extension
+  - name: CiteThisPage
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CiteThisPage.git
+    version: "{{ mediawiki_default_branch }}"
 
   # CodeEditor - Extends the WikiEditor advanced editing toolbar with an embedded Ace editor widget, providing some
   # handy features for user/site JavaScript pages, CSS pages, JSON pages, and when extension Scribunto is also
@@ -91,6 +144,50 @@ list:
       $wgCommentStreamsModeratorFastDelete = true;
       $wgCommentStreamsAllowedNamespaces = -1;
 
+  # ConfirmEdit - Provides CAPTCHA support to help prevent spam and abuse from automated bots
+  # You can override the config in override.php if needed, like all other settings
+  # Bundled extension
+  - name: ConfirmEdit
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ConfirmEdit.git
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      // Enable the SimpleCaptcha
+      $wgCaptchaClass = 'SimpleCaptcha';
+      // Make sure the captcha is shown for anonymous users, 'autoconfirmed', and regular users
+      // but not for registered bots and sysops
+      $wgGroupPermissions['*']['skipcaptcha'] = false;
+      $wgGroupPermissions['user']['skipcaptcha'] = false;
+      $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = false;
+      $wgGroupPermissions['bot']['skipcaptcha'] = true; // registered bots
+      $wgGroupPermissions['sysop']['skipcaptcha'] = true;
+      // Enable captchas on these actions (defaults)
+      $wgCaptchaTriggers['edit'] = false;
+      $wgCaptchaTriggers['create'] = false;
+      $wgCaptchaTriggers['sendemail'] = false;
+      $wgCaptchaTriggers['addurl'] = true;
+      $wgCaptchaTriggers['createaccount'] = true;
+      $wgCaptchaTriggers['badlogin'] = true;
+      $wgCaptchaTriggers['badloginperuser'] = true;
+      // Use the default SimpleCaptcha settings
+      $wgSimpleCaptchaDefaultOptions = [
+        'length' => 5,
+        'casesensitive' => false,
+        'letters' => '23456789abcdefghjkmnpqrstuvwxyz',
+        'numbers' => '23456789',
+        'specials' => '',
+        'font' => __DIR__ . '/fonts/DejaVuSans.ttf',
+        'fontsize' => 24,
+        'width' => 120,
+        'height' => 40,
+        'maxrotation' => 15,
+        'shadowoffset' => 2,
+        'lines' => 4,
+        'backgroundcolor' => [ 255, 255, 255 ],
+        'textcolor' => [ 0, 0, 0 ],
+        'linecolor' => [ 64, 64, 64 ],
+        'pixelnoise' => 0,
+        'blur' => false,
+      ];
 
   # ContributionScores - Polls the wiki database to locate contributors with the highest contribution volume
   - name: ContributionScores
@@ -391,6 +488,12 @@ list:
     config: |
       wfLoadExtension( 'Network' );
 
+  # Nuke - Allows administrators to mass delete pages
+  # Bundled extension
+  - name: Nuke
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Nuke.git
+    version: "{{ mediawiki_default_branch }}"
+
   # NumerAlpha - Provides syntax to insert auto-incrementing numbers, letters, and roman numerals into pages
   - name: NumerAlpha
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/NumerAlpha
@@ -455,6 +558,12 @@ list:
   # interpreted as an argument delimiter
   - name: PipeEscape
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PipeEscape
+    version: "{{ mediawiki_default_branch }}"
+
+  # Poem - Adds a <poem> tag for 'pre-formatted' text that can also include wikitext markup
+  # Bundled extension
+  - name: Poem
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Poem
     version: "{{ mediawiki_default_branch }}"
 
   # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
@@ -622,6 +731,9 @@ list:
   #      $wgSubpageNavigationShowTree = false;
 
   # SyntaxHighlight - Provides rich formatting of source code using the syntaxhighlight tag
+  # The name in the repo is SyntaxHighlight_GeSHi even though the extension is called SyntaxHighlight
+  # AND the backend is Pygments not GeSHi
+  # Bundled extension
   - name: SyntaxHighlight_GeSHi
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SyntaxHighlight_GeSHi
     version: "{{ mediawiki_default_branch }}"
@@ -636,6 +748,15 @@ list:
   - name: TemplateData
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TemplateData
     version: "{{ mediawiki_default_branch }}"
+
+  # TemplateStyles - Allows templates to include CSS styles that are applied when the template is used on a page
+  # This makes is so much easier to have reusable components with their own styling while also avoiding
+  # global edits in MediaWiki:Common.css
+  # Bundled extension
+  - name: TemplateStyles
+    repo: https://github.com/wikimedia/mediawiki-extensions-TemplateStyles
+    version: "{{ mediawiki_default_branch }}"
+    composer_merge: true
 
   # TextExtracts - Provides an API which allows to retrieve plain-text or limited HTML
   - name: TextExtracts

@@ -68,13 +68,6 @@ list:
     type: skins
     version: "{{ mediawiki_default_branch }}"
 
-  # Skin: Timeless (MW Core) - strongly supports responsive web design
-  # Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
-  - name: MinervaNeue
-    repo: https://github.com/wikimedia/mediawiki-skins-MinervaNeue.git
-    type: skins
-    version: "{{ mediawiki_default_branch }}"
-
   # Skin: Foreground
   # Documentation: https://www.mediawiki.org/wiki/Skin:Foreground
   - name: Foreground
@@ -90,7 +83,9 @@ list:
   #  type: skins
   #  version: "{{ mediawiki_default_branch }}"
 
-  # Timeless skin - A responsive skin developed as part of the Reading department's focus on mobile
+  # A responsive skin developed as part of the Reading department's focus on mobile
+  # Skin: Timeless (MW Core) - strongly supports responsive web design
+  # Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
   - name: Timeless
     repo: https://gerrit.wikimedia.org/r/mediawiki/skins/Timeless
     version: "{{ mediawiki_default_branch }}"

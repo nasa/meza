@@ -22,7 +22,7 @@
 
 - name: Display directory permissions
   ansible.builtin.debug:
-    msg: "{{ item.item }}: owner={{ item.stat.pw_name }}, group={{ item.stat.gr_name }}, mode={{ '%04o' | format(item.stat.mode) }}"
+    msg: "{{ item.item }}: owner={{ item.stat.pw_name }}, group={{ item.stat.gr_name }}, mode={{ '%04o' | format(item.stat.mode | int) }}"
   loop: "{{ dir_perms.results }}"
   when: item.stat.exists
 
@@ -42,12 +42,14 @@
   ansible.builtin.file:
     path: "{{ m_cache_directory }}/test-write"
     state: touch
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
-    group: "{{ group_apache }}"
     mode: '0664'
   become: true
   become_user: meza-ansible
   register: cache_write_test
+
+- name: Debug cache write test
+  ansible.builtin.debug:
+    msg: "cache write test: {{ cache_write_test }}"
 
 - name: Remove test file
   ansible.builtin.file:

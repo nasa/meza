@@ -7,6 +7,12 @@
   gather_facts: true
   become: true
 
+# All playbooks should load critical Meza variables first
+  pre_tasks:
+    - name: Load critical Meza variables
+      ansible.builtin.include_role:
+        name: set-vars
+
   tasks:
     - name: Include permission verification role
       ansible.builtin.include_role:

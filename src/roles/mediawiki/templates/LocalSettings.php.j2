@@ -313,9 +313,10 @@ $wgEmailAuthentication = $wgEnableEmail;
 $wgPasswordSender = '{{ wgPasswordSender }}';
 $wgEmergencyContact = '{{ wgEmergencyContact | default(wgPasswordSender) }}';
 
-
-
-
+// Allowing HTML email only enables the User Preference Option.
+// Without this set to true, users cannot choose to receive HTML email.
+$wgAllowHTMLEmail = true;
+$wgDefaultUserOptions['echo-email-format'] = 'html'; // default = plain-text
 
 
 

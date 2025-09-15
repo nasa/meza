@@ -15,8 +15,8 @@
 
 ## It will be running once installed
 - name: Install Intel/AMD 64bit static build of Netdata
-  shell: bash <(curl -Ss https://my-netdata.io/kickstart-static64.sh) --dont-wait
+  shell: sh <(curl -Ss https://get.netdata.cloud/kickstart.sh) --dont-wait
   args:
-    executable: /bin/bash
+    executable: /bin/sh
   become: false
   when: netdata_present.stat.exists == False

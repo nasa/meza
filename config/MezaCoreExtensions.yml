@@ -789,7 +789,7 @@ list:
       # https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
       $wgULSIMEEnabled = false;
 
-  # UrlGetParameters
+  # UrlGetParameters - enables you to use and/or display URL GET parameters in wiki pages
   - name: UrlGetParameters
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/UrlGetParameters
     version: "{{ mediawiki_default_branch }}"

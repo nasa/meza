@@ -10,7 +10,7 @@
     - name: "Exit if at least one of the following not setup: secret, public, or Meza versions"
       ansible.builtin.debug:
         msg: "local_config_repo, secret_config_repo, or enforce_meza_version must be configured"
-      failed_when: True
+      failed_when: true
       when: >
         (
           local_config_repo is not defined
@@ -80,7 +80,7 @@
             color: "good"
             link_names: 1
           register: secret_config_notify
-          failed_when: False
+          failed_when: false
           when:
             - secret_config_git_operation.changed
             - autodeployer is defined
@@ -98,7 +98,7 @@
             icon_url: "{{ autodeployer_slack_icon_url }}"
             color: "good"
             link_names: 1
-          failed_when: False
+          failed_when: false
           when:
             - secret_config_git_operation.changed
             - secret_config_notify.failed
@@ -130,11 +130,6 @@
         - secret_config_repo is defined
         - secret_config_repo.repo is defined
         - secret_config_repo.version is defined
-
-
-
-
-
 
     #
     # PUBLIC CONFIG
@@ -206,7 +201,7 @@
             color: "good"
             link_names: 1
           register: public_config_notify
-          failed_when: False
+          failed_when: false
           when:
             - public_config_git_operation.changed
             - autodeployer is defined
@@ -224,7 +219,7 @@
             icon_url: "{{ autodeployer_slack_icon_url }}"
             color: "good"
             link_names: 1
-          failed_when: False
+          failed_when: false
           when:
             - public_config_git_operation.changed
             - public_config_notify.failed
@@ -255,11 +250,6 @@
         - local_config_repo is defined
         - local_config_repo.repo is defined
         - local_config_repo.version is defined
-
-
-
-
-
 
     #
     # MEZA
@@ -320,7 +310,7 @@
             color: "good"
             link_names: 1
           register: meza_notify
-          failed_when: False
+          failed_when: false
           when:
             - meza_git_operation.changed
             - autodeployer is defined
@@ -338,7 +328,7 @@
             icon_url: "{{ autodeployer_slack_icon_url }}"
             color: "good"
             link_names: 1
-          failed_when: False
+          failed_when: false
           when:
             - meza_git_operation.changed
             - meza_notify.failed
@@ -366,9 +356,6 @@
         - meta: end_play
 
       when: enforce_meza_version is defined
-
-
-
 
     #
     # Not doing deploy? End play

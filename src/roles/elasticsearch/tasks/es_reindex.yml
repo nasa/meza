@@ -1,11 +1,16 @@
 ---
 
 - name: Ensure Elasticsearch reindex script on elasticsearch servers
-  template:
+  ansible.builtin.template:
     src: elastic-reindex.sh.j2
     dest: "{{ m_deploy }}/elastic-reindex.sh"
-    mode: 0644
+    mode: '0644'
 
+# 'creates' ensures idempotency because it will only run if the file doesn't exist.
+# However, it would prevent re-running the script if needed. (like Elasticsearch
+# failed mid-reindex and needs to be re-run)
 - name: Run Elasticsearch reindex script
-  shell: "bash {{ m_deploy }}/elastic-reindex.sh > {{ m_logs }}/elastic-reindex-{{ version_found.json.version.number }} 2>&1"
-
+  ansible.builtin.shell: >
+    bash {{ m_deploy }}/elastic-reindex.sh > {{ m_logs }}/elastic-reindex-{{ elasticsearch_version_found.json.version.number }} 2>&1
+  args:
+    creates: "{{ m_logs }}/elastic-reindex-{{ elasticsearch_version_found.json.version.number }}"

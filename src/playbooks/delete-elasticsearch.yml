@@ -4,17 +4,18 @@
   become: true
 
   vars_prompt:
-   - name: "seriously_delete_elasticsearch"
-     prompt: Type "yes" to delete elasticsearch
-     private: false
-     default: "No"
+    - name: "seriously_delete_elasticsearch"
+      prompt: Type "yes" to delete elasticsearch
+      private: false
+      default: "No"
 
 
   tasks:
     # - name: Verify user wants to delete elasticsearch
     #   pause: prompt='Please confirm you want to delete Elasticsearch! Press return to continue. Press Ctrl+c and then "a" to abort'
 
-    - include_role:
+    - name: Include set-vars role
+      include_role:
         name: set-vars
 
     - name: Ensure Elasticsearch is removed

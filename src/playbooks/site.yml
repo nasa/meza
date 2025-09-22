@@ -1,11 +1,26 @@
 ---
-# run with:
-# cd /opt/meza/ansible
-# sudo -u meza-ansible ansible-playbook site.yml
+# login as or switch to user meza-ansible and run:
+# cd /opt/meza/config
+# sudo meza deploy monolith -vvv
+# Docs at https://www.mediawiki.org/wiki/Meza
 
-# FIXME #729: Move this into a role
 - hosts: localhost
   become: true
+  tasks:
+      # install geerlingguy.kibana
+    - name: run ansible galaxy to install our 3rd-party roles from requirements
+      local_action: command ansible-galaxy install -r ../requirements.yml --ignore-errors
+
+# FIXME #729: Move this into a role
+- name: Bootstrap localhost
+  hosts: localhost
+  become: true
+  # Due to our local installation of ansible,
+  # Add /usr/local/bin to meza-ansible user $PATH
+  # @FIXME: This should be done in the meza-ansible user's bashrc
+  #  Or it is not even necessary bc we don't use a local ansible
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   tasks:
   # Can't run set-vars yet, so bootstrap m_home and m_config_vault for now.
   # Meza install path retrieved in same way in set-vars role
@@ -29,20 +44,20 @@
         name: alt-meza-ansible
         move_home: true
         home: "{{ m_home }}/alt-meza-ansible"
-        group: wheel
+        group: "{{ group_wheel }}"
     - name: Ensure user alt-meza-ansible .ssh dir configured
       file:
         path: "{{ m_home }}/alt-meza-ansible/.ssh"
         owner: alt-meza-ansible
-        group: wheel
-        mode: 0700
+        group: "{{ group_wheel }}"
+        mode: '0700'
         state: directory
     - name: Copy meza-ansible keys to alt-meza-ansible
       copy:
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
         owner: alt-meza-ansible
-        group: wheel
+        group: "{{ group_wheel }}"
         mode: "{{ item.mode }}"
       with_items:
         - name: id_rsa
@@ -54,38 +69,39 @@
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
         owner: alt-meza-ansible
-        group: wheel
+        group: "{{ group_wheel }}"
         mode: "{{ item.mode }}"
       failed_when: false
       with_items:
         - name: known_hosts
           mode: "0600"
+
   # Note: without this, if the user decides to encrypt secret.yml with Ansible
   # vault then it changes mode to 0600 and ownership to root:root. This makes it
   # impossible to include_vars later.
-
     - name: Ensure secret.yml owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}/secret/{{ env }}/secret.yml"
-        owner: meza-ansible
-        group: wheel
+        owner: "{{ ansible_user | default(ansible_env.USER) }}"
+        group: "{{ group_wheel }}"
         mode: "0660"
     - name: Ensure {{ m_conf_dir }} owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}"
-        owner: meza-ansible
-        group: wheel
+        owner: "{{ ansible_user | default(ansible_env.USER) }}"
+        group: "{{ group_wheel }}"
         mode: "0755"
 
-
-# Set umask on all servers. Perhaps this should move above localhost steps since
+# Perhaps this should move above localhost steps since
 # it may impact them, and role "umask-set" has no config requirements
-
-- hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
+- name: Set umask on all servers
+  hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
   become: true
   roles:
     - umask-set
-- hosts: localhost
+
+- name: Initialize controller configuration
+  hosts: localhost
   become: true
   roles:
     - set-vars
@@ -96,18 +112,18 @@
   tags:
     - autodeployer
     - controller
-- hosts: localhost
+
+- name: Autodeploy on localhost
+  hosts: localhost
   become: true
   roles:
     - set-vars
     - role: autodeployer
       when: force_deploy is defined or autodeployer is defined
 
-# Ensure proper base setup on all servers in inventory, with the exception of
-# servers in "exclude-all" group. At present, the intent of this group is to
-# allow servers which serve as sources for database and user-uploaded files,
-# but are not managed by this meza install.
-- hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
+- name: Ensure proper base setup on all servers
+# exclude servers which serve as sources for database and user-uploaded files, but are not managed by this meza install.
+  hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
   become: true
   roles:
     - set-vars
@@ -121,7 +137,8 @@
     #     - ansible_facts['distribution_major_version'] == "8"
   tags: base
 
-- hosts: load_balancers,load_balancers_meza_internal,load_balancers_meza_external
+- name: Configure load balancers
+  hosts: load_balancers,load_balancers_meza_internal,load_balancers_meza_external
   become: true
   tags:
     - load-balancer
@@ -135,9 +152,12 @@
       firewall_protocol: tcp
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
-      # NOTE: firewalld ports 80 and 443 opened to ALL within haproxy role
     - haproxy
-- hosts: app_servers
+    - role: ansible-role-certbot-meza
+      when: use_certbot
+
+- name: Configure app servers
+  hosts: app_servers
   become: true
   tags: apache-php
   roles:
@@ -160,25 +180,14 @@
       firewall_servers: "{{ load_balancers_all }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
 
-# Keeping this as a separate play, since at some point it will make sense to
-# configure app_servers as gluster clients and have separate gluster servers
-# (which can also be app_servers, of course, like everything else in meza)
-- hosts: app_servers
+- name: Configure Gluster on app servers
+  hosts: app_servers
   become: true
   tags: gluster
   vars:
     gluster_replicas: "{{ groups['app_servers'] | length }}"
   roles:
     - set-vars
-
-    # Portmap tcp and udp
-    #
-    # From docs:
-    # ref: http://gluster.readthedocs.io/en/latest/Administrator%20Guide/Troubleshooting/?highlight=38465
-    #
-    # Check your firewall setting to open ports 111 for portmap
-    # requests/replies and Gluster NFS server requests/replies. Gluster NFS
-    # server operates over the following port numbers: 38465, 38466, and 38467.
     - role: firewall_port
       firewall_action: open
       firewall_port: 111
@@ -193,19 +202,6 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
       when: groups['app_servers']|length|int > 1
-
-    # All gluster servers, Gluster Daemon
-    # maybe also: 24009, 24010, 24011
-    #
-    # From the docs
-    # ref: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Setting%20Up%20Clients/
-    #
-    # Ensure that TCP and UDP ports 24007 and 24008 are open on all Gluster
-    # servers. Apart from these ports, you need to open one port for each brick
-    # starting from port 49152 (instead of 24009 onwards as with previous
-    # releases). The brick ports assignment scheme is now compliant with IANA
-    # guidelines. For example: if you have five bricks, you need to have ports
-    # 49152 to 49156 open.
     - role: firewall_port
       firewall_action: open
       firewall_port: 24007
@@ -220,10 +216,6 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
       when: groups['app_servers']|length|int > 1
-
-
-    # One port required for each brick (in meza, this equals each server (one
-    # brick per server))
     - role: firewall_port
       firewall_action: open
       firewall_port: 49152
@@ -252,11 +244,11 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
       when: groups['app_servers']|length|int > 1
-
-      # FIXME #801: Some docs said ports 38465, 38466, 38467 needed for Gluster
     - role: gluster
       when: groups['app_servers']|length|int > 1
-- hosts: memcached_servers
+
+- name: Configure memcached servers
+  hosts: memcached_servers
   become: true
   tags: memcached
   roles:
@@ -268,15 +260,15 @@
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - memcached
-- hosts: db_master
+
+- name: Configure database master
+  hosts: db_master
   become: true
   tags: database
   roles:
     - set-vars
     - role: firewall_service
       firewall_service: mysql
-      # FIXME: try merging these two mysql lines with:
-      # firewall_servers: "{{ groups['app_servers'] }} + {{ groups['db_slaves'] }}"
       firewall_servers: "{{ groups['app_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - role: firewall_service
@@ -284,13 +276,11 @@
       firewall_servers: "{{ groups['db_slaves'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - role: database
-      # Get the one and only server that should be in the db_master group and set
-      # it's IP address as replication master IP. Note that this can be left blank
-      # or not included at all if no replication should be performed.
-      # FIXME #802: Should replication master be set only if slaves exist?
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: master
-- hosts: db_slaves
+
+- name: Configure database slaves
+  hosts: db_slaves
   become: true
   tags: database
   roles:
@@ -301,18 +291,19 @@
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
       when: ansible_distribution_file_variety == 'RedHat'
     - role: database
-      # Get the one and only server that should be in the db_master group and set
-      # it's IP address as replication master IP. Note that this can be left blank
-      # or not included at all if no replication should be performed.
       mysql_replication_master: "{{ groups['db_master'][0] }}"
       mysql_replication_role: slave
-- hosts: backup_servers
+
+- name: Configure backup servers
+  hosts: backup_servers
   become: true
   tags: backup_servers
   roles:
     - set-vars
     - backup-config
-- hosts: elastic_servers
+
+- name: Configure Elasticsearch servers
+  hosts: elastic_servers
   become: true
   tags: elasticsearch
   roles:
@@ -341,10 +332,12 @@
       firewall_protocol: tcp
       firewall_servers: "{{ groups['elastic_servers'] }}"
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
-    - elasticsearch
+    - role: elasticsearch
+    - role: geerlingguy.kibana
+      when: m_install_kibana
 
-# Note: this is app_servers again, but must be after everything else is setup
-- hosts: app_servers
+- name: Configure MediaWiki on app servers
+  hosts: app_servers
   become: true
   tags: mediawiki
   roles:
@@ -353,14 +346,18 @@
     - role: lua
       when: m_install_lua
     - mediawiki
-- hosts: logging_servers
+
+- name: Configure logging servers
+  hosts: logging_servers
   become: true
   tags: logging
   roles:
     - set-vars
     - role: meza-log
       when: docker_skip_tasks is not defined or not docker_skip_tasks
-- hosts: backup_servers
+
+- name: Cleanup backups on backup servers
+  hosts: backup_servers
   become: true
   tags:
     - backup-cleanup
@@ -368,7 +365,9 @@
     - set-vars
     - role: backups-cleanup
       when: backups_cleanup is defined and backups_cleanup.crontime is defined
-- hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
+
+- name: Configure cron jobs on all servers
+  hosts: all:!exclude-all:!load_balancers_nonmeza:!load_balancers_nonmeza_external:!load_balancers_nonmeza_internal
   become: true
   tags:
     - cron

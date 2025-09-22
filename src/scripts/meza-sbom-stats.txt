@@ -1,0 +1,32 @@
+Package Statistics:
+Total packages: 220
+
+By source file:
+  composer.lock: 218
+  composer.local.lock: 2
+
+By scope:
+  runtime: 149
+  development: 71
+
+By type:
+  library: 181
+  composer-plugin: 3
+  mediawiki-extension: 16
+  mediawiki-skin: 1
+  class: 1
+  phpcodesniffer-standard: 3
+  project: 1
+  platform: 14
+
+Top licenses:
+  MIT: 82
+  GPL-2.0-or-later: 52
+  BSD-3-Clause: 37
+  PHP-3.01: 14
+  BSD-2-Clause: 7
+  Apache-2.0: 6
+  GPL-3.0-or-later: 6
+  GPL-2.0+: 5
+  LGPL-2.1-only: 2
+  GPL-3.0-only: 2

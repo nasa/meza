@@ -1,0 +1,22 @@
+---
+# See: https://github.com/geerlingguy/ansible-role-certbot/issues/107
+- name: Ensure dnf-plugins are installed on Rocky/AlmaLinux.
+  yum:
+    name: dnf-plugins-core
+    state: present
+
+- name: Enable crb repo for Rocky/AlmaLinux 9+.
+  shell: |
+    dnf config-manager --set-enabled crb
+  changed_when: false
+
+  when:
+    - ansible_distribution_major_version | int > 8
+
+- name: Enable powertools for Rocky/AlmaLinux 8.
+  shell: |
+    dnf config-manager --set-enabled powertools
+  changed_when: false
+
+  when:
+    - ansible_distribution_major_version | int <= 9

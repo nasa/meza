@@ -53,4 +53,3 @@
     owner: "{{ m_backups_owner }}"
     group: "{{ m_backups_group }}"
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
-

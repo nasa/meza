@@ -5,9 +5,9 @@
     dest: "{{ mysql_config_file }}"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
     force: "{{ overwrite_global_mycnf }}"
-  notify: restart mysql
+  notify: Restart mysql
 
 - name: Verify mysql include directory exists.
   file:
@@ -15,7 +15,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
   when: mysql_config_include_files | length
 
 - name: Copy my.cnf override files into include directory.
@@ -24,10 +24,10 @@
     dest: "{{ mysql_config_include_dir }}/{{ item.src | basename }}"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
     force: "{{ item.force | default(False) }}"
   with_items: "{{ mysql_config_include_files }}"
-  notify: restart mysql
+  notify: Restart mysql
 
 - name: Create slow query log file (if configured).
   shell: "touch {{ mysql_slow_query_log_file }} creates={{ mysql_slow_query_log_file }}"
@@ -39,7 +39,7 @@
     state: directory
     owner: mysql
     group: mysql
-    mode:  0755
+    mode: '0755'
     setype: mysqld_db_t
 
 - name: Set ownership on slow query log file (if configured).
@@ -48,7 +48,7 @@
     state: file
     owner: mysql
     group: mysql
-    mode: 0640
+    mode: '0640'
   when: mysql_slow_query_log_enabled
 
 - name: Create error log file (if configured).
@@ -61,7 +61,7 @@
     state: file
     owner: mysql
     group: mysql
-    mode: 0640
+    mode: '0640'
   when: mysql_log == "" and mysql_log_error != ""
 
 - name: Rotate MariaDB log
@@ -70,8 +70,8 @@
     dest: /etc/logrotate.d/mariadb
     owner: root
     group: root
-    mode: 0644
-  notify: restart mysql
+    mode: '0644'
+  notify: Restart mysql
 
 - name: Create datadir if it does not exist
   shell: "mysql_install_db --datadir={{ mysql_datadir }}"

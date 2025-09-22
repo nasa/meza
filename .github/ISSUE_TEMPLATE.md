@@ -1,9 +1,0 @@
-### Environment
-
-- Machine or Virtual Machine details: (VirtualBox, VMWare, Digital Ocean, AWS, etc)
-- Operating System: (run `cat /etc/redhat-release` and report output)
-- meza version hash: (run `cd /opt/meza && git rev-parse --short HEAD` and report output)
-
-### Issue details
-
-Please provide any error messages you received and, if possible, steps to reproduce it. Consider reporting relevant data from /opt/data-meza/logs

@@ -62,64 +62,6 @@ else {
 
 }
 
-
-{% if saml_secret is defined %}
-/**
- *  0) SAML AUTH
- *
- *  Perform authentication up front, immediately after $wikiId is setup.
- *
- **/
-
-// Get the data needed to know if the server request is an external (remote) or internal (localhost) request
-if     (!empty($_SERVER['HTTP_CLIENT_IP']))       { $ip_address = $_SERVER['HTTP_CLIENT_IP']; }
-elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR']; }
-elseif (isset($_SERVER['REMOTE_ADDR'] ) )         { $ip_address = $_SERVER['REMOTE_ADDR']; }
-
-// Allow exceptions of the PluggableAuth/SAML integration for specific wikis
-// so that localhost maintenance script can create new bot accounts on the wikis
-if ( in_array( $wikiId, array( 'mywiki1','mywiki2', ) ) )
-{ # SKIP "PluggableAuth" AND "SimpleSAMLphp" 
-} else { 
-  #  USE "PluggableAuth" AND "SimpleSAMLphp"as follows:
-
-// Load and Configure PluggableAuth for SAML IDP/SSO
-wfLoadExtension( "PluggableAuth" );
-$wgPluggableAuth_EnableAutoLogin = true;
-$wgPluggableAuth_EnableLocalProperties = false;
-$wgPluggableAuth_EnableLocalLogin = false;
-if (isset($ip_address) && $ip_address == '127.0.0.1') 
-{ $wgPluggableAuth_EnableLocalLogin = true;  }
-$wgGroupPermissions['*']['autocreateaccount'] = true;
-
-// Load and Configure SimpleSAMLphp for SAML IDP/SSO
-wfLoadExtension( "SimpleSAMLphp" );
-// @FIXME This is repeated in the templated file SAMLConfig.php
-$wgSimpleSAMLphp_InstallDir = '/opt/simplesamlphp';
-
-// SAML Authentication (Who the user IS)
-$wgPluggableAuth_Config['Log in using SAML'] = [
-    'plugin' =>   'SimpleSAMLphp',
-    'data'   => [ 'authSourceId'      => 'default-sp',
-                  'usernameAttribute' => "{{ idp_username_attr | default('AUID') }}",
-                  'realNameAttribute' => "{{ idp_realname_attr | default('displayName') }}",
-                  'emailAttribute'    => "{{ idp_email_attr | default('Email') }}",
-                ]
-];
-
-// Load all PHP files in samlAuthorizations.d for all wikis
-foreach ( glob("$m_deploy/public/samlAuthorizations.d/*.php") as $filename) {
-  require_once $filename;
-}
-
-// Load all PHP files in samlAuthorizations.d for this wiki
-foreach ( glob("$m_deploy/public/wikis/$wikiId/samlAuthorizations.d/*.php") as $filename) {
-  require_once $filename; 
-}
-
-}
-{% endif %}
-
 {% if wiki_id_redirects is defined and wiki_id_redirects|length > 0 %}
 
 // array point wiki IDs to redirect from and to
@@ -176,21 +118,6 @@ foreach ( glob("$m_deploy/public/preLocalSettings.d/*.php") as $filename) {
 foreach ( glob("$m_deploy/public/wikis/$wikiId/preLocalSettings.d/*.php") as $filename) {
     require_once $filename;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -386,9 +313,10 @@ $wgEmailAuthentication = $wgEnableEmail;
 $wgPasswordSender = '{{ wgPasswordSender }}';
 $wgEmergencyContact = '{{ wgEmergencyContact | default(wgPasswordSender) }}';
 
-
-
-
+// Allowing HTML email only enables the User Preference Option.
+// Without this set to true, users cannot choose to receive HTML email.
+$wgAllowHTMLEmail = true;
+$wgDefaultUserOptions['echo-email-format'] = 'html'; // default = plain-text
 
 
 

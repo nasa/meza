@@ -14,4 +14,3 @@
     lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
   when: ((ansible_facts['distribution'] == "Rocky" and ansible_facts['distribution_major_version'] == "8")) or
           ((ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "8"))
-

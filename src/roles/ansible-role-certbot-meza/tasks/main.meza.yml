@@ -1,0 +1,63 @@
+---
+
+# This task list will:
+# - open port 54321 on firewalld
+# - list existing certificate(s)
+# - remove Meza cruft in /etc/haproxy/certs
+# - template out the renew-hook script
+# - remove the certbot cron job if certbot is not enabled
+
+# Enable certbot to talk to it's standalone server for renewals
+- name: Ensure firewall port 54321 OPEN when certbot ENABLED
+  include_role:
+    name: firewall_port
+  vars:
+    firewall_action: open
+    firewall_port: 54321
+    firewall_protocol: tcp
+    firewall_zone: "{{m_private_networking_zone|default('public')}}"
+
+# @FIXME: This is a hack to remove the Meza cert files because binding
+# HAProxy to a directory will fail if non-pem files are there.
+# We want to bind to the directory so that Meza supports multiple domains.
+# It is unknown why these files are needed _at all_ in /etc/haproxy/certs
+# They are stored in /opt/conf-meza/secret/monolith/ssl/
+- name: Remove Meza cert files when certbot ENABLED
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/haproxy/certs/meza.crt
+    - /etc/haproxy/certs/meza.key
+
+# What is in the certs directory?
+- name: Check for existing cert(s)
+  find:
+    paths: /etc/haproxy/certs
+    patterns: '*.pem'
+  register: certs
+
+- name: List the existing certificates
+  debug:
+    msg: "Found existing certificate at {{ item.path }}"
+  with_items: "{{ certs.files }}"
+
+# There is no notify, because the script is used in cert generation
+# By placing the script in the renewal-hooks hierarchy, it's run
+# automatically by certbot renew (but not by certonly).
+- name: Write the deploy hook script
+  template:
+    src: concat.pem.sh.j2
+    dest: /etc/letsencrypt/renewal-hooks/deploy/concat.pem.sh
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    group: "{{ group_wheel }}"
+    mode: u=rwx,g=rwx,o=rx
+
+# This would only happen if someone decided to stop using Certbot
+# Otherwise, why would you ever want to stop auto-renewal?
+# But there is no other 'cleanup' task for certbot's cron job
+- name: Remove certbot cron if certbot is not ENABLED
+  cron:
+    name: Certbot automatic renewal
+    state: absent
+  when: not use_certbot or not certbot_auto_renew

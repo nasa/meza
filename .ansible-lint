@@ -1,0 +1,36 @@
+---
+# Ansible-lint configuration for Meza project
+profile: production  # min, basic, moderate, safety, shared, production
+
+# Exclude certain paths from linting
+exclude_paths:
+  - .venv/
+  - .cache/
+  - vendor/
+  - tests/docker/
+  - src/roles/geerlingguy.kibana/
+  - src/roles/ansible-role-certbot-meza/
+
+# Skip specific rules that may be too strict for this project
+skip_list:
+  - yaml[line-length]  # Allow longer lines for readability
+  - name[casing]      # Allow flexible naming conventions
+  - risky-file-permissions  # Some meza tasks require specific permissions
+
+# Warn for these rules instead of failing
+warn_list:
+  - experimental  # Warn about experimental features
+  - yaml[comments]  # Warn about comment formatting
+
+# Use project-specific ansible.cfg
+# ansible:
+#   config_file: config/ansible.cfg
+
+# Enable offline mode to skip galaxy role checks
+offline: false
+
+# Use colored output
+use_default_rules: true
+parseable: false
+quiet: false
+verbosity: 1

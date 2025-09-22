@@ -18,7 +18,7 @@
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 - name: Dump wiki databases
-  mysql_db:
+  community.mysql.mysql_db:
     state: dump
     name: "wiki_{{ item }}"
     target: "{{ m_tmp }}/{{ env }}_{{ item }}.sql"

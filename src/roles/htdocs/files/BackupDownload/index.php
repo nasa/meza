@@ -14,8 +14,29 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-// FIXME: this assumes installed in /opt which is not gauranteed
-require_once '/opt/.deploy-meza/config.php';
+// Dynamically determine Meza installation directory for portability
+// Method 1: Try to find meza command in PATH and determine install dir
+$mezaCommand = trim(shell_exec('which meza 2>/dev/null'));
+if ($mezaCommand && file_exists($mezaCommand)) {
+	// Get the real path and go up directories: /install/meza/src/scripts/meza.py -> /install
+	$installDir = dirname(dirname(dirname(dirname(realpath($mezaCommand)))));
+} else {
+	// Method 2: Fallback - assume current script is in /install/htdocs/BackupDownload/
+	// Go up from htdocs/BackupDownload to find install directory
+	$currentDir = dirname(dirname(__FILE__)); // htdocs directory
+	$installDir = dirname($currentDir); // install directory
+}
+
+$configPath = $installDir . '/.deploy-meza/config.php';
+
+// Verify config file exists before including
+if (!file_exists($configPath)) {
+	http_response_code(500);
+	die('Configuration file not found. Please ensure Meza is properly configured.');
+}
+
+// Include the generated configuration
+require_once($configPath);
 
 // if there's a SAML config file, we need to authenticate with SAML, like, now.
 if ( is_file( $m_deploy.'/SAMLConfig.php' ) ) {

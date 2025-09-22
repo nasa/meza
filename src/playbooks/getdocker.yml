@@ -53,7 +53,7 @@
         state: latest
       notify: Restart Docker
       tags:
-      - latest
+        - latest
 
     - name: Ensure Docker is running (and enable it at boot)
       service:
@@ -70,5 +70,3 @@
 
     # - name: Test docker
     #   shell: docker run hello-world
-
-

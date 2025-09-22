@@ -82,4 +82,3 @@
         - autodeployer.slack_channel is defined
         - autodeployer.slack_username is defined
         - autodeployer_slack_icon_url is defined
-

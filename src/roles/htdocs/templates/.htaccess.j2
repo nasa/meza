@@ -29,6 +29,11 @@
     RewriteRule ^ServerPerformance(?:/|$)(.*)$ - [L]
 
     {% if allow_backup_downloads %}
+    # Block access to test files and sensitive files in BackupDownload
+    RewriteRule ^BackupDownload/.*Test\.php$ - [F,L]
+    RewriteRule ^BackupDownload/README\.md$ - [F,L]
+    RewriteRule ^BackupDownload/.*\.md$ - [F,L]
+    
     # Allow access to BackupDownload function
     RewriteRule ^BackupDownload(?:/|$)(.*)$ - [L]
     {% endif %}

@@ -101,8 +101,8 @@
 - name: "Ensure {{ m_meza }} properly owned"
   file:
     path: "{{ m_meza }}"
-    owner: "{{ m_meza_owner }}"
-    group: "{{ m_meza_group }}"
+    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    group: "{{ m_group }}"
     state: directory
     recurse: true
   tags:

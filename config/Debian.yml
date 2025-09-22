@@ -12,41 +12,6 @@ package_apache: apache2
 # from when Meza installed Apache and PHP from source. They probably are not needed
 # anymore.
 package_php_apache_deps: []
-  # Did not immediately find a replacement package in Debian for these RH packages
-  # - zlib-devel
-  # - sqlite-devel
-  # - bzip2-devel
-  # - pcre-devel
-  # - libXpm-devel
-  # - gmp-devel
-  # - t1lib-devel
-  # - aspell-devel
-  # - libvpx-devel
-  # - readline-devel
-  # - libmcrypt-devel
-  # - pam-devel
-  # - m4
-  # - xz-libs
-  # These are either named the same in RE vs Debian, or were easily found
-  # - libcurl4-openssl-dev
-  # - libssl-dev
-  # - libxml2-dev
-  # - libicu-dev
-  # - libjpeg-dev
-  # - libpng-dev
-  # - libfreetype6-dev
-  # - libtidy-dev
-  # - sendmail
-  # - sendmail-cf
-  # - mariadb-common
-  # These are required to install PHP from source.
-  # - libxpm-dev
-  # - libmysqlclient-dev
-  # - libpq-dev
-  # - libldap2-dev
-  # - libxslt-dev
-  # - libldb-dev
-
 package_java: "default-jre"
 package_python3: python3
 package_python3_pip: python3-pip
@@ -58,7 +23,7 @@ package_base_extras:
   - cifs-utils
   - curl
 package_nmap: nmap
-package_lua: [ 'liblua5.1-0-dev', 'liblua50-dev', 'liblualib50-dev', 're2c', 'pkg-config' ]
+package_lua: ['liblua5.1-0-dev', 'liblua50-dev', 'liblualib50-dev', 're2c', 'pkg-config']
 package_imagemagick:
   - ghostscript
   - imagemagick
@@ -88,12 +53,10 @@ path_php_apache_conf_d: "/etc/php/{{ php_debian_version }}/apache2/conf.d"
 path_php_lib: "/usr/lib/php"
 path_memcached_conf: "/etc/memcached.conf"
 
-
 #
 # Commands
 #
 command_update_ca_trust: "update-ca-certificates"
-
 
 #
 # Users and groups
@@ -101,3 +64,10 @@ command_update_ca_trust: "update-ca-certificates"
 user_apache: www-data
 group_apache: www-data
 user_memcached: memcache
+group_wheel: sudo
+
+# Group management for Debian family (Debian, Ubuntu)
+# Ensure consistent group membership requirements
+meza_required_groups:
+  - www-data
+  - sudo

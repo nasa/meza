@@ -1,22 +1,107 @@
-echo "******* Generating elasticsearch index *******"
+#!/bin/sh
+set -euo pipefail
+IFS=$'\n\t'
+
+log() { echo "[$(date +'%F %T')] $*"; }
+
+# Retry/backoff configuration: can be overridden by environment variables or Ansible template vars
+# Environment override takes precedence; otherwise Ansible-provided defaults are used.
+RETRY_MAX=${RETRY_MAX:-{{ elasticsearch_index_retry_max | default(5) }}}
+RETRY_INITIAL=${RETRY_INITIAL:-{{ elasticsearch_index_retry_initial | default(5) }}}
+
+# run_with_retries: execute a shell command (string) with retries and exponential backoff
+run_with_retries() {
+	local max_attempts=${RETRY_MAX}
+	local delay=${RETRY_INITIAL}
+	local attempt=1
+	local cmd="$*"
+
+	while [ $attempt -le $max_attempts ]; do
+		log "Attempt $attempt/$max_attempts: $cmd"
+		# Use sh -c to run the composed command string
+		if sh -c "$cmd"; then
+			log "Command succeeded"
+			return 0
+		else
+			rc=$?
+			log "Command failed with exit code $rc"
+			if [ $attempt -lt $max_attempts ]; then
+				log "Sleeping for ${delay}s before retry"
+				sleep $delay
+				delay=$((delay * 2))
+			fi
+		fi
+		attempt=$((attempt + 1))
+	done
+
+	log "Command failed after $max_attempts attempts: $cmd"
+	return 1
+}
+
+echo "******* Generating elasticsearch index for $wiki_id *******"
+
+# Lock to prevent concurrent rebuilds for the same wiki
+LOCKFILE="/var/lock/meza-elastic-build-${wiki_id}.lock"
+if [ ! -w "$(dirname "$LOCKFILE")" ]; then
+	LOCKFILE="/tmp/meza-elastic-build-${wiki_id}.lock"
+fi
+exec 200>"$LOCKFILE"
+flock -n 200 || { echo "Another index build is running for $wiki_id; exiting."; exit 1; }
+trap 'echo "Caught signal, releasing lock"; flock -u 200; rm -f "$LOCKFILE"; exit 1' INT TERM EXIT
 
 disable_search_file="{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
 # disable search update in wiki-specific settings
 echo -e "<?php\n\$wgDisableSearchUpdate = true;\n" > "$disable_search_file"
 
-# Run script to generate elasticsearch index
+# Run script to generate elasticsearch index mappings/config
 cd "{{ m_mediawiki }}"
-WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php" --startOver
+WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:UpdateSearchIndexConfig --startOver
+
+# Determine indices for this wiki (typical CirrusSearch index pattern)
+index_pattern="wiki_${wiki_id}_*"
+# Get indices; be tolerant if none exist yet
+indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
+
+if [ -n "$indices" ]; then
+	echo "Setting refresh_interval=-1 and number_of_replicas=0 for indices matching $index_pattern"
+	for idx in $indices; do
+		echo "  $idx"
+		curl -s -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"-1","number_of_replicas":0}}' | jq -r '. || true' >/dev/null 2>&1 || true
+	done
+else
+	echo "No existing indices matching $index_pattern found; will create during indexing"
+fi
+
+# Bootstrap the search index (bulk indexing). These commands can take some time.
+# We deliberately run with refresh disabled above for performance.
+log "Starting ForceSearchIndex (skipLinks/indexOnSkip) with retries"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:ForceSearchIndex --skipLinks --indexOnSkip"
+
+# After first pass, recompute indices to include any newly-created indices so we can restore settings later
+indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
+
+log "Starting ForceSearchIndex (skipParse) with retries"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki | quote }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse"
+
+# Recompute indices again to capture any additional indices created during indexing
+indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
+
+# Restore index settings (refresh interval and replicas) so Es can serve searches normally
+if [ -n "$indices" ]; then
+	echo "Restoring refresh_interval and number_of_replicas for indices matching $index_pattern"
+	for idx in $indices; do
+		echo "  $idx"
+		curl -s -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"1s","number_of_replicas":1}}' | jq -r '. || true' >/dev/null 2>&1 || true
+	done
+fi
 
 # Remove search-update disable in wiki-specific settings
 rm -f "$disable_search_file"
 
-# Bootstrap the search index
-#
-# Note that this can take some time
-# For large wikis read "Bootstrapping large wikis" in https://git.wikimedia.org/blob/mediawiki%2Fextensions%2FCirrusSearch.git/REL1_25/README
-WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipLinks --indexOnSkip
-WIKI="$wiki_id" php "{{ m_mediawiki }}/extensions/CirrusSearch/maintenance/ForceSearchIndex.php" --skipParse
-
 echo "******* Elastic Search build index complete! *******"
+
+# Release lock and cleanup
+flock -u 200 || true
+rm -f "$LOCKFILE" || true
+trap - INT TERM EXIT

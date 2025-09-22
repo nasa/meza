@@ -29,11 +29,11 @@
   include_role:
     name: rsync
   vars:
-    pulling_to_server:   "{{ inventory_hostname }}"
-    pulling_to_path:     "{{ m_backups }}/{{ env }}/{{ item }}/{{ backup_timestamp }}_wiki.sql"
+    pulling_to_server: "{{ inventory_hostname }}"
+    pulling_to_path: "{{ m_backups }}/{{ env }}/{{ item }}/{{ backup_timestamp }}_wiki.sql"
     pulling_from_server: "{{ groups['db_master'][0] }}"
-    pulling_from_path:   "{{ m_tmp }}/{{ env }}_{{ item }}.sql"
-    pulling_from_user:   "meza-ansible"
+    pulling_from_path: "{{ m_tmp }}/{{ env }}_{{ item }}.sql"
+    pulling_from_user: "meza-ansible"
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 # Remove temp SQL files, only needs to be done on first backup server

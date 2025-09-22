@@ -1,0 +1,3812 @@
+{
+    "spdxVersion": "SPDX-2.3",
+    "dataLicense": "CC0-1.0",
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "name": "Meza SBOM",
+    "documentNamespace": "https://meza.org/sbom/689de40e41f0a",
+    "creationInfo": {
+        "created": "2025-08-14T13:26:38+00:00",
+        "creators": [
+            "Tool: Meza SBOM Generator"
+        ],
+        "licenseListVersion": "3.21"
+    },
+    "documentDescribes": [
+        "SPDXRef-Package-Meza"
+    ],
+    "packageVerificationCode": {
+        "packageVerificationCodeValue": "161bbb07a1531593c5310847c18acb3549cf2aff"
+    },
+    "packages": [
+        {
+            "SPDXID": "SPDXRef-Package-Meza",
+            "name": "Meza",
+            "versionInfo": "1.1.0",
+            "downloadLocation": "https://github.com/nasa/meza",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "Copyright NASA",
+            "supplier": "Organization: NASA",
+            "description": "MediaWiki E-Z Administration"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-bacon_bacon_qr_code",
+            "name": "bacon/bacon-qr-code",
+            "versionInfo": "v3.0.1",
+            "downloadLocation": "https://github.com/Bacon/BaconQrCode.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/Bacon/BaconQrCode"
+                }
+            ],
+            "description": "BaconQrCode is a QR code generator for PHP."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-christian_riesen_base32",
+            "name": "christian-riesen/base32",
+            "versionInfo": "1.6.0",
+            "downloadLocation": "https://github.com/ChristianRiesen/base32.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/ChristianRiesen/base32"
+                }
+            ],
+            "description": "Base32 encoder/decoder according to RFC 4648"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-composer_installers",
+            "name": "composer/installers",
+            "versionInfo": "v1.12.0",
+            "downloadLocation": "https://github.com/composer/installers.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://composer.github.io/installers/"
+                }
+            ],
+            "description": "A multi-framework Composer library installer"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-composer_semver",
+            "name": "composer/semver",
+            "versionInfo": "3.4.3",
+            "downloadLocation": "https://github.com/composer/semver.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Semver library that offers utilities, version constraint parsing and validation."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-cssjanus_cssjanus",
+            "name": "cssjanus/cssjanus",
+            "versionInfo": "v2.3.0",
+            "downloadLocation": "https://github.com/wikimedia/php-cssjanus.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/CSSJanus"
+                }
+            ],
+            "description": "Convert CSS stylesheets between left-to-right and right-to-left."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-dasprid_enum",
+            "name": "dasprid/enum",
+            "versionInfo": "1.0.6",
+            "downloadLocation": "https://github.com/DASPRiD/Enum.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP 7.1 enum implementation"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-data_values_common",
+            "name": "data-values/common",
+            "versionInfo": "1.2.0",
+            "downloadLocation": "https://github.com/DataValues/Common.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/DataValues/Common"
+                }
+            ],
+            "description": "Contains common implementations of the interfaces defined by DataValuesInterfaces"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-data_values_data_values",
+            "name": "data-values/data-values",
+            "versionInfo": "3.1.0",
+            "downloadLocation": "https://github.com/DataValues/DataValues.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/DataValues/DataValues"
+                }
+            ],
+            "description": "Defines the DataValue interface and some trivial implementations"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-data_values_geo",
+            "name": "data-values/geo",
+            "versionInfo": "4.5.1",
+            "downloadLocation": "https://github.com/DataValues/Geo.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/DataValues/Geo"
+                }
+            ],
+            "description": "Geographical value objects, parsers and formatters"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-data_values_interfaces",
+            "name": "data-values/interfaces",
+            "versionInfo": "1.2.0",
+            "downloadLocation": "https://github.com/DataValues/Interfaces.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/DataValues/Interfaces"
+                }
+            ],
+            "description": "Defines interfaces for ValueParsers, ValueFormatters and ValueValidators"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-data_values_validators",
+            "name": "data-values/validators",
+            "versionInfo": "1.0.0",
+            "downloadLocation": "https://github.com/DataValues/Validators.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/DataValues/Validators"
+                }
+            ],
+            "description": "Common ValueValidator implementations"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-elasticsearch_elasticsearch",
+            "name": "elasticsearch/elasticsearch",
+            "versionInfo": "v7.17.3",
+            "downloadLocation": "https://github.com/elastic/elasticsearch-php.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "(Apache-2.0 OR LGPL-2.1-only)",
+            "licenseDeclared": "(Apache-2.0 OR LGPL-2.1-only)",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP Client for Elasticsearch"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-endroid_qr_code",
+            "name": "endroid/qr-code",
+            "versionInfo": "5.1.0",
+            "downloadLocation": "https://github.com/endroid/qr-code.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/endroid/qr-code"
+                }
+            ],
+            "description": "Endroid QR Code"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ezimuel_guzzlestreams",
+            "name": "ezimuel/guzzlestreams",
+            "versionInfo": "4.1.0",
+            "downloadLocation": "https://github.com/ezimuel/guzzlestreams.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://guzzlephp.org/"
+                }
+            ],
+            "description": "Fork of guzzle/streams (abandoned) to be used with elasticsearch-php"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ezimuel_ringphp",
+            "name": "ezimuel/ringphp",
+            "versionInfo": "1.4.0",
+            "downloadLocation": "https://github.com/ezimuel/ringphp.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Fork of guzzle/RingPHP (abandoned) to be used with elasticsearch-php"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ezyang_htmlpurifier",
+            "name": "ezyang/htmlpurifier",
+            "versionInfo": "v4.18.0",
+            "downloadLocation": "https://github.com/ezyang/htmlpurifier.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-2.1-or-later",
+            "licenseDeclared": "LGPL-2.1-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://htmlpurifier.org/"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-guzzlehttp_guzzle",
+            "name": "guzzlehttp/guzzle",
+            "versionInfo": "7.9.2",
+            "downloadLocation": "https://github.com/guzzle/guzzle.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Guzzle is a PHP HTTP client library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-guzzlehttp_promises",
+            "name": "guzzlehttp/promises",
+            "versionInfo": "2.2.0",
+            "downloadLocation": "https://github.com/guzzle/promises.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Guzzle promises library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-guzzlehttp_psr7",
+            "name": "guzzlehttp/psr7",
+            "versionInfo": "2.7.1",
+            "downloadLocation": "https://github.com/guzzle/psr7.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PSR-7 message implementation that also provides common utility methods"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jakobo_hotp_php",
+            "name": "jakobo/hotp-php",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/thecodedrift/hotp-php.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "HOTP simplifies One Time Password systems for PHP Authentication"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jeroen_batching_iterator",
+            "name": "jeroen/batching-iterator",
+            "versionInfo": "3.0.0",
+            "downloadLocation": "https://github.com/JeroenDeDauw/BatchingIterator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0+",
+            "licenseDeclared": "GPL-2.0+",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/BatchingIterator"
+                }
+            ],
+            "description": "Iterator that fetches values in batch"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jeroen_file_fetcher",
+            "name": "jeroen/file-fetcher",
+            "versionInfo": "6.1.1",
+            "downloadLocation": "https://github.com/JeroenDeDauw/FileFetcher.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/FileFetcher"
+                }
+            ],
+            "description": "Simple file fetching interface"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jeroen_file_fetcher_cache",
+            "name": "jeroen/file-fetcher-cache",
+            "versionInfo": "1.0.1",
+            "downloadLocation": "https://github.com/JeroenDeDauw/file-fetcher-cache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Provides a SimpleCache (PSR-16) decorator for file fetchers"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jeroen_simple_cache",
+            "name": "jeroen/simple-cache",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/JeroenDeDauw/SimpleCache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0+",
+            "licenseDeclared": "GPL-2.0+",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/SimpleCache"
+                }
+            ],
+            "description": "Small library defining a minimalistic caching interface and provides some basic implementations"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jeroen_simple_geocoder",
+            "name": "jeroen/simple-geocoder",
+            "versionInfo": "1.3.1",
+            "downloadLocation": "https://github.com/JeroenDeDauw/SimpleGeocoder.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Simple and minimalistic Geocoder interface with some basic implementations"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jmikola_geojson",
+            "name": "jmikola/geojson",
+            "versionInfo": "1.2.0",
+            "downloadLocation": "https://github.com/jmikola/geojson.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/jmikola/geojson"
+                }
+            ],
+            "description": "GeoJSON implementation for PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-jumbojett_openid_connect_php",
+            "name": "jumbojett/openid-connect-php",
+            "versionInfo": "v1.0.2",
+            "downloadLocation": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Bare-bones OpenID Connect client"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-justinrainbow_json_schema",
+            "name": "justinrainbow/json-schema",
+            "versionInfo": "5.3.0",
+            "downloadLocation": "https://github.com/jsonrainbow/json-schema.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/justinrainbow/json-schema"
+                }
+            ],
+            "description": "A library to validate a json schema."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-liuggio_statsd_php_client",
+            "name": "liuggio/statsd-php-client",
+            "versionInfo": "v1.0.18",
+            "downloadLocation": "https://github.com/liuggio/statsd-php-client.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/liuggio/statsd-php-client/"
+                }
+            ],
+            "description": "Statsd (Object Oriented) client library for PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mck89_peast",
+            "name": "mck89/peast",
+            "versionInfo": "v1.16.3",
+            "downloadLocation": "https://github.com/mck89/peast.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Peast is PHP library that generates AST for JavaScript code"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_bootstrap",
+            "name": "mediawiki/bootstrap",
+            "versionInfo": "5.0.0",
+            "downloadLocation": "https://github.com/ProfessionalWiki/Bootstrap.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:Bootstrap"
+                }
+            ],
+            "description": "Provides the Bootstrap 4 web front-end framework to MediaWiki skins and extensions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_bootstrap_components",
+            "name": "mediawiki/bootstrap-components",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/oetterer/BootstrapComponents.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:BootstrapComponents"
+                }
+            ],
+            "description": "A Mediawiki extension to allow for the usage of special bootstrap components inside wiki markup."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_chameleon_skin",
+            "name": "mediawiki/chameleon-skin",
+            "versionInfo": "5.0.1",
+            "downloadLocation": "https://github.com/ProfessionalWiki/chameleon.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/ProfessionalWiki/chameleon"
+                }
+            ],
+            "description": "A highly flexible MediaWiki skin using Bootstrap 4"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_http_request",
+            "name": "mediawiki/http-request",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/http-request.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/SemanticMediaWiki/http-request"
+                }
+            ],
+            "description": "A minimalistic http/curl request interface library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_lingo",
+            "name": "mediawiki/lingo",
+            "versionInfo": "3.2.4",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-extensions-Lingo.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:Lingo"
+                }
+            ],
+            "description": "Provides hover-over tool tips on wiki pages from terms defined on a wiki page"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_maps",
+            "name": "mediawiki/maps",
+            "versionInfo": "11.0.1",
+            "downloadLocation": "https://github.com/ProfessionalWiki/Maps.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://maps.extension.wiki"
+                }
+            ],
+            "description": "Adds various mapping features to MediaWiki"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_mermaid",
+            "name": "mediawiki/mermaid",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/Mermaid.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/SemanticMediaWiki/Mermaid"
+                }
+            ],
+            "description": "Provides a parser function to generate diagrams and charts with the help of the mermaid script language"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_parser_hooks",
+            "name": "mediawiki/parser-hooks",
+            "versionInfo": "1.6.1",
+            "downloadLocation": "https://github.com/JeroenDeDauw/ParserHooks.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/ParserHooks/blob/master/README.md"
+                }
+            ],
+            "description": "Adds a OOP and declarative parser hook interface on top of MediaWiki"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_scss",
+            "name": "mediawiki/scss",
+            "versionInfo": "4.0.0",
+            "downloadLocation": "https://github.com/ProfessionalWiki/SCSS.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/ProfessionalWiki/SCSS"
+                }
+            ],
+            "description": "Allows using SCSS files for MediaWiki styling"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_semantic_compound_queries",
+            "name": "mediawiki/semantic-compound-queries",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticCompoundQueries.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:Semantic_Compound_Queries"
+                }
+            ],
+            "description": "A Semantic Mediawiki extension to display and combine multiple #ask queries in a single visualization output"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_semantic_extra_special_properties",
+            "name": "mediawiki/semantic-extra-special-properties",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.semantic-mediawiki.org/wiki/Extension:Semantic_Extra_Special_Properties"
+                }
+            ],
+            "description": "Provides extra special properties for Semantic MediaWiki"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_semantic_media_wiki",
+            "name": "mediawiki/semantic-media-wiki",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticMediaWiki.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.semantic-mediawiki.org/wiki/"
+                }
+            ],
+            "description": "An extension to MediaWiki that lets you store and query structured data within wiki pages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_semantic_result_formats",
+            "name": "mediawiki/semantic-result-formats",
+            "versionInfo": "5.0.0",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticResultFormats.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.semantic-mediawiki.org/wiki/Extension:Semantic_Result_Formats"
+                }
+            ],
+            "description": "Provides additional result formats for queries using Semantic MediaWiki"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_semantic_scribunto",
+            "name": "mediawiki/semantic-scribunto",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticScribunto.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.semantic-mediawiki.org/wiki/Extension:SemanticScribunto"
+                }
+            ],
+            "description": "A Semantic Mediawiki extension to natively support the Scribunto extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_simple_batch_upload",
+            "name": "mediawiki/simple-batch-upload",
+            "versionInfo": "2.0.1",
+            "downloadLocation": "https://github.com/ProfessionalWiki/SimpleBatchUpload.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:SimpleBatchUpload"
+                }
+            ],
+            "description": "Basic, no-frills uploading of multiple files to MediaWiki"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_sub_page_list",
+            "name": "mediawiki/sub-page-list",
+            "versionInfo": "dev-master",
+            "downloadLocation": "https://github.com/ProfessionalWiki/SubPageList.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/ProfessionalWiki/SubPageList#readme"
+                }
+            ],
+            "description": "SubPageList is a lightweight extension to display lists of subpages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-michelf_php_markdown",
+            "name": "michelf/php-markdown",
+            "versionInfo": "1.9.1",
+            "downloadLocation": "https://github.com/michelf/php-markdown.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://michelf.ca/projects/php-markdown/"
+                }
+            ],
+            "description": "PHP Markdown"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-monolog_monolog",
+            "name": "monolog/monolog",
+            "versionInfo": "2.9.3",
+            "downloadLocation": "https://github.com/Seldaek/monolog.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/Seldaek/monolog"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mwstake_mediawiki_component_events",
+            "name": "mwstake/mediawiki-component-events",
+            "versionInfo": "4.0.2",
+            "downloadLocation": "https://github.com/hallowelt/mwstake-mediawiki-component-events.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-only",
+            "licenseDeclared": "GPL-3.0-only",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Mechanism for firing events"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mwstake_mediawiki_componentloader",
+            "name": "mwstake/mediawiki-componentloader",
+            "versionInfo": "1.0.1",
+            "downloadLocation": "https://github.com/hallowelt/mwstake-mediawiki-componentloader.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-only",
+            "licenseDeclared": "GPL-3.0-only",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Required for proper initialization of MWStake components"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-nicmart_tree",
+            "name": "nicmart/tree",
+            "versionInfo": "0.4.0",
+            "downloadLocation": "https://github.com/nicmart/Tree.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A basic but flexible php tree data structure and a fluent tree builder implementation."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-nyholm_dsn",
+            "name": "nyholm/dsn",
+            "versionInfo": "2.0.1",
+            "downloadLocation": "https://github.com/Nyholm/dsn.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://tnyholm.se"
+                }
+            ],
+            "description": "Parse your DSN strings in a powerful and flexible way"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-onoi_blob_store",
+            "name": "onoi/blob-store",
+            "versionInfo": "1.2.1",
+            "downloadLocation": "https://github.com/onoi/blob-store.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0+",
+            "licenseDeclared": "GPL-2.0+",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/onoi/blob-store"
+                }
+            ],
+            "description": "A simple interface to manage schema-free temporal persistent key/values"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-onoi_cache",
+            "name": "onoi/cache",
+            "versionInfo": "1.2.0",
+            "downloadLocation": "https://github.com/onoi/cache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0+",
+            "licenseDeclared": "GPL-2.0+",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/onoi/cache"
+                }
+            ],
+            "description": "A minimalistic cache adapter interface library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-onoi_callback_container",
+            "name": "onoi/callback-container",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/onoi/callback-container.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0+",
+            "licenseDeclared": "GPL-2.0+",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/onoi/callback-container"
+                }
+            ],
+            "description": "A very simple callback container/builder library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-onoi_event_dispatcher",
+            "name": "onoi/event-dispatcher",
+            "versionInfo": "1.1.0",
+            "downloadLocation": "https://github.com/onoi/event-dispatcher.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/onoi/event-dispatcher"
+                }
+            ],
+            "description": "A minimalistic interface to relay generic events to registered listeners"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-onoi_message_reporter",
+            "name": "onoi/message-reporter",
+            "versionInfo": "1.4.2",
+            "downloadLocation": "https://github.com/onoi/message-reporter.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/onoi/message-reporter"
+                }
+            ],
+            "description": "An interface to report and relay arbitrary messages to registered handlers"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-oojs_oojs_ui",
+            "name": "oojs/oojs-ui",
+            "versionInfo": "v0.51.2",
+            "downloadLocation": "https://github.com/wikimedia/oojs-ui.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/OOUI"
+                }
+            ],
+            "description": "Provides library of common widgets, layouts, and windows."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-paragonie_constant_time_encoding",
+            "name": "paragonie/constant_time_encoding",
+            "versionInfo": "v3.0.0",
+            "downloadLocation": "https://github.com/paragonie/constant_time_encoding.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Constant-time Implementations of RFC 4648 Encoding (Base-64, Base-32, Base-16)"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-paragonie_random_compat",
+            "name": "paragonie/random_compat",
+            "versionInfo": "v9.99.100",
+            "downloadLocation": "https://github.com/paragonie/random_compat.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-param_processor_param_processor",
+            "name": "param-processor/param-processor",
+            "versionInfo": "1.12.0",
+            "downloadLocation": "https://github.com/JeroenDeDauw/ParamProcessor.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/ParamProcessor"
+                }
+            ],
+            "description": "Parameter processing library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_console_getopt",
+            "name": "pear/console_getopt",
+            "versionInfo": "v1.4.3",
+            "downloadLocation": "https://github.com/pear/Console_Getopt.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "More info available on: http://pear.php.net/package/Console_Getopt"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_mail",
+            "name": "pear/mail",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/pear/Mail.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://pear.php.net/package/Mail"
+                }
+            ],
+            "description": "Class that provides multiple interfaces for sending emails."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_mail_mime",
+            "name": "pear/mail_mime",
+            "versionInfo": "1.10.12",
+            "downloadLocation": "https://github.com/pear/Mail_Mime.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://pear.php.net/package/Mail_Mime"
+                }
+            ],
+            "description": "Mail_Mime provides classes to create MIME messages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_net_smtp",
+            "name": "pear/net_smtp",
+            "versionInfo": "1.12.1",
+            "downloadLocation": "https://github.com/pear/Net_SMTP.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://pear.github.io/Net_SMTP/"
+                }
+            ],
+            "description": "An implementation of the SMTP protocol"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_net_socket",
+            "name": "pear/net_socket",
+            "versionInfo": "v1.2.2",
+            "downloadLocation": "https://github.com/pear/Net_Socket.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP License",
+            "licenseDeclared": "PHP License",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "More info available on: http://pear.php.net/package/Net_Socket"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_net_url2",
+            "name": "pear/net_url2",
+            "versionInfo": "v2.2.3",
+            "downloadLocation": "https://github.com/pear/Net_URL2.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/pear/Net_URL2"
+                }
+            ],
+            "description": "Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_pear_core_minimal",
+            "name": "pear/pear-core-minimal",
+            "versionInfo": "v1.10.16",
+            "downloadLocation": "https://github.com/pear/pear-core-minimal.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Minimal set of PEAR core files to be used as composer dependency"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pear_pear_exception",
+            "name": "pear/pear_exception",
+            "versionInfo": "v1.0.2",
+            "downloadLocation": "https://github.com/pear/PEAR_Exception.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/pear/PEAR_Exception"
+                }
+            ],
+            "description": "The PEAR Exception base class."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpseclib_phpseclib",
+            "name": "phpseclib/phpseclib",
+            "versionInfo": "3.0.46",
+            "downloadLocation": "https://github.com/phpseclib/phpseclib.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://phpseclib.sourceforge.net"
+                }
+            ],
+            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-pimple_pimple",
+            "name": "pimple/pimple",
+            "versionInfo": "v3.5.0",
+            "downloadLocation": "https://github.com/silexphp/Pimple.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://pimple.symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-professional_wiki_external_content",
+            "name": "professional-wiki/external-content",
+            "versionInfo": "3.0.1",
+            "downloadLocation": "https://github.com/ProfessionalWiki/ExternalContent.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://professional.wiki/en/extension/external-content"
+                }
+            ],
+            "description": "MediaWiki extension that allows embedding external content, specified by URL, into your wiki pages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-professional_wiki_modern_timeline",
+            "name": "professional-wiki/modern-timeline",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/ProfessionalWiki/ModernTimeline.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://professional.wiki/en/extension/modern-timeline"
+                }
+            ],
+            "description": "Adds a modern timeline visualization as Semantic MediaWiki result format"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-professional_wiki_network",
+            "name": "professional-wiki/network",
+            "versionInfo": "1.4.0",
+            "downloadLocation": "https://github.com/ProfessionalWiki/Network.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/ProfessionalWiki/Network"
+                }
+            ],
+            "description": "MediaWiki extension for adding interactive network visualizations to your wiki pages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_container",
+            "name": "psr/container",
+            "versionInfo": "1.1.2",
+            "downloadLocation": "https://github.com/php-fig/container.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/php-fig/container"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_http_client",
+            "name": "psr/http-client",
+            "versionInfo": "1.0.3",
+            "downloadLocation": "https://github.com/php-fig/http-client.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/php-fig/http-client"
+                }
+            ],
+            "description": "Common interface for HTTP clients"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_http_factory",
+            "name": "psr/http-factory",
+            "versionInfo": "1.1.0",
+            "downloadLocation": "https://github.com/php-fig/http-factory.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PSR-17: Common interfaces for PSR-7 HTTP message factories"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_http_message",
+            "name": "psr/http-message",
+            "versionInfo": "1.1",
+            "downloadLocation": "https://github.com/php-fig/http-message.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/php-fig/http-message"
+                }
+            ],
+            "description": "Common interface for HTTP messages"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_log",
+            "name": "psr/log",
+            "versionInfo": "1.1.4",
+            "downloadLocation": "https://github.com/php-fig/log.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/php-fig/log"
+                }
+            ],
+            "description": "Common interface for logging libraries"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_simple_cache",
+            "name": "psr/simple-cache",
+            "versionInfo": "1.0.1",
+            "downloadLocation": "https://github.com/php-fig/simple-cache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Common interfaces for simple caching"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ralouphie_getallheaders",
+            "name": "ralouphie/getallheaders",
+            "versionInfo": "3.0.3",
+            "downloadLocation": "https://github.com/ralouphie/getallheaders.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A polyfill for getallheaders."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-react_promise",
+            "name": "react/promise",
+            "versionInfo": "v3.2.0",
+            "downloadLocation": "https://github.com/reactphp/promise.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A lightweight implementation of CommonJS Promises/A for PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ruflin_elastica",
+            "name": "ruflin/elastica",
+            "versionInfo": "7.3.1",
+            "downloadLocation": "https://github.com/ruflin/Elastica.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://elastica.io/"
+                }
+            ],
+            "description": "Elasticsearch Client"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-scssphp_scssphp",
+            "name": "scssphp/scssphp",
+            "versionInfo": "v1.13.0",
+            "downloadLocation": "https://github.com/scssphp/scssphp.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://scssphp.github.io/scssphp/"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-seld_jsonlint",
+            "name": "seld/jsonlint",
+            "versionInfo": "1.10.2",
+            "downloadLocation": "https://github.com/Seldaek/jsonlint.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "JSON Linter"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-serialization_serialization",
+            "name": "serialization/serialization",
+            "versionInfo": "4.1.0",
+            "downloadLocation": "https://github.com/wmde/Serialization.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/wmde/Serialization"
+                }
+            ],
+            "description": "Library defining a Serializer and a Deserializer interface and basic utilities"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-smarty_smarty",
+            "name": "smarty/smarty",
+            "versionInfo": "v4.5.5",
+            "downloadLocation": "https://github.com/smarty-php/smarty.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-3.0",
+            "licenseDeclared": "LGPL-3.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://smarty-php.github.io/smarty/"
+                }
+            ],
+            "description": "Smarty - the compiling PHP template engine"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_css_selector",
+            "name": "symfony/css-selector",
+            "versionInfo": "v5.4.45",
+            "downloadLocation": "https://github.com/symfony/css-selector.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Converts CSS selectors to XPath expressions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_deprecation_contracts",
+            "name": "symfony/deprecation-contracts",
+            "versionInfo": "v3.6.0",
+            "downloadLocation": "https://github.com/symfony/deprecation-contracts.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "A generic function and convention to trigger deprecation notices"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php73",
+            "name": "symfony/polyfill-php73",
+            "versionInfo": "v1.32.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php73.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php80",
+            "name": "symfony/polyfill-php80",
+            "versionInfo": "v1.31.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php80.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php81",
+            "name": "symfony/polyfill-php81",
+            "versionInfo": "v1.31.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php81.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.1+ features to lower PHP versions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php82",
+            "name": "symfony/polyfill-php82",
+            "versionInfo": "v1.31.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php82.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.2+ features to lower PHP versions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php83",
+            "name": "symfony/polyfill-php83",
+            "versionInfo": "v1.31.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php83.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_yaml",
+            "name": "symfony/yaml",
+            "versionInfo": "v5.4.45",
+            "downloadLocation": "https://github.com/symfony/yaml.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Loads and dumps YAML files"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_assert",
+            "name": "wikimedia/assert",
+            "versionInfo": "v0.5.1",
+            "downloadLocation": "https://github.com/wikimedia/Assert.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/wikimedia/Assert"
+                }
+            ],
+            "description": "Provides runtime assertions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_at_ease",
+            "name": "wikimedia/at-ease",
+            "versionInfo": "v3.0.0",
+            "downloadLocation": "https://github.com/wikimedia/at-ease.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/at-ease"
+                }
+            ],
+            "description": "Safe replacement to @ for suppressing warnings."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_base_convert",
+            "name": "wikimedia/base-convert",
+            "versionInfo": "v2.0.2",
+            "downloadLocation": "https://github.com/wikimedia/base-convert.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/base_convert"
+                }
+            ],
+            "description": "Convert an arbitrarily-long string from one numeric base to another, optionally zero-padding to a minimum column width."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_bcp_47_code",
+            "name": "wikimedia/bcp-47-code",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Bcp47Code.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Bcp47Code"
+                }
+            ],
+            "description": "Simple interface representing languages which have a BCP 47 code"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_cdb",
+            "name": "wikimedia/cdb",
+            "versionInfo": "3.0.0",
+            "downloadLocation": "https://github.com/wikimedia/cdb.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/CDB"
+                }
+            ],
+            "description": "Constant Database (CDB) wrapper library for PHP. Provides pure-PHP fallback when dba_* functions are absent."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_cldr_plural_rule_parser",
+            "name": "wikimedia/cldr-plural-rule-parser",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/CLDRPluralRuleParser.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/CLDRPluralRuleParser"
+                }
+            ],
+            "description": "Evaluates plural rules specified in the CLDR project notation."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_common_passwords",
+            "name": "wikimedia/common-passwords",
+            "versionInfo": "v0.5.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-CommonPasswords.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/CommonPasswords"
+                }
+            ],
+            "description": "List of the 100,000 most commonly used passwords"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_composer_merge_plugin",
+            "name": "wikimedia/composer-merge-plugin",
+            "versionInfo": "v2.1.0",
+            "downloadLocation": "https://github.com/wikimedia/composer-merge-plugin.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Composer plugin to merge multiple composer.json files"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_css_sanitizer",
+            "name": "wikimedia/css-sanitizer",
+            "versionInfo": "v5.5.0",
+            "downloadLocation": "https://github.com/wikimedia/css-sanitizer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Css-sanitizer"
+                }
+            ],
+            "description": "Classes to parse and sanitize CSS"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_equivset",
+            "name": "wikimedia/equivset",
+            "versionInfo": "1.7.1",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Equivset.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Equivset"
+                }
+            ],
+            "description": "Visually Equivalent Set of UTF-8 Characters"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_html_formatter",
+            "name": "wikimedia/html-formatter",
+            "versionInfo": "4.1.0",
+            "downloadLocation": "https://github.com/wikimedia/HtmlFormatter.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/HtmlFormatter"
+                }
+            ],
+            "description": "Performs transformations of HTML by wrapping around libxml2 and working around its countless bugs."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_idle_dom",
+            "name": "wikimedia/idle-dom",
+            "versionInfo": "v1.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-IDLeDOM.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/IDLeDOM"
+                }
+            ],
+            "description": "DOM interfaces automatically generated from WebIDL"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_ip_utils",
+            "name": "wikimedia/ip-utils",
+            "versionInfo": "5.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-IPUtils.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/IPUtils"
+                }
+            ],
+            "description": "Parse, match, and analyze IP addresses and CIDR ranges"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_json_codec",
+            "name": "wikimedia/json-codec",
+            "versionInfo": "v3.0.3",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-JsonCodec.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/JsonCodec"
+                }
+            ],
+            "description": "Interfaces to serialize and deserialize PHP objects to/from JSON"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_less_php",
+            "name": "wikimedia/less.php",
+            "versionInfo": "v5.1.2",
+            "downloadLocation": "https://github.com/wikimedia/less.php.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://gerrit.wikimedia.org/g/mediawiki/libs/less.php"
+                }
+            ],
+            "description": "PHP port of the LESS processor"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_minify",
+            "name": "wikimedia/minify",
+            "versionInfo": "2.9.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Minify.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://gerrit.wikimedia.org/g/mediawiki/libs/Minify"
+                }
+            ],
+            "description": "Minification of JavaScript code and CSS stylesheets."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_normalized_exception",
+            "name": "wikimedia/normalized-exception",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-NormalizedException.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/NormalizedException"
+                }
+            ],
+            "description": "A helper for making exceptions play nice with PSR-3 logging"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_object_factory",
+            "name": "wikimedia/object-factory",
+            "versionInfo": "v5.0.1",
+            "downloadLocation": "https://github.com/wikimedia/object-factory.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/ObjectFactory"
+                }
+            ],
+            "description": "Construct objects from configuration instructions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_parsoid",
+            "name": "wikimedia/parsoid",
+            "versionInfo": "v0.20.2",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-services-parsoid.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Parsoid"
+                }
+            ],
+            "description": "Parsoid, a bidirectional parser between wikitext and HTML5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_php_session_serializer",
+            "name": "wikimedia/php-session-serializer",
+            "versionInfo": "v3.0.0",
+            "downloadLocation": "https://github.com/wikimedia/php-session-serializer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Php-session-serializer"
+                }
+            ],
+            "description": "Provides methods like PHP's session_encode and session_decode that don't mess with $_SESSION"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_purtle",
+            "name": "wikimedia/purtle",
+            "versionInfo": "v2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/purtle.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://mediawiki.org/wiki/Purtle"
+                }
+            ],
+            "description": "Fast streaming RDF serializer"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_relpath",
+            "name": "wikimedia/relpath",
+            "versionInfo": "4.0.1",
+            "downloadLocation": "https://github.com/wikimedia/RelPath.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/RelPath"
+                }
+            ],
+            "description": "Work with file paths to join or find the relative path"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_remex_html",
+            "name": "wikimedia/remex-html",
+            "versionInfo": "4.1.1",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-RemexHtml.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/RemexHtml"
+                }
+            ],
+            "description": "Fast HTML 5 parser"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_request_timeout",
+            "name": "wikimedia/request-timeout",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-RequestTimeout.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/RequestTimeout"
+                }
+            ],
+            "description": "Request timeout library for Excimer with plain PHP fallback"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_running_stat",
+            "name": "wikimedia/running-stat",
+            "versionInfo": "v2.1.0",
+            "downloadLocation": "https://github.com/wikimedia/running-stat.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/RunningStat"
+                }
+            ],
+            "description": "PHP implementations of online statistical algorithms"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_scoped_callback",
+            "name": "wikimedia/scoped-callback",
+            "versionInfo": "v5.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-ScopedCallback.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/ScopedCallback"
+                }
+            ],
+            "description": "Make a callback run when a dummy object leaves the scope."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_services",
+            "name": "wikimedia/services",
+            "versionInfo": "4.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Services.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Services_(PHP_library)"
+                }
+            ],
+            "description": "Generic service to manage named services using lazy instantiation based on instantiator callback functions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_shellbox",
+            "name": "wikimedia/shellbox",
+            "versionInfo": "4.1.1",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Shellbox.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Shellbox"
+                }
+            ],
+            "description": "Library and server for containerized shell execution"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_textcat",
+            "name": "wikimedia/textcat",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/wikimedia/textcat.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-2.1-only",
+            "licenseDeclared": "LGPL-2.1-only",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/TextCat"
+                }
+            ],
+            "description": "PHP port of the TextCat language guesser utility, see http://odur.let.rug.nl/~vannoord/TextCat/."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_timestamp",
+            "name": "wikimedia/timestamp",
+            "versionInfo": "v4.1.1",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Timestamp.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Timestamp"
+                }
+            ],
+            "description": "Creation, parsing, and conversion of timestamps"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_utfnormal",
+            "name": "wikimedia/utfnormal",
+            "versionInfo": "4.0.0",
+            "downloadLocation": "https://github.com/wikimedia/utfnormal.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/utfnormal"
+                }
+            ],
+            "description": "Contains Unicode normalization routines, including both pure PHP implementations and automatic use of the 'intl' PHP extension when present"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_wait_condition_loop",
+            "name": "wikimedia/wait-condition-loop",
+            "versionInfo": "v2.0.2",
+            "downloadLocation": "https://github.com/wikimedia/wait-condition-loop.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/WaitConditionLoop"
+                }
+            ],
+            "description": "Wait loop that reaches a condition or times out"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_wikipeg",
+            "name": "wikimedia/wikipeg",
+            "versionInfo": "4.0.2",
+            "downloadLocation": "https://github.com/wikimedia/wikipeg.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Parser generator for JavaScript and PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_wrappedstring",
+            "name": "wikimedia/wrappedstring",
+            "versionInfo": "v4.0.1",
+            "downloadLocation": "https://github.com/wikimedia/WrappedString.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/WrappedString"
+                }
+            ],
+            "description": "Automatically compact sequentially-outputted strings that share a common prefix / suffix pair."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_xmp_reader",
+            "name": "wikimedia/xmp-reader",
+            "versionInfo": "0.9.4",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-XMPReader.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/XMPReader"
+                }
+            ],
+            "description": "Reader for XMP data containing properties relevant to images"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_zest_css",
+            "name": "wikimedia/zest-css",
+            "versionInfo": "3.0.4",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-Zest.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Zest"
+                }
+            ],
+            "description": "Fast, lightweight, extensible CSS selector engine for PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-willdurand_geocoder",
+            "name": "willdurand/geocoder",
+            "versionInfo": "4.6.0",
+            "downloadLocation": "https://github.com/geocoder-php/php-common.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://geocoder-php.org"
+                }
+            ],
+            "description": "Common files for PHP Geocoder"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-zordius_lightncandy",
+            "name": "zordius/lightncandy",
+            "versionInfo": "v1.2.6",
+            "downloadLocation": "https://github.com/zordius/lightncandy.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/zordius/lightncandy"
+                }
+            ],
+            "description": "An extremely fast PHP implementation of handlebars ( http://handlebarsjs.com/ ) and mustache ( http://mustache.github.io/ )."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-composer_pcre",
+            "name": "composer/pcre",
+            "versionInfo": "3.3.2",
+            "downloadLocation": "https://github.com/composer/pcre.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PCRE wrapping library that offers type-safe preg_* replacements."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-composer_spdx_licenses",
+            "name": "composer/spdx-licenses",
+            "versionInfo": "1.5.8",
+            "downloadLocation": "https://github.com/composer/spdx-licenses.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "SPDX licenses list and validation library."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-composer_xdebug_handler",
+            "name": "composer/xdebug-handler",
+            "versionInfo": "3.0.5",
+            "downloadLocation": "https://github.com/composer/xdebug-handler.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Restarts a process without Xdebug."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-dealerdirect_phpcodesniffer_composer_installer",
+            "name": "dealerdirect/phpcodesniffer-composer-installer",
+            "versionInfo": "v1.1.2",
+            "downloadLocation": "https://github.com/PHPCSStandards/composer-installer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP_CodeSniffer Standards Composer Installer Plugin"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_cache",
+            "name": "doctrine/cache",
+            "versionInfo": "2.2.0",
+            "downloadLocation": "https://github.com/doctrine/cache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.doctrine-project.org/projects/cache.html"
+                }
+            ],
+            "description": "PHP Doctrine Cache library is a popular cache implementation that supports many different drivers such as redis, memcache, apc, mongodb and others."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_dbal",
+            "name": "doctrine/dbal",
+            "versionInfo": "3.8.4",
+            "downloadLocation": "https://github.com/doctrine/dbal.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.doctrine-project.org/projects/dbal.html"
+                }
+            ],
+            "description": "Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_deprecations",
+            "name": "doctrine/deprecations",
+            "versionInfo": "1.1.5",
+            "downloadLocation": "https://github.com/doctrine/deprecations.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.doctrine-project.org/"
+                }
+            ],
+            "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_event_manager",
+            "name": "doctrine/event-manager",
+            "versionInfo": "2.0.1",
+            "downloadLocation": "https://github.com/doctrine/event-manager.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.doctrine-project.org/projects/event-manager.html"
+                }
+            ],
+            "description": "The Doctrine Event Manager is a simple PHP event system that was built to be used with the various Doctrine projects."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_instantiator",
+            "name": "doctrine/instantiator",
+            "versionInfo": "2.0.0",
+            "downloadLocation": "https://github.com/doctrine/instantiator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.doctrine-project.org/projects/instantiator.html"
+                }
+            ],
+            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-doctrine_sql_formatter",
+            "name": "doctrine/sql-formatter",
+            "versionInfo": "1.1.3",
+            "downloadLocation": "https://github.com/doctrine/sql-formatter.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/doctrine/sql-formatter/"
+                }
+            ],
+            "description": "a PHP SQL highlighting library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-felixfbecker_advanced_json_rpc",
+            "name": "felixfbecker/advanced-json-rpc",
+            "versionInfo": "v3.2.1",
+            "downloadLocation": "https://github.com/felixfbecker/php-advanced-json-rpc.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "ISC",
+            "licenseDeclared": "ISC",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A more advanced JSONRPC implementation"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-giorgiosironi_eris",
+            "name": "giorgiosironi/eris",
+            "versionInfo": "0.14.1",
+            "downloadLocation": "https://github.com/giorgiosironi/eris.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP library for property-based testing. Integrates with PHPUnit."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-hamcrest_hamcrest_php",
+            "name": "hamcrest/hamcrest-php",
+            "versionInfo": "v2.1.1",
+            "downloadLocation": "https://github.com/hamcrest/hamcrest-php.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "This is the PHP port of Hamcrest Matchers"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-johnkary_phpunit_speedtrap",
+            "name": "johnkary/phpunit-speedtrap",
+            "versionInfo": "v4.0.1",
+            "downloadLocation": "https://github.com/johnkary/phpunit-speedtrap.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/johnkary/phpunit-speedtrap"
+                }
+            ],
+            "description": "Find and report on slow tests in your PHPUnit test suite"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_mediawiki_codesniffer",
+            "name": "mediawiki/mediawiki-codesniffer",
+            "versionInfo": "v45.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-tools-codesniffer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Manual:Coding_conventions/PHP"
+                }
+            ],
+            "description": "MediaWiki CodeSniffer Standards"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_mediawiki_phan_config",
+            "name": "mediawiki/mediawiki-phan-config",
+            "versionInfo": "0.14.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-tools-phan.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Continuous_integration/Phan"
+                }
+            ],
+            "description": "Standard MediaWiki phan configuration"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_minus_x",
+            "name": "mediawiki/minus-x",
+            "versionInfo": "1.1.3",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-tools-minus-x.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/MinusX"
+                }
+            ],
+            "description": "Removes executable bit from files that shouldn't be executable"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_phan_taint_check_plugin",
+            "name": "mediawiki/phan-taint-check-plugin",
+            "versionInfo": "6.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-tools-phan-SecurityCheckPlugin.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A Phan plugin to do security checking"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-microsoft_tolerant_php_parser",
+            "name": "microsoft/tolerant-php-parser",
+            "versionInfo": "v0.1.2",
+            "downloadLocation": "https://github.com/microsoft/tolerant-php-parser.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Tolerant PHP-to-AST parser designed for IDE usage scenarios"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-myclabs_deep_copy",
+            "name": "myclabs/deep-copy",
+            "versionInfo": "1.13.4",
+            "downloadLocation": "https://github.com/myclabs/DeepCopy.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Create deep copies (clones) of your objects"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-netresearch_jsonmapper",
+            "name": "netresearch/jsonmapper",
+            "versionInfo": "v4.5.0",
+            "downloadLocation": "https://github.com/cweiske/jsonmapper.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "OSL-3.0",
+            "licenseDeclared": "OSL-3.0",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Map nested JSON structures onto PHP classes"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-nikic_php_parser",
+            "name": "nikic/php-parser",
+            "versionInfo": "v4.19.4",
+            "downloadLocation": "https://github.com/nikic/PHP-Parser.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A PHP parser written in PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phan_phan",
+            "name": "phan/phan",
+            "versionInfo": "5.4.3",
+            "downloadLocation": "https://github.com/phan/phan.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A static analyzer for PHP"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phar_io_manifest",
+            "name": "phar-io/manifest",
+            "versionInfo": "2.0.4",
+            "downloadLocation": "https://github.com/phar-io/manifest.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phar_io_version",
+            "name": "phar-io/version",
+            "versionInfo": "3.2.1",
+            "downloadLocation": "https://github.com/phar-io/version.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Library for handling version information and constraints"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-php_parallel_lint_php_console_color",
+            "name": "php-parallel-lint/php-console-color",
+            "versionInfo": "v1.0.1",
+            "downloadLocation": "https://github.com/php-parallel-lint/PHP-Console-Color.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Simple library for creating colored console ouput."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-php_parallel_lint_php_console_highlighter",
+            "name": "php-parallel-lint/php-console-highlighter",
+            "versionInfo": "v1.0.0",
+            "downloadLocation": "https://github.com/php-parallel-lint/PHP-Console-Highlighter.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Highlight PHP code in terminal"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-php_parallel_lint_php_parallel_lint",
+            "name": "php-parallel-lint/php-parallel-lint",
+            "versionInfo": "v1.4.0",
+            "downloadLocation": "https://github.com/php-parallel-lint/PHP-Parallel-Lint.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/php-parallel-lint/PHP-Parallel-Lint"
+                }
+            ],
+            "description": "This tool checks the syntax of PHP files about 20x faster than serial check."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpcsstandards_phpcsextra",
+            "name": "phpcsstandards/phpcsextra",
+            "versionInfo": "1.2.1",
+            "downloadLocation": "https://github.com/PHPCSStandards/PHPCSExtra.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-3.0-or-later",
+            "licenseDeclared": "LGPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A collection of sniffs and standards for use with PHP_CodeSniffer."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpcsstandards_phpcsutils",
+            "name": "phpcsstandards/phpcsutils",
+            "versionInfo": "1.0.12",
+            "downloadLocation": "https://github.com/PHPCSStandards/PHPCSUtils.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-3.0-or-later",
+            "licenseDeclared": "LGPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://phpcsutils.com/"
+                }
+            ],
+            "description": "A suite of utility functions for use with PHP_CodeSniffer"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpdocumentor_reflection_common",
+            "name": "phpdocumentor/reflection-common",
+            "versionInfo": "2.2.0",
+            "downloadLocation": "https://github.com/phpDocumentor/ReflectionCommon.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://www.phpdoc.org"
+                }
+            ],
+            "description": "Common reflection classes used by phpdocumentor to reflect the code structure"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpdocumentor_reflection_docblock",
+            "name": "phpdocumentor/reflection-docblock",
+            "versionInfo": "5.6.2",
+            "downloadLocation": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpdocumentor_type_resolver",
+            "name": "phpdocumentor/type-resolver",
+            "versionInfo": "1.10.0",
+            "downloadLocation": "https://github.com/phpDocumentor/TypeResolver.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpstan_phpdoc_parser",
+            "name": "phpstan/phpdoc-parser",
+            "versionInfo": "2.2.0",
+            "downloadLocation": "https://github.com/phpstan/phpdoc-parser.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHPDoc parser with support for nullable, intersection and generic types"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_php_code_coverage",
+            "name": "phpunit/php-code-coverage",
+            "versionInfo": "9.2.32",
+            "downloadLocation": "https://github.com/sebastianbergmann/php-code-coverage.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/php-code-coverage"
+                }
+            ],
+            "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_php_file_iterator",
+            "name": "phpunit/php-file-iterator",
+            "versionInfo": "3.0.6",
+            "downloadLocation": "https://github.com/sebastianbergmann/php-file-iterator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/php-file-iterator/"
+                }
+            ],
+            "description": "FilterIterator implementation that filters files based on a list of suffixes."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_php_invoker",
+            "name": "phpunit/php-invoker",
+            "versionInfo": "3.1.1",
+            "downloadLocation": "https://github.com/sebastianbergmann/php-invoker.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/php-invoker/"
+                }
+            ],
+            "description": "Invoke callables with a timeout"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_php_text_template",
+            "name": "phpunit/php-text-template",
+            "versionInfo": "2.0.4",
+            "downloadLocation": "https://github.com/sebastianbergmann/php-text-template.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/php-text-template/"
+                }
+            ],
+            "description": "Simple template engine."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_php_timer",
+            "name": "phpunit/php-timer",
+            "versionInfo": "5.0.3",
+            "downloadLocation": "https://github.com/sebastianbergmann/php-timer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/php-timer/"
+                }
+            ],
+            "description": "Utility class for timing"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-phpunit_phpunit",
+            "name": "phpunit/phpunit",
+            "versionInfo": "9.6.19",
+            "downloadLocation": "https://github.com/sebastianbergmann/phpunit.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://phpunit.de/"
+                }
+            ],
+            "description": "The PHP Unit Testing framework."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psr_cache",
+            "name": "psr/cache",
+            "versionInfo": "3.0.0",
+            "downloadLocation": "https://github.com/php-fig/cache.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Common interface for caching libraries"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-psy_psysh",
+            "name": "psy/psysh",
+            "versionInfo": "v0.12.10",
+            "downloadLocation": "https://github.com/bobthecow/psysh.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://psysh.org"
+                }
+            ],
+            "description": "An interactive shell for modern PHP."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sabre_event",
+            "name": "sabre/event",
+            "versionInfo": "5.1.7",
+            "downloadLocation": "https://github.com/sabre-io/event.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://sabre.io/event/"
+                }
+            ],
+            "description": "sabre/event is a library for lightweight event-based programming"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_cli_parser",
+            "name": "sebastian/cli-parser",
+            "versionInfo": "1.0.2",
+            "downloadLocation": "https://github.com/sebastianbergmann/cli-parser.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/cli-parser"
+                }
+            ],
+            "description": "Library for parsing CLI options"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_code_unit",
+            "name": "sebastian/code-unit",
+            "versionInfo": "1.0.8",
+            "downloadLocation": "https://github.com/sebastianbergmann/code-unit.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/code-unit"
+                }
+            ],
+            "description": "Collection of value objects that represent the PHP code units"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_code_unit_reverse_lookup",
+            "name": "sebastian/code-unit-reverse-lookup",
+            "versionInfo": "2.0.3",
+            "downloadLocation": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/"
+                }
+            ],
+            "description": "Looks up which function or method a line of code belongs to"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_comparator",
+            "name": "sebastian/comparator",
+            "versionInfo": "4.0.9",
+            "downloadLocation": "https://github.com/sebastianbergmann/comparator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/comparator"
+                }
+            ],
+            "description": "Provides the functionality to compare PHP values for equality"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_complexity",
+            "name": "sebastian/complexity",
+            "versionInfo": "2.0.3",
+            "downloadLocation": "https://github.com/sebastianbergmann/complexity.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/complexity"
+                }
+            ],
+            "description": "Library for calculating the complexity of PHP code units"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_diff",
+            "name": "sebastian/diff",
+            "versionInfo": "4.0.6",
+            "downloadLocation": "https://github.com/sebastianbergmann/diff.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/diff"
+                }
+            ],
+            "description": "Diff implementation"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_environment",
+            "name": "sebastian/environment",
+            "versionInfo": "5.1.5",
+            "downloadLocation": "https://github.com/sebastianbergmann/environment.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://www.github.com/sebastianbergmann/environment"
+                }
+            ],
+            "description": "Provides functionality to handle HHVM/PHP environments"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_exporter",
+            "name": "sebastian/exporter",
+            "versionInfo": "4.0.6",
+            "downloadLocation": "https://github.com/sebastianbergmann/exporter.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.github.com/sebastianbergmann/exporter"
+                }
+            ],
+            "description": "Provides the functionality to export PHP variables for visualization"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_global_state",
+            "name": "sebastian/global-state",
+            "versionInfo": "5.0.8",
+            "downloadLocation": "https://github.com/sebastianbergmann/global-state.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "http://www.github.com/sebastianbergmann/global-state"
+                }
+            ],
+            "description": "Snapshotting of global state"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_lines_of_code",
+            "name": "sebastian/lines-of-code",
+            "versionInfo": "1.0.4",
+            "downloadLocation": "https://github.com/sebastianbergmann/lines-of-code.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/lines-of-code"
+                }
+            ],
+            "description": "Library for counting the lines of code in PHP source code"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_object_enumerator",
+            "name": "sebastian/object-enumerator",
+            "versionInfo": "4.0.4",
+            "downloadLocation": "https://github.com/sebastianbergmann/object-enumerator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/object-enumerator/"
+                }
+            ],
+            "description": "Traverses array structures and object graphs to enumerate all referenced objects"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_object_reflector",
+            "name": "sebastian/object-reflector",
+            "versionInfo": "2.0.4",
+            "downloadLocation": "https://github.com/sebastianbergmann/object-reflector.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/object-reflector/"
+                }
+            ],
+            "description": "Allows reflection of object attributes, including inherited and non-public ones"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_recursion_context",
+            "name": "sebastian/recursion-context",
+            "versionInfo": "4.0.6",
+            "downloadLocation": "https://github.com/sebastianbergmann/recursion-context.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/recursion-context"
+                }
+            ],
+            "description": "Provides functionality to recursively process PHP variables"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_resource_operations",
+            "name": "sebastian/resource-operations",
+            "versionInfo": "3.0.4",
+            "downloadLocation": "https://github.com/sebastianbergmann/resource-operations.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.github.com/sebastianbergmann/resource-operations"
+                }
+            ],
+            "description": "Provides a list of PHP built-in functions that operate on resources"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_type",
+            "name": "sebastian/type",
+            "versionInfo": "3.2.1",
+            "downloadLocation": "https://github.com/sebastianbergmann/type.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/type"
+                }
+            ],
+            "description": "Collection of value objects that represent the types of the PHP type system"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-sebastian_version",
+            "name": "sebastian/version",
+            "versionInfo": "3.0.2",
+            "downloadLocation": "https://github.com/sebastianbergmann/version.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/sebastianbergmann/version"
+                }
+            ],
+            "description": "Library that helps with managing the version number of Git-hosted PHP projects"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-squizlabs_php_codesniffer",
+            "name": "squizlabs/php_codesniffer",
+            "versionInfo": "3.10.3",
+            "downloadLocation": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/PHPCSStandards/PHP_CodeSniffer"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_console",
+            "name": "symfony/console",
+            "versionInfo": "v6.4.24",
+            "downloadLocation": "https://github.com/symfony/console.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Eases the creation of beautiful and testable command line interfaces"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_service_contracts",
+            "name": "symfony/service-contracts",
+            "versionInfo": "v3.6.0",
+            "downloadLocation": "https://github.com/symfony/service-contracts.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Generic abstractions related to writing services"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_string",
+            "name": "symfony/string",
+            "versionInfo": "v6.4.24",
+            "downloadLocation": "https://github.com/symfony/string.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_var_dumper",
+            "name": "symfony/var-dumper",
+            "versionInfo": "v6.4.24",
+            "downloadLocation": "https://github.com/symfony/var-dumper.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Provides mechanisms for walking through any arbitrary PHP variable"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-theseer_tokenizer",
+            "name": "theseer/tokenizer",
+            "versionInfo": "1.2.3",
+            "downloadLocation": "https://github.com/theseer/tokenizer.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-3-Clause",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "A small library for converting tokenized PHP source code into XML and potentially other formats"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-tysonandre_var_representation_polyfill",
+            "name": "tysonandre/var_representation_polyfill",
+            "versionInfo": "0.1.3",
+            "downloadLocation": "https://github.com/TysonAndre/var_representation_polyfill.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Polyfill for var_representation: convert a variable to a string in a way that fixes the shortcomings of var_export"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-webmozart_assert",
+            "name": "webmozart/assert",
+            "versionInfo": "1.11.0",
+            "downloadLocation": "https://github.com/webmozarts/assert.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Assertions to validate method input/output with nice error messages."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_alea",
+            "name": "wikimedia/alea",
+            "versionInfo": "1.0.0",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-libs-alea.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Alea"
+                }
+            ],
+            "description": "PHP port of the (non-cryptographic) Alea pseudo-random number generator"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_langconv",
+            "name": "wikimedia/langconv",
+            "versionInfo": "0.4.2",
+            "downloadLocation": "https://github.com/wikimedia/langconv.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/LangConv"
+                }
+            ],
+            "description": "Finite-State Transducer implementation of MediaWiki LanguageConverter"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wikimedia_testing_access_wrapper",
+            "name": "wikimedia/testing-access-wrapper",
+            "versionInfo": "3.0.0",
+            "downloadLocation": "https://github.com/wikimedia/testing-access-wrapper.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Testing-access-wrapper"
+                }
+            ],
+            "description": "A simple helper class to access non-public elements of a class when testing."
+        },
+        {
+            "SPDXID": "SPDXRef-Package-wmde_hamcrest_html_matchers",
+            "name": "wmde/hamcrest-html-matchers",
+            "versionInfo": "v1.1.0",
+            "downloadLocation": "https://github.com/wmde/hamcrest-html-matchers.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "LGPL-2.1",
+            "licenseDeclared": "LGPL-2.1",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "Set of Hamcrest matchers for HTML assertions"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_mw_extension_registry_helper",
+            "name": "mediawiki/mw-extension-registry-helper",
+            "versionInfo": "1.0",
+            "downloadLocation": "https://github.com/ProfessionalWiki/mw-extension-registry-helper.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.local.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/cmln/mw-extension-registry-helper"
+                }
+            ],
+            "description": "Helper functions for the MediaWiki ExtensionRegistry"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-mediawiki_validator",
+            "name": "mediawiki/validator",
+            "versionInfo": "2.2.3",
+            "downloadLocation": "https://github.com/JeroenDeDauw/Validator.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.local.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://github.com/JeroenDeDauw/Validator"
+                }
+            ],
+            "description": "MediaWiki wrapper for the ParamProcessor library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_calendar",
+            "name": "ext-calendar",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP calendar extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_ctype",
+            "name": "ext-ctype",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP ctype extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_dom",
+            "name": "ext-dom",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP dom extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_fileinfo",
+            "name": "ext-fileinfo",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP fileinfo extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_iconv",
+            "name": "ext-iconv",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP iconv extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_intl",
+            "name": "ext-intl",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP intl extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_json",
+            "name": "ext-json",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP json extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_libxml",
+            "name": "ext-libxml",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP libxml extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_mbstring",
+            "name": "ext-mbstring",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP mbstring extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_openssl",
+            "name": "ext-openssl",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP openssl extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_xml",
+            "name": "ext-xml",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP xml extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_xmlreader",
+            "name": "ext-xmlreader",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP xmlreader extension"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-php",
+            "name": "php",
+            "versionInfo": ">=8.1.0",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP runtime"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ext_curl",
+            "name": "ext-curl",
+            "versionInfo": "any",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "PHP-3.01",
+            "licenseDeclared": "PHP-3.01",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [],
+            "description": "PHP curl extension"
+        }
+    ]
+}

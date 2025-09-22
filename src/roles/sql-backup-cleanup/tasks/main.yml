@@ -7,7 +7,7 @@
   register: ls_sql_backup
   delegate_to: "{{ groups['backup_servers'][0] }}"
 
-- ansible.builtin.debug: { var: ls_sql_backup }
+- ansible.builtin.debug: {var: ls_sql_backup}
 
 - name: "Clean out all but the latest SQL backup file for {{ cleanup_wiki }} IF DESIRED"
   shell: |
@@ -22,4 +22,4 @@
   register: ls_sql_backup
   delegate_to: "{{ groups['backup_servers'][0] }}"
 
-- ansible.builtin.debug: { var: ls_sql_backup }
+- ansible.builtin.debug: {var: ls_sql_backup}

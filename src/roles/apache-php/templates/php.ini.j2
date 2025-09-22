@@ -394,7 +394,7 @@ max_input_vars = {{ php_max_input_vars }}
 ; Maximum amount of memory a script may consume (128MB)
 ; http://php.net/memory-limit
 ;memory_limit = 128M ; Original value. Probably should set this as a variable to allow this to be set manually
-memory_limit = 8G
+memory_limit = {{ php_memory_limit | default('128M') }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Error handling and logging ;
@@ -1880,7 +1880,7 @@ opcache.max_accelerated_files={{ php_opcache_max_accelerated_files }}
 ; In other words,
 ; IF YOU EDIT LIVE ON PRODUCTION, APACHE WON'T EVEN SEE YOUR CHANGES
 ; unless you restart the webserver. Rogue admins foiled! Do it right!
-{% if m_use_production_settings %}
+{% if m_opcache_production_mode %}
 opcache.validate_timestamps=0
 {% else %}
 opcache.validate_timestamps=1
@@ -1945,7 +1945,7 @@ opcache.error_log={{ m_logs }}/php/opcache_error.log
 ; By default, only fatal errors (level 0) or errors (level 1) are logged.
 ; You can also enable warnings (level 2), info messages (level 3) or
 ; debug messages (level 4).
-{% if m_use_production_settings %}
+{% if m_opcache_production_mode %}
 opcache.log_verbosity_level=1
 {% else %}
 opcache.log_verbosity_level=2

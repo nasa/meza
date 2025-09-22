@@ -10,7 +10,7 @@
     path: "{{ m_htdocs }}"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0775
+    mode: '0775'
 
 - name: Ensure mw-temp directory configured
   file:
@@ -90,7 +90,8 @@
 
 #
 # Composer
-#
+# @TODO: This should be moved to a separate role, and then this role should
+# depend on it. @see Issue #71
 - name: Ensure Composer configured
   include_role:
     name: composer

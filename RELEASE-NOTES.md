@@ -1,5 +1,14 @@
 Release Notes
 =============
+
+!Important
+for RELEASE NOTES between 39.5.0 and 43.25.11 see
+**RELEASE_NOTES-43.25.11.md**
+
+## Meza 43
+- overwrite_local_git_changes is now simply overwrite_local_changes (false) 
+and controls behavior of all Git plus Composer installed extensions and skins.
+
 ## Meza 39.5.0
 
 Upgrades:
@@ -41,11 +50,11 @@ New Features:
 - Only execute SMW Rebuild Data when requested explicitly. 
   This feature improves the separation of concerns between "platform updates"
   and "special maintenance". It is accomplished using the tags feature
-  of Ansible: `meza deploy monolith --tags smw-data` 
+  of Ansible: `meza deploy monolith --tags base,smw-data` 
   
   Note that you can use the `meza maint rebuild` command to rebuild 
   SMW data **and** Elasticsearch indexes. This command is equivalent to 
-  `meza deploy monolith --tags smw-data,search-index`
+  `meza deploy monolith --tags base,smw-data,search-index`
 
 - Pretty URLs 
   There is no *index.php* in URLs, just `mysite.com/wiki/SomePage`

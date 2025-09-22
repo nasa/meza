@@ -35,7 +35,7 @@
     file: "{{ m_install }}/meza/config/defaults.yml"
 
 #FIXME remove this
-# - ansible.builtin.debug: { msg: "{{ m_i18n }} TEST {{ m_db_replication_log_pos }} " }
+# - ansible.builtin.debug: {msg: "{{ m_i18n }} TEST {{ m_db_replication_log_pos }} "}
 
 #
 # Gluster mods
@@ -52,7 +52,7 @@
   include_vars:
     file: "{{ m_local_public }}/public.yml"
   # Ingore errors so this file is not required to be included
-  failed_when: False
+  failed_when: false
 
 - name: Get individual wikis dirs from localhost
   find:
@@ -69,7 +69,7 @@
   include_vars:
     file: "{{ m_local_public }}/env/{{ env }}.yml"
   # Ingore errors so this file is not required to be included
-  failed_when: False
+  failed_when: false
 
 #
 # Secret config

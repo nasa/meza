@@ -1,158 +1,155 @@
 #!/bin/sh
-#
-# Reindexing of elasticsearch indices
+set -euo pipefail
+IFS=$'\n\t'
 
-# FIXME: Make MediaWiki stop updating search index before doing any of this
+# Reindexing of elasticsearch indices with zero-downtime alias swap
+# This script will create a new index, reindex data into it, perform an
+# atomic alias swap so searches are not interrupted, then delete the old index.
+# It disables refresh and replicas during the reindex for performance and
+# restores sensible defaults afterwards.
 
-echo "####################################################"
-echo "Elasticsearch reindex script"
+log() { echo "[$(date +'%F %T')] $*"; }
 
-# Append this to the name of all indices: version of elasticsearch
-version_quoted=$(curl --silent localhost:9200 | jq .version.number)
-es_version="${version_quoted%\"}"
-es_version="${es_version#\"}"
-echo "Elasticsearch version $es_version"
-echo "####################################################"
-echo
+LOCKFILE="/var/lock/meza-elastic-reindex.lock"
+if [ ! -w "$(dirname "$LOCKFILE")" ]; then
+	LOCKFILE="/tmp/meza-elastic-reindex.lock"
+fi
+exec 200>"$LOCKFILE"
+flock -n 200 || { log "Another reindex is running; exiting."; exit 1; }
+trap 'log "Caught signal, releasing lock"; flock -u 200; rm -f "$LOCKFILE"; exit 1' INT TERM EXIT
 
-# Get a list of all indices. Note, each index name is quoted like:
-#
-#	"mediawiki_cirrussearch_frozen_indexes"
-#	"mw_cirrus_metastore"
-#	"mw_cirrus_versions"
-#	"wiki_demo_content_first"
-#	"wiki_demo_general_first"
-all_indices=$(curl --silent localhost:9200/_stats/store | jq '.indices | keys | .[]')
+log "####################################################"
+log "Elasticsearch reindex script"
 
-echo "Index info:"
-echo
-curl --silent localhost:9200/_stats/store | jq .
-echo
+# Determine ES version
+version_quoted=$(curl --silent localhost:9200 | jq -r '.version.number // "unknown"')
+es_version="$version_quoted"
+log "Elasticsearch version $es_version"
+log "####################################################"
 
-echo "List of indices:"
-echo "$all_indices"
-echo
+# Get a list of all indices. This returns plain index names.
+all_indices=$(curl --silent localhost:9200/_cat/indices?h=index | tr -d '\r' || true)
+
+if [ -z "$all_indices" ]; then
+	log "No indices found on Elasticsearch host; exiting."
+	flock -u 200 || true
+	rm -f "$LOCKFILE" || true
+	trap - INT TERM EXIT
+	exit 0
+fi
+
+log "Index info (summary):"
+curl --silent localhost:9200/_stats/store | jq '.indices | length as $n | {indices: $n}' || true
 
 # Loop over all the indices
-while read -r index_quoted; do
+for index in $all_indices; do
+	# Skip internal indices that we should not touch
+	case "$index" in
+		".kibana*"|".security*"|".monitoring*"|".watcher*"|"_data*"|".transform*")
+			log "Skipping internal/system index: $index"
+			continue
+			;;
+	esac
 
-	# strip quotes from index_quoted and print it unquoted
-	index="${index_quoted%\"}"
-	index="${index#\"}"
-	# echo "... stripped quotes = $index ..."
+	log "Processing index: $index"
+	# Build a new index name. Keep some traceability with version and timestamp
+	new_index="${index}--reindexed-${es_version}-$(date +%s)"
 
-	new_index="$index-$es_version"
+	# Optional: create a snapshot before making changes (requires snapshot repo configured)
+	# TODO: implement snapshot creation if a snapshot repository is configured for safety.
 
+	# Fetch settings and mappings from the original index
+	log "Fetching settings and mappings for $index"
+	settings=$(curl --silent "localhost:9200/$index/_settings" | jq ".\"$index\".settings | del(.index.creation_date) | del(.index.uuid) | del(.index.version)" )
+	mappings=$(curl --silent "localhost:9200/$index/_mapping" | jq ".\"$index\".mappings")
 
-	echo
-	echo "####"
-	echo "#### Performing next re-indexing"
-	echo "####   Original index name: $index_quoted"
-	echo "####   New index name: \"$new_index\""
-	echo "####"
-	echo
+	# Adjust settings for the new index to optimize reindex performance
+	# disable refresh and replicas during reindex
+	optimized_settings=$(echo "$settings" | jq '.index += {"refresh_interval":"-1","number_of_replicas":0}')
 
-	echo
-	echo "This index was created in Elasticsearch version:"
-	curl --silent "localhost:9200/$index/_settings?human" | jq ".\"$index\".settings.index.version.created_string"
-	echo
+	log "Creating new index: $new_index with optimized settings"
+	curl -s -XPUT "localhost:9200/$new_index" -H 'Content-Type: application/json' -d "{ \"settings\": $optimized_settings, \"mappings\": $mappings }" | jq -r '. || true' >/dev/null 2>&1 || true
 
-	# FIXME: backup index ???
+	# Make original index read-only to avoid writes changing during reindex
+	log "Setting $index read-only"
+	curl -s -XPUT "localhost:9200/$index/_settings" -H 'Content-Type: application/json' -d '{"index":{"blocks":{"read_only":true}}}' | jq -r '. || true' >/dev/null 2>&1 || true
 
-	# Do this before setting original to read-only
-	echo
-	echo "## Create new index settings and mappings copied from original"\
-	echo
-	# Get settings for original index, but strip off creation date, uuid, and version info
-	settings=$(curl --silent "localhost:9200/$index/_settings" | jq ".$index.settings | del(.index.creation_date) | del(.index.uuid) | del(.index.version)")
-	# Get mappings. Change similarity:default to similarity:classic
-	mappings=$(curl --silent "localhost:9200/$index/_mapping" | jq ".$index.mappings" | sed 's/"similarity": "default",/"similarity": "classic",/g')
-	curl --silent -XPOST "localhost:9200/$new_index" -d "{ \"settings\" : $settings, \"mappings\" : $mappings }" | jq .
-	echo
+	# Reindex data
+	log "Starting _reindex from $index to $new_index (wait_for_completion=true)"
+	curl -s -XPOST 'localhost:9200/_reindex?wait_for_completion=true' -H 'Content-Type: application/json' -d "{ \"source\":{ \"index\": \"$index\" }, \"dest\":{ \"index\": \"$new_index\" } }" | jq -r '. || true'
 
+	# After reindex, restore some settings on new index so it can serve queries
+	log "Restoring refresh_interval and number_of_replicas on $new_index"
+	curl -s -XPUT "localhost:9200/$new_index/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"1s","number_of_replicas":1}}' | jq -r '. || true' >/dev/null 2>&1 || true
 
-	# The old index will be made read-only during the reindexing process, after
-	# which it will be deleted.
-	echo
-	echo "## Make $index_quoted read-only"
-	echo
-	curl --silent -XPUT "localhost:9200/$index/_settings" -d '{"index" : {"blocks" : { "read_only": true } } }' | jq .
-	echo
+	# Get aliases associated with the old index
+	log "Retrieving aliases for $index"
+	aliases_json=$(curl --silent "localhost:9200/$index/_alias" || echo '{}')
+	# Collect alias names (if any)
+	alias_names=$(echo "$aliases_json" | jq -r 'keys[]' 2>/dev/null || true)
 
-	# Indices will be reindexed to a new index called $new_index
-	echo
-	echo "## Copy \"$index\" to new index \"$new_index\""
-	echo
-	curl --silent -XPOST 'localhost:9200/_reindex?wait_for_completion=true' -d "{ \"source\": { \"index\": \"$index\" }, \"dest\": { \"index\": \"$new_index\" } }" | jq .
-	echo
+	# Build atomic alias actions: add alias(es) from old index to new index, then remove from old index
+	# Ensure we always add the original index name as an alias to the new index so clients using the index name continue to work
+	actions=$(jq -n '[]')
+	# Add action: make original index name an alias for new index
+	actions=$(echo "$actions" | jq --arg ni "$new_index" --arg alias "$index" '. + [{"add": {"index": $ni, "alias": $alias}}]')
 
-	echo
-	echo "## Re-print list of indices"
-	echo
-	curl --silent localhost:9200/_stats/store | jq .
-	echo
+	# Also add any other aliases that pointed to the old index
+	for a in $alias_names; do
+		if [ "$a" = "$index" ]; then
+			# already added above
+			continue
+		fi
+		log "Will move alias $a to $new_index"
+		actions=$(echo "$actions" | jq --arg ni "$new_index" --arg alias "$a" '. + [{"add": {"index": $ni, "alias": $alias}}]')
+	done
 
-	# Get list of aliases pointing to the original index. Will use after
-	# deleting the original index.
-	echo
-	echo "## Get list of all current aliases for $index_quoted, before deleting $index_quoted"
-	echo
-	curl --silent "localhost:9200/$index/_alias" | jq .
-	all_aliases_quotes=$(curl --silent "localhost:9200/$index/_alias" | jq '.[] | .[] | keys | .[]')
-	echo
-	echo "$all_aliases_quotes"
-	echo
+	# Now add remove actions for old index so the swap is atomic
+	# Remove original index name from old index (if it exists as alias) and other aliases
+	actions=$(echo "$actions" | jq --arg oi "$index" '. + [{"remove_index": {"index": $oi}}]')
 
-	# Delete the old index (after making it not read-only)
-	echo
-	echo "## Make $index_quoted no longer read-only so it can be deleted"
-	echo
-	curl --silent -XPUT "localhost:9200/$index/_settings" -d '{"index" : {"blocks" : { "read_only": false } } }' | jq .
-	echo
-	echo "## Delete $index_quoted"
-	echo
-	curl --silent -XDELETE "http://localhost:9200/$index/" | jq .
-	echo
+	# Perform alias swap atomically. We use a conservative approach: add aliases to new index first,
+	# then delete the old index in the same actions call if supported. If the cluster rejects combined actions,
+	# the script will fall back to a two-step approach below.
+	log "Attempting atomic alias swap and delete old index"
+	alias_payload=$(jq -n --argjson acts "$actions" '{actions: $acts}')
+	alias_result=$(curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "$alias_payload" || true)
+	log "Alias API result: $alias_result"
 
-	# The original index name will be added as an alias for the new index
-	echo
-	echo "## Make the original index name, $index_quoted, be an alias for \"$new_index\""
-	echo
-	curl --silent -XPOST "localhost:9200/_aliases"  -d "{ \"actions\" : [	{ \"add\" : { \"index\" : \"$new_index\", \"alias\" : \"$index\" } } ] }" | jq .
-	echo
+	# Verify new index has the alias (original name)
+	has_alias=$(curl -s "localhost:9200/$new_index/_alias/$index" || true)
+	if [ -z "$has_alias" ] || echo "$has_alias" | grep -q 'error'; then
+		log "Atomic alias + delete failed or not supported; falling back to safe two-step swap"
+		# Add aliases to new index
+		for a in $alias_names; do
+			log "Adding alias $a to $new_index"
+			curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "{ \"actions\": [ { \"add\": { \"index\": \"$new_index\", \"alias\": \"$a\" } } ] }" | jq -r '. || true' >/dev/null 2>&1 || true
+		done
+		# Add primary index name alias
+		log "Adding primary alias $index to $new_index"
+		curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "{ \"actions\": [ { \"add\": { \"index\": \"$new_index\", \"alias\": \"$index\" } } ] }" | jq -r '. || true' >/dev/null 2>&1 || true
+		# Remove aliases from old index
+		for a in $alias_names; do
+			log "Removing alias $a from $index"
+			curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "{ \"actions\": [ { \"remove\": { \"index\": \"$index\", \"alias\": \"$a\" } } ] }" | jq -r '. || true' >/dev/null 2>&1 || true
+		done
+		# Remove primary index name from old index if it existed as alias
+		log "Removing primary alias $index from $index (if present)"
+		curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "{ \"actions\": [ { \"remove_index\": { \"index\": \"$index\" } } ] }" | jq -r '. || true' >/dev/null 2>&1 || true
+	fi
 
-	# Add any aliases that previously pointed to the old index to the new index
-	echo
-	echo "## Loop over all of these aliases, adding them as aliases for the new index"
-	echo
-	echo "$all_aliases_quotes"
-	echo
-	while read -r alias_quoted; do
+	# Delete old index now that aliases point to new index
+	log "Deleting old index $index"	
+	curl -s -XDELETE "http://localhost:9200/$index/" | jq -r '. || true' >/dev/null 2>&1 || true
 
-		an_alias="${alias_quoted%\"}"
-		an_alias="${an_alias#\"}"
+	log "Completed reindex for $index -> $new_index"
+	done
 
-		echo
-		echo "  # Add \"$an_alias\" as an alias for $new_index"
-		echo
-		curl --silent -XPOST "localhost:9200/_aliases" -d "{ \"actions\" : [ { \"add\" : { \"index\" : \"$new_index\", \"alias\" : \"$an_alias\" } } ] }" | jq .
-		echo
+log "####################################################"
+log "Re-indexing complete"
+log "####################################################"
 
-	done <<< "$all_aliases_quotes"
-
-	echo
-	echo "$new_index complete. Now showing index created in Elasticsearch version:"
-	curl --silent "localhost:9200/$new_index/_settings?human" | jq ".\"$new_index\".settings.index.version.created_string"
-	echo
-
-	echo
-	echo "## Complete with $index and $new_index"
-	echo
-
-done <<< "$all_indices"
-
-# FIXME: If MediaWiki search-indexing disabled, reenable now
-
-echo "####################################################"
-echo "Re-indexing complete"
-echo "####################################################"
+# Release lock
+flock -u 200 || true
+rm -f "$LOCKFILE" || true
+trap - INT TERM EXIT

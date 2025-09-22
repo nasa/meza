@@ -29,5 +29,5 @@
 #
 # https://cbea.ms/git-commit/
 # All lines starting with the pound symbol will be discarded
-
-This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
+# Add a footer:
+# This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.

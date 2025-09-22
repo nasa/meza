@@ -8,7 +8,7 @@
 
 - name: "Initially assume directory does not exist"
   set_fact:
-    remote_dir_exists: False
+    remote_dir_exists: false
 
 #
 # Put meza-ansible's private key and known_hosts on server within /root
@@ -30,7 +30,7 @@
     -o UserKnownHostsFile=/root/meza-ansible-known_hosts
     {{ remote_server_user }}@{{ remote_server }}
     '[ -d {{ uploads_backup_dir_path }} ]'
-  failed_when: False
+  failed_when: false
   register: remote_dir_check
   run_once: true
   when: remote_server != inventory_hostname
@@ -38,25 +38,25 @@
 # If not actually a remote server
 - name: "Check for existence of {{ directory_path }} on {{ inventory_hostname }}"
   shell: '[ -d {{ uploads_backup_dir_path }} ]'
-  failed_when: False
+  failed_when: false
   register: local_dir_check
   run_once: true
   when: remote_server == inventory_hostname
 
-- ansible.builtin.debug: { var: remote_dir_check }
-- ansible.builtin.debug: { var: local_dir_check }
+- ansible.builtin.debug: {var: remote_dir_check}
+- ansible.builtin.debug: {var: local_dir_check}
 
 - set_fact:
-    local_dir_check: False
+    local_dir_check: false
   when: local_dir_check is skipped
 
 - set_fact:
-    remote_dir_check: False
+    remote_dir_check: false
   when: remote_dir_check is skipped
 
 - name: "Set remote_dir_exists to true"
   set_fact:
-    remote_dir_exists: True
+    remote_dir_exists: true
   when: (local_dir_check and local_dir_check.rc == 0) or (remote_dir_check and remote_dir_check.rc == 0)
 
 - name: Show value of remote_dir_exists

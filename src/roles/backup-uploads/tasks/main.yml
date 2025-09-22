@@ -14,7 +14,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
 
@@ -22,7 +22,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}/{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
@@ -31,7 +31,7 @@
   file:
     path: "{{ m_backups }}/{{ env }}/{{ item }}/uploads"
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: root
     group: root
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
@@ -40,9 +40,9 @@
   include_role:
     name: rsync
   vars:
-    pulling_to_server:   "{{ inventory_hostname }}"
-    pulling_to_path:     "{{ m_backups }}/{{ env }}/{{ item }}/uploads"
+    pulling_to_server: "{{ inventory_hostname }}"
+    pulling_to_path: "{{ m_backups }}/{{ env }}/{{ item }}/uploads"
     pulling_from_server: "{{ groups['app_servers'][0] }}"
-    pulling_from_path:   "{{ m_uploads_dir }}/{{ item }}/"
-    pulling_from_user:   "meza-ansible"
+    pulling_from_path: "{{ m_uploads_dir }}/{{ item }}/"
+    pulling_from_user: "meza-ansible"
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"

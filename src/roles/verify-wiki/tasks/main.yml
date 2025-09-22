@@ -44,7 +44,7 @@
     state: directory
     path: "{{ m_cache_directory }}/{{ wiki_id }}"
     owner: "{{ m_cache_directory_owner }}"
-    group: "{{ m_cache_directory_group }}"
+    group: "{{ group_apache }}"
     mode: "{{ m_cache_directory_mode }}"
 
 #
@@ -62,7 +62,7 @@
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
 - name: "{{ wiki_id }} - Ensure wiki config symlink in place"
   file:
     # dest = symlink, src = dir linked to
@@ -71,7 +71,7 @@
     state: link
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: 0755
+    mode: '0755'
 
 ###############################################################################
 #                                                                             #
@@ -288,8 +288,8 @@
     path: "{{ m_uploads_dir }}/{{ wiki_id }}"
     state: directory
     mode: "{{ m_uploads_dir_mode }}"
-    owner: "{{ m_uploads_dir_owner }}"
-    group: "{{ m_uploads_dir_group }}"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
 
 
 #
@@ -395,6 +395,6 @@
     path: "{{ m_uploads_dir }}/{{ wiki_id }}"
     state: directory
     mode: "{{ m_uploads_dir_mode }}"
-    owner: "{{ m_uploads_dir_owner }}"
-    group: "{{ m_uploads_dir_group }}"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
     recurse: "{{ m_recursively_set_uploads_permissions | default(False) }}"

@@ -6,7 +6,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
     recurse: true
 
 # At this point the controller must have a local config. Now force it upon the
@@ -30,6 +30,5 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
     recurse: true
-

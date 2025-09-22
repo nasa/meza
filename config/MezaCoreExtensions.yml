@@ -247,6 +247,7 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
+      $wgGroupPermissions['sysop']['deletebatch'] = true;
 
   # DiscussionTools - Tools for working with talk pages
   - name: DiscussionTools

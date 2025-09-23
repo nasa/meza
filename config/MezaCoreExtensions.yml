@@ -135,7 +135,7 @@ list:
   # CommentStreams - Adds a commenting system for wikis.
   - name: CommentStreams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
-    version: "master"
+    version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
       $wgAllowDisplayTitle = true;

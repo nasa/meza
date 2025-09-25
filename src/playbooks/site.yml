@@ -21,9 +21,11 @@
   #  Or it is not even necessary bc we don't use a local ansible
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  roles:
+    - essential-vars
   tasks:
-  # Can't run set-vars yet, so bootstrap m_home and m_config_vault for now.
-  # Meza install path retrieved in same way in set-vars role
+    # Can't run set-vars yet, so bootstrap m_home and m_config_vault for now.
+    # Meza install path retrieved in same way in set-vars role
     - name: Get Meza install path
       shell: dirname $(dirname $(dirname $(dirname $(realpath $(which meza)))))
       register: ip
@@ -53,6 +55,7 @@
         mode: '0700'
         state: directory
     - name: Copy meza-ansible keys to alt-meza-ansible
+      become: true
       copy:
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
@@ -65,6 +68,7 @@
         - name: id_rsa.pub
           mode: "0644"
     - name: Copy meza-ansible known_hosts to alt-meza-ansible
+      become: true
       copy:
         src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
         dest: "{{ m_home }}/alt-meza-ansible/.ssh/{{ item.name }}"
@@ -82,13 +86,13 @@
     - name: Ensure secret.yml owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}/secret/{{ env }}/secret.yml"
-        owner: "{{ ansible_user | default(ansible_env.USER) }}"
+        owner: meza-ansible
         group: "{{ group_wheel }}"
         mode: "0660"
     - name: Ensure {{ m_conf_dir }} owned by meza-ansible
       file:
         path: "{{ m_conf_dir }}"
-        owner: "{{ ansible_user | default(ansible_env.USER) }}"
+        owner: meza-ansible
         group: "{{ group_wheel }}"
         mode: "0755"
 

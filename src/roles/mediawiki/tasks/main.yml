@@ -28,16 +28,17 @@
 - name: Ensure user meza-ansible .ssh dir configured
   file:
     path: "{{ m_home }}/meza-ansible/.ssh"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: '0700'
     state: directory
 
 - name: Copy meza-ansible keys to app servers
+  become: true
   copy:
     src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
     dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
   with_items:
@@ -47,10 +48,11 @@
       mode: "0644"
 
 - name: Copy meza-ansible known_hosts to app_servers
+  become: true
   copy:
     src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
     dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
   failed_when: false
@@ -421,10 +423,10 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - {path: "{{ m_meza_data }}", owner: "{{ ansible_user | default(ansible_env.USER) }}", group: "{{ group_apache }}", mode: "2775"}
+    - {path: "{{ m_meza_data }}", owner: "meza-ansible", group: "{{ group_apache }}", mode: "2775"}
     - {path: "{{ m_cache_directory }}", owner: "{{ user_apache }}", group: "{{ group_apache }}", mode: "2775"}
     - {path: "{{ m_logs }}", owner: "{{ m_logs_owner }}", group: "{{ group_apache }}", mode: "2775"}
-    - {path: "{{ m_backups }}", owner: "{{ ansible_user | default(ansible_env.USER) }}", group: "{{ group_apache }}", mode: "2775"}
+    - {path: "{{ m_backups }}", owner: "meza-ansible", group: "{{ group_apache }}", mode: "2775"}
 
 #
 # Cache (at this time) for localization caching. Also can be used for caching
@@ -560,7 +562,7 @@
   template:
     src: "{{ item }}.j2"
     dest: "{{ m_install }}/.deploy-meza/{{ item }}"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: '0755'
   with_items:

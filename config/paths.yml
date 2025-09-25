@@ -102,7 +102,7 @@ m_paths:
   install:
     path: "{{ m_install }}"
     mode: "0755"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: "{{ ansible_user | default('meza-ansible') }}"
     group: "{{ group_wheel | default('root') }}"
 
   mw_temp:
@@ -120,7 +120,7 @@ m_group: "{{ group_wheel | default('root') }}"
 
 
 m_data_mode: "0755"
-m_data_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_data_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_data_group: "{{ group_wheel | default('root') }}"
 
 
@@ -128,7 +128,7 @@ m_data_group: "{{ group_wheel | default('root') }}"
 # Used for many things within htdocs that don't require apache to manipulate
 #
 m_htdocs_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
-m_htdocs_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_htdocs_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_htdocs_group: "{{ group_wheel | default('root') }}"
 
 
@@ -148,14 +148,14 @@ m_cache_directory_mode: "0770"
 m_cache_directory_owner: "{{ user_apache | default('unknown_apache_user', true) }}"
 
 m_logs_mode: "0755"
-m_logs_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_logs_owner: "{{ ansible_user | default('meza-ansible') }}"
 
 # @FIXME: Why is meza-backups group name hard-coded and
 # Why do we even need an alternate group besides 'root' or m_group or group_wheel
 # If it is a "backup" operator, distinct from meza-ansible, then
 # the user too should be a variable (other than m_user)
 m_backups_mode: "0775"
-m_backups_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_backups_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_backups_group: meza-backups
 
 # mode/ownership for anything in /etc/cron.d
@@ -164,14 +164,14 @@ m_crond_owner: root
 m_crond_group: root
 
 m_config_public_mode: "0755"
-m_config_public_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_config_public_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_config_public_group: "{{ group_wheel | default('root') }}"
 
 m_config_secret_file_mode: "0660"
 m_config_secret_dir_mode: "0775"
-m_config_secret_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_config_secret_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_config_secret_group: "{{ group_wheel | default('root') }}"
 
 m_simplesamlphp_mode: "u=rwX,g=rwX,o=rX"
-m_simplesamlphp_owner: "{{ ansible_user | default(ansible_env.USER) }}"
+m_simplesamlphp_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_simplesamlphp_group: "{{ group_wheel | default('root') }}"

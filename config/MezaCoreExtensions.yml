@@ -138,10 +138,13 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
+      # All users have commenting rights by default
+      # $wgGroupPermissions['user']['cs-comment'] = true;
       $wgAllowDisplayTitle = true;
       $wgRestrictDisplayTitle = false;
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
+      # By setting to -1, comments are allowed ONLY when <comment-streams /> is used on the page.
       $wgCommentStreamsAllowedNamespaces = -1;
 
   # ConfirmEdit - Provides CAPTCHA support to help prevent spam and abuse from automated bots

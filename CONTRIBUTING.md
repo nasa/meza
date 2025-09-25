@@ -83,13 +83,16 @@ To do a dry run, you must use or target an actual (provisioned by Meza) controll
 similar node, not your local workstation. Although no changes will be made,
 playbook tests and conditions still must be met to succeed.
 
-Run the check as the 'meza-ansible' user. If you run as root, it will fail due
-to incorrect ownership of git repositories.
+You should run the check as the 'meza-ansible' user. If you run as root, it will fail due
+to incorrect ownership of git repositories. **In general, always become the meza-ansible user
+to work on Meza's source tree and to issue meza commands.**
 
 ```bash
+# run an interactive login shell as `meza-ansible` (reads the user's shell profile files, etc.)
 sudo -i -u meza-ansible
+# change to the project's ansible configuration directory to pickup ansible.cfg
 cd /opt/meza/config
-ansible-playbook /opt/meza/src/playbooks/site.yml --check -e group_wheel=wheel -e ansible_user=meza-ansible -c local -i /opt/conf-meza/secret/monolith/hosts
+ansible-playbook /opt/meza/src/playbooks/site.yml --check -c local -i /opt/conf-meza/secret/monolith/hosts
 ```
 
 ### Molecule

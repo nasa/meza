@@ -133,15 +133,21 @@ list:
     version: "{{ mediawiki_default_branch }}"
 
   # CommentStreams - Adds a commenting system for wikis.
+  # FIXME: Comment streams is incompatible with REL1_43 at this time (2025-09)
+  # ref. https://phabricator.wikimedia.org/T388462
+  # On-wiki, we see that nothing happens when adding <comment-streams /> to a page
   - name: CommentStreams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
+      # All users have commenting rights by default
+      # $wgGroupPermissions['user']['cs-comment'] = true;
       $wgAllowDisplayTitle = true;
       $wgRestrictDisplayTitle = false;
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
+      # By setting to -1, comments are allowed ONLY when <comment-streams /> is used on the page.
       $wgCommentStreamsAllowedNamespaces = -1;
 
   # ConfirmEdit - Provides CAPTCHA support to help prevent spam and abuse from automated bots

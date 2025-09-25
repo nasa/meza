@@ -49,7 +49,7 @@
   template:
     src: concat.pem.sh.j2
     dest: /etc/letsencrypt/renewal-hooks/deploy/concat.pem.sh
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: "{{ ansible_user | default('meza-ansible') }}"
     group: "{{ group_wheel }}"
     mode: u=rwx,g=rwx,o=rx
 

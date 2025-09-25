@@ -450,7 +450,7 @@
 - name: "Ensure {{ m_tmp }} exists"
   ansible.builtin.file:
     path: "{{ m_tmp }}"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: "{{ ansible_user | default('meza-ansible') }}"
     group: "{{ group_wheel }}"
     mode: '0755'
     state: directory
@@ -524,7 +524,7 @@
   ansible.builtin.template:
     src: "gitconfig.j2"
     dest: "{{ m_home }}/meza-ansible/.gitconfig"
-    owner: "{{ ansible_user | default(ansible_env.USER) }}"
+    owner: "{{ ansible_user | default('meza-ansible') }}"
     group: "{{ group_wheel }}"
     mode: '0644'
 

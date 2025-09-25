@@ -2,4 +2,5 @@
   hosts: localhost
   become: true
   roles:
-    - certbot
+    - set-vars
+    - ansible-role-certbot-meza

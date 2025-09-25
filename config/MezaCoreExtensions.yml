@@ -133,6 +133,9 @@ list:
     version: "{{ mediawiki_default_branch }}"
 
   # CommentStreams - Adds a commenting system for wikis.
+  # FIXME: Comment streams is incompatible with REL1_43 at this time (2025-09)
+  # ref. https://phabricator.wikimedia.org/T388462
+  # On-wiki, we see that nothing happens when adding <comment-streams /> to a page
   - name: CommentStreams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
     version: "{{ mediawiki_default_branch }}"

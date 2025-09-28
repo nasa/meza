@@ -62,15 +62,18 @@
     - file-perms
 
 
-# Still no config for controller? This must be a new installation. Copy from
-# the baseline.
+# Ensure that the 'wikis' directory exists within m_local_public; owned by 
+# apache since .smw.json needs to be writable by apache for the SMW Admin
+# Special page interface; but also group-owned by apache so that meza-ansible
+# (which is in group apache) can write to it during maintenance tasks.
 - name: "Ensure m_local_public/wikis exists"
   file:
     path: "{{ m_local_public }}/wikis"
     state: directory
-    owner: "{{ m_config_public_owner }}"
-    group: "{{ m_config_public_group }}"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
     mode: "{{ m_config_public_mode }}"
+    recurse: true
 
 - name: Ensure pre/post/saml settings directories exists in config
   file:

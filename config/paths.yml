@@ -163,7 +163,7 @@ m_crond_mode: "0644"
 m_crond_owner: root
 m_crond_group: root
 
-m_config_public_mode: "0755"
+m_config_public_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
 m_config_public_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_config_public_group: "{{ group_wheel | default('root') }}"
 

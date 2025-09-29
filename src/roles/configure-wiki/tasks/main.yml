@@ -45,7 +45,7 @@
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}/.smw.json"
     state: touch
     owner: "{{ user_apache }}"
-    group: "{{ group_wheel }}"
+    group: "{{ group_apache }}"
     mode: "u=rw,g=rw,o=r"
   delegate_to: localhost
   run_once: true

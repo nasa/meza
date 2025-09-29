@@ -2,16 +2,16 @@
 # Essential variables role - sets critical variables needed before set-vars runs
 
 - name: Set OS-specific group_wheel fact
-  set_fact:
+  ansible.builtin.set_fact:
     group_wheel: "{% if ansible_os_family == 'RedHat' %}wheel{% else %}sudo{% endif %}"
 
 - name: Set ansible_user fact with fallbacks
-  set_fact:
+  ansible.builtin.set_fact:
     ansible_user: "{{ ansible_user | default('meza-ansible') }}"
 
 - name: Debug essential variables
-  debug:
-    msg: 
+  ansible.builtin.debug:
+    msg:
       - "group_wheel: {{ group_wheel }}"
       - "ansible_user: {{ ansible_user }}"
       - "ansible_env.USER: {{ ansible_env.USER }}"

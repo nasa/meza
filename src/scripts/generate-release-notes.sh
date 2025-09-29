@@ -28,6 +28,11 @@ Usage: $0 <START_REF> <END_REF>
 
 Normally you should start with the tag that was last documented
 And end with the tag that is being documented.
+
+For convenience, the actual RELEASE_NOTES file is named RELEASE_NOTES-<END_REF>.md
+And, you can look at the heading of the generated file for the range.
+Put simply, update the RELEASE_NOTES-HEAD.md file with
+./src/scripts/generate-release-notes.sh 43.29.1 HEAD
 HERE
   exit 1
 fi

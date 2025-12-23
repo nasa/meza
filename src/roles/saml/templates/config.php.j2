@@ -60,12 +60,18 @@ $config = [
 	'database.password' => 'secret',
 	'database.options' => [],
 	'database.prefix' => '',
+	'database.driver_options' => [],
 	'database.persistent' => false,
 	'database.secondaries' => [],
 
-	'enable.saml20-idp' => false,
+	'enable.saml20-idp' => true,
 	'enable.adfs-idp' => false,
-
+	'module.enable' => [
+		'exampleauth' => true,
+		'core'        => true,
+		'admin'       => true,
+		'saml'        => true
+	],
 	# This should be _less_ than memcache_store.expires. See below.
 	'session.duration' => {{ session_duration_hours }} * (60 * 60), // {{ session_duration_hours }} hours
 
@@ -75,10 +81,10 @@ $config = [
 	'session.cookie.lifetime' => 0,
 	'session.cookie.path' => '/',
 	'session.cookie.domain' => '{{ wiki_app_fqdn }}',
-	'session.cookie.secure' => true,
+
     // 'session.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
 	// This has to be 'None' for Chrome browser to login to the Admin panel
-	'session.cookie.samesite' => 'None',
+	'session.cookie.samesite' => $httpUtils->canSetSameSiteNone() ? 'None' : null,
 	'session.phpsession.cookiename' => 'SimpleSAML',
 	'session.phpsession.savepath' => null,
 	'session.phpsession.httponly' => true,
@@ -174,4 +180,3 @@ $config = [
 
     'proxymode.passAuthnContextClassRef' => false,
 ];
-

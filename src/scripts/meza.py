@@ -366,22 +366,41 @@ def request_lock_for_deploy(env):
         f.write(f"{pid}\n{timestamp}")
         f.close()
 
-    # Improved group detection and fallback for lock file permissions
-    try:
-        grp.getgrnam('apache')
-        meza_chown(lock_file, 'meza-ansible', 'apache')
-        os.chmod(lock_file, 0o664)
-    except KeyError:
-        try:
-            grp.getgrnam('www-data')  # Debian/Ubuntu fallback
-            meza_chown(lock_file, 'meza-ansible', 'www-data')
-            os.chmod(lock_file, 0o664)
-        except KeyError:
-            print('Neither apache nor www-data group exists. Using "wheel" as fallback.')
-            meza_chown(lock_file, 'meza-ansible', 'wheel')
-            os.chmod(lock_file, 0o664)
+    lock_owner, lock_group = get_deploy_lock_owner_and_group()
+    meza_chown(lock_file, lock_owner, lock_group)
+    os.chmod(lock_file, 0o664)
 
     return {"pid": pid, "timestamp": timestamp}
+
+
+def get_deploy_lock_owner_and_group():
+    """
+    Resolve a valid owner and group for deploy lock files.
+
+    Returns:
+        tuple: Username and group name for lock file ownership.
+    """
+    lock_owner = 'meza-ansible'
+    try:
+        pwd.getpwnam(lock_owner)
+    except KeyError:
+        lock_owner = pwd.getpwuid(os.getuid()).pw_name
+        print(f'User "meza-ansible" not found. Using "{lock_owner}" as fallback.')
+
+    preferred_groups = ['apache', 'www-data', 'wheel']
+
+    for group_name in preferred_groups:
+        try:
+            grp.getgrnam(group_name)
+            if group_name == 'wheel':
+                print('Neither apache nor www-data group exists. Using "wheel" as fallback.')
+            return lock_owner, group_name
+        except KeyError:
+            continue
+
+    lock_group = grp.getgrgid(os.getgid()).gr_name
+    print(f'Neither apache, www-data, nor wheel group exists. Using "{lock_group}" as fallback.')
+    return lock_owner, lock_group
 
 
 def unlock_deploy(env):

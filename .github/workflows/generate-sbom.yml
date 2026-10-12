@@ -13,9 +13,6 @@ on:
       - 'composer.lock'
       - 'composer.json'
       - 'composer.local.lock'
-  schedule:
-    # Generate SBOM weekly on Sundays at 2 AM UTC
-    - cron: '0 2 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -34,7 +31,7 @@ jobs:
       - name: Validate composer files
         run: |
           if [ ! -f composer.lock ]; then
-            echo "composer.lock not found"
+            echo "::error::composer.lock not found. It is not tracked in this repo; SBOMs are generated manually on a deployed node (see src/scripts/generate-sbom.md)."
             exit 1
           fi
 
@@ -50,11 +47,11 @@ jobs:
       - name: Generate SBOM
         run: |
           mkdir -p sbom
-          php scripts/generate-sbom.php --format all --output sbom/meza-sbom
+          php src/scripts/generate-sbom.php --format all --output sbom/meza-sbom
 
       - name: Generate package statistics
         run: |
-          php scripts/generate-sbom.php --stats > sbom/package-stats.txt
+          php src/scripts/generate-sbom.php --stats > sbom/package-stats.txt
 
       - name: Validate SBOM files
         run: |

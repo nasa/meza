@@ -18,6 +18,9 @@ on:
     - cron: '0 2 * * 0'
   workflow_dispatch:
 
+permissions:
+  contents: write  # SBOM job commits generated SBOM back on push to master
+
 jobs:
   generate-sbom:
     runs-on: ubuntu-latest
